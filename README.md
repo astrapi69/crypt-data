@@ -3,7 +3,7 @@
 <div align="center">
 
 [![Build Status](https://travis-ci.org/astrapi69/crypt-data.svg?branch=develop)](https://travis-ci.org/astrapi69/crypt-data) 
-[![Coverage Status](https://coveralls.io/repos/github/astrapi69/crypt-data/badge.svg?branch=develop)](https://coveralls.io/github/astrapi69/crypt-data?branch=develop) 
+[![Coverage Status](https://codecov.io/gh/astrapi69/crypt-data/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/crypt-data)
 [![Open Issues](https://img.shields.io/github/issues/astrapi69/crypt-data.svg?style=flat)](https://github.com/astrapi69/crypt-data/issues) 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/crypt-data/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/crypt-data)
 [![Javadocs](http://www.javadoc.io/badge/de.alpharogroup/crypt-data.svg)](http://www.javadoc.io/doc/de.alpharogroup/crypt-data)
@@ -114,10 +114,10 @@ Do not hesitate to contact the crypt-data developers with your questions, concer
 |Special thanks to [sonatype repository](https://www.sonatype.com) for providing a free maven repository service for open source projects|
 |     <img width=1000/>     |
 
-|**coveralls.io**|
+|**codecov.io**|
 |     :---:      |
-|[![Coverage Status](https://coveralls.io/repos/github/astrapi69/crypt-data/badge.svg?branch=develop)](https://coveralls.io/github/astrapi69/crypt-data?branch=develop)|
-|Special thanks to [coveralls.io](https://coveralls.io) for providing a free code coverage for open source projects|
+|[![Coverage Status](https://codecov.io/gh/astrapi69/crypt-data/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/crypt-data)|
+|Special thanks to [codecov.io](https://codecov.io) for providing a free code coverage for open source projects|
 |     <img width=1000/>     |
 
 |**javadoc.io**|
