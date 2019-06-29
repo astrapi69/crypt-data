@@ -1,0 +1,19 @@
+# crypt-data .travis.yml
+
+language: java
+
+cache:
+  directories:
+  - $HOME/.m2
+
+jdk:
+    - oraclejdk8
+
+notifications:
+    email:
+        recipients:
+            - asterios.raptis@web.de
+        on_failure: always
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
