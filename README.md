@@ -54,14 +54,14 @@ Than you can add the dependency to your dependencies:
 
 	<properties>
 			...
-		<!-- JOBJ-CONTRACT-VERIFIER version -->
-		<crypt-data.version>3.2</crypt-data.version>
+		<!-- CRYPT-DATA version -->
+		<crypt-data.version>7</crypt-data.version>
 			...
 	</properties>
 			...
 		<dependencies>
 			...
-			<!-- JOBJ-CONTRACT-VERIFIER DEPENDENCY -->
+			<!-- CRYPT-DATA DEPENDENCY -->
 			<dependency>
 				<groupId>de.alpharogroup</groupId>
 				<artifactId>crypt-data</artifactId>
@@ -95,10 +95,6 @@ Don't forget to add new units tests on your changes.
 
 Do not hesitate to contact the crypt-data developers with your questions, concerns, comments, bug reports, or feature requests.
 - Feature requests, questions and bug reports can be reported at the [issues page](https://github.com/astrapi69/crypt-data/issues).
-
-# Similar projects
-
-- [equalsverifier](https://github.com/jqno/equalsverifier) EqualsVerifier can be used in Java unit tests to verify whether the contract for the equals and hashCode methods is met.
 
 ## Credits
 
