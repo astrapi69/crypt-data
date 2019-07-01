@@ -56,6 +56,9 @@ public class ObfuscationOperationRule<C, RW> {
 	/** The index where this rule will execute. */
 	Set<Integer> indexes;
 
+	/** The flag that shows if the character is inverted with replaceWith. */
+	boolean inverted;
+
 	/** The operated character. */
 	C operatedCharacter;
 

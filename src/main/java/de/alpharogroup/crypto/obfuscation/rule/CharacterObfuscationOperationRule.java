@@ -49,14 +49,23 @@ public class CharacterObfuscationOperationRule
 		ObfuscationOperationRule<Character, Character>
 {
 
-	public CharacterObfuscationOperationRule(Character character, Set<Integer> indexes,Character operatedCharacter,
-		Operation operation,  Character replaceWith)
+
+	public CharacterObfuscationOperationRule(Character character, Set<Integer> indexes, boolean inverted,
+		Character operatedCharacter, Operation operation, Character replaceWith)
 	{
-		super(character, indexes, operatedCharacter, operation, replaceWith);
+		super(character, indexes, inverted, operatedCharacter, operation, replaceWith);
 		if (operation != null)
 		{
 			setOperatedCharacter(Operation.operate(character, operation));
 		}
 	}
 
+	public void inverse()
+	{
+		char currentChar = getCharacter();
+		char replaceWithChar = getReplaceWith();
+		setCharacter(replaceWithChar);
+		setReplaceWith(currentChar);
+		setInverted(!isInverted());
+	}
 }
