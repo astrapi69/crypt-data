@@ -25,7 +25,7 @@
 
 	<properties>
 		<!-- CRYPT-API version -->
-		<crypt-api.version>7</crypt-api.version>
+		<crypt-api.version>7.2-SNAPSHOT</crypt-api.version>
 		<!-- JAXB-API version -->
 		<jaxb-api.version>2.3.1</jaxb-api.version>
 		<!-- COMMONS-CODEC version -->

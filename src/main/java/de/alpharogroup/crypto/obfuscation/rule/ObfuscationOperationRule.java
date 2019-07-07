@@ -24,14 +24,18 @@
  */
 package de.alpharogroup.crypto.obfuscation.rule;
 
+import java.io.Serializable;
+import java.util.Optional;
 import java.util.Set;
 
+import de.alpharogroup.collections.set.SetFactory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
@@ -48,24 +52,33 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ObfuscationOperationRule<C, RW> {
+public class ObfuscationOperationRule<C, RW> implements Serializable
+{
+
+	/** The Constant serialVersionUID. */
+	private static final long serialVersionUID = 1L;
 
 	/** The character. */
+	@NonNull
 	C character;
 
 	/** The index where this rule will execute. */
-	Set<Integer> indexes;
+	@Builder.Default
+	Set<Integer> indexes = SetFactory.newHashSet();
 
 	/** The flag that shows if the character is inverted with replaceWith. */
 	boolean inverted;
 
 	/** The operated character. */
-	C operatedCharacter;
+	@Builder.Default
+	Optional<C> operatedCharacter = Optional.empty();
 
 	/** The type of operation for the obfuscation. */
-	Operation operation;
+	@Builder.Default
+	Operation operation = Operation.NONE;
 
 	/** The character(s) that will be replaced with. */
+	@NonNull
 	RW replaceWith;
 
 }

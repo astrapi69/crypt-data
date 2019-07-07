@@ -32,6 +32,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
@@ -50,9 +51,11 @@ public class ObfuscationRule<C, RW> implements Serializable
 	private static final long serialVersionUID = 1L;
 
 	/** The character. */
+	@NonNull
 	C character;
 
 	/** The character(s) that will be replaced with. */
+	@NonNull
 	RW replaceWith;
 
 }
