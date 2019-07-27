@@ -1,6 +1,15 @@
 ## Change log
 ----------------------
 
+Version 7.1
+-------------
+
+ADDED:
+
+- new launch configuration for intellij created
+- new restrictions for all operation rules added
+- new unit tests for character operation rules created
+
 Version 7
 -------------
 

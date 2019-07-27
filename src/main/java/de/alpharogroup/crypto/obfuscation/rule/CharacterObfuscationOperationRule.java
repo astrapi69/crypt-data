@@ -24,6 +24,7 @@
  */
 package de.alpharogroup.crypto.obfuscation.rule;
 
+import java.util.Optional;
 import java.util.Set;
 
 import lombok.AccessLevel;
@@ -49,13 +50,14 @@ public class CharacterObfuscationOperationRule
 		ObfuscationOperationRule<Character, Character>
 {
 
-	public CharacterObfuscationOperationRule(Character character, Set<Integer> indexes,Character operatedCharacter,
-		Operation operation,  Character replaceWith)
+	public CharacterObfuscationOperationRule(Character character, Set<Integer> indexes,
+		boolean inverted, Optional<Character> operatedCharacter, Operation operation,
+		Character replaceWith)
 	{
-		super(character, indexes, operatedCharacter, operation, replaceWith);
+		super(character, indexes, inverted, operatedCharacter, operation, replaceWith);
 		if (operation != null)
 		{
-			setOperatedCharacter(Operation.operate(character, operation));
+			setOperatedCharacter(Optional.of(Operation.operate(character, operation)));
 		}
 	}
 

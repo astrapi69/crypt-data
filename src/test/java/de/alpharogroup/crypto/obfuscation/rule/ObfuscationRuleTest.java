@@ -43,9 +43,12 @@ public class ObfuscationRuleTest
 	@Test
 	public final void testConstructors()
 	{
-		ObfuscationRule<Character, Character> model = new ObfuscationRule<>();
+		ObfuscationRule<Character, Character> model;
+		model = new ObfuscationRule<>('a', 'b');
 		assertNotNull(model);
-		model = ObfuscationRule.<Character, Character> builder().build();
+		model = ObfuscationRule.<Character, Character> builder()
+			.character('a')
+			.replaceWith('b').build();
 		assertNotNull(model);
 	}
 
