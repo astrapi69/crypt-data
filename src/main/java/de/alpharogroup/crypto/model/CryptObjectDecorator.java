@@ -25,9 +25,7 @@
 package de.alpharogroup.crypto.model;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.NonNull;
@@ -41,8 +39,6 @@ import lombok.NonNull;
  *            the generic type of the suffix
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 class CryptObjectDecorator<P,S> {
