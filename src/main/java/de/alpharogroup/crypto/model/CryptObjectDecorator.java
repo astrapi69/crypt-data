@@ -30,6 +30,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import lombok.NonNull;
 
 /**
  * The class {@link CryptObjectDecorator} holds a prefix and a suffix that can decorate an crypt object
@@ -45,6 +46,6 @@ import lombok.experimental.FieldDefaults;
 @Builder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 class CryptObjectDecorator<P,S> {
-    P prefix;
-    S suffix;
+    @NonNull P prefix;
+    @NonNull S suffix;
 }
