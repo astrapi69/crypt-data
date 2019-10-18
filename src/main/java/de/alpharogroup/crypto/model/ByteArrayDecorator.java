@@ -27,10 +27,10 @@ package de.alpharogroup.crypto.model;
 import lombok.experimental.SuperBuilder;
 
 /**
- * The class {@link CharacterDecorator} that can decorate an crypt
- * object with a {@link String} in prefix and suffix
+ * The class {@link ByteArrayDecorator} that can decorate an crypt
+ * object with a byte array in prefix and suffix
  */
 @SuperBuilder
-public final class StringDecorator extends CryptObjectDecorator<String>
+public final class ByteArrayDecorator extends CryptObjectDecorator<byte[]>
 {
 }

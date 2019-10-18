@@ -4,6 +4,10 @@
 Version 7.3-SNAPSHOT
 -------------
 
+ADDED:
+
+- new decorator class for byte array object created
+
 Version 7.2
 -------------
 

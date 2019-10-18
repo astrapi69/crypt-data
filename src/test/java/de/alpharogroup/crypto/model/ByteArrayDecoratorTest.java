@@ -24,13 +24,52 @@
  */
 package de.alpharogroup.crypto.model;
 
-import lombok.experimental.SuperBuilder;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+
+import java.nio.charset.Charset;
+
+import org.testng.annotations.Test;
 
 /**
- * The class {@link CharacterDecorator} that can decorate an crypt
- * object with a {@link String} in prefix and suffix
+ * The unit test class for the class {@link ByteArrayDecorator}
  */
-@SuperBuilder
-public final class StringDecorator extends CryptObjectDecorator<String>
+public class ByteArrayDecoratorTest
 {
+
+	/**
+	 * Test method for {@link ByteArrayDecorator} builders
+	 */
+	@Test
+	public void testCreation()
+	{
+		byte[] actual;
+		byte[] expected;
+		byte[] prefix;
+		byte[] suffix;
+		prefix = "ab".getBytes(Charset.forName("UTF-8"));
+		suffix = "xy".getBytes(Charset.forName("UTF-8"));
+		ByteArrayDecorator decorator = ByteArrayDecorator.builder()
+			.prefix(prefix).suffix(suffix).build();
+		assertNotNull(decorator);
+
+		actual = decorator.getPrefix();
+		expected = prefix;
+		assertEquals(actual, expected);
+
+		actual = decorator.getSuffix();
+		expected = suffix;
+		assertEquals(actual, expected);
+	}
+
+	/**
+	 * Test method for {@link ByteArrayDecorator} builders
+	 */
+	@Test(expectedExceptions = { NullPointerException.class })
+	public void testCreationWithNPE()
+	{
+		ByteArrayDecorator decorator = ByteArrayDecorator.builder().build();
+		assertNotNull(decorator);
+	}
+
 }

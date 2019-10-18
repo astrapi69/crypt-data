@@ -27,8 +27,8 @@ package de.alpharogroup.crypto.model;
 import lombok.experimental.SuperBuilder;
 
 /**
- * The class {@link CryptModel} holds a character prefix and a suffix that can decorate an crypt
- * object
+ * The class {@link CharacterDecorator} that can decorate an crypt
+ * object with a {@link Character} in prefix and suffix
  */
 @SuperBuilder
 public final class CharacterDecorator extends CryptObjectDecorator<Character>
