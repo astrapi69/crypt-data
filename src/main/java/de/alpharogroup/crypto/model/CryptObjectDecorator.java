@@ -24,61 +24,31 @@
  */
 package de.alpharogroup.crypto.model;
 
-import java.io.Serializable;
-import java.util.List;
-
-import de.alpharogroup.crypto.algorithm.Algorithm;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Singular;
+import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 /**
- * The class {@link CryptModel} holds data for the encryption or decryption process.
+ * The class {@link CryptObjectDecorator} holds a prefix and a suffix that can decorate an crypt
+ * object
  *
- * @param <C>
- *            the generic type of the cipher
- * @param <K>
- *            the generic type of the key
+ * @param <T>
+ *            the generic type of the prefix and the suffix
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@SuperBuilder(toBuilder = true)
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class CryptModel<C, K, T> implements Serializable
+@SuperBuilder
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class CryptObjectDecorator<T>
 {
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 1L;
+	/** The prefix for the crypt object */
+	@NonNull
+	T prefix;
 
-	/** The algorithm. */
-	Algorithm algorithm;
+	/** The suffix for the crypt object */
+	@NonNull
+	T suffix;
 
-	/** The cipher. */
-	C cipher;
-
-	/** The decorators for the crypt object */
-	@Singular
-	List<CryptObjectDecorator<T>> decorators;
-
-	/**
-	 * The flag initialized that indicates if the cipher is initialized.
-	 */
-	boolean initialized;
-
-	/** The iteration count. */
-	Integer iterationCount;
-
-	/** The key. */
-	K key;
-
-	/** The operation mode that indicates if an encryption or decryption process will start. */
-	int operationMode;
-
-	/** The salt byte array. */
-	byte[] salt;
 }

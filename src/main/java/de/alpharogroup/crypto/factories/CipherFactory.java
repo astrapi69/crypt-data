@@ -190,7 +190,7 @@ public class CipherFactory
 	 * @throws UnsupportedEncodingException
 	 *             is thrown if the named charset is not supported
 	 */
-	public static Cipher newCipher(final CryptModel<Cipher, String> model)
+	public static Cipher newCipher(final CryptModel<Cipher, String, String> model)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
 		InvalidKeyException, InvalidAlgorithmParameterException, UnsupportedEncodingException
 	{

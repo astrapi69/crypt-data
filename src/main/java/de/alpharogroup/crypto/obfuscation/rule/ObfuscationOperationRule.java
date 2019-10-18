@@ -41,8 +41,8 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 /**
- * The class {@link ObfuscationOperationRule} builds a complex rule for
- * obfuscating a single character.
+ * The class {@link ObfuscationOperationRule} builds a complex rule for obfuscating a single
+ * character.
  */
 @Getter
 @Setter

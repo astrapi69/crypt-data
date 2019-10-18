@@ -50,11 +50,12 @@ public class CryptModelTest
 	public final void testConstructors()
 	{
 		String privateKey = "D1D15ED36B887AF1";
-		CryptModel<Cipher, String> model = CryptModel.<Cipher, String> builder().key(privateKey)
-			.algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
-			.iterationCount(19).operationMode(Cipher.ENCRYPT_MODE).build();
+		CryptModel<Cipher, String, String> model = CryptModel.<Cipher, String, String> builder()
+			.key(privateKey).algorithm(SunJCEAlgorithm.PBEWithMD5AndDES)
+			.salt(CompoundAlgorithm.SALT).iterationCount(19).operationMode(Cipher.ENCRYPT_MODE)
+			.build();
 		assertNotNull(model);
-		model = CryptModel.<Cipher, String> builder().build();
+		model = CryptModel.<Cipher, String, String> builder().build();
 		assertNotNull(model);
 		model = new CryptModel<>();
 		model.setKey(privateKey);
@@ -77,10 +78,11 @@ public class CryptModelTest
 
 		actual = EqualsHashCodeAndToStringEvaluator
 			.evaluateEqualsHashcodeAndToString(CryptModel.class, clazz -> {
-				return CryptModel.<Cipher, String> builder()
+				return CryptModel.<Cipher, String, String> builder()
 					.key(RandomExtensions.getRandomHexString(16).toUpperCase())
 					.algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
-					.iterationCount(19).operationMode(Cipher.ENCRYPT_MODE).build();
+					.iterationCount(19).operationMode(Cipher.ENCRYPT_MODE)
+					.decorator(StringDecorator.builder().prefix("s").suffix("s").build()).build();
 			});
 		expected = true;
 		assertEquals(expected, actual);

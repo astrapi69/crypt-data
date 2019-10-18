@@ -59,7 +59,7 @@ public class CipherFactoryTest
 
 	/**
 	 * Test method for {@link CipherFactory#newCipher(CryptModel)}
-	 * 
+	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
@@ -80,10 +80,10 @@ public class CipherFactoryTest
 	{
 		Cipher actual;
 		String privateKey;
-		CryptModel<Cipher, String> encryptorModel;
+		CryptModel<Cipher, String, String> encryptorModel;
 
 		privateKey = "D1D15ED36B887AF1";
-		encryptorModel = CryptModel.<Cipher, String> builder().key(privateKey)
+		encryptorModel = CryptModel.<Cipher, String, String> builder().key(privateKey)
 			.algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
 			.iterationCount(CompoundAlgorithm.ITERATIONCOUNT).operationMode(Cipher.ENCRYPT_MODE)
 			.build();
