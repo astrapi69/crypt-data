@@ -25,17 +25,16 @@
 package de.alpharogroup.crypto.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import de.alpharogroup.crypto.algorithm.Algorithm;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Singular;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 /**
  * The class {@link CryptModel} holds data for the encryption or decryption process.
@@ -45,15 +44,12 @@ import lombok.experimental.FieldDefaults;
  * @param <K>
  *            the generic type of the key
  */
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
+@SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CryptModel<C, K> implements Serializable
+public class CryptModel<C, K, T> implements Serializable
 {
 
 	/** The Constant serialVersionUID. */
@@ -64,6 +60,10 @@ public class CryptModel<C, K> implements Serializable
 
 	/** The cipher. */
 	C cipher;
+
+	/** The decorators for the crypt object */
+	@Singular
+	List<CryptObjectDecorator<T>> decorators;
 
 	/**
 	 * The flag initialized that indicates if the cipher is initialized.

@@ -135,8 +135,7 @@ public class KeyPairFactoryTest
 		KeyPairGenerator actual;
 
 		actual = KeyPairFactory.newKeyPairGenerator(KeyPairGeneratorAlgorithm.RSA.getAlgorithm(),
-			KeySize.KEYSIZE_2048.getKeySize(),
-			SecureRandomBuilder.getInstance().build());
+			KeySize.KEYSIZE_2048.getKeySize(), SecureRandomBuilder.getInstance().build());
 		assertNotNull(actual);
 	}
 

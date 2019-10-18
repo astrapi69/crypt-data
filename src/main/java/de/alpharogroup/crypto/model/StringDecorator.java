@@ -22,27 +22,14 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-/**
- *
- */
-package de.alpharogroup.crypto.obfuscation.rule;
+package de.alpharogroup.crypto.model;
 
-import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
+import lombok.experimental.SuperBuilder;
 
 /**
- * The unit test class for the class {@link CharacterObfuscationOperationRule}
+ * The class {@link CryptModel} holds a string prefix and a suffix that can decorate an crypt object
  */
-public class CharacterObfuscationOperationRuleTest
+@SuperBuilder
+public final class StringDecorator extends CryptObjectDecorator<String>
 {
-
-	/**
-	 * Test method for {@link CharacterObfuscationOperationRule}
-	 */
-	@Test
-	public void testWithBeanTester()
-	{
-		BeanTester beanTester = new BeanTester();
-		beanTester.testBean(CharacterObfuscationOperationRule.class);
-	}
 }

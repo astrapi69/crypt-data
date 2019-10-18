@@ -25,23 +25,30 @@
 package de.alpharogroup.crypto.model;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
 import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 /**
- * The class {@link CryptObjectDecorator} holds a prefix and a suffix that can decorate an crypt object
+ * The class {@link CryptObjectDecorator} holds a prefix and a suffix that can decorate an crypt
+ * object
  *
- * @param <P>
- *            the generic type of the prefix
- * @param <S>
- *            the generic type of the suffix
+ * @param <T>
+ *            the generic type of the prefix and the suffix
  */
 @Data
-@Builder(toBuilder = true)
+@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-class CryptObjectDecorator<P,S> {
-    @NonNull P prefix;
-    @NonNull S suffix;
+public class CryptObjectDecorator<T>
+{
+
+	/** The prefix for the crypt object */
+	@NonNull
+	T prefix;
+
+	/** The suffix for the crypt object */
+	@NonNull
+	T suffix;
+
 }

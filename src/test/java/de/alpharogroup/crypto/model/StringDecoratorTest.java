@@ -22,52 +22,47 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package de.alpharogroup.crypto.obfuscation.rule;
+package de.alpharogroup.crypto.model;
 
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
-import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.evaluate.object.verifier.ContractVerifier;
-
 /**
- * The unit test class for the class {@link ObfuscationRule}.
+ * The unit test class for the class {@link StringDecorator}
  */
-public class ObfuscationRuleTest
+public class StringDecoratorTest
 {
 
 	/**
-	 * Test method for {@link ObfuscationRule} constructors and builders
+	 * Test method for {@link StringDecorator} builders
 	 */
 	@Test
-	public final void testConstructors()
+	public void testCreation()
 	{
-		ObfuscationRule<Character, Character> model;
-		model = new ObfuscationRule<>('a', 'b');
-		assertNotNull(model);
-		model = ObfuscationRule.<Character, Character> builder().character('a').replaceWith('b')
-			.build();
-		assertNotNull(model);
+		String actual;
+		String expected;
+		StringDecorator decorator = StringDecorator.builder().prefix("$").suffix("?").build();
+		assertNotNull(decorator);
+
+		actual = decorator.getPrefix();
+		expected = "$";
+		assertEquals(actual, expected);
+
+		actual = decorator.getSuffix();
+		expected = "?";
+		assertEquals(actual, expected);
 	}
 
 	/**
-	 * Test method for {@link ObfuscationRule}
+	 * Test method for {@link StringDecorator} builders
 	 */
-	@Test
-	public void testWithBeanTester()
+	@Test(expectedExceptions = { NullPointerException.class })
+	public void testCreationWithNPE()
 	{
-		BeanTester beanTester = new BeanTester();
-		beanTester.testBean(ObfuscationRule.class);
+		StringDecorator decorator = StringDecorator.builder().build();
+		assertNotNull(decorator);
 	}
 
-	/**
-	 * Test method for {@link ObfuscationRule#equals(Object)} , {@link ObfuscationRule#hashCode()}
-	 * and {@link ObfuscationRule#toString()}
-	 */
-	@Test
-	public void verifyEqualsHashcodeAndToStringContracts()
-	{
-		ContractVerifier.of(ObfuscationRule.class).verify();
-	}
 }
