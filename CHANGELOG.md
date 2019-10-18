@@ -1,13 +1,14 @@
 ## Change log
 ----------------------
 
-Version 7.2-SNAPSHOT
+Version 7.2
 -------------
 
 ADDED:
 
 - new generic class that holds a prefix and a suffix that can decorate an crypt object
 - new decorator classes for character and string object created
+- new FUNDING.yml file added for donations added
 
 CHANGED:
 
