@@ -43,7 +43,7 @@ No animals were harmed in the making of this library.
 
 The source code comes under the liberal MIT License, making crypt-data great for all types of applications.
 
-## Maven dependency
+## Maven dependency [![Maven Central](https://img.shields.io/maven-central/v/de.alpharogroup/crypt-data.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22de.alpharogroup%22%20AND%20a:%22crypt-data%22)
 
 Maven dependency is now on sonatype.
 Check out [sonatype repository](https://oss.sonatype.org/index.html#nexus-search;gav~de.alpharogroup~crypt-data~~~) for latest snapshots and releases.
