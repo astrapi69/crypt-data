@@ -37,6 +37,9 @@ import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvalu
 import de.alpharogroup.random.RandomExtensions;
 import lombok.SneakyThrows;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * The unit test class for the class {@link CryptModel}
  */
@@ -70,8 +73,9 @@ public class CryptModelTest
 	 * {@link CryptModel#toString()}
 	 */
 	@Test
-	@SneakyThrows
 	public void testEqualsHashcodeAndToStringWithClass()
+		throws NoSuchMethodException, IllegalAccessException, InstantiationException,
+		NoSuchFieldException, ClassNotFoundException, InvocationTargetException, IOException
 	{
 		boolean expected;
 		boolean actual;

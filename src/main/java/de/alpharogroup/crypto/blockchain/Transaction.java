@@ -27,33 +27,22 @@ package de.alpharogroup.crypto.blockchain;
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
 import de.alpharogroup.crypto.blockchain.api.ITransaction;
 import de.alpharogroup.crypto.hash.HashExtensions;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
 
 /**
  * The class {@link Transaction}
  */
-@Getter
-@Setter
-@EqualsAndHashCode
-@NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Transaction implements ITransaction
 {
 
-	byte[] hash;
+	private byte[] hash;
 
-	byte[] senderHash;
+	private byte[] senderHash;
 
-	byte[] signature;
+	private byte[] signature;
 
-	String text;
+	private String text;
 
-	long timestamp;
+	private long timestamp;
 
 	public Transaction(String text, byte[] senderHash, byte[] signature)
 	{
@@ -65,10 +54,106 @@ public class Transaction implements ITransaction
 			HashAlgorithm.SHA256);
 	}
 
+	public Transaction()
+	{
+	}
+
 	@Override
 	public byte[] getSignableData()
 	{
 		return text.getBytes();
 	}
 
+	public byte[] getHash()
+	{
+		return this.hash;
+	}
+
+	public byte[] getSenderHash()
+	{
+		return this.senderHash;
+	}
+
+	public byte[] getSignature()
+	{
+		return this.signature;
+	}
+
+	public String getText()
+	{
+		return this.text;
+	}
+
+	public long getTimestamp()
+	{
+		return this.timestamp;
+	}
+
+	public void setHash(byte[] hash)
+	{
+		this.hash = hash;
+	}
+
+	public void setSenderHash(byte[] senderHash)
+	{
+		this.senderHash = senderHash;
+	}
+
+	public void setSignature(byte[] signature)
+	{
+		this.signature = signature;
+	}
+
+	public void setText(String text)
+	{
+		this.text = text;
+	}
+
+	public void setTimestamp(long timestamp)
+	{
+		this.timestamp = timestamp;
+	}
+
+	public boolean equals(final Object o)
+	{
+		if (o == this)
+			return true;
+		if (!(o instanceof Transaction))
+			return false;
+		final Transaction other = (Transaction)o;
+		if (!other.canEqual((Object)this))
+			return false;
+		if (!java.util.Arrays.equals(this.getHash(), other.getHash()))
+			return false;
+		if (!java.util.Arrays.equals(this.getSenderHash(), other.getSenderHash()))
+			return false;
+		if (!java.util.Arrays.equals(this.getSignature(), other.getSignature()))
+			return false;
+		final Object this$text = this.getText();
+		final Object other$text = other.getText();
+		if (this$text == null ? other$text != null : !this$text.equals(other$text))
+			return false;
+		if (this.getTimestamp() != other.getTimestamp())
+			return false;
+		return true;
+	}
+
+	protected boolean canEqual(final Object other)
+	{
+		return other instanceof Transaction;
+	}
+
+	public int hashCode()
+	{
+		final int PRIME = 59;
+		int result = 1;
+		result = result * PRIME + java.util.Arrays.hashCode(this.getHash());
+		result = result * PRIME + java.util.Arrays.hashCode(this.getSenderHash());
+		result = result * PRIME + java.util.Arrays.hashCode(this.getSignature());
+		final Object $text = this.getText();
+		result = result * PRIME + ($text == null ? 43 : $text.hashCode());
+		final long $timestamp = this.getTimestamp();
+		result = result * PRIME + (int)($timestamp >>> 32 ^ $timestamp);
+		return result;
+	}
 }

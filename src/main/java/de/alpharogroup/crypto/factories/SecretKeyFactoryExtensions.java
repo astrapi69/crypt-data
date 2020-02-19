@@ -24,24 +24,24 @@
  */
 package de.alpharogroup.crypto.factories;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import lombok.experimental.UtilityClass;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * The factory class {@link SecretKeyFactory} holds methods for creating {@link SecretKeySpec}
  * objects.
  */
-@UtilityClass
-public class SecretKeyFactoryExtensions
+public final class SecretKeyFactoryExtensions
 {
+
+	private SecretKeyFactoryExtensions()
+	{
+	}
 
 	/**
 	 * Factory method for creating a new {@link SecretKeyFactory} from the given algorithm.

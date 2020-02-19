@@ -24,6 +24,18 @@
  */
 package de.alpharogroup.crypto.key;
 
+import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import de.alpharogroup.crypto.hex.HexExtensions;
+import de.alpharogroup.crypto.key.reader.PemObjectReader;
+import de.alpharogroup.crypto.key.reader.PrivateKeyReader;
+import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Primitive;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemWriter;
+
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.KeyFactory;
@@ -37,27 +49,17 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 
-import javax.xml.bind.DatatypeConverter;
-
-import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Primitive;
-import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
-import org.bouncycastle.util.io.pem.PemObject;
-import org.bouncycastle.util.io.pem.PemWriter;
-
-import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import de.alpharogroup.crypto.hex.HexExtensions;
-import de.alpharogroup.crypto.key.reader.PemObjectReader;
-import de.alpharogroup.crypto.key.reader.PrivateKeyReader;
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link PrivateKeyExtensions}.
  */
-@UtilityClass
-public class PrivateKeyExtensions
+public final class PrivateKeyExtensions
 {
+
+	private PrivateKeyExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
+	}
 
 	/**
 	 * Gets the key length of the given {@link PrivateKey}.

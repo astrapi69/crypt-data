@@ -24,29 +24,29 @@
  */
 package de.alpharogroup.crypto.hash;
 
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Queue;
-
+import com.google.common.primitives.Longs;
+import de.alpharogroup.crypto.algorithm.HashAlgorithm;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.google.common.primitives.Longs;
-
-import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
+import java.util.Queue;
 
 /**
  * The class {@link HashExtensions}.
  *
  * @author Asterios Raptis
  */
-@UtilityClass
-public class HashExtensions
+public final class HashExtensions
 {
+
+	private HashExtensions()
+	{
+	}
 
 	/**
 	 * Hashes the given {@link byte[]} object with the given parameters.
@@ -158,8 +158,9 @@ public class HashExtensions
 	 * @return the calculated hash as byte array
 	 */
 	public static byte[] hash(byte[] input, byte[] hash, byte[] signature, long timestamp,
-		@NonNull HashAlgorithm algorithm)
+		HashAlgorithm algorithm)
 	{
+		Objects.requireNonNull(algorithm);
 		byte[] hashValue = ArrayUtils.addAll(input, hash);
 		hashValue = ArrayUtils.addAll(hashValue, signature);
 		hashValue = ArrayUtils.addAll(hashValue, Longs.toByteArray(timestamp));
@@ -202,8 +203,9 @@ public class HashExtensions
 	 * @return the calculated hash as byte array
 	 */
 	public static byte[] hash(byte[] input, byte[] hash, long signature, long timestamp,
-		@NonNull HashAlgorithm algorithm)
+		HashAlgorithm algorithm)
 	{
+		Objects.requireNonNull(algorithm);
 		byte[] hashValue = ArrayUtils.addAll(input, hash);
 		hashValue = ArrayUtils.addAll(hashValue, Longs.toByteArray(signature));
 		hashValue = ArrayUtils.addAll(hashValue, Longs.toByteArray(timestamp));
@@ -241,8 +243,9 @@ public class HashExtensions
 	 *            the algorithm
 	 * @return the calculated hash as byte array
 	 */
-	public static byte[] hash(byte[] input, byte[] publicKey, @NonNull HashAlgorithm algorithm)
+	public static byte[] hash(byte[] input, byte[] publicKey, HashAlgorithm algorithm)
 	{
+		Objects.requireNonNull(algorithm);
 		byte[] hashValue = ArrayUtils.addAll(input, publicKey);
 		switch (algorithm)
 		{
@@ -279,8 +282,9 @@ public class HashExtensions
 	 * @return the merkle root tree
 	 */
 	public static byte[] getMerkleRootHash(Queue<byte[]> hashQueue,
-		@NonNull HashAlgorithm algorithm)
+		HashAlgorithm algorithm)
 	{
+		Objects.requireNonNull(algorithm);
 		while (hashQueue.size() > 1)
 		{
 			byte[] hashValue = ArrayUtils.addAll(hashQueue.poll(), hashQueue.poll());

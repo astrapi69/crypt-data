@@ -147,8 +147,7 @@ public class EncryptedPrivateKeyWriterTest
 	/**
 	 * Test method for {@link EncryptedPrivateKeyWriter} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

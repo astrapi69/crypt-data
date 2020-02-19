@@ -24,19 +24,19 @@
  */
 package de.alpharogroup.crypto.factories;
 
-import java.security.spec.AlgorithmParameterSpec;
-
 import javax.crypto.spec.PBEParameterSpec;
-
-import lombok.experimental.UtilityClass;
+import java.security.spec.AlgorithmParameterSpec;
 
 /**
  * The factory class {@link AlgorithmParameterSpecFactory} holds methods for creating
  * {@link AlgorithmParameterSpec} objects.
  */
-@UtilityClass
-public class AlgorithmParameterSpecFactory
+public final class AlgorithmParameterSpecFactory
 {
+
+	private AlgorithmParameterSpecFactory()
+	{
+	}
 
 	/**
 	 * Factory method for creating a new {@link PBEParameterSpec} from the given salt and iteration

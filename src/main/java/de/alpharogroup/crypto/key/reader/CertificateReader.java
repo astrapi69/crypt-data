@@ -24,6 +24,8 @@
  */
 package de.alpharogroup.crypto.key.reader;
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -33,15 +35,10 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
-import org.apache.commons.codec.binary.Base64;
-
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link CertificateReader} is a utility class for reading certificates.
  */
-@UtilityClass
-public class CertificateReader
+public final class CertificateReader
 {
 
 	/** The Constant BEGIN_CERTIFICATE_PREFIX. */
@@ -49,6 +46,10 @@ public class CertificateReader
 
 	/** The Constant END_CERTIFICATE_SUFFIX. */
 	public static final String END_CERTIFICATE_SUFFIX = "-----END CERTIFICATE-----";
+
+	private CertificateReader()
+	{
+	}
 
 	/**
 	 * Read pem certificate.

@@ -39,8 +39,7 @@ public class KeyWriterTest
 	/**
 	 * Test method for {@link KeyWriter} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

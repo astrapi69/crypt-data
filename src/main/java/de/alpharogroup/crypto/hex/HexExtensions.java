@@ -24,24 +24,25 @@
  */
 package de.alpharogroup.crypto.hex;
 
-import java.nio.charset.Charset;
-
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
+import java.nio.charset.Charset;
+import java.util.Objects;
 
 /**
  * The class {@link HexExtensions} provides methods for encode and decode hex encoded byte or char
  * arrays and {@link String} objects.
  */
-@UtilityClass
-public class HexExtensions
+public final class HexExtensions
 {
 	/** A char array from the hexadecimal digits. */
 	private static final char[] HEXADECIMAL_DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
 			'9', 'A', 'B', 'C', 'D', 'E', 'F' };
+
+	private HexExtensions()
+	{
+	}
 
 	/**
 	 * Transform the given byte array that contains the binary data decoded to a String object. The
@@ -157,9 +158,10 @@ public class HexExtensions
 	 *            lowercase otherwise uppercase.
 	 * @return the hexadecimal {@link String} object
 	 */
-	public static String encodeHex(final @NonNull String string, final Charset charset,
+	public static String encodeHex(final String string, final Charset charset,
 		final boolean lowerCase)
 	{
+		Objects.requireNonNull(string);
 		char[] encodedCharArray;
 		if (charset != null)
 		{

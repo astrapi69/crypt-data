@@ -24,43 +24,32 @@
  */
 package de.alpharogroup.crypto.blockchain;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
 import de.alpharogroup.crypto.blockchain.api.IBlock;
 import de.alpharogroup.crypto.blockchain.api.ITransaction;
 import de.alpharogroup.crypto.hash.HashExtensions;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The class {@link Block}
  */
-@Getter
-@Setter
-@EqualsAndHashCode
-@NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Block implements IBlock
 {
 
-	byte[] hash;
+	private byte[] hash;
 
-	byte[] merkleRoot;
+	private byte[] merkleRoot;
 
-	byte[] previousBlockHash;
+	private byte[] previousBlockHash;
 
-	long timestamp;
+	private long timestamp;
 
-	List<ITransaction> transactions;
+	private List<ITransaction> transactions;
 
-	long tries;
+	private long tries;
 
 	public Block(byte[] previousBlockHash, List<ITransaction> transactions, long tries)
 	{
@@ -74,6 +63,10 @@ public class Block implements IBlock
 			HashAlgorithm.SHA256);
 		this.hash = HashExtensions.hash(previousBlockHash, merkleRoot, tries, timestamp,
 			HashAlgorithm.SHA256);
+	}
+
+	public Block()
+	{
 	}
 
 	@Override
@@ -90,4 +83,112 @@ public class Block implements IBlock
 	}
 
 
+	public byte[] getHash()
+	{
+		return this.hash;
+	}
+
+	public byte[] getMerkleRoot()
+	{
+		return this.merkleRoot;
+	}
+
+	public byte[] getPreviousBlockHash()
+	{
+		return this.previousBlockHash;
+	}
+
+	public long getTimestamp()
+	{
+		return this.timestamp;
+	}
+
+	public List<ITransaction> getTransactions()
+	{
+		return this.transactions;
+	}
+
+	public long getTries()
+	{
+		return this.tries;
+	}
+
+	public void setHash(byte[] hash)
+	{
+		this.hash = hash;
+	}
+
+	public void setMerkleRoot(byte[] merkleRoot)
+	{
+		this.merkleRoot = merkleRoot;
+	}
+
+	public void setPreviousBlockHash(byte[] previousBlockHash)
+	{
+		this.previousBlockHash = previousBlockHash;
+	}
+
+	public void setTimestamp(long timestamp)
+	{
+		this.timestamp = timestamp;
+	}
+
+	public void setTransactions(List<ITransaction> transactions)
+	{
+		this.transactions = transactions;
+	}
+
+	public void setTries(long tries)
+	{
+		this.tries = tries;
+	}
+
+	public boolean equals(final Object o)
+	{
+		if (o == this)
+			return true;
+		if (!(o instanceof Block))
+			return false;
+		final Block other = (Block)o;
+		if (!other.canEqual((Object)this))
+			return false;
+		if (!java.util.Arrays.equals(this.getHash(), other.getHash()))
+			return false;
+		if (!java.util.Arrays.equals(this.getMerkleRoot(), other.getMerkleRoot()))
+			return false;
+		if (!java.util.Arrays.equals(this.getPreviousBlockHash(), other.getPreviousBlockHash()))
+			return false;
+		if (this.getTimestamp() != other.getTimestamp())
+			return false;
+		final Object this$transactions = this.getTransactions();
+		final Object other$transactions = other.getTransactions();
+		if (this$transactions == null ?
+			other$transactions != null :
+			!this$transactions.equals(other$transactions))
+			return false;
+		if (this.getTries() != other.getTries())
+			return false;
+		return true;
+	}
+
+	protected boolean canEqual(final Object other)
+	{
+		return other instanceof Block;
+	}
+
+	public int hashCode()
+	{
+		final int PRIME = 59;
+		int result = 1;
+		result = result * PRIME + java.util.Arrays.hashCode(this.getHash());
+		result = result * PRIME + java.util.Arrays.hashCode(this.getMerkleRoot());
+		result = result * PRIME + java.util.Arrays.hashCode(this.getPreviousBlockHash());
+		final long $timestamp = this.getTimestamp();
+		result = result * PRIME + (int)($timestamp >>> 32 ^ $timestamp);
+		final Object $transactions = this.getTransactions();
+		result = result * PRIME + ($transactions == null ? 43 : $transactions.hashCode());
+		final long $tries = this.getTries();
+		result = result * PRIME + (int)($tries >>> 32 ^ $tries);
+		return result;
+	}
 }

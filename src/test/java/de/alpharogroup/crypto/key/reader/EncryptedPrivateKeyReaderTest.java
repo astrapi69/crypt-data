@@ -24,7 +24,6 @@
  */
 package de.alpharogroup.crypto.key.reader;
 
-import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,6 +42,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.search.PathFinder;
+
+import static org.testng.AssertJUnit.assertNotNull;
 
 /**
  * The unit test class for the class {@link EncryptedPrivateKeyReader}
@@ -132,8 +133,7 @@ public class EncryptedPrivateKeyReaderTest
 	/**
 	 * Test method for {@link EncryptedPrivateKeyReader} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

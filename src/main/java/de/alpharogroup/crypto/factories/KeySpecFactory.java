@@ -24,19 +24,20 @@
  */
 package de.alpharogroup.crypto.factories;
 
-import java.security.spec.KeySpec;
+import de.alpharogroup.crypto.compound.CompoundAlgorithm;
 
 import javax.crypto.spec.PBEKeySpec;
-
-import de.alpharogroup.crypto.compound.CompoundAlgorithm;
-import lombok.experimental.UtilityClass;
+import java.security.spec.KeySpec;
 
 /**
  * The factory class {@link KeySpecFactory} holds methods for creating {@link KeySpec} objects.
  */
-@UtilityClass
-public class KeySpecFactory
+public final class KeySpecFactory
 {
+
+	private KeySpecFactory()
+	{
+	}
 
 	/**
 	 * Factory method for creating a new {@link PBEKeySpec} from the given private key.

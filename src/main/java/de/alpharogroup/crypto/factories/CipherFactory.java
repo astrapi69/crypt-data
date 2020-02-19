@@ -24,6 +24,12 @@
  */
 package de.alpharogroup.crypto.factories;
 
+import de.alpharogroup.crypto.model.CryptModel;
+
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -33,20 +39,15 @@ import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-
-import de.alpharogroup.crypto.model.CryptModel;
-import lombok.experimental.UtilityClass;
-
 /**
  * The factory class {@link CipherFactory} holds methods for creating {@link Cipher} objects.
  */
-@UtilityClass
-public class CipherFactory
+public final class CipherFactory
 {
+
+	private CipherFactory()
+	{
+	}
 
 	/**
 	 * Factory method for creating a new {@link Cipher} from the given parameters.

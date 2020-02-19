@@ -86,8 +86,7 @@ public class PublicKeyWriterTest
 	/**
 	 * Test method for {@link PublicKeyWriter} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

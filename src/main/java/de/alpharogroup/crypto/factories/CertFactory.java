@@ -24,24 +24,7 @@
  */
 package de.alpharogroup.crypto.factories;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.SignatureException;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.util.Date;
-
-import javax.security.auth.x500.X500Principal;
-
+import de.alpharogroup.crypto.provider.SecurityProvider;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.Extension;
@@ -58,17 +41,25 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 
-import de.alpharogroup.crypto.provider.SecurityProvider;
-import lombok.experimental.UtilityClass;
+import javax.security.auth.x500.X500Principal;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.security.*;
+import java.security.cert.Certificate;
+import java.security.cert.*;
+import java.util.Date;
 
 /**
  * The factory class {@link CertFactory} holds methods for creating {@link Certificate} objects and
  * sub classes like {@link X509Certificate}.
  */
-@SuppressWarnings("deprecation")
-@UtilityClass
-public class CertFactory
+@SuppressWarnings("deprecation") public final class CertFactory
 {
+
+	private CertFactory()
+	{
+	}
 
 	/**
 	 * Factory method for creating a new {@link X509Certificate} from the given certificate type and

@@ -24,6 +24,9 @@
  */
 package de.alpharogroup.crypto.key;
 
+import de.alpharogroup.crypto.algorithm.KeystoreType;
+import de.alpharogroup.crypto.factories.KeyStoreFactory;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,16 +36,17 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-import de.alpharogroup.crypto.algorithm.KeystoreType;
-import de.alpharogroup.crypto.factories.KeyStoreFactory;
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link KeyStoreExtensions}.
  */
-@UtilityClass
 public final class KeyStoreExtensions
 {
+
+	private KeyStoreExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
+	}
 
 	/**
 	 * Delete the given alias from the given keystore file.

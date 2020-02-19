@@ -24,29 +24,25 @@
  */
 package de.alpharogroup.crypto.factories;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-
 import de.alpharogroup.crypto.algorithm.Algorithm;
 import de.alpharogroup.crypto.key.KeySize;
 import de.alpharogroup.crypto.key.reader.PrivateKeyReader;
 import de.alpharogroup.crypto.key.reader.PublicKeyReader;
-import lombok.experimental.UtilityClass;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 
 /**
  * The factory class {@link KeyPairFactory} holds methods for creating {@link KeyPair} objects.
  */
-@UtilityClass
-public class KeyPairFactory
+public final class KeyPairFactory
 {
+
+	private KeyPairFactory()
+	{
+	}
 
 	/**
 	 * Factory method for creating a new {@link KeyPair} from the given algorithm and

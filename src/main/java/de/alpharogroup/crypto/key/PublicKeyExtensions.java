@@ -24,6 +24,13 @@
  */
 package de.alpharogroup.crypto.key;
 
+import de.alpharogroup.crypto.hex.HexExtensions;
+import de.alpharogroup.crypto.key.reader.PublicKeyReader;
+import de.alpharogroup.crypto.key.writer.PublicKeyWriter;
+import de.alpharogroup.string.StringExtensions;
+import lombok.NonNull;
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.PublicKey;
@@ -32,21 +39,17 @@ import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.List;
 
-import org.apache.commons.codec.binary.Base64;
-
-import de.alpharogroup.crypto.hex.HexExtensions;
-import de.alpharogroup.crypto.key.reader.PublicKeyReader;
-import de.alpharogroup.crypto.key.writer.PublicKeyWriter;
-import de.alpharogroup.string.StringExtensions;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link PublicKeyExtensions}.
  */
-@UtilityClass
-public class PublicKeyExtensions
+public final class PublicKeyExtensions
 {
+
+	private PublicKeyExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
+	}
 
 	/**
 	 * Gets the key length of the given {@link PublicKey}.

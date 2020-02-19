@@ -28,6 +28,7 @@ import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.PublicKey;
 
@@ -94,8 +95,9 @@ public class BlockTest
 	 * {@link Block#toString()}
 	 */
 	@Test(enabled = false)
-	@SneakyThrows
 	public void testEqualsHashcodeAndToStringWithClass()
+		throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException,
+		InstantiationException, ClassNotFoundException, InvocationTargetException, IOException
 	{
 		boolean expected;
 		boolean actual;

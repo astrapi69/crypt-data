@@ -171,8 +171,7 @@ public class KeyPairFactoryTest
 	/**
 	 * Test method for {@link KeyPairFactory} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

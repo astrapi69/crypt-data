@@ -24,25 +24,21 @@
  */
 package de.alpharogroup.crypto.factories;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * The factory class {@link KeyStoreFactory} holds methods for creating {@link KeyStore} objects.
  */
-@UtilityClass
-public class KeyStoreFactory
+public final class KeyStoreFactory
 {
+
+	private KeyStoreFactory()
+	{
+	}
 
 	/**
 	 * Factory method for load the {@link KeyStore} object from the given file.

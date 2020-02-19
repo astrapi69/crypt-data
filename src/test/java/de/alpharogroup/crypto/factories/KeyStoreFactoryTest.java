@@ -83,8 +83,7 @@ public class KeyStoreFactoryTest
 	/**
 	 * Test method for {@link KeyStoreFactory} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

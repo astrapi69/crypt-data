@@ -30,16 +30,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
-
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
+import java.util.Objects;
 
 /**
  * The class {@link PublicKeyWriter} is a utility class for write public keys in files or streams.
  */
-@UtilityClass
-public class PublicKeyWriter
+public final class PublicKeyWriter
 {
+
+	private PublicKeyWriter()
+	{
+	}
 
 	/**
 	 * Write the given {@link PublicKey} into the given {@link File}.
@@ -51,8 +52,9 @@ public class PublicKeyWriter
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void write(final PublicKey publicKey, final @NonNull File file) throws IOException
+	public static void write(final PublicKey publicKey, final File file) throws IOException
 	{
+		Objects.requireNonNull(file);
 		write(publicKey, new FileOutputStream(file));
 	}
 
@@ -66,9 +68,10 @@ public class PublicKeyWriter
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void write(final PublicKey publicKey, final @NonNull OutputStream outputStream)
+	public static void write(final PublicKey publicKey, final OutputStream outputStream)
 		throws IOException
 	{
+		Objects.requireNonNull(outputStream);
 		final byte[] publicKeyBytes = publicKey.getEncoded();
 		final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
 		outputStream.write(keySpec.getEncoded());
@@ -85,9 +88,10 @@ public class PublicKeyWriter
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void writeInPemFormat(final PublicKey publicKey, final @NonNull File file)
+	public static void writeInPemFormat(final PublicKey publicKey, final File file)
 		throws IOException
 	{
+		Objects.requireNonNull(file);
 		KeyWriter.writeInPemFormat(publicKey, file);
 	}
 

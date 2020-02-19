@@ -24,6 +24,9 @@
  */
 package de.alpharogroup.crypto.key.reader;
 
+import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,17 +37,11 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 
-import org.apache.commons.codec.binary.Base64;
-
-import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link PrivateKeyReader} is a utility class for reading private keys in *.der or *.pem
  * format.
  */
-@UtilityClass
-public class PrivateKeyReader
+public final class PrivateKeyReader
 {
 
 	/** The Constant RSA_PRIVATE_KEY. */
@@ -63,6 +60,10 @@ public class PrivateKeyReader
 	/** The Constant END_RSA_PRIVATE_KEY_SUFFIX. */
 	public static final String END_RSA_PRIVATE_KEY_SUFFIX = "\n-----END " + RSA_PRIVATE_KEY
 		+ "-----";
+
+	private PrivateKeyReader()
+	{
+	}
 
 	/**
 	 * Checks if the given {@link File}( in *.der format) is password protected

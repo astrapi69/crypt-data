@@ -24,14 +24,7 @@
  */
 package de.alpharogroup.crypto.key.reader;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.security.PrivateKey;
-import java.security.Security;
-
+import de.alpharogroup.crypto.provider.SecurityProvider;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMDecryptorProvider;
 import org.bouncycastle.openssl.PEMEncryptedKeyPair;
@@ -43,15 +36,19 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 
-import de.alpharogroup.crypto.provider.SecurityProvider;
-import lombok.experimental.UtilityClass;
+import java.io.*;
+import java.security.PrivateKey;
+import java.security.Security;
 
 /**
  * The class {@link PemObjectReader} is a utility class for reading {@link PemObject} from a file.
  */
-@UtilityClass
-public class PemObjectReader
+public final class PemObjectReader
 {
+
+	private PemObjectReader()
+	{
+	}
 
 	/**
 	 * Gets the pem object.

@@ -24,32 +24,20 @@
  */
 package de.alpharogroup.crypto.key.writer;
 
+import de.alpharogroup.crypto.compound.CompoundAlgorithm;
+import de.alpharogroup.crypto.factories.AlgorithmParameterSpecFactory;
+import de.alpharogroup.crypto.factories.SecretKeyFactoryExtensions;
+
+import javax.crypto.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.security.AlgorithmParameters;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.SecureRandom;
+import java.security.*;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.EncryptedPrivateKeyInfo;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-
-import de.alpharogroup.crypto.compound.CompoundAlgorithm;
-import de.alpharogroup.crypto.factories.AlgorithmParameterSpecFactory;
-import de.alpharogroup.crypto.factories.SecretKeyFactoryExtensions;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
+import java.util.Objects;
 
 /**
  * The class {@link EncryptedPrivateKeyWriter} is a utility class for write and protect
@@ -57,9 +45,12 @@ import lombok.experimental.UtilityClass;
  *
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class EncryptedPrivateKeyWriter
 {
+
+	private EncryptedPrivateKeyWriter()
+	{
+	}
 
 	/**
 	 * Encrypt the given {@link PrivateKey} with the given password and return the resulted byte
@@ -151,11 +142,12 @@ public final class EncryptedPrivateKeyWriter
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public static void encryptPrivateKeyWithPassword(final PrivateKey privateKey,
-		final @NonNull OutputStream outputStream, final String password)
+		final OutputStream outputStream, final String password)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
 		InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException,
 		BadPaddingException, InvalidParameterSpecException, IOException
 	{
+		Objects.requireNonNull(outputStream);
 		final byte[] encryptedPrivateKeyWithPasswordBytes = encryptPrivateKeyWithPassword(
 			privateKey, password);
 		outputStream.write(encryptedPrivateKeyWithPasswordBytes);

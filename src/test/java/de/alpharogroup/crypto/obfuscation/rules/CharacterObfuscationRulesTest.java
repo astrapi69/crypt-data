@@ -29,6 +29,7 @@ import static org.testng.AssertJUnit.assertNotNull;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -53,7 +54,7 @@ public class CharacterObfuscationRulesTest
 	@Test
 	public final void testConstructors()
 	{
-		final Map<Character, Character> charmap = MapFactory.newHashMap();
+		final Map<Character, Character> charmap = new HashMap<>();
 
 		charmap.put(Character.valueOf('1'), Character.valueOf('I'));
 		charmap.put(Character.valueOf('2'), Character.valueOf('S'));
@@ -94,8 +95,8 @@ public class CharacterObfuscationRulesTest
 		CharacterObfuscationRules third;
 		CharacterObfuscationRules fourth;
 
-		charmap = MapFactory.newHashMap();
-		charmap2 = MapFactory.newHashMap();
+		charmap = new HashMap<>();
+		charmap2 = new HashMap<>();
 
 		charmap.put(Character.valueOf('1'), Character.valueOf('I'));
 		charmap.put(Character.valueOf('2'), Character.valueOf('F'));
@@ -109,7 +110,7 @@ public class CharacterObfuscationRulesTest
 
 
 		first = new CharacterObfuscationRules(obfuscationRules);
-		second = new CharacterObfuscationRules(HashBiMap.create(MapFactory.newHashMap(charmap2)));
+		second = new CharacterObfuscationRules(HashBiMap.create(new HashMap<>(charmap2)));
 		third = new CharacterObfuscationRules(obfuscationRules);
 		fourth = new CharacterObfuscationRules(obfuscationRules);
 

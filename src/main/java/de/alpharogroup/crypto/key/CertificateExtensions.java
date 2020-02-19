@@ -24,14 +24,8 @@
  */
 package de.alpharogroup.crypto.key;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.X509Certificate;
-import java.util.Date;
-
-import javax.security.auth.x500.X500Principal;
-
+import de.alpharogroup.crypto.algorithm.HashAlgorithm;
+import de.alpharogroup.crypto.hex.HexExtensions;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -39,17 +33,25 @@ import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x500.style.IETFUtils;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 
-import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import de.alpharogroup.crypto.hex.HexExtensions;
-import lombok.experimental.UtilityClass;
+import javax.security.auth.x500.X500Principal;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.X509Certificate;
+import java.util.Date;
 
 /**
  * The class {@link CertificateExtensions} provides extension methods for {@link X509Certificate}
  * objects.
  */
-@UtilityClass
-public class CertificateExtensions
+public final class CertificateExtensions
 {
+
+	private CertificateExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
+	}
 
 	/**
 	 * Gets the issued to value of the given {@link X509Certificate}.

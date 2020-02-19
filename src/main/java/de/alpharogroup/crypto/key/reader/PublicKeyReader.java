@@ -24,6 +24,9 @@
  */
 package de.alpharogroup.crypto.key.reader;
 
+import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,17 +37,11 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
-import org.apache.commons.codec.binary.Base64;
-
-import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import lombok.experimental.UtilityClass;
-
 
 /**
  * The class {@link PublicKeyReader} is a utility class for reading public keys.
  */
-@UtilityClass
-public class PublicKeyReader
+public final class PublicKeyReader
 {
 
 	/** The Constant END_PUBLIC_KEY_SUFFIX. */
@@ -52,6 +49,10 @@ public class PublicKeyReader
 
 	/** The Constant BEGIN_PUBLIC_KEY_PREFIX. */
 	public static final String BEGIN_PUBLIC_KEY_PREFIX = "-----BEGIN PUBLIC KEY-----\n";
+
+	private PublicKeyReader()
+	{
+	}
 
 	/**
 	 * Read public key.

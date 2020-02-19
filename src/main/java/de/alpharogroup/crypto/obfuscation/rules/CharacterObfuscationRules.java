@@ -26,16 +26,10 @@ package de.alpharogroup.crypto.obfuscation.rules;
 
 import com.google.common.collect.BiMap;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 /**
  * The class {@link CharacterObfuscationRules} can define a simple rule for encrypt and decrypt a
  * key.
  */
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 public class CharacterObfuscationRules extends ObfuscationBiMapRules<Character, Character>
 {
 
@@ -46,10 +40,70 @@ public class CharacterObfuscationRules extends ObfuscationBiMapRules<Character, 
 	 *            the obfuscation rules
 	 */
 
-	@Builder(builderMethodName = "rulesBuilder")
 	public CharacterObfuscationRules(BiMap<Character, Character> obfuscationRules)
 	{
 		super(obfuscationRules);
 	}
 
+	public static CharacterObfuscationRulesBuilder rulesBuilder()
+	{
+		return new CharacterObfuscationRulesBuilder();
+	}
+
+	public boolean equals(final Object o)
+	{
+		if (o == this)
+			return true;
+		if (!(o instanceof CharacterObfuscationRules))
+			return false;
+		final CharacterObfuscationRules other = (CharacterObfuscationRules)o;
+		if (!other.canEqual((Object)this))
+			return false;
+		if (!super.equals(o))
+			return false;
+		return true;
+	}
+
+	protected boolean canEqual(final Object other)
+	{
+		return other instanceof CharacterObfuscationRules;
+	}
+
+	public int hashCode()
+	{
+		int result = super.hashCode();
+		return result;
+	}
+
+	public String toString()
+	{
+		return "CharacterObfuscationRules(super=" + super.toString() + ")";
+	}
+
+	public static class CharacterObfuscationRulesBuilder
+	{
+		private BiMap<Character, Character> obfuscationRules;
+
+		CharacterObfuscationRulesBuilder()
+		{
+		}
+
+		public CharacterObfuscationRules.CharacterObfuscationRulesBuilder obfuscationRules(
+			BiMap<Character, Character> obfuscationRules)
+		{
+			this.obfuscationRules = obfuscationRules;
+			return this;
+		}
+
+		public CharacterObfuscationRules build()
+		{
+			return new CharacterObfuscationRules(obfuscationRules);
+		}
+
+		public String toString()
+		{
+			return "CharacterObfuscationRules.CharacterObfuscationRulesBuilder(obfuscationRules="
+				+ this.obfuscationRules + ")";
+		}
+	}
 }

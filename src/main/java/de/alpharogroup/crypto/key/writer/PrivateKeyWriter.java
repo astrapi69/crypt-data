@@ -24,6 +24,10 @@
  */
 package de.alpharogroup.crypto.key.writer;
 
+import de.alpharogroup.crypto.key.KeyFileFormat;
+import de.alpharogroup.crypto.key.KeyFormat;
+import de.alpharogroup.crypto.key.PrivateKeyExtensions;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,19 +35,17 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
-
-import de.alpharogroup.crypto.key.KeyFileFormat;
-import de.alpharogroup.crypto.key.KeyFormat;
-import de.alpharogroup.crypto.key.PrivateKeyExtensions;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
+import java.util.Objects;
 
 /**
  * The class {@link PrivateKeyWriter} is a utility class for write public keys in files or streams.
  */
-@UtilityClass
-public class PrivateKeyWriter
+public final class PrivateKeyWriter
 {
+
+	private PrivateKeyWriter()
+	{
+	}
 
 	/**
 	 * Write the given {@link PrivateKey} into the given {@link File} in the *.der format.
@@ -55,9 +57,10 @@ public class PrivateKeyWriter
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void write(final PrivateKey privateKey, final @NonNull File file)
+	public static void write(final PrivateKey privateKey, final File file)
 		throws IOException
 	{
+		Objects.requireNonNull(file);
 		write(privateKey, new FileOutputStream(file));
 	}
 
@@ -71,9 +74,10 @@ public class PrivateKeyWriter
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void write(final PrivateKey privateKey, final @NonNull OutputStream outputStream)
+	public static void write(final PrivateKey privateKey, final OutputStream outputStream)
 		throws IOException
 	{
+		Objects.requireNonNull(outputStream);
 		final byte[] privateKeyBytes = privateKey.getEncoded();
 		final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
 		outputStream.write(keySpec.getEncoded());
@@ -90,9 +94,10 @@ public class PrivateKeyWriter
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void writeInPemFormat(final PrivateKey privateKey, final @NonNull File file)
+	public static void writeInPemFormat(final PrivateKey privateKey, final File file)
 		throws IOException
 	{
+		Objects.requireNonNull(file);
 		KeyWriter.writeInPemFormat(privateKey, file);
 	}
 
@@ -110,9 +115,10 @@ public class PrivateKeyWriter
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void write(final PrivateKey privateKey, final @NonNull OutputStream outputStream,
+	public static void write(final PrivateKey privateKey, final OutputStream outputStream,
 		final KeyFileFormat fileFormat, final KeyFormat keyFormat) throws IOException
 	{
+		Objects.requireNonNull(outputStream);
 		final byte[] privateKeyBytes = privateKey.getEncoded();
 		switch (fileFormat)
 		{

@@ -28,6 +28,7 @@ import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.PublicKey;
 
@@ -89,8 +90,9 @@ public class TransactionTest
 	 * {@link Transaction#toString()}
 	 */
 	@Test(enabled = false)
-	@SneakyThrows
 	public void testEqualsHashcodeAndToStringWithClass()
+		throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException,
+		InstantiationException, ClassNotFoundException, InvocationTargetException, IOException
 	{
 		boolean expected;
 		boolean actual;
