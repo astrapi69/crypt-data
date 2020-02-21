@@ -28,6 +28,7 @@ import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.PublicKey;
 
@@ -39,7 +40,6 @@ import org.testng.annotations.Test;
 import de.alpharogroup.crypto.key.reader.PublicKeyReader;
 import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 import de.alpharogroup.file.search.PathFinder;
-import lombok.SneakyThrows;
 
 /**
  * The unit test class for the class {@link Transaction}
@@ -89,8 +89,9 @@ public class TransactionTest
 	 * {@link Transaction#toString()}
 	 */
 	@Test(enabled = false)
-	@SneakyThrows
 	public void testEqualsHashcodeAndToStringWithClass()
+		throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException,
+		InstantiationException, ClassNotFoundException, InvocationTargetException, IOException
 	{
 		boolean expected;
 		boolean actual;

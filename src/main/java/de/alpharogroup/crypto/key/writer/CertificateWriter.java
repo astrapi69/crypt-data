@@ -31,20 +31,18 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
+import java.util.Objects;
 
 import org.apache.commons.codec.binary.Base64;
 
 import de.alpharogroup.crypto.key.KeyFileFormat;
 import de.alpharogroup.crypto.key.reader.CertificateReader;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link CertificateWriter} is a utility class for write certificates in files or streams
  * in several file formats.
  */
-@UtilityClass
-public class CertificateWriter
+public final class CertificateWriter
 {
 
 	/**
@@ -62,9 +60,10 @@ public class CertificateWriter
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	public static void write(final X509Certificate certificate, final @NonNull File file,
+	public static void write(final X509Certificate certificate, final File file,
 		KeyFileFormat fileFormat) throws IOException, CertificateEncodingException
 	{
+		Objects.requireNonNull(file);
 		write(certificate, new FileOutputStream(file), fileFormat);
 	}
 
@@ -83,10 +82,10 @@ public class CertificateWriter
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	public static void write(final X509Certificate certificate,
-		final @NonNull OutputStream outputStream, KeyFileFormat fileFormat)
-		throws IOException, CertificateEncodingException
+	public static void write(final X509Certificate certificate, final OutputStream outputStream,
+		KeyFileFormat fileFormat) throws IOException, CertificateEncodingException
 	{
+		Objects.requireNonNull(outputStream);
 		final byte[] certificateBytes = certificate.getEncoded();
 		switch (fileFormat)
 		{
@@ -116,9 +115,10 @@ public class CertificateWriter
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	public static void writeInDerFormat(final X509Certificate certificate, final @NonNull File file)
+	public static void writeInDerFormat(final X509Certificate certificate, final File file)
 		throws IOException, CertificateEncodingException
 	{
+		Objects.requireNonNull(file);
 		writeInDerFormat(certificate, new FileOutputStream(file));
 	}
 
@@ -136,8 +136,9 @@ public class CertificateWriter
 	 *             is thrown if an encoding error occurs.
 	 */
 	public static void writeInDerFormat(final X509Certificate certificate,
-		final @NonNull OutputStream outputStream) throws IOException, CertificateEncodingException
+		final OutputStream outputStream) throws IOException, CertificateEncodingException
 	{
+		Objects.requireNonNull(outputStream);
 		write(certificate, outputStream, KeyFileFormat.DER);
 	}
 
@@ -153,9 +154,10 @@ public class CertificateWriter
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	public static void writeInPemFormat(final X509Certificate certificate, final @NonNull File file)
+	public static void writeInPemFormat(final X509Certificate certificate, final File file)
 		throws IOException, CertificateEncodingException
 	{
+		Objects.requireNonNull(file);
 		writeInPemFormat(certificate, new FileOutputStream(file));
 	}
 
@@ -173,9 +175,14 @@ public class CertificateWriter
 	 *             is thrown if an encoding error occurs.
 	 */
 	public static void writeInPemFormat(final X509Certificate certificate,
-		final @NonNull OutputStream outputStream) throws IOException, CertificateEncodingException
+		final OutputStream outputStream) throws IOException, CertificateEncodingException
 	{
+		Objects.requireNonNull(outputStream);
 		write(certificate, outputStream, KeyFileFormat.PEM);
+	}
+
+	private CertificateWriter()
+	{
 	}
 
 }

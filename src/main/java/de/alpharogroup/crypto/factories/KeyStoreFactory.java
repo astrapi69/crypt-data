@@ -35,13 +35,10 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * The factory class {@link KeyStoreFactory} holds methods for creating {@link KeyStore} objects.
  */
-@UtilityClass
-public class KeyStoreFactory
+public final class KeyStoreFactory
 {
 
 	/**
@@ -114,6 +111,10 @@ public class KeyStoreFactory
 		}
 		keyStore.load(new FileInputStream(keystoreFile), password.toCharArray());
 		return keyStore;
+	}
+
+	private KeyStoreFactory()
+	{
 	}
 
 }

@@ -29,13 +29,11 @@ import java.security.spec.KeySpec;
 import javax.crypto.spec.PBEKeySpec;
 
 import de.alpharogroup.crypto.compound.CompoundAlgorithm;
-import lombok.experimental.UtilityClass;
 
 /**
  * The factory class {@link KeySpecFactory} holds methods for creating {@link KeySpec} objects.
  */
-@UtilityClass
-public class KeySpecFactory
+public final class KeySpecFactory
 {
 
 	/**
@@ -74,6 +72,10 @@ public class KeySpecFactory
 				iterationCount);
 		}
 		return new PBEKeySpec(privateKey.toCharArray(), salt, iterationCount);
+	}
+
+	private KeySpecFactory()
+	{
 	}
 
 }

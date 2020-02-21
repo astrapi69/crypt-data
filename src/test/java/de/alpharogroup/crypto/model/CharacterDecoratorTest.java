@@ -29,6 +29,9 @@ import static org.testng.Assert.assertNotNull;
 
 import org.testng.annotations.Test;
 
+/**
+ * The unit test class for the class {@link CharacterDecorator}
+ */
 public class CharacterDecoratorTest
 {
 
@@ -40,15 +43,15 @@ public class CharacterDecoratorTest
 	{
 		Character actual;
 		Character expected;
-		CharacterDecorator characterDecorator = CharacterDecorator.builder()
-			.prefix(Character.valueOf('$')).suffix(Character.valueOf('?')).build();
-		assertNotNull(characterDecorator);
+		CharacterDecorator decorator = CharacterDecorator.builder().prefix(Character.valueOf('$'))
+			.suffix(Character.valueOf('?')).build();
+		assertNotNull(decorator);
 
-		actual = characterDecorator.getPrefix();
+		actual = decorator.getPrefix();
 		expected = '$';
 		assertEquals(actual, expected);
 
-		actual = characterDecorator.getSuffix();
+		actual = decorator.getSuffix();
 		expected = '?';
 		assertEquals(actual, expected);
 	}
@@ -59,8 +62,8 @@ public class CharacterDecoratorTest
 	@Test(expectedExceptions = { NullPointerException.class })
 	public void testCreationWithNPE()
 	{
-		CharacterDecorator characterDecorator = CharacterDecorator.builder().build();
-		assertNotNull(characterDecorator);
+		CharacterDecorator decorator = CharacterDecorator.builder().build();
+		assertNotNull(decorator);
 	}
 
 }

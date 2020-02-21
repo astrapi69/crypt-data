@@ -27,7 +27,6 @@ package de.alpharogroup.crypto.factories;
 import static org.testng.AssertJUnit.assertNotNull;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
 import java.security.PublicKey;
 import java.security.Security;
@@ -38,7 +37,6 @@ import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.cert.X509v1CertificateBuilder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
@@ -133,8 +131,7 @@ public class CertificateBuilderFactoryTest
 	/**
 	 * Test method for {@link CertificateBuilderFactory} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

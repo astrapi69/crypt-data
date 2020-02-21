@@ -34,14 +34,11 @@ import org.bouncycastle.cert.X509v1CertificateBuilder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509v1CertificateBuilder;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * The factory class {@link CertificateBuilderFactory} holds methods for creating
  * CertificateBuilder.
  */
-@UtilityClass
-public class CertificateBuilderFactory
+public final class CertificateBuilderFactory
 {
 
 	/**
@@ -95,5 +92,9 @@ public class CertificateBuilderFactory
 		final X509v3CertificateBuilder certBuilder = new X509v3CertificateBuilder(issuer, serial,
 			notBefore, notAfter, subject, publicKeyInfo);
 		return certBuilder;
+	}
+
+	private CertificateBuilderFactory()
+	{
 	}
 }

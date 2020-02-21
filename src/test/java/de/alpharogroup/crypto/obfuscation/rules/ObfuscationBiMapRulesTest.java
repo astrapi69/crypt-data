@@ -27,6 +27,7 @@ package de.alpharogroup.crypto.obfuscation.rules;
 import static org.testng.AssertJUnit.assertEquals;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.meanbean.test.BeanTestException;
@@ -36,7 +37,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import de.alpharogroup.collections.map.MapFactory;
 import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 
 /**
@@ -63,7 +63,7 @@ public class ObfuscationBiMapRulesTest
 		ObfuscationBiMapRules<String, String> third;
 		ObfuscationBiMapRules<String, String> fourth;
 
-		charmap = MapFactory.newHashMap();
+		charmap = new HashMap<>();
 
 		charmap.put("1", "O");
 		charmap.put("2", "Tw");
@@ -76,7 +76,7 @@ public class ObfuscationBiMapRulesTest
 		charmap.put("9", "N");
 		obfuscationRules = HashBiMap.create(charmap);
 
-		map = MapFactory.newHashMap();
+		map = new HashMap<>();
 
 		map.put("1", "O");
 

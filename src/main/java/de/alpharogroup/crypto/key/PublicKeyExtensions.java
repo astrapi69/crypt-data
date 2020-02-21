@@ -31,6 +31,7 @@ import java.security.interfaces.DSAPublicKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -38,14 +39,11 @@ import de.alpharogroup.crypto.hex.HexExtensions;
 import de.alpharogroup.crypto.key.reader.PublicKeyReader;
 import de.alpharogroup.crypto.key.writer.PublicKeyWriter;
 import de.alpharogroup.string.StringExtensions;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link PublicKeyExtensions}.
  */
-@UtilityClass
-public class PublicKeyExtensions
+public final class PublicKeyExtensions
 {
 
 	/**
@@ -79,18 +77,6 @@ public class PublicKeyExtensions
 	}
 
 	/**
-	 * Transform the given {@link PublicKey} to a hexadecimal {@link String} value.
-	 *
-	 * @param publicKey
-	 *            the public key
-	 * @return the new hexadecimal {@link String} value.
-	 */
-	public static String toHexString(final PublicKey publicKey)
-	{
-		return toHexString(publicKey, true);
-	}
-
-	/**
 	 * Transform the given {@link PublicKey} to a base64 encoded {@link String} value.
 	 *
 	 * @param publicKey
@@ -104,27 +90,15 @@ public class PublicKeyExtensions
 	}
 
 	/**
-	 * Transform the public key in pem format.
+	 * Transform the given {@link PublicKey} to a hexadecimal {@link String} value.
 	 *
 	 * @param publicKey
 	 *            the public key
-	 * @return the public key in pem format
+	 * @return the new hexadecimal {@link String} value.
 	 */
-	public static String toPemFormat(final PublicKey publicKey)
+	public static String toHexString(final PublicKey publicKey)
 	{
-		final String publicKeyAsBase64String = toBase64(publicKey);
-		final List<String> parts = StringExtensions.splitByFixedLength(publicKeyAsBase64String, 64);
-
-		final StringBuilder sb = new StringBuilder();
-		sb.append(PublicKeyReader.BEGIN_PUBLIC_KEY_PREFIX);
-		for (final String part : parts)
-		{
-			sb.append(part);
-			sb.append(System.lineSeparator());
-		}
-		sb.append(PublicKeyReader.END_PUBLIC_KEY_SUFFIX);
-		sb.append(System.lineSeparator());
-		return sb.toString();
+		return toHexString(publicKey, true);
 	}
 
 	/**
@@ -151,10 +125,41 @@ public class PublicKeyExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void toPemFile(final @NonNull PublicKey publicKey, final @NonNull File file)
-		throws IOException
+	public static void toPemFile(final PublicKey publicKey, final File file) throws IOException
 	{
+		Objects.requireNonNull(publicKey);
+		Objects.requireNonNull(file);
 		PublicKeyWriter.writeInPemFormat(publicKey, file);
+	}
+
+	/**
+	 * Transform the public key in pem format.
+	 *
+	 * @param publicKey
+	 *            the public key
+	 * @return the public key in pem format
+	 */
+	public static String toPemFormat(final PublicKey publicKey)
+	{
+		final String publicKeyAsBase64String = toBase64(publicKey);
+		final List<String> parts = StringExtensions.splitByFixedLength(publicKeyAsBase64String, 64);
+
+		final StringBuilder sb = new StringBuilder();
+		sb.append(PublicKeyReader.BEGIN_PUBLIC_KEY_PREFIX);
+		for (final String part : parts)
+		{
+			sb.append(part);
+			sb.append(System.lineSeparator());
+		}
+		sb.append(PublicKeyReader.END_PUBLIC_KEY_SUFFIX);
+		sb.append(System.lineSeparator());
+		return sb.toString();
+	}
+
+	private PublicKeyExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
 	}
 
 }

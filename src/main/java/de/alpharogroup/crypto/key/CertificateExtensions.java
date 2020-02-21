@@ -41,73 +41,13 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
 import de.alpharogroup.crypto.hex.HexExtensions;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link CertificateExtensions} provides extension methods for {@link X509Certificate}
  * objects.
  */
-@UtilityClass
-public class CertificateExtensions
+public final class CertificateExtensions
 {
-
-	/**
-	 * Gets the issued to value of the given {@link X509Certificate}.
-	 *
-	 * @param certificate
-	 *            the certificate
-	 * @return the issued to value of the given {@link X509Certificate}.
-	 */
-	public static String getIssuedTo(final X509Certificate certificate)
-	{
-		final X500Principal issuedToPrincipal = certificate.getIssuerX500Principal();
-		final String issuedTo = issuedToPrincipal.getName();
-		return issuedTo;
-	}
-
-	/**
-	 * Gets the issued by value of the given {@link X509Certificate}.
-	 *
-	 * @param certificate
-	 *            the certificate
-	 * @return the issued by value of the given {@link X509Certificate}.
-	 */
-	public static String getIssuedBy(final X509Certificate certificate)
-	{
-		final X500Principal issuedByPrincipal = certificate.getSubjectX500Principal();
-		final String issuedBy = issuedByPrincipal.getName();
-		return issuedBy;
-	}
-
-	/**
-	 * Gets the organization value of the given {@link X509Certificate}.
-	 *
-	 * @param certificate
-	 *            the certificate
-	 * @return the organization
-	 * @throws CertificateEncodingException
-	 *             is thrown if an encoding error occurs.
-	 */
-	public static String getOrganization(final X509Certificate certificate)
-		throws CertificateEncodingException
-	{
-		return getFirstValueOf(certificate, BCStyle.O);
-	}
-
-	/**
-	 * Gets the locality value of the given {@link X509Certificate}.
-	 *
-	 * @param certificate
-	 *            the certificate
-	 * @return the locality
-	 * @throws CertificateEncodingException
-	 *             is thrown if an encoding error occurs.
-	 */
-	public static String getLocality(final X509Certificate certificate)
-		throws CertificateEncodingException
-	{
-		return getFirstValueOf(certificate, BCStyle.L);
-	}
 
 	/**
 	 * Gets the country value of the given {@link X509Certificate}.
@@ -122,6 +62,31 @@ public class CertificateExtensions
 		throws CertificateEncodingException
 	{
 		return getFirstValueOf(certificate, BCStyle.C);
+	}
+
+	/**
+	 * Gets the fingerprint from the given {@link X509Certificate} and the given algorithm.
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @param hashAlgorithm
+	 *            the hash algorithm
+	 * @return the fingerprint
+	 * @throws CertificateEncodingException
+	 *             is thrown if an encoding error occurs.
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the MessageDigest object fails.
+	 */
+	public static String getFingerprint(final X509Certificate certificate,
+		final HashAlgorithm hashAlgorithm)
+		throws CertificateEncodingException, NoSuchAlgorithmException
+	{
+		final byte[] derEncoded = certificate.getEncoded();
+		final MessageDigest messageDigest = MessageDigest.getInstance(hashAlgorithm.getAlgorithm());
+		messageDigest.update(derEncoded);
+		final byte[] digest = messageDigest.digest();
+		final String fingerprint = HexExtensions.toHexString(digest);
+		return fingerprint;
 	}
 
 	/**
@@ -153,6 +118,76 @@ public class CertificateExtensions
 	}
 
 	/**
+	 * Gets the issued by value of the given {@link X509Certificate}.
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the issued by value of the given {@link X509Certificate}.
+	 */
+	public static String getIssuedBy(final X509Certificate certificate)
+	{
+		final X500Principal issuedByPrincipal = certificate.getSubjectX500Principal();
+		final String issuedBy = issuedByPrincipal.getName();
+		return issuedBy;
+	}
+
+	/**
+	 * Gets the issued to value of the given {@link X509Certificate}.
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the issued to value of the given {@link X509Certificate}.
+	 */
+	public static String getIssuedTo(final X509Certificate certificate)
+	{
+		final X500Principal issuedToPrincipal = certificate.getIssuerX500Principal();
+		final String issuedTo = issuedToPrincipal.getName();
+		return issuedTo;
+	}
+
+	/**
+	 * Gets the locality value of the given {@link X509Certificate}.
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the locality
+	 * @throws CertificateEncodingException
+	 *             is thrown if an encoding error occurs.
+	 */
+	public static String getLocality(final X509Certificate certificate)
+		throws CertificateEncodingException
+	{
+		return getFirstValueOf(certificate, BCStyle.L);
+	}
+
+	/**
+	 * Gets the organization value of the given {@link X509Certificate}.
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the organization
+	 * @throws CertificateEncodingException
+	 *             is thrown if an encoding error occurs.
+	 */
+	public static String getOrganization(final X509Certificate certificate)
+		throws CertificateEncodingException
+	{
+		return getFirstValueOf(certificate, BCStyle.O);
+	}
+
+	/**
+	 * Gets the signature algorithm.
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the signature algorithm
+	 */
+	public static String getSignatureAlgorithm(final X509Certificate certificate)
+	{
+		return certificate.getSigAlgName();
+	}
+
+	/**
 	 * Gets the valid from of the given {@link X509Certificate}.
 	 *
 	 * @param certificate
@@ -178,40 +213,9 @@ public class CertificateExtensions
 		return certificate.getNotAfter();
 	}
 
-	/**
-	 * Gets the fingerprint from the given {@link X509Certificate} and the given algorithm.
-	 *
-	 * @param certificate
-	 *            the certificate
-	 * @param hashAlgorithm
-	 *            the hash algorithm
-	 * @return the fingerprint
-	 * @throws CertificateEncodingException
-	 *             is thrown if an encoding error occurs.
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the MessageDigest object fails.
-	 */
-	public static String getFingerprint(final X509Certificate certificate,
-		final HashAlgorithm hashAlgorithm)
-		throws CertificateEncodingException, NoSuchAlgorithmException
+	private CertificateExtensions()
 	{
-		final byte[] derEncoded = certificate.getEncoded();
-		final MessageDigest messageDigest = MessageDigest.getInstance(hashAlgorithm.getAlgorithm());
-		messageDigest.update(derEncoded);
-		final byte[] digest = messageDigest.digest();
-		final String fingerprint = HexExtensions.toHexString(digest);
-		return fingerprint;
-	}
-
-	/**
-	 * Gets the signature algorithm.
-	 *
-	 * @param certificate
-	 *            the certificate
-	 * @return the signature algorithm
-	 */
-	public static String getSignatureAlgorithm(final X509Certificate certificate)
-	{
-		return certificate.getSigAlgName();
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
 	}
 }

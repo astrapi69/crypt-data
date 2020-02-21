@@ -43,7 +43,7 @@ No animals were harmed in the making of this library.
 
 The source code comes under the liberal MIT License, making crypt-data great for all types of applications.
 
-## Maven dependency
+## Maven dependency [![Maven Central](https://img.shields.io/maven-central/v/de.alpharogroup/crypt-data.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22de.alpharogroup%22%20AND%20a:%22crypt-data%22)
 
 Maven dependency is now on sonatype.
 Check out [sonatype repository](https://oss.sonatype.org/index.html#nexus-search;gav~de.alpharogroup~crypt-data~~~) for latest snapshots and releases.
@@ -55,7 +55,7 @@ Than you can add the dependency to your dependencies:
 	<properties>
 			...
 		<!-- CRYPT-DATA version -->
-		<crypt-data.version>7.2</crypt-data.version>
+		<crypt-data.version>7.3</crypt-data.version>
 			...
 	</properties>
 			...
@@ -79,7 +79,7 @@ You can first define the version in the ext section and add than the following g
 ```
 ext {
 			...
-    cryptDataVersion = '7.2'
+    cryptDataVersion = '7.3'
 			...
 }
 dependencies {

@@ -27,28 +27,18 @@ package de.alpharogroup.crypto.obfuscation.rule;
 import java.util.Optional;
 import java.util.Set;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.FieldDefaults;
-
 /**
  * The class {@link CharacterObfuscationOperationRule} builds a complex rule for obfuscating a
  * single character.
  */
-@Getter
-@Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CharacterObfuscationOperationRule
 	extends
 		ObfuscationOperationRule<Character, Character>
 {
+
+	public CharacterObfuscationOperationRule()
+	{
+	}
 
 	public CharacterObfuscationOperationRule(Character character, Set<Integer> indexes,
 		boolean inverted, Optional<Character> operatedCharacter, Operation operation,
@@ -61,4 +51,37 @@ public class CharacterObfuscationOperationRule
 		}
 	}
 
+	@Override
+	protected boolean canEqual(final Object other)
+	{
+		return other instanceof CharacterObfuscationOperationRule;
+	}
+
+	@Override
+	public boolean equals(final Object o)
+	{
+		if (o == this)
+			return true;
+		if (!(o instanceof CharacterObfuscationOperationRule))
+			return false;
+		final CharacterObfuscationOperationRule other = (CharacterObfuscationOperationRule)o;
+		if (!other.canEqual(this))
+			return false;
+		if (!super.equals(o))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int result = super.hashCode();
+		return result;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "CharacterObfuscationOperationRule(super=" + super.toString() + ")";
+	}
 }

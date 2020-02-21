@@ -37,29 +37,43 @@ import java.security.spec.X509EncodedKeySpec;
 import org.apache.commons.codec.binary.Base64;
 
 import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import lombok.experimental.UtilityClass;
 
 
 /**
  * The class {@link PublicKeyReader} is a utility class for reading public keys.
  */
-@UtilityClass
-public class PublicKeyReader
+public final class PublicKeyReader
 {
-
-	/** The Constant END_PUBLIC_KEY_SUFFIX. */
-	public static final String END_PUBLIC_KEY_SUFFIX = "-----END PUBLIC KEY-----";
 
 	/** The Constant BEGIN_PUBLIC_KEY_PREFIX. */
 	public static final String BEGIN_PUBLIC_KEY_PREFIX = "-----BEGIN PUBLIC KEY-----\n";
 
+	/** The Constant END_PUBLIC_KEY_SUFFIX. */
+	public static final String END_PUBLIC_KEY_SUFFIX = "-----END PUBLIC KEY-----";
+
 	/**
-	 * Read public key.
+	 * Read the public key from a pem file as base64 encoded {@link String} value.
+	 *
+	 * @param file
+	 *            the file in pem format that contains the public key.
+	 * @return the base64 encoded {@link String} value.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static String readPemFileAsBase64(final File file) throws IOException
+	{
+		final byte[] keyBytes = Files.readAllBytes(file.toPath());
+		final String publicKeyAsBase64String = new String(keyBytes)
+			.replace(BEGIN_PUBLIC_KEY_PREFIX, "").replace(END_PUBLIC_KEY_SUFFIX, "");
+		return publicKeyAsBase64String;
+	}
+
+	/**
+	 * reads a public key from a file.
 	 *
 	 * @param file
 	 *            the file
 	 * @return the public key
-	 * 
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws NoSuchAlgorithmException
@@ -70,11 +84,12 @@ public class PublicKeyReader
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list.
 	 */
-	public static PublicKey readPublicKey(final File file) throws IOException,
+	public static PublicKey readPemPublicKey(final File file) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
-		final byte[] keyBytes = Files.readAllBytes(file.toPath());
-		return readPublicKey(keyBytes);
+		final String publicKeyAsString = readPemFileAsBase64(file);
+		final byte[] decoded = Base64.decodeBase64(publicKeyAsString);
+		return readPublicKey(decoded);
 	}
 
 	/**
@@ -123,11 +138,12 @@ public class PublicKeyReader
 	}
 
 	/**
-	 * reads a public key from a file.
+	 * Read public key.
 	 *
 	 * @param file
 	 *            the file
 	 * @return the public key
+	 * 
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws NoSuchAlgorithmException
@@ -138,29 +154,15 @@ public class PublicKeyReader
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list.
 	 */
-	public static PublicKey readPemPublicKey(final File file) throws IOException,
+	public static PublicKey readPublicKey(final File file) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
-		final String publicKeyAsString = readPemFileAsBase64(file);
-		final byte[] decoded = Base64.decodeBase64(publicKeyAsString);
-		return readPublicKey(decoded);
+		final byte[] keyBytes = Files.readAllBytes(file.toPath());
+		return readPublicKey(keyBytes);
 	}
 
-	/**
-	 * Read the public key from a pem file as base64 encoded {@link String} value.
-	 *
-	 * @param file
-	 *            the file in pem format that contains the public key.
-	 * @return the base64 encoded {@link String} value.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static String readPemFileAsBase64(final File file) throws IOException
+	private PublicKeyReader()
 	{
-		final byte[] keyBytes = Files.readAllBytes(file.toPath());
-		final String publicKeyAsBase64String = new String(keyBytes)
-			.replace(BEGIN_PUBLIC_KEY_PREFIX, "").replace(END_PUBLIC_KEY_SUFFIX, "");
-		return publicKeyAsBase64String;
 	}
 
 }

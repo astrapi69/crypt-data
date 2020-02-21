@@ -44,13 +44,11 @@ import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 
 import de.alpharogroup.crypto.provider.SecurityProvider;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link PemObjectReader} is a utility class for reading {@link PemObject} from a file.
  */
-@UtilityClass
-public class PemObjectReader
+public final class PemObjectReader
 {
 
 	/**
@@ -118,5 +116,9 @@ public class PemObjectReader
 		pemWriter.close();
 		final String pemString = stringWriter.toString();
 		return pemString;
+	}
+
+	private PemObjectReader()
+	{
 	}
 }

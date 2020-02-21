@@ -28,25 +28,26 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
 
+import org.apache.commons.io.FileUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.checksum.FileChecksumExtensions;
 import de.alpharogroup.crypto.algorithm.MdAlgorithm;
 import de.alpharogroup.crypto.key.PrivateKeyExtensions;
 import de.alpharogroup.crypto.key.reader.PrivateKeyReader;
 import de.alpharogroup.crypto.key.reader.PublicKeyReader;
-import de.alpharogroup.file.checksum.ChecksumExtensions;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
 
@@ -86,8 +87,7 @@ public class PublicKeyWriterTest
 	/**
 	 * Test method for {@link PublicKeyWriter} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
@@ -112,17 +112,17 @@ public class PublicKeyWriterTest
 	public void testWriteFile() throws IOException, NoSuchAlgorithmException,
 		InvalidKeySpecException, NoSuchProviderException
 	{
-		String expected;
-		String actual;
+		Checksum expected;
+		Checksum actual;
 		File writtenPublickeyDerFile;
 		// new scenario...
 		publicKey = PublicKeyReader.readPublicKey(publicKeyDerFile);
 		writtenPublickeyDerFile = new File(derDir, "written-public.der");
 		PublicKeyWriter.write(publicKey, writtenPublickeyDerFile);
-
-		expected = ChecksumExtensions.getChecksum(publicKeyDerFile, MdAlgorithm.MD5);
-		actual = ChecksumExtensions.getChecksum(writtenPublickeyDerFile, MdAlgorithm.MD5);
-		assertEquals(expected, actual);
+		Checksum checksum = new CRC32();
+		expected = FileUtils.checksum(publicKeyDerFile, checksum);
+		actual = FileUtils.checksum(writtenPublickeyDerFile, checksum);
+		assertEquals(expected.getValue(), actual.getValue());
 		DeleteFileExtensions.delete(writtenPublickeyDerFile);
 	}
 
@@ -143,8 +143,8 @@ public class PublicKeyWriterTest
 		publicKey = PrivateKeyExtensions.generatePublicKey(privateKey);
 		convertedPublickeyPemFile = new File(pemDir, "converted-public.pem");
 		PublicKeyWriter.writeInPemFormat(publicKey, convertedPublickeyPemFile);
-		expected = ChecksumExtensions.getChecksum(publicKeyPemFile, MdAlgorithm.MD5);
-		actual = ChecksumExtensions.getChecksum(convertedPublickeyPemFile, MdAlgorithm.MD5);
+		expected = FileChecksumExtensions.getChecksum(publicKeyPemFile, MdAlgorithm.MD5);
+		actual = FileChecksumExtensions.getChecksum(convertedPublickeyPemFile, MdAlgorithm.MD5);
 		assertEquals(expected, actual);
 		DeleteFileExtensions.delete(convertedPublickeyPemFile);
 	}

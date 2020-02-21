@@ -28,8 +28,12 @@ import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
@@ -38,7 +42,6 @@ import org.testng.annotations.Test;
 import de.alpharogroup.crypto.key.reader.PublicKeyReader;
 import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 import de.alpharogroup.file.search.PathFinder;
-import lombok.SneakyThrows;
 
 /**
  * The unit test class for the class {@link Address}
@@ -50,8 +53,8 @@ public class AddressTest
 	 * Test method for {@link Address} constructors
 	 */
 	@Test
-	@SneakyThrows
-	public final void testConstructors()
+	public final void testConstructors() throws InvalidKeySpecException, NoSuchAlgorithmException,
+		NoSuchProviderException, IOException
 	{
 		Address address;
 		File publickeyPemDir;
@@ -74,8 +77,9 @@ public class AddressTest
 	 * {@link Address#toString()}
 	 */
 	@Test(enabled = false)
-	@SneakyThrows
 	public void testEqualsHashcodeAndToStringWithClass()
+		throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException,
+		InstantiationException, ClassNotFoundException, InvocationTargetException, IOException
 	{
 		boolean expected;
 		boolean actual;

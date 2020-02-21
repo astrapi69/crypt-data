@@ -58,15 +58,53 @@ import de.alpharogroup.crypto.factories.CipherFactory;
 import de.alpharogroup.crypto.factories.KeySpecFactory;
 import de.alpharogroup.crypto.factories.SecretKeyFactoryExtensions;
 import de.alpharogroup.crypto.provider.SecurityProvider;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link EncryptedPrivateKeyReader} is a utility class for reading encrypted private keys
  * that are protected with a password.
  */
-@UtilityClass
 public final class EncryptedPrivateKeyReader
 {
+
+	/**
+	 * Reads from the given {@link File} that contains the password protected {@link KeyPair} and
+	 * returns it
+	 *
+	 * @param encryptedPrivateKeyFile
+	 *            the file that contains the password protected {@link KeyPair}
+	 * @param password
+	 *            the password
+	 * @return the key pair
+	 * @throws FileNotFoundException
+	 *             is thrown if the file did not found
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws PEMException
+	 *             is thrown if an error occurs on read the pem file
+	 */
+	public static KeyPair getKeyPair(final File encryptedPrivateKeyFile, final String password)
+		throws FileNotFoundException, IOException, PEMException
+	{
+		PEMParser pemParser = new PEMParser(new FileReader(encryptedPrivateKeyFile));
+		Object pemObject = pemParser.readObject();
+		pemParser.close();
+
+		JcaPEMKeyConverter keyConverter = new JcaPEMKeyConverter()
+			.setProvider(SecurityProvider.BC.name());
+		KeyPair keyPair;
+		if (pemObject instanceof PEMEncryptedKeyPair)
+		{
+			PEMDecryptorProvider decryptorProvider = new JcePEMDecryptorProviderBuilder()
+				.setProvider(SecurityProvider.BC.name()).build(password.toCharArray());
+			keyPair = keyConverter
+				.getKeyPair(((PEMEncryptedKeyPair)pemObject).decryptKeyPair(decryptorProvider));
+		}
+		else
+		{
+			keyPair = keyConverter.getKeyPair((PEMKeyPair)pemObject);
+		}
+		return keyPair;
+	}
 
 	/**
 	 * Reads the given byte array that contains a password protected private key.
@@ -109,6 +147,35 @@ public final class EncryptedPrivateKeyReader
 		final KeySpec pkcs8KeySpec = encryptedPrivateKeyInfo.getKeySpec(cipher);
 		final KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
 		return keyFactory.generatePrivate(pkcs8KeySpec);
+	}
+
+	/**
+	 * Reads the given {@link File} that contains a password protected private key.
+	 *
+	 * @param encryptedPrivateKeyFile
+	 *            the file that contains the password protected private key
+	 * @param password
+	 *            the password
+	 * @return the {@link PrivateKey} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws NoSuchPaddingException
+	 *             the no such padding exception
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails.
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails.
+	 */
+	public static PrivateKey readPasswordProtectedPrivateKey(final File encryptedPrivateKeyFile,
+		final String password) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException,
+		InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException
+	{
+		return readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
+			KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
 	}
 
 	/**
@@ -158,73 +225,8 @@ public final class EncryptedPrivateKeyReader
 		return null;
 	}
 
-	/**
-	 * Reads from the given {@link File} that contains the password protected {@link KeyPair} and
-	 * returns it
-	 *
-	 * @param encryptedPrivateKeyFile
-	 *            the file that contains the password protected {@link KeyPair}
-	 * @param password
-	 *            the password
-	 * @return the key pair
-	 * @throws FileNotFoundException
-	 *             is thrown if the file did not found
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @throws PEMException
-	 *             is thrown if an error occurs on read the pem file
-	 */
-	public static KeyPair getKeyPair(final File encryptedPrivateKeyFile, final String password)
-		throws FileNotFoundException, IOException, PEMException
+	private EncryptedPrivateKeyReader()
 	{
-		PEMParser pemParser = new PEMParser(new FileReader(encryptedPrivateKeyFile));
-		Object pemObject = pemParser.readObject();
-		pemParser.close();
-
-		JcaPEMKeyConverter keyConverter = new JcaPEMKeyConverter()
-			.setProvider(SecurityProvider.BC.name());
-		KeyPair keyPair;
-		if (pemObject instanceof PEMEncryptedKeyPair)
-		{
-			PEMDecryptorProvider decryptorProvider = new JcePEMDecryptorProviderBuilder()
-				.setProvider(SecurityProvider.BC.name()).build(password.toCharArray());
-			keyPair = keyConverter
-				.getKeyPair(((PEMEncryptedKeyPair)pemObject).decryptKeyPair(decryptorProvider));
-		}
-		else
-		{
-			keyPair = keyConverter.getKeyPair((PEMKeyPair)pemObject);
-		}
-		return keyPair;
-	}
-
-	/**
-	 * Reads the given {@link File} that contains a password protected private key.
-	 *
-	 * @param encryptedPrivateKeyFile
-	 *            the file that contains the password protected private key
-	 * @param password
-	 *            the password
-	 * @return the {@link PrivateKey} object
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
-	 * @throws NoSuchPaddingException
-	 *             the no such padding exception
-	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
-	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails.
-	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cipher object fails.
-	 */
-	public static PrivateKey readPasswordProtectedPrivateKey(final File encryptedPrivateKeyFile,
-		final String password) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException,
-		InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException
-	{
-		return readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-			KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
 	}
 
 }

@@ -35,12 +35,10 @@ import java.security.cert.CertificateException;
 
 import de.alpharogroup.crypto.algorithm.KeystoreType;
 import de.alpharogroup.crypto.factories.KeyStoreFactory;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link KeyStoreExtensions}.
  */
-@UtilityClass
 public final class KeyStoreExtensions
 {
 
@@ -73,6 +71,12 @@ public final class KeyStoreExtensions
 
 		keyStore.deleteEntry(alias);
 		keyStore.store(new FileOutputStream(keystoreFile), password.toCharArray());
+	}
+
+	private KeyStoreExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
 	}
 
 }

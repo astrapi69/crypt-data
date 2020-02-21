@@ -28,18 +28,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.Key;
+import java.util.Objects;
 
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 
 import de.alpharogroup.file.write.WriteFileExtensions;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link KeyWriter} is a utility class for write security keys in files.
  */
-@UtilityClass
-public class KeyWriter
+public final class KeyWriter
 {
 
 	/**
@@ -52,8 +50,9 @@ public class KeyWriter
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void writeInPemFormat(final Key key, final @NonNull File file) throws IOException
+	public static void writeInPemFormat(final Key key, final File file) throws IOException
 	{
+		Objects.requireNonNull(file);
 		StringWriter stringWriter = new StringWriter();
 		JcaPEMWriter pemWriter = new JcaPEMWriter(stringWriter);
 		pemWriter.writeObject(key);
@@ -61,6 +60,10 @@ public class KeyWriter
 		String pemFormat = stringWriter.toString();
 		pemFormat = pemFormat.replaceAll("\\r\\n", "\\\n");
 		WriteFileExtensions.string2File(file, pemFormat);
+	}
+
+	private KeyWriter()
+	{
 	}
 
 }

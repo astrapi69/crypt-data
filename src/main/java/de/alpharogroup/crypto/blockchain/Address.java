@@ -27,32 +27,25 @@ package de.alpharogroup.crypto.blockchain;
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
 import de.alpharogroup.crypto.blockchain.api.IAddress;
 import de.alpharogroup.crypto.hash.HashExtensions;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.FieldDefaults;
 
 /**
  * The class {@link Address}
  */
-@Getter
-@Setter
-@EqualsAndHashCode
-@NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Address implements IAddress
 {
 
 	/** The hash. */
-	byte[] hash;
+	private byte[] hash;
 
 	/** The name. */
-	String name;
+	private String name;
 
 	/** The public key. */
-	byte[] publicKey;
+	private byte[] publicKey;
+
+	public Address()
+	{
+	}
 
 	/**
 	 * Instantiates a new {@link Address}
@@ -67,5 +60,79 @@ public class Address implements IAddress
 		this.name = name;
 		this.publicKey = publicKey;
 		this.hash = HashExtensions.hash(name.getBytes(), publicKey, HashAlgorithm.SHA256);
+	}
+
+	protected boolean canEqual(final Object other)
+	{
+		return other instanceof Address;
+	}
+
+	@Override
+	public boolean equals(final Object o)
+	{
+		if (o == this)
+			return true;
+		if (!(o instanceof Address))
+			return false;
+		final Address other = (Address)o;
+		if (!other.canEqual(this))
+			return false;
+		if (!java.util.Arrays.equals(this.getHash(), other.getHash()))
+			return false;
+		final Object this$name = this.getName();
+		final Object other$name = other.getName();
+		if (this$name == null ? other$name != null : !this$name.equals(other$name))
+			return false;
+		if (!java.util.Arrays.equals(this.getPublicKey(), other.getPublicKey()))
+			return false;
+		return true;
+	}
+
+	@Override
+	public byte[] getHash()
+	{
+		return this.hash;
+	}
+
+	@Override
+	public String getName()
+	{
+		return this.name;
+	}
+
+	@Override
+	public byte[] getPublicKey()
+	{
+		return this.publicKey;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int PRIME = 59;
+		int result = 1;
+		result = result * PRIME + java.util.Arrays.hashCode(this.getHash());
+		final Object $name = this.getName();
+		result = result * PRIME + ($name == null ? 43 : $name.hashCode());
+		result = result * PRIME + java.util.Arrays.hashCode(this.getPublicKey());
+		return result;
+	}
+
+	@Override
+	public void setHash(byte[] hash)
+	{
+		this.hash = hash;
+	}
+
+	@Override
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	@Override
+	public void setPublicKey(byte[] publicKey)
+	{
+		this.publicKey = publicKey;
 	}
 }

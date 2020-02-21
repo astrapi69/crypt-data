@@ -28,14 +28,11 @@ import java.security.spec.AlgorithmParameterSpec;
 
 import javax.crypto.spec.PBEParameterSpec;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * The factory class {@link AlgorithmParameterSpecFactory} holds methods for creating
  * {@link AlgorithmParameterSpec} objects.
  */
-@UtilityClass
-public class AlgorithmParameterSpecFactory
+public final class AlgorithmParameterSpecFactory
 {
 
 	/**
@@ -53,5 +50,9 @@ public class AlgorithmParameterSpecFactory
 	{
 		final AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
 		return paramSpec;
+	}
+
+	private AlgorithmParameterSpecFactory()
+	{
 	}
 }

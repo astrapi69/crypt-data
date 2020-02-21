@@ -37,6 +37,7 @@ import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
+import java.util.Objects;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -48,8 +49,6 @@ import javax.crypto.SecretKey;
 import de.alpharogroup.crypto.compound.CompoundAlgorithm;
 import de.alpharogroup.crypto.factories.AlgorithmParameterSpecFactory;
 import de.alpharogroup.crypto.factories.SecretKeyFactoryExtensions;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link EncryptedPrivateKeyWriter} is a utility class for write and protect
@@ -57,9 +56,87 @@ import lombok.experimental.UtilityClass;
  *
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class EncryptedPrivateKeyWriter
 {
+
+	/**
+	 * Encrypt the given {@link PrivateKey} with the given password and write the result to the
+	 * given {@link File}.
+	 *
+	 * @param privateKey
+	 *            the private key to encrypt
+	 * @param file
+	 *            the file
+	 * @param password
+	 *            the password
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchPaddingException
+	 *             the no such padding exception
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cypher object fails.
+	 * @throws IllegalBlockSizeException
+	 *             the illegal block size exception
+	 * @throws BadPaddingException
+	 *             the bad padding exception
+	 * @throws InvalidParameterSpecException
+	 *             the invalid parameter spec exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	public static void encryptPrivateKeyWithPassword(final PrivateKey privateKey, final File file,
+		final String password) throws NoSuchAlgorithmException, InvalidKeySpecException,
+		NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
+		IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException, IOException
+	{
+		encryptPrivateKeyWithPassword(privateKey, new FileOutputStream(file), password);
+	}
+
+	/**
+	 * Encrypt the given {@link PrivateKey} with the given password and write the result to the
+	 * given {@link OutputStream}.
+	 *
+	 * @param privateKey
+	 *            the private key to encrypt
+	 * @param outputStream
+	 *            the output stream
+	 * @param password
+	 *            the password
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchPaddingException
+	 *             the no such padding exception
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cypher object fails.
+	 * @throws IllegalBlockSizeException
+	 *             the illegal block size exception
+	 * @throws BadPaddingException
+	 *             the bad padding exception
+	 * @throws InvalidParameterSpecException
+	 *             the invalid parameter spec exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static void encryptPrivateKeyWithPassword(final PrivateKey privateKey,
+		final OutputStream outputStream, final String password)
+		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
+		InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException,
+		BadPaddingException, InvalidParameterSpecException, IOException
+	{
+		Objects.requireNonNull(outputStream);
+		final byte[] encryptedPrivateKeyWithPasswordBytes = encryptPrivateKeyWithPassword(
+			privateKey, password);
+		outputStream.write(encryptedPrivateKeyWithPasswordBytes);
+		outputStream.close();
+	}
 
 	/**
 	 * Encrypt the given {@link PrivateKey} with the given password and return the resulted byte
@@ -121,82 +198,8 @@ public final class EncryptedPrivateKeyWriter
 		return encinfo.getEncoded();
 	}
 
-	/**
-	 * Encrypt the given {@link PrivateKey} with the given password and write the result to the
-	 * given {@link OutputStream}.
-	 *
-	 * @param privateKey
-	 *            the private key to encrypt
-	 * @param outputStream
-	 *            the output stream
-	 * @param password
-	 *            the password
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
-	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
-	 * @throws NoSuchPaddingException
-	 *             the no such padding exception
-	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails
-	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cypher object fails.
-	 * @throws IllegalBlockSizeException
-	 *             the illegal block size exception
-	 * @throws BadPaddingException
-	 *             the bad padding exception
-	 * @throws InvalidParameterSpecException
-	 *             the invalid parameter spec exception
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static void encryptPrivateKeyWithPassword(final PrivateKey privateKey,
-		final @NonNull OutputStream outputStream, final String password)
-		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
-		InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException,
-		BadPaddingException, InvalidParameterSpecException, IOException
+	private EncryptedPrivateKeyWriter()
 	{
-		final byte[] encryptedPrivateKeyWithPasswordBytes = encryptPrivateKeyWithPassword(
-			privateKey, password);
-		outputStream.write(encryptedPrivateKeyWithPasswordBytes);
-		outputStream.close();
-	}
-
-	/**
-	 * Encrypt the given {@link PrivateKey} with the given password and write the result to the
-	 * given {@link File}.
-	 *
-	 * @param privateKey
-	 *            the private key to encrypt
-	 * @param file
-	 *            the file
-	 * @param password
-	 *            the password
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
-	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
-	 * @throws NoSuchPaddingException
-	 *             the no such padding exception
-	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails
-	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cypher object fails.
-	 * @throws IllegalBlockSizeException
-	 *             the illegal block size exception
-	 * @throws BadPaddingException
-	 *             the bad padding exception
-	 * @throws InvalidParameterSpecException
-	 *             the invalid parameter spec exception
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 */
-	public static void encryptPrivateKeyWithPassword(final PrivateKey privateKey, final File file,
-		final String password) throws NoSuchAlgorithmException, InvalidKeySpecException,
-		NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException,
-		IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException, IOException
-	{
-		encryptPrivateKeyWithPassword(privateKey, new FileOutputStream(file), password);
 	}
 
 }

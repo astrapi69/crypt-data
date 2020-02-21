@@ -26,10 +26,8 @@ package de.alpharogroup.crypto.factories;
 
 import static org.testng.AssertJUnit.assertNotNull;
 
-import java.lang.reflect.InvocationTargetException;
 import java.security.spec.AlgorithmParameterSpec;
 
-import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
@@ -56,8 +54,7 @@ public class AlgorithmParameterSpecFactoryTest
 	/**
 	 * Test method for {@link AlgorithmParameterSpecFactory} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
