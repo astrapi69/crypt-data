@@ -40,7 +40,6 @@ import org.testng.annotations.Test;
 import de.alpharogroup.crypto.key.reader.PublicKeyReader;
 import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 import de.alpharogroup.file.search.PathFinder;
-import lombok.SneakyThrows;
 
 /**
  * The unit test class for the class {@link Transaction}

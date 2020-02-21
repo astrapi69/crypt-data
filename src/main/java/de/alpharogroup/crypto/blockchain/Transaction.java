@@ -44,6 +44,10 @@ public class Transaction implements ITransaction
 
 	private long timestamp;
 
+	public Transaction()
+	{
+	}
+
 	public Transaction(String text, byte[] senderHash, byte[] signature)
 	{
 		this.text = text;
@@ -54,66 +58,12 @@ public class Transaction implements ITransaction
 			HashAlgorithm.SHA256);
 	}
 
-	public Transaction()
+	protected boolean canEqual(final Object other)
 	{
+		return other instanceof Transaction;
 	}
 
 	@Override
-	public byte[] getSignableData()
-	{
-		return text.getBytes();
-	}
-
-	public byte[] getHash()
-	{
-		return this.hash;
-	}
-
-	public byte[] getSenderHash()
-	{
-		return this.senderHash;
-	}
-
-	public byte[] getSignature()
-	{
-		return this.signature;
-	}
-
-	public String getText()
-	{
-		return this.text;
-	}
-
-	public long getTimestamp()
-	{
-		return this.timestamp;
-	}
-
-	public void setHash(byte[] hash)
-	{
-		this.hash = hash;
-	}
-
-	public void setSenderHash(byte[] senderHash)
-	{
-		this.senderHash = senderHash;
-	}
-
-	public void setSignature(byte[] signature)
-	{
-		this.signature = signature;
-	}
-
-	public void setText(String text)
-	{
-		this.text = text;
-	}
-
-	public void setTimestamp(long timestamp)
-	{
-		this.timestamp = timestamp;
-	}
-
 	public boolean equals(final Object o)
 	{
 		if (o == this)
@@ -121,7 +71,7 @@ public class Transaction implements ITransaction
 		if (!(o instanceof Transaction))
 			return false;
 		final Transaction other = (Transaction)o;
-		if (!other.canEqual((Object)this))
+		if (!other.canEqual(this))
 			return false;
 		if (!java.util.Arrays.equals(this.getHash(), other.getHash()))
 			return false;
@@ -138,11 +88,43 @@ public class Transaction implements ITransaction
 		return true;
 	}
 
-	protected boolean canEqual(final Object other)
+	@Override
+	public byte[] getHash()
 	{
-		return other instanceof Transaction;
+		return this.hash;
 	}
 
+	@Override
+	public byte[] getSenderHash()
+	{
+		return this.senderHash;
+	}
+
+	@Override
+	public byte[] getSignableData()
+	{
+		return text.getBytes();
+	}
+
+	@Override
+	public byte[] getSignature()
+	{
+		return this.signature;
+	}
+
+	@Override
+	public String getText()
+	{
+		return this.text;
+	}
+
+	@Override
+	public long getTimestamp()
+	{
+		return this.timestamp;
+	}
+
+	@Override
 	public int hashCode()
 	{
 		final int PRIME = 59;
@@ -155,5 +137,35 @@ public class Transaction implements ITransaction
 		final long $timestamp = this.getTimestamp();
 		result = result * PRIME + (int)($timestamp >>> 32 ^ $timestamp);
 		return result;
+	}
+
+	@Override
+	public void setHash(byte[] hash)
+	{
+		this.hash = hash;
+	}
+
+	@Override
+	public void setSenderHash(byte[] senderHash)
+	{
+		this.senderHash = senderHash;
+	}
+
+	@Override
+	public void setSignature(byte[] signature)
+	{
+		this.signature = signature;
+	}
+
+	@Override
+	public void setText(String text)
+	{
+		this.text = text;
+	}
+
+	@Override
+	public void setTimestamp(long timestamp)
+	{
+		this.timestamp = timestamp;
 	}
 }

@@ -24,9 +24,9 @@
  */
 package de.alpharogroup.crypto.obfuscation.rules;
 
-import com.google.common.collect.BiMap;
-
 import java.util.Objects;
+
+import com.google.common.collect.BiMap;
 
 /**
  * The class {@link ObfuscationBiMapRules} decorates a {@link BiMap} that defines rules for encrypt
@@ -34,6 +34,39 @@ import java.util.Objects;
  */
 public class ObfuscationBiMapRules<K, V>
 {
+
+	public static class ObfuscationBiMapRulesBuilder<K, V>
+	{
+		private BiMap<K, V> obfuscationRules;
+
+		ObfuscationBiMapRulesBuilder()
+		{
+		}
+
+		public ObfuscationBiMapRules<K, V> build()
+		{
+			return new ObfuscationBiMapRules<K, V>(obfuscationRules);
+		}
+
+		public ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder<K, V> obfuscationRules(
+			BiMap<K, V> obfuscationRules)
+		{
+			this.obfuscationRules = obfuscationRules;
+			return this;
+		}
+
+		@Override
+		public String toString()
+		{
+			return "ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder(obfuscationRules="
+				+ this.obfuscationRules + ")";
+		}
+	}
+
+	public static <K, V> ObfuscationBiMapRulesBuilder<K, V> builder()
+	{
+		return new ObfuscationBiMapRulesBuilder<K, V>();
+	}
 
 	/**
 	 * The rules for encrypt the string.
@@ -52,16 +85,12 @@ public class ObfuscationBiMapRules<K, V>
 		this.obfuscationRules = obfuscationRules;
 	}
 
-	public static <K, V> ObfuscationBiMapRulesBuilder<K, V> builder()
+	protected boolean canEqual(final Object other)
 	{
-		return new ObfuscationBiMapRulesBuilder<K, V>();
+		return other instanceof ObfuscationBiMapRules;
 	}
 
-	public BiMap<K, V> getObfuscationRules()
-	{
-		return this.obfuscationRules;
-	}
-
+	@Override
 	public boolean equals(final Object o)
 	{
 		if (o == this)
@@ -69,22 +98,23 @@ public class ObfuscationBiMapRules<K, V>
 		if (!(o instanceof ObfuscationBiMapRules))
 			return false;
 		final ObfuscationBiMapRules<?, ?> other = (ObfuscationBiMapRules<?, ?>)o;
-		if (!other.canEqual((Object)this))
+		if (!other.canEqual(this))
 			return false;
 		final Object this$obfuscationRules = this.getObfuscationRules();
 		final Object other$obfuscationRules = other.getObfuscationRules();
-		if (this$obfuscationRules == null ?
-			other$obfuscationRules != null :
-			!this$obfuscationRules.equals(other$obfuscationRules))
+		if (this$obfuscationRules == null
+			? other$obfuscationRules != null
+			: !this$obfuscationRules.equals(other$obfuscationRules))
 			return false;
 		return true;
 	}
 
-	protected boolean canEqual(final Object other)
+	public BiMap<K, V> getObfuscationRules()
 	{
-		return other instanceof ObfuscationBiMapRules;
+		return this.obfuscationRules;
 	}
 
+	@Override
 	public int hashCode()
 	{
 		final int PRIME = 59;
@@ -94,35 +124,9 @@ public class ObfuscationBiMapRules<K, V>
 		return result;
 	}
 
+	@Override
 	public String toString()
 	{
 		return "ObfuscationBiMapRules(obfuscationRules=" + this.getObfuscationRules() + ")";
-	}
-
-	public static class ObfuscationBiMapRulesBuilder<K, V>
-	{
-		private BiMap<K, V> obfuscationRules;
-
-		ObfuscationBiMapRulesBuilder()
-		{
-		}
-
-		public ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder<K, V> obfuscationRules(
-			BiMap<K, V> obfuscationRules)
-		{
-			this.obfuscationRules = obfuscationRules;
-			return this;
-		}
-
-		public ObfuscationBiMapRules<K, V> build()
-		{
-			return new ObfuscationBiMapRules<K, V>(obfuscationRules);
-		}
-
-		public String toString()
-		{
-			return "ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder(obfuscationRules="
-				+ this.obfuscationRules + ")";
-		}
 	}
 }

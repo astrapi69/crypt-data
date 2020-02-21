@@ -24,8 +24,9 @@
  */
 package de.alpharogroup.crypto.factories;
 
-import javax.crypto.spec.PBEParameterSpec;
 import java.security.spec.AlgorithmParameterSpec;
+
+import javax.crypto.spec.PBEParameterSpec;
 
 /**
  * The factory class {@link AlgorithmParameterSpecFactory} holds methods for creating
@@ -33,10 +34,6 @@ import java.security.spec.AlgorithmParameterSpec;
  */
 public final class AlgorithmParameterSpecFactory
 {
-
-	private AlgorithmParameterSpecFactory()
-	{
-	}
 
 	/**
 	 * Factory method for creating a new {@link PBEParameterSpec} from the given salt and iteration
@@ -53,5 +50,9 @@ public final class AlgorithmParameterSpecFactory
 	{
 		final AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
 		return paramSpec;
+	}
+
+	private AlgorithmParameterSpecFactory()
+	{
 	}
 }

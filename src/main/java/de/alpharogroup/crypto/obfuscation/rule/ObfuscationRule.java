@@ -29,106 +29,6 @@ import java.util.Objects;
 
 public class ObfuscationRule<C, RW> implements Serializable
 {
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 1L;
-
-	/** The character. */
-	private C character;
-
-	/** The character(s) that will be replaced with. */
-	private RW replaceWith;
-
-	public ObfuscationRule(C character, RW replaceWith)
-	{
-		Objects.requireNonNull(character);
-		Objects.requireNonNull(replaceWith);
-		this.character = character;
-		this.replaceWith = replaceWith;
-	}
-
-	public ObfuscationRule()
-	{
-	}
-
-	public static <C, RW> ObfuscationRuleBuilder<C, RW> builder()
-	{
-		return new ObfuscationRuleBuilder<C, RW>();
-	}
-
-	public C getCharacter()
-	{
-		return this.character;
-	}
-
-	public RW getReplaceWith()
-	{
-		return this.replaceWith;
-	}
-
-	public void setCharacter(C character)
-	{
-		Objects.requireNonNull(character);
-		this.character = character;
-	}
-
-	public void setReplaceWith(RW replaceWith)
-	{
-		Objects.requireNonNull(replaceWith);
-		this.replaceWith = replaceWith;
-	}
-
-	public boolean equals(final Object o)
-	{
-		if (o == this)
-			return true;
-		if (!(o instanceof ObfuscationRule))
-			return false;
-		final ObfuscationRule<?, ?> other = (ObfuscationRule<?, ?>)o;
-		if (!other.canEqual((Object)this))
-			return false;
-		final Object this$character = this.getCharacter();
-		final Object other$character = other.getCharacter();
-		if (this$character == null ?
-			other$character != null :
-			!this$character.equals(other$character))
-			return false;
-		final Object this$replaceWith = this.getReplaceWith();
-		final Object other$replaceWith = other.getReplaceWith();
-		if (this$replaceWith == null ?
-			other$replaceWith != null :
-			!this$replaceWith.equals(other$replaceWith))
-			return false;
-		return true;
-	}
-
-	protected boolean canEqual(final Object other)
-	{
-		return other instanceof ObfuscationRule;
-	}
-
-	public int hashCode()
-	{
-		final int PRIME = 59;
-		int result = 1;
-		final Object $character = this.getCharacter();
-		result = result * PRIME + ($character == null ? 43 : $character.hashCode());
-		final Object $replaceWith = this.getReplaceWith();
-		result = result * PRIME + ($replaceWith == null ? 43 : $replaceWith.hashCode());
-		return result;
-	}
-
-	public String toString()
-	{
-		return "ObfuscationRule(character=" + this.getCharacter() + ", replaceWith=" + this
-			.getReplaceWith() + ")";
-	}
-
-	public ObfuscationRuleBuilder<C, RW> toBuilder()
-	{
-		return new ObfuscationRuleBuilder<C, RW>().character(this.character)
-			.replaceWith(this.replaceWith);
-	}
-
 	public static class ObfuscationRuleBuilder<C, RW>
 	{
 		private C character;
@@ -136,6 +36,11 @@ public class ObfuscationRule<C, RW> implements Serializable
 
 		ObfuscationRuleBuilder()
 		{
+		}
+
+		public ObfuscationRule<C, RW> build()
+		{
+			return new ObfuscationRule<C, RW>(character, replaceWith);
 		}
 
 		public ObfuscationRule.ObfuscationRuleBuilder<C, RW> character(C character)
@@ -152,15 +57,114 @@ public class ObfuscationRule<C, RW> implements Serializable
 			return this;
 		}
 
-		public ObfuscationRule<C, RW> build()
-		{
-			return new ObfuscationRule<C, RW>(character, replaceWith);
-		}
-
+		@Override
 		public String toString()
 		{
 			return "ObfuscationRule.ObfuscationRuleBuilder(character=" + this.character
 				+ ", replaceWith=" + this.replaceWith + ")";
 		}
+	}
+
+	/** The Constant serialVersionUID. */
+	private static final long serialVersionUID = 1L;
+
+	public static <C, RW> ObfuscationRuleBuilder<C, RW> builder()
+	{
+		return new ObfuscationRuleBuilder<C, RW>();
+	}
+
+	/** The character. */
+	private C character;
+
+	/** The character(s) that will be replaced with. */
+	private RW replaceWith;
+
+	public ObfuscationRule()
+	{
+	}
+
+	public ObfuscationRule(C character, RW replaceWith)
+	{
+		Objects.requireNonNull(character);
+		Objects.requireNonNull(replaceWith);
+		this.character = character;
+		this.replaceWith = replaceWith;
+	}
+
+	protected boolean canEqual(final Object other)
+	{
+		return other instanceof ObfuscationRule;
+	}
+
+	@Override
+	public boolean equals(final Object o)
+	{
+		if (o == this)
+			return true;
+		if (!(o instanceof ObfuscationRule))
+			return false;
+		final ObfuscationRule<?, ?> other = (ObfuscationRule<?, ?>)o;
+		if (!other.canEqual(this))
+			return false;
+		final Object this$character = this.getCharacter();
+		final Object other$character = other.getCharacter();
+		if (this$character == null
+			? other$character != null
+			: !this$character.equals(other$character))
+			return false;
+		final Object this$replaceWith = this.getReplaceWith();
+		final Object other$replaceWith = other.getReplaceWith();
+		if (this$replaceWith == null
+			? other$replaceWith != null
+			: !this$replaceWith.equals(other$replaceWith))
+			return false;
+		return true;
+	}
+
+	public C getCharacter()
+	{
+		return this.character;
+	}
+
+	public RW getReplaceWith()
+	{
+		return this.replaceWith;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int PRIME = 59;
+		int result = 1;
+		final Object $character = this.getCharacter();
+		result = result * PRIME + ($character == null ? 43 : $character.hashCode());
+		final Object $replaceWith = this.getReplaceWith();
+		result = result * PRIME + ($replaceWith == null ? 43 : $replaceWith.hashCode());
+		return result;
+	}
+
+	public void setCharacter(C character)
+	{
+		Objects.requireNonNull(character);
+		this.character = character;
+	}
+
+	public void setReplaceWith(RW replaceWith)
+	{
+		Objects.requireNonNull(replaceWith);
+		this.replaceWith = replaceWith;
+	}
+
+	public ObfuscationRuleBuilder<C, RW> toBuilder()
+	{
+		return new ObfuscationRuleBuilder<C, RW>().character(this.character)
+			.replaceWith(this.replaceWith);
+	}
+
+	@Override
+	public String toString()
+	{
+		return "ObfuscationRule(character=" + this.getCharacter() + ", replaceWith="
+			+ this.getReplaceWith() + ")";
 	}
 }

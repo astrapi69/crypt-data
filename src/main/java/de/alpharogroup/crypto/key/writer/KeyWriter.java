@@ -24,24 +24,21 @@
  */
 package de.alpharogroup.crypto.key.writer;
 
-import de.alpharogroup.file.write.WriteFileExtensions;
-import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.Key;
 import java.util.Objects;
 
+import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
+
+import de.alpharogroup.file.write.WriteFileExtensions;
+
 /**
  * The class {@link KeyWriter} is a utility class for write security keys in files.
  */
 public final class KeyWriter
 {
-
-	private KeyWriter()
-	{
-	}
 
 	/**
 	 * Write the given {@link Key} into the given {@link File}.
@@ -63,6 +60,10 @@ public final class KeyWriter
 		String pemFormat = stringWriter.toString();
 		pemFormat = pemFormat.replaceAll("\\r\\n", "\\\n");
 		WriteFileExtensions.string2File(file, pemFormat);
+	}
+
+	private KeyWriter()
+	{
 	}
 
 }

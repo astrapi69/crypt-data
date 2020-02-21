@@ -42,7 +42,6 @@ import org.testng.annotations.Test;
 import de.alpharogroup.crypto.key.reader.PublicKeyReader;
 import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 import de.alpharogroup.file.search.PathFinder;
-import lombok.SneakyThrows;
 
 /**
  * The unit test class for the class {@link Address}
@@ -54,9 +53,8 @@ public class AddressTest
 	 * Test method for {@link Address} constructors
 	 */
 	@Test
-	public final void testConstructors()
-		throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException,
-		IOException
+	public final void testConstructors() throws InvalidKeySpecException, NoSuchAlgorithmException,
+		NoSuchProviderException, IOException
 	{
 		Address address;
 		File publickeyPemDir;

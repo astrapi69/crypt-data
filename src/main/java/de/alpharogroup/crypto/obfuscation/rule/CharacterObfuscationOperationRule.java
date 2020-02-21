@@ -36,6 +36,10 @@ public class CharacterObfuscationOperationRule
 		ObfuscationOperationRule<Character, Character>
 {
 
+	public CharacterObfuscationOperationRule()
+	{
+	}
+
 	public CharacterObfuscationOperationRule(Character character, Set<Integer> indexes,
 		boolean inverted, Optional<Character> operatedCharacter, Operation operation,
 		Character replaceWith)
@@ -47,10 +51,13 @@ public class CharacterObfuscationOperationRule
 		}
 	}
 
-	public CharacterObfuscationOperationRule()
+	@Override
+	protected boolean canEqual(final Object other)
 	{
+		return other instanceof CharacterObfuscationOperationRule;
 	}
 
+	@Override
 	public boolean equals(final Object o)
 	{
 		if (o == this)
@@ -58,24 +65,21 @@ public class CharacterObfuscationOperationRule
 		if (!(o instanceof CharacterObfuscationOperationRule))
 			return false;
 		final CharacterObfuscationOperationRule other = (CharacterObfuscationOperationRule)o;
-		if (!other.canEqual((Object)this))
+		if (!other.canEqual(this))
 			return false;
 		if (!super.equals(o))
 			return false;
 		return true;
 	}
 
-	protected boolean canEqual(final Object other)
-	{
-		return other instanceof CharacterObfuscationOperationRule;
-	}
-
+	@Override
 	public int hashCode()
 	{
 		int result = super.hashCode();
 		return result;
 	}
 
+	@Override
 	public String toString()
 	{
 		return "CharacterObfuscationOperationRule(super=" + super.toString() + ")";

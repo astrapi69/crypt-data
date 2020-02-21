@@ -37,7 +37,6 @@ import org.testng.annotations.Test;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import de.alpharogroup.collections.map.MapFactory;
 import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 
 /**

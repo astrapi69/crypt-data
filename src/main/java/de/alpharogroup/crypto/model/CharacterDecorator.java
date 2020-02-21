@@ -25,28 +25,22 @@
 package de.alpharogroup.crypto.model;
 
 /**
- * The class {@link CharacterDecorator} that can decorate an crypt
- * object with a {@link Character} in prefix and suffix
+ * The class {@link CharacterDecorator} that can decorate an crypt object with a {@link Character}
+ * in prefix and suffix
  */
 public final class CharacterDecorator extends CryptObjectDecorator<Character>
 {
-	protected CharacterDecorator(CharacterDecoratorBuilder<?, ?> b)
-	{
-		super(b);
-	}
-
-	public static CharacterDecoratorBuilder<?, ?> builder()
-	{
-		return new CharacterDecoratorBuilderImpl();
-	}
-
 	public static abstract class CharacterDecoratorBuilder<C extends CharacterDecorator, B extends CharacterDecoratorBuilder<C, B>>
-		extends CryptObjectDecorator.CryptObjectDecoratorBuilder<Character, C, B>
+		extends
+			CryptObjectDecorator.CryptObjectDecoratorBuilder<Character, C, B>
 	{
-		protected abstract B self();
-
+		@Override
 		public abstract C build();
 
+		@Override
+		protected abstract B self();
+
+		@Override
 		public String toString()
 		{
 			return "CharacterDecorator.CharacterDecoratorBuilder(super=" + super.toString() + ")";
@@ -54,20 +48,33 @@ public final class CharacterDecorator extends CryptObjectDecorator<Character>
 	}
 
 	private static final class CharacterDecoratorBuilderImpl
-		extends CharacterDecoratorBuilder<CharacterDecorator, CharacterDecoratorBuilderImpl>
+		extends
+			CharacterDecoratorBuilder<CharacterDecorator, CharacterDecoratorBuilderImpl>
 	{
 		private CharacterDecoratorBuilderImpl()
 		{
 		}
 
-		protected CharacterDecorator.CharacterDecoratorBuilderImpl self()
-		{
-			return this;
-		}
-
+		@Override
 		public CharacterDecorator build()
 		{
 			return new CharacterDecorator(this);
 		}
+
+		@Override
+		protected CharacterDecorator.CharacterDecoratorBuilderImpl self()
+		{
+			return this;
+		}
+	}
+
+	public static CharacterDecoratorBuilder<?, ?> builder()
+	{
+		return new CharacterDecoratorBuilderImpl();
+	}
+
+	protected CharacterDecorator(CharacterDecoratorBuilder<?, ?> b)
+	{
+		super(b);
 	}
 }

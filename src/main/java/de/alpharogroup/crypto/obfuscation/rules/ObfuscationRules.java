@@ -24,11 +24,11 @@
  */
 package de.alpharogroup.crypto.obfuscation.rules;
 
-import de.alpharogroup.crypto.obfuscation.rule.ObfuscationRule;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import de.alpharogroup.crypto.obfuscation.rule.ObfuscationRule;
 
 /**
  * The class {@link ObfuscationRules} holds a list of obfuscation rules that will be processed with
@@ -37,80 +37,38 @@ import java.util.List;
 public class ObfuscationRules<C, RW>
 {
 
-	/** The obfuscation rules. */
-	private List<ObfuscationRule<C, RW>> rules;
-
-	public ObfuscationRules(List<ObfuscationRule<C, RW>> rules)
-	{
-		this.rules = rules;
-	}
-
-	public ObfuscationRules()
-	{
-	}
-
-	public static <C, RW> ObfuscationRulesBuilder<C, RW> builder()
-	{
-		return new ObfuscationRulesBuilder<C, RW>();
-	}
-
-	public List<ObfuscationRule<C, RW>> getRules()
-	{
-		return this.rules;
-	}
-
-	public void setRules(List<ObfuscationRule<C, RW>> rules)
-	{
-		this.rules = rules;
-	}
-
-	public boolean equals(final Object o)
-	{
-		if (o == this)
-			return true;
-		if (!(o instanceof ObfuscationRules))
-			return false;
-		final ObfuscationRules<?, ?> other = (ObfuscationRules<?, ?>)o;
-		if (!other.canEqual((Object)this))
-			return false;
-		final Object this$rules = this.getRules();
-		final Object other$rules = other.getRules();
-		if (this$rules == null ? other$rules != null : !this$rules.equals(other$rules))
-			return false;
-		return true;
-	}
-
-	protected boolean canEqual(final Object other)
-	{
-		return other instanceof ObfuscationRules;
-	}
-
-	public int hashCode()
-	{
-		final int PRIME = 59;
-		int result = 1;
-		final Object $rules = this.getRules();
-		result = result * PRIME + ($rules == null ? 43 : $rules.hashCode());
-		return result;
-	}
-
-	public String toString()
-	{
-		return "ObfuscationRules(rules=" + this.getRules() + ")";
-	}
-
-	public ObfuscationRulesBuilder<C, RW> toBuilder()
-	{
-		return new ObfuscationRulesBuilder<C, RW>()
-			.rules(this.rules == null ? java.util.Collections.emptyList() : this.rules);
-	}
-
 	public static class ObfuscationRulesBuilder<C, RW>
 	{
 		private ArrayList<ObfuscationRule<C, RW>> rules;
 
 		ObfuscationRulesBuilder()
 		{
+		}
+
+		public ObfuscationRules<C, RW> build()
+		{
+			List<ObfuscationRule<C, RW>> rules;
+			switch (this.rules == null ? 0 : this.rules.size())
+			{
+				case 0 :
+					rules = java.util.Collections.emptyList();
+					break;
+				case 1 :
+					rules = java.util.Collections.singletonList(this.rules.get(0));
+					break;
+				default :
+					rules = java.util.Collections
+						.unmodifiableList(new ArrayList<ObfuscationRule<C, RW>>(this.rules));
+			}
+
+			return new ObfuscationRules<C, RW>(rules);
+		}
+
+		public ObfuscationRules.ObfuscationRulesBuilder<C, RW> clearRules()
+		{
+			if (this.rules != null)
+				this.rules.clear();
+			return this;
 		}
 
 		public ObfuscationRules.ObfuscationRulesBuilder<C, RW> rule(ObfuscationRule<C, RW> rule)
@@ -130,35 +88,81 @@ public class ObfuscationRules<C, RW>
 			return this;
 		}
 
-		public ObfuscationRules.ObfuscationRulesBuilder<C, RW> clearRules()
-		{
-			if (this.rules != null)
-				this.rules.clear();
-			return this;
-		}
-
-		public ObfuscationRules<C, RW> build()
-		{
-			List<ObfuscationRule<C, RW>> rules;
-			switch (this.rules == null ? 0 : this.rules.size())
-			{
-				case 0:
-					rules = java.util.Collections.emptyList();
-					break;
-				case 1:
-					rules = java.util.Collections.singletonList(this.rules.get(0));
-					break;
-				default:
-					rules = java.util.Collections
-						.unmodifiableList(new ArrayList<ObfuscationRule<C, RW>>(this.rules));
-			}
-
-			return new ObfuscationRules<C, RW>(rules);
-		}
-
+		@Override
 		public String toString()
 		{
 			return "ObfuscationRules.ObfuscationRulesBuilder(rules=" + this.rules + ")";
 		}
+	}
+
+	public static <C, RW> ObfuscationRulesBuilder<C, RW> builder()
+	{
+		return new ObfuscationRulesBuilder<C, RW>();
+	}
+
+	/** The obfuscation rules. */
+	private List<ObfuscationRule<C, RW>> rules;
+
+	public ObfuscationRules()
+	{
+	}
+
+	public ObfuscationRules(List<ObfuscationRule<C, RW>> rules)
+	{
+		this.rules = rules;
+	}
+
+	protected boolean canEqual(final Object other)
+	{
+		return other instanceof ObfuscationRules;
+	}
+
+	@Override
+	public boolean equals(final Object o)
+	{
+		if (o == this)
+			return true;
+		if (!(o instanceof ObfuscationRules))
+			return false;
+		final ObfuscationRules<?, ?> other = (ObfuscationRules<?, ?>)o;
+		if (!other.canEqual(this))
+			return false;
+		final Object this$rules = this.getRules();
+		final Object other$rules = other.getRules();
+		if (this$rules == null ? other$rules != null : !this$rules.equals(other$rules))
+			return false;
+		return true;
+	}
+
+	public List<ObfuscationRule<C, RW>> getRules()
+	{
+		return this.rules;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int PRIME = 59;
+		int result = 1;
+		final Object $rules = this.getRules();
+		result = result * PRIME + ($rules == null ? 43 : $rules.hashCode());
+		return result;
+	}
+
+	public void setRules(List<ObfuscationRule<C, RW>> rules)
+	{
+		this.rules = rules;
+	}
+
+	public ObfuscationRulesBuilder<C, RW> toBuilder()
+	{
+		return new ObfuscationRulesBuilder<C, RW>()
+			.rules(this.rules == null ? java.util.Collections.emptyList() : this.rules);
+	}
+
+	@Override
+	public String toString()
+	{
+		return "ObfuscationRules(rules=" + this.getRules() + ")";
 	}
 }

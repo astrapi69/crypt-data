@@ -25,25 +25,23 @@
 package de.alpharogroup.crypto.key.reader;
 
 
+import static org.testng.AssertJUnit.assertNotNull;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMException;
-import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.search.PathFinder;
-
-import static org.testng.AssertJUnit.assertNotNull;
 
 /**
  * The unit test class for the class {@link EncryptedPrivateKeyReader}

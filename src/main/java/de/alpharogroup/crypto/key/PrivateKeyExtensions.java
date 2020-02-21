@@ -24,18 +24,6 @@
  */
 package de.alpharogroup.crypto.key;
 
-import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import de.alpharogroup.crypto.hex.HexExtensions;
-import de.alpharogroup.crypto.key.reader.PemObjectReader;
-import de.alpharogroup.crypto.key.reader.PrivateKeyReader;
-import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Primitive;
-import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
-import org.bouncycastle.util.io.pem.PemObject;
-import org.bouncycastle.util.io.pem.PemWriter;
-
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.KeyFactory;
@@ -49,16 +37,75 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 
+import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Primitive;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemWriter;
+
+import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import de.alpharogroup.crypto.hex.HexExtensions;
+import de.alpharogroup.crypto.key.reader.PemObjectReader;
+import de.alpharogroup.crypto.key.reader.PrivateKeyReader;
+
 /**
  * The class {@link PrivateKeyExtensions}.
  */
 public final class PrivateKeyExtensions
 {
 
-	private PrivateKeyExtensions()
+	/**
+	 * Transform the given byte array(of private key in PKCS#1 format) to a PEM formatted
+	 * {@link String}.
+	 *
+	 * @param privateKeyPKCS1Formatted
+	 *            the byte array(of private key in PKCS#1 format)
+	 * @return the String in PEM-Format
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	public static String fromPKCS1ToPemFormat(final byte[] privateKeyPKCS1Formatted)
+		throws IOException
 	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
+		PemObject pemObject = new PemObject(PrivateKeyReader.RSA_PRIVATE_KEY,
+			privateKeyPKCS1Formatted);
+		StringWriter stringWriter = new StringWriter();
+		PemWriter pemWriter = new PemWriter(stringWriter);
+		pemWriter.writeObject(pemObject);
+		pemWriter.close();
+		String string = stringWriter.toString();
+		return string;
+	}
+
+	/**
+	 * Generate the corresponding {@link PublicKey} object from the given {@link PrivateKey} object.
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @return the corresponding {@link PublicKey} object or null if generation failed.
+	 * @throws NoSuchAlgorithmException
+	 *             the no such algorithm exception
+	 * @throws InvalidKeySpecException
+	 *             the invalid key spec exception
+	 */
+	public static PublicKey generatePublicKey(final PrivateKey privateKey)
+		throws NoSuchAlgorithmException, InvalidKeySpecException
+	{
+		if (privateKey instanceof RSAPrivateKey)
+		{
+			final RSAPrivateCrtKey privk = (RSAPrivateCrtKey)privateKey;
+			final RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(privk.getModulus(),
+				privk.getPublicExponent());
+
+			final KeyFactory keyFactory = KeyFactory
+				.getInstance(KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+			final PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+			return publicKey;
+		}
+		return null;
 	}
 
 	/**
@@ -120,32 +167,6 @@ public final class PrivateKeyExtensions
 	}
 
 	/**
-	 * Transform the given {@link PrivateKey} to a hexadecimal {@link String} value.
-	 *
-	 * @param privateKey
-	 *            the private key
-	 * @return the new hexadecimal {@link String} value.
-	 */
-	public static String toHexString(final PrivateKey privateKey)
-	{
-		return toHexString(privateKey, true);
-	}
-
-	/**
-	 * Transform the given {@link PrivateKey} to a hexadecimal {@link String} value.
-	 *
-	 * @param privateKey
-	 *            the private key
-	 * @param lowerCase
-	 *            the flag if the result shell be transform in lower case. If true the result is
-	 * @return the new hexadecimal {@link String} value.
-	 */
-	public static String toHexString(final PrivateKey privateKey, final boolean lowerCase)
-	{
-		return HexExtensions.toHexString(privateKey.getEncoded(), lowerCase);
-	}
-
-	/**
 	 * Transform the given {@link PrivateKey} to a base64 encoded {@link String} value.
 	 *
 	 * @param privateKey
@@ -174,31 +195,29 @@ public final class PrivateKeyExtensions
 	}
 
 	/**
-	 * Generate the corresponding {@link PublicKey} object from the given {@link PrivateKey} object.
+	 * Transform the given {@link PrivateKey} to a hexadecimal {@link String} value.
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the corresponding {@link PublicKey} object or null if generation failed.
-	 * @throws NoSuchAlgorithmException
-	 *             the no such algorithm exception
-	 * @throws InvalidKeySpecException
-	 *             the invalid key spec exception
+	 * @return the new hexadecimal {@link String} value.
 	 */
-	public static PublicKey generatePublicKey(final PrivateKey privateKey)
-		throws NoSuchAlgorithmException, InvalidKeySpecException
+	public static String toHexString(final PrivateKey privateKey)
 	{
-		if (privateKey instanceof RSAPrivateKey)
-		{
-			final RSAPrivateCrtKey privk = (RSAPrivateCrtKey)privateKey;
-			final RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(privk.getModulus(),
-				privk.getPublicExponent());
+		return toHexString(privateKey, true);
+	}
 
-			final KeyFactory keyFactory = KeyFactory
-				.getInstance(KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
-			final PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-			return publicKey;
-		}
-		return null;
+	/**
+	 * Transform the given {@link PrivateKey} to a hexadecimal {@link String} value.
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @param lowerCase
+	 *            the flag if the result shell be transform in lower case. If true the result is
+	 * @return the new hexadecimal {@link String} value.
+	 */
+	public static String toHexString(final PrivateKey privateKey, final boolean lowerCase)
+	{
+		return HexExtensions.toHexString(privateKey.getEncoded(), lowerCase);
 	}
 
 	/**
@@ -236,27 +255,10 @@ public final class PrivateKeyExtensions
 		return privateKeyPKCS1Formatted;
 	}
 
-	/**
-	 * Transform the given byte array(of private key in PKCS#1 format) to a PEM formatted
-	 * {@link String}.
-	 *
-	 * @param privateKeyPKCS1Formatted
-	 *            the byte array(of private key in PKCS#1 format)
-	 * @return the String in PEM-Format
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 */
-	public static String fromPKCS1ToPemFormat(final byte[] privateKeyPKCS1Formatted)
-		throws IOException
+	private PrivateKeyExtensions()
 	{
-		PemObject pemObject = new PemObject(PrivateKeyReader.RSA_PRIVATE_KEY,
-			privateKeyPKCS1Formatted);
-		StringWriter stringWriter = new StringWriter();
-		PemWriter pemWriter = new PemWriter(stringWriter);
-		pemWriter.writeObject(pemObject);
-		pemWriter.close();
-		String string = stringWriter.toString();
-		return string;
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
 	}
 
 

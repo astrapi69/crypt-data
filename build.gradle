@@ -32,6 +32,7 @@ dependencies {
     testCompile "de.alpharogroup:test-objects:$testObjectsVersion"
     testCompile "io.github.benas:random-beans:$randomBeansVersion"
     testCompile "de.alpharogroup:randomizer-core:$randomizerCoreVersion"
+    testCompile("de.alpharogroup:checksum-up:$checksumUpVersion")
     testCompile "org.meanbean:meanbean:$meanbeanVersion"
     testCompile "de.alpharogroup:jobj-contract-verifier:$jobjContractVerifierVersion"
     testCompile "org.testng:testng:$testngVersion"

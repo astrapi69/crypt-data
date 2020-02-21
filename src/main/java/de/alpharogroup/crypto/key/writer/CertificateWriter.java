@@ -24,10 +24,6 @@
  */
 package de.alpharogroup.crypto.key.writer;
 
-import de.alpharogroup.crypto.key.KeyFileFormat;
-import de.alpharogroup.crypto.key.reader.CertificateReader;
-import org.apache.commons.codec.binary.Base64;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,16 +33,17 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Objects;
 
+import org.apache.commons.codec.binary.Base64;
+
+import de.alpharogroup.crypto.key.KeyFileFormat;
+import de.alpharogroup.crypto.key.reader.CertificateReader;
+
 /**
  * The class {@link CertificateWriter} is a utility class for write certificates in files or streams
  * in several file formats.
  */
 public final class CertificateWriter
 {
-
-	private CertificateWriter()
-	{
-	}
 
 	/**
 	 * Write the given {@link X509Certificate} into the given {@link File} in the given
@@ -85,9 +82,8 @@ public final class CertificateWriter
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	public static void write(final X509Certificate certificate,
-		final OutputStream outputStream, KeyFileFormat fileFormat)
-		throws IOException, CertificateEncodingException
+	public static void write(final X509Certificate certificate, final OutputStream outputStream,
+		KeyFileFormat fileFormat) throws IOException, CertificateEncodingException
 	{
 		Objects.requireNonNull(outputStream);
 		final byte[] certificateBytes = certificate.getEncoded();
@@ -183,6 +179,10 @@ public final class CertificateWriter
 	{
 		Objects.requireNonNull(outputStream);
 		write(certificate, outputStream, KeyFileFormat.PEM);
+	}
+
+	private CertificateWriter()
+	{
 	}
 
 }

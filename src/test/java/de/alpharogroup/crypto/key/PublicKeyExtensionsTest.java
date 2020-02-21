@@ -42,11 +42,11 @@ import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.checksum.FileChecksumExtensions;
 import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import de.alpharogroup.crypto.algorithm.MdAlgorithm;
 import de.alpharogroup.crypto.factories.KeyPairFactory;
 import de.alpharogroup.crypto.key.reader.PublicKeyReader;
-import de.alpharogroup.file.checksum.ChecksumExtensions;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
@@ -209,8 +209,8 @@ public class PublicKeyExtensionsTest
 		publicKey = PublicKeyReader.readPemPublicKey(publicKeyPemFile);
 		convertedPublickeyPemFile = new File(pemDir, "converted-public.pem");
 		PublicKeyExtensions.toPemFile(publicKey, convertedPublickeyPemFile);
-		expected = ChecksumExtensions.getChecksum(publicKeyPemFile, MdAlgorithm.MD5);
-		actual = ChecksumExtensions.getChecksum(convertedPublickeyPemFile, MdAlgorithm.MD5);
+		expected = FileChecksumExtensions.getChecksum(publicKeyPemFile, MdAlgorithm.MD5);
+		actual = FileChecksumExtensions.getChecksum(convertedPublickeyPemFile, MdAlgorithm.MD5);
 		assertEquals(expected, actual);
 		DeleteFileExtensions.delete(convertedPublickeyPemFile);
 	}

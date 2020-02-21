@@ -27,12 +27,10 @@ package de.alpharogroup.crypto.key.reader;
 import static org.testng.AssertJUnit.assertNotNull;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.security.PublicKey;
 import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 

@@ -24,15 +24,15 @@
  */
 package de.alpharogroup.crypto.factories;
 
+import java.math.BigInteger;
+import java.security.PublicKey;
+import java.util.Date;
+
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.cert.X509v1CertificateBuilder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509v1CertificateBuilder;
-
-import java.math.BigInteger;
-import java.security.PublicKey;
-import java.util.Date;
 
 /**
  * The factory class {@link CertificateBuilderFactory} holds methods for creating
@@ -40,10 +40,6 @@ import java.util.Date;
  */
 public final class CertificateBuilderFactory
 {
-
-	private CertificateBuilderFactory()
-	{
-	}
 
 	/**
 	 * Factory method for creating a new {@link X509v1CertificateBuilder} object of version 1 of
@@ -96,5 +92,9 @@ public final class CertificateBuilderFactory
 		final X509v3CertificateBuilder certBuilder = new X509v3CertificateBuilder(issuer, serial,
 			notBefore, notAfter, subject, publicKeyInfo);
 		return certBuilder;
+	}
+
+	private CertificateBuilderFactory()
+	{
 	}
 }

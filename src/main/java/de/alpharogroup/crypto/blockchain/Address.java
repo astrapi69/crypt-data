@@ -43,6 +43,10 @@ public class Address implements IAddress
 	/** The public key. */
 	private byte[] publicKey;
 
+	public Address()
+	{
+	}
+
 	/**
 	 * Instantiates a new {@link Address}
 	 *
@@ -58,40 +62,12 @@ public class Address implements IAddress
 		this.hash = HashExtensions.hash(name.getBytes(), publicKey, HashAlgorithm.SHA256);
 	}
 
-	public Address()
+	protected boolean canEqual(final Object other)
 	{
+		return other instanceof Address;
 	}
 
-	public byte[] getHash()
-	{
-		return this.hash;
-	}
-
-	public String getName()
-	{
-		return this.name;
-	}
-
-	public byte[] getPublicKey()
-	{
-		return this.publicKey;
-	}
-
-	public void setHash(byte[] hash)
-	{
-		this.hash = hash;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-
-	public void setPublicKey(byte[] publicKey)
-	{
-		this.publicKey = publicKey;
-	}
-
+	@Override
 	public boolean equals(final Object o)
 	{
 		if (o == this)
@@ -99,7 +75,7 @@ public class Address implements IAddress
 		if (!(o instanceof Address))
 			return false;
 		final Address other = (Address)o;
-		if (!other.canEqual((Object)this))
+		if (!other.canEqual(this))
 			return false;
 		if (!java.util.Arrays.equals(this.getHash(), other.getHash()))
 			return false;
@@ -112,11 +88,25 @@ public class Address implements IAddress
 		return true;
 	}
 
-	protected boolean canEqual(final Object other)
+	@Override
+	public byte[] getHash()
 	{
-		return other instanceof Address;
+		return this.hash;
 	}
 
+	@Override
+	public String getName()
+	{
+		return this.name;
+	}
+
+	@Override
+	public byte[] getPublicKey()
+	{
+		return this.publicKey;
+	}
+
+	@Override
 	public int hashCode()
 	{
 		final int PRIME = 59;
@@ -126,5 +116,23 @@ public class Address implements IAddress
 		result = result * PRIME + ($name == null ? 43 : $name.hashCode());
 		result = result * PRIME + java.util.Arrays.hashCode(this.getPublicKey());
 		return result;
+	}
+
+	@Override
+	public void setHash(byte[] hash)
+	{
+		this.hash = hash;
+	}
+
+	@Override
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	@Override
+	public void setPublicKey(byte[] publicKey)
+	{
+		this.publicKey = publicKey;
 	}
 }

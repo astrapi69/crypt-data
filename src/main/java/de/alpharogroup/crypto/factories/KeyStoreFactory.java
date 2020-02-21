@@ -24,7 +24,12 @@
  */
 package de.alpharogroup.crypto.factories;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -35,10 +40,6 @@ import java.security.cert.CertificateException;
  */
 public final class KeyStoreFactory
 {
-
-	private KeyStoreFactory()
-	{
-	}
 
 	/**
 	 * Factory method for load the {@link KeyStore} object from the given file.
@@ -110,6 +111,10 @@ public final class KeyStoreFactory
 		}
 		keyStore.load(new FileInputStream(keystoreFile), password.toCharArray());
 		return keyStore;
+	}
+
+	private KeyStoreFactory()
+	{
 	}
 
 }

@@ -24,10 +24,6 @@
  */
 package de.alpharogroup.crypto.key.writer;
 
-import de.alpharogroup.crypto.key.KeyFileFormat;
-import de.alpharogroup.crypto.key.KeyFormat;
-import de.alpharogroup.crypto.key.PrivateKeyExtensions;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,15 +33,15 @@ import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Objects;
 
+import de.alpharogroup.crypto.key.KeyFileFormat;
+import de.alpharogroup.crypto.key.KeyFormat;
+import de.alpharogroup.crypto.key.PrivateKeyExtensions;
+
 /**
  * The class {@link PrivateKeyWriter} is a utility class for write public keys in files or streams.
  */
 public final class PrivateKeyWriter
 {
-
-	private PrivateKeyWriter()
-	{
-	}
 
 	/**
 	 * Write the given {@link PrivateKey} into the given {@link File} in the *.der format.
@@ -57,8 +53,7 @@ public final class PrivateKeyWriter
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void write(final PrivateKey privateKey, final File file)
-		throws IOException
+	public static void write(final PrivateKey privateKey, final File file) throws IOException
 	{
 		Objects.requireNonNull(file);
 		write(privateKey, new FileOutputStream(file));
@@ -82,23 +77,6 @@ public final class PrivateKeyWriter
 		final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
 		outputStream.write(keySpec.getEncoded());
 		outputStream.close();
-	}
-
-	/**
-	 * Write the given {@link PrivateKey} into the given {@link File}.
-	 *
-	 * @param privateKey
-	 *            the private key
-	 * @param file
-	 *            the file to write in
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static void writeInPemFormat(final PrivateKey privateKey, final File file)
-		throws IOException
-	{
-		Objects.requireNonNull(file);
-		KeyWriter.writeInPemFormat(privateKey, file);
 	}
 
 	/**
@@ -145,6 +123,27 @@ public final class PrivateKeyWriter
 				break;
 		}
 		outputStream.close();
+	}
+
+	/**
+	 * Write the given {@link PrivateKey} into the given {@link File}.
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @param file
+	 *            the file to write in
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static void writeInPemFormat(final PrivateKey privateKey, final File file)
+		throws IOException
+	{
+		Objects.requireNonNull(file);
+		KeyWriter.writeInPemFormat(privateKey, file);
+	}
+
+	private PrivateKeyWriter()
+	{
 	}
 
 }

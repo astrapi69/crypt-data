@@ -36,6 +36,63 @@ import java.util.Objects;
 public class CryptObjectDecorator<T>
 {
 
+	public static abstract class CryptObjectDecoratorBuilder<T, C extends CryptObjectDecorator<T>, B extends CryptObjectDecorator.CryptObjectDecoratorBuilder<T, C, B>>
+	{
+		private T prefix;
+		private T suffix;
+
+		public abstract C build();
+
+		public B prefix(T prefix)
+		{
+			Objects.requireNonNull(prefix);
+			this.prefix = prefix;
+			return self();
+		}
+
+		protected abstract B self();
+
+		public B suffix(T suffix)
+		{
+			Objects.requireNonNull(suffix);
+			this.suffix = suffix;
+			return self();
+		}
+
+		@Override
+		public String toString()
+		{
+			return "CryptObjectDecorator.CryptObjectDecoratorBuilder(prefix=" + this.prefix
+				+ ", suffix=" + this.suffix + ")";
+		}
+	}
+
+	private static final class CryptObjectDecoratorBuilderImpl<T>
+		extends
+			CryptObjectDecoratorBuilder<T, CryptObjectDecorator<T>, CryptObjectDecoratorBuilderImpl<T>>
+	{
+		private CryptObjectDecoratorBuilderImpl()
+		{
+		}
+
+		@Override
+		public CryptObjectDecorator<T> build()
+		{
+			return new CryptObjectDecorator<T>(this);
+		}
+
+		@Override
+		protected CryptObjectDecorator.CryptObjectDecoratorBuilderImpl<T> self()
+		{
+			return this;
+		}
+	}
+
+	public static <T> CryptObjectDecoratorBuilder<T, ?, ?> builder()
+	{
+		return new CryptObjectDecoratorBuilderImpl<T>();
+	}
+
 	/** The prefix for the crypt object */
 	private final T prefix;
 
@@ -51,21 +108,12 @@ public class CryptObjectDecorator<T>
 		this.suffix = b.suffix;
 	}
 
-	public static <T> CryptObjectDecoratorBuilder<T, ?, ?> builder()
+	protected boolean canEqual(final Object other)
 	{
-		return new CryptObjectDecoratorBuilderImpl<T>();
+		return other instanceof CryptObjectDecorator;
 	}
 
-	public T getPrefix()
-	{
-		return this.prefix;
-	}
-
-	public T getSuffix()
-	{
-		return this.suffix;
-	}
-
+	@Override
 	public boolean equals(final Object o)
 	{
 		if (o == this)
@@ -73,7 +121,7 @@ public class CryptObjectDecorator<T>
 		if (!(o instanceof CryptObjectDecorator))
 			return false;
 		final CryptObjectDecorator<?> other = (CryptObjectDecorator<?>)o;
-		if (!other.canEqual((Object)this))
+		if (!other.canEqual(this))
 			return false;
 		final Object this$prefix = this.getPrefix();
 		final Object other$prefix = other.getPrefix();
@@ -86,11 +134,17 @@ public class CryptObjectDecorator<T>
 		return true;
 	}
 
-	protected boolean canEqual(final Object other)
+	public T getPrefix()
 	{
-		return other instanceof CryptObjectDecorator;
+		return this.prefix;
 	}
 
+	public T getSuffix()
+	{
+		return this.suffix;
+	}
+
+	@Override
 	public int hashCode()
 	{
 		final int PRIME = 59;
@@ -102,57 +156,10 @@ public class CryptObjectDecorator<T>
 		return result;
 	}
 
+	@Override
 	public String toString()
 	{
 		return "CryptObjectDecorator(prefix=" + this.getPrefix() + ", suffix=" + this.getSuffix()
 			+ ")";
-	}
-
-	public static abstract class CryptObjectDecoratorBuilder<T, C extends CryptObjectDecorator<T>, B extends CryptObjectDecorator.CryptObjectDecoratorBuilder<T, C, B>>
-	{
-		private T prefix;
-		private T suffix;
-
-		public B prefix(T prefix)
-		{
-			Objects.requireNonNull(prefix);
-			this.prefix = prefix;
-			return self();
-		}
-
-		public B suffix(T suffix)
-		{
-			Objects.requireNonNull(suffix);
-			this.suffix = suffix;
-			return self();
-		}
-
-		protected abstract B self();
-
-		public abstract C build();
-
-		public String toString()
-		{
-			return "CryptObjectDecorator.CryptObjectDecoratorBuilder(prefix=" + this.prefix
-				+ ", suffix=" + this.suffix + ")";
-		}
-	}
-
-	private static final class CryptObjectDecoratorBuilderImpl<T>
-		extends CryptObjectDecoratorBuilder<T, CryptObjectDecorator<T>, CryptObjectDecoratorBuilderImpl<T>>
-	{
-		private CryptObjectDecoratorBuilderImpl()
-		{
-		}
-
-		protected CryptObjectDecorator.CryptObjectDecoratorBuilderImpl<T> self()
-		{
-			return this;
-		}
-
-		public CryptObjectDecorator<T> build()
-		{
-			return new CryptObjectDecorator<T>(this);
-		}
 	}
 }

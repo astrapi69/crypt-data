@@ -24,20 +24,17 @@
  */
 package de.alpharogroup.crypto.factories;
 
-import de.alpharogroup.crypto.compound.CompoundAlgorithm;
+import java.security.spec.KeySpec;
 
 import javax.crypto.spec.PBEKeySpec;
-import java.security.spec.KeySpec;
+
+import de.alpharogroup.crypto.compound.CompoundAlgorithm;
 
 /**
  * The factory class {@link KeySpecFactory} holds methods for creating {@link KeySpec} objects.
  */
 public final class KeySpecFactory
 {
-
-	private KeySpecFactory()
-	{
-	}
 
 	/**
 	 * Factory method for creating a new {@link PBEKeySpec} from the given private key.
@@ -75,6 +72,10 @@ public final class KeySpecFactory
 				iterationCount);
 		}
 		return new PBEKeySpec(privateKey.toCharArray(), salt, iterationCount);
+	}
+
+	private KeySpecFactory()
+	{
 	}
 
 }

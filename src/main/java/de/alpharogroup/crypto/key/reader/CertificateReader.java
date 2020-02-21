@@ -24,8 +24,6 @@
  */
 package de.alpharogroup.crypto.key.reader;
 
-import org.apache.commons.codec.binary.Base64;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +32,8 @@ import java.nio.file.Files;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * The class {@link CertificateReader} is a utility class for reading certificates.
@@ -47,8 +47,44 @@ public final class CertificateReader
 	/** The Constant END_CERTIFICATE_SUFFIX. */
 	public static final String END_CERTIFICATE_SUFFIX = "-----END CERTIFICATE-----";
 
-	private CertificateReader()
+	/**
+	 * Reads the given byte array and tries to create a {@link X509Certificate} object.
+	 *
+	 * @param decoded
+	 *            the decoded
+	 * @return the {@link X509Certificate} object from the given byte array.
+	 * 
+	 * @throws CertificateException
+	 *             is thrown if no Provider supports a CertificateFactorySpi implementation for the
+	 *             specified type.
+	 */
+	public static X509Certificate readCertificate(final byte[] decoded) throws CertificateException
 	{
+		final CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+		final InputStream inputStream = new ByteArrayInputStream(decoded);
+		final X509Certificate certificate = (X509Certificate)certificateFactory
+			.generateCertificate(inputStream);
+		return certificate;
+	}
+
+	/**
+	 * Reads the given file in *.der format and tries to create a {@link X509Certificate} object.
+	 *
+	 * @param file
+	 *            the file
+	 * @return the {@link X509Certificate} object from the given byte array.
+	 * 
+	 * @throws CertificateException
+	 *             is thrown if no Provider supports a CertificateFactorySpi implementation for the
+	 *             specified type.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static X509Certificate readCertificate(final File file)
+		throws CertificateException, IOException
+	{
+		final byte[] decoded = Files.readAllBytes(file.toPath());
+		return readCertificate(decoded);
 	}
 
 	/**
@@ -90,44 +126,8 @@ public final class CertificateReader
 		return publicKeyAsBase64String;
 	}
 
-	/**
-	 * Reads the given file in *.der format and tries to create a {@link X509Certificate} object.
-	 *
-	 * @param file
-	 *            the file
-	 * @return the {@link X509Certificate} object from the given byte array.
-	 * 
-	 * @throws CertificateException
-	 *             is thrown if no Provider supports a CertificateFactorySpi implementation for the
-	 *             specified type.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static X509Certificate readCertificate(final File file)
-		throws CertificateException, IOException
+	private CertificateReader()
 	{
-		final byte[] decoded = Files.readAllBytes(file.toPath());
-		return readCertificate(decoded);
-	}
-
-	/**
-	 * Reads the given byte array and tries to create a {@link X509Certificate} object.
-	 *
-	 * @param decoded
-	 *            the decoded
-	 * @return the {@link X509Certificate} object from the given byte array.
-	 * 
-	 * @throws CertificateException
-	 *             is thrown if no Provider supports a CertificateFactorySpi implementation for the
-	 *             specified type.
-	 */
-	public static X509Certificate readCertificate(final byte[] decoded) throws CertificateException
-	{
-		final CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-		final InputStream inputStream = new ByteArrayInputStream(decoded);
-		final X509Certificate certificate = (X509Certificate)certificateFactory
-			.generateCertificate(inputStream);
-		return certificate;
 	}
 
 }

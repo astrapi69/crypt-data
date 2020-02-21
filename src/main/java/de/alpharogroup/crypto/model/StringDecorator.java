@@ -25,28 +25,22 @@
 package de.alpharogroup.crypto.model;
 
 /**
- * The class {@link CharacterDecorator} that can decorate an crypt
- * object with a {@link String} in prefix and suffix
+ * The class {@link CharacterDecorator} that can decorate an crypt object with a {@link String} in
+ * prefix and suffix
  */
 public final class StringDecorator extends CryptObjectDecorator<String>
 {
-	protected StringDecorator(StringDecoratorBuilder<?, ?> b)
-	{
-		super(b);
-	}
-
-	public static StringDecoratorBuilder<?, ?> builder()
-	{
-		return new StringDecoratorBuilderImpl();
-	}
-
 	public static abstract class StringDecoratorBuilder<C extends StringDecorator, B extends StringDecoratorBuilder<C, B>>
-		extends CryptObjectDecorator.CryptObjectDecoratorBuilder<String, C, B>
+		extends
+			CryptObjectDecorator.CryptObjectDecoratorBuilder<String, C, B>
 	{
-		protected abstract B self();
-
+		@Override
 		public abstract C build();
 
+		@Override
+		protected abstract B self();
+
+		@Override
 		public String toString()
 		{
 			return "StringDecorator.StringDecoratorBuilder(super=" + super.toString() + ")";
@@ -54,20 +48,33 @@ public final class StringDecorator extends CryptObjectDecorator<String>
 	}
 
 	private static final class StringDecoratorBuilderImpl
-		extends StringDecoratorBuilder<StringDecorator, StringDecoratorBuilderImpl>
+		extends
+			StringDecoratorBuilder<StringDecorator, StringDecoratorBuilderImpl>
 	{
 		private StringDecoratorBuilderImpl()
 		{
 		}
 
-		protected StringDecorator.StringDecoratorBuilderImpl self()
-		{
-			return this;
-		}
-
+		@Override
 		public StringDecorator build()
 		{
 			return new StringDecorator(this);
 		}
+
+		@Override
+		protected StringDecorator.StringDecoratorBuilderImpl self()
+		{
+			return this;
+		}
+	}
+
+	public static StringDecoratorBuilder<?, ?> builder()
+	{
+		return new StringDecoratorBuilderImpl();
+	}
+
+	protected StringDecorator(StringDecoratorBuilder<?, ?> b)
+	{
+		super(b);
 	}
 }

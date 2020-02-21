@@ -27,6 +27,9 @@ package de.alpharogroup.crypto.model;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 import javax.crypto.Cipher;
 
 import org.testng.annotations.Test;
@@ -35,10 +38,6 @@ import de.alpharogroup.crypto.algorithm.SunJCEAlgorithm;
 import de.alpharogroup.crypto.compound.CompoundAlgorithm;
 import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 import de.alpharogroup.random.RandomExtensions;
-import lombok.SneakyThrows;
-
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * The unit test class for the class {@link CryptModel}

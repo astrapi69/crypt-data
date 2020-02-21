@@ -43,8 +43,8 @@ public class CharacterDecoratorTest
 	{
 		Character actual;
 		Character expected;
-		CharacterDecorator decorator = CharacterDecorator.builder()
-			.prefix(Character.valueOf('$')).suffix(Character.valueOf('?')).build();
+		CharacterDecorator decorator = CharacterDecorator.builder().prefix(Character.valueOf('$'))
+			.suffix(Character.valueOf('?')).build();
 		assertNotNull(decorator);
 
 		actual = decorator.getPrefix();
