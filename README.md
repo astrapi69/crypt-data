@@ -55,7 +55,7 @@ Than you can add the dependency to your dependencies:
 	<properties>
 			...
 		<!-- CRYPT-DATA version -->
-		<crypt-data.version>7.2</crypt-data.version>
+		<crypt-data.version>7.3</crypt-data.version>
 			...
 	</properties>
 			...
@@ -79,7 +79,7 @@ You can first define the version in the ext section and add than the following g
 ```
 ext {
 			...
-    cryptDataVersion = '7.2'
+    cryptDataVersion = '7.3'
 			...
 }
 dependencies {

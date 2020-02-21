@@ -1,12 +1,18 @@
 ## Change log
 ----------------------
 
-Version 7.3-SNAPSHOT
+Version 7.3
 -------------
 
 ADDED:
-
+ 
+- new build system gradle
 - new decorator class for byte array object created
+
+CHANGED:
+
+- removed maven build system and all related files
+- removed all lombok dependent imports
 
 Version 7.2
 -------------
