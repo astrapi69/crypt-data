@@ -63,6 +63,8 @@ import de.alpharogroup.crypto.provider.SecurityProvider;
 /**
  * The factory class {@link CertFactory} holds methods for creating {@link Certificate} objects and
  * sub classes like {@link X509Certificate}.
+ *
+ * Note: a very good entry point for creating yourself certificate you can follow this <a href="http://www.bouncycastle.org/wiki/display/JA1/X.509+Public+Key+Certificate+and+Certification+Request+Generation">link</a>
  */
 @SuppressWarnings("deprecation")
 public final class CertFactory

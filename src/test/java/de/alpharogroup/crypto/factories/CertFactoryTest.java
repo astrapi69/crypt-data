@@ -194,7 +194,7 @@ public class CertFactoryTest
 
 	/**
 	 * Test method for
-	 * {@link CertFactory#newX509Certificate(PublicKey, PrivateKey, String, String, String, Date, Date)}
+	 * {@link CertFactory#newX509Certificate(PublicKey, PrivateKey, BigInteger, String, String, String, Date, Date)} 
 	 */
 	@Test
 	public void testNewX509CertificatePublicKeyPrivateKeyStringStringStringDateDate()
