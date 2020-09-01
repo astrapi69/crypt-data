@@ -32,6 +32,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
+import org.apache.commons.io.FileUtils;
 import org.meanbean.test.BeanTester;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
@@ -66,16 +67,16 @@ public class KeyStoreFactoryTest
 		FileNotFoundException, KeyStoreException, IOException
 	{
 		File publickeyDerDir;
-		File privatekeyDerFile;
+		File keystoreJksFile;
 		KeyStore keystore;
 
 		publickeyDerDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
-		privatekeyDerFile = new File(publickeyDerDir, "keystore.jks");
+		keystoreJksFile = new File(publickeyDerDir, "keystore.jks");
 
 		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
-			privatekeyDerFile, true);
+			keystoreJksFile, true);
 		AssertJUnit.assertNotNull(keystore);
-		DeleteFileExtensions.delete(privatekeyDerFile);
+		FileUtils.deleteQuietly(keystoreJksFile);
 	}
 
 	/**

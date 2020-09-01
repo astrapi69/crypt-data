@@ -101,10 +101,6 @@ public final class KeyStoreFactory
 		if (newEmpty)
 		{
 			keyStore.load(null, password.toCharArray());
-			if (!keystoreFile.exists())
-			{
-				keystoreFile.createNewFile();
-			}
 			OutputStream out = new FileOutputStream(keystoreFile);
 			keyStore.store(out, password.toCharArray());
 			return keyStore;

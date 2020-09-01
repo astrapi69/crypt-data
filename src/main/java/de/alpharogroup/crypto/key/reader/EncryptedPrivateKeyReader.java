@@ -207,6 +207,7 @@ public final class EncryptedPrivateKeyReader
 		throws IOException, NoSuchAlgorithmException, NoSuchPaddingException,
 		InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException
 	{
+		PrivateKey privateKey = null;
 		byte[] encryptedPrivateKeyBytes = null;
 		boolean pemFormat = PrivateKeyReader.isPemFormat(encryptedPrivateKeyFile);
 		if (pemFormat)
@@ -214,15 +215,15 @@ public final class EncryptedPrivateKeyReader
 			KeyPair keyPair = getKeyPair(encryptedPrivateKeyFile, password);
 			if (keyPair != null)
 			{
-				return keyPair.getPrivate();
+				privateKey = keyPair.getPrivate();
 			}
 		}
 		else
 		{
 			encryptedPrivateKeyBytes = Files.readAllBytes(encryptedPrivateKeyFile.toPath());
-			return readPasswordProtectedPrivateKey(encryptedPrivateKeyBytes, password, algorithm);
+			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyBytes, password, algorithm);
 		}
-		return null;
+		return privateKey;
 	}
 
 	private EncryptedPrivateKeyReader()

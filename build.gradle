@@ -3,7 +3,7 @@ plugins {
     id "java"
     id "maven-publish"
     id "signing"
-    id "com.github.ben-manes.versions" version "0.27.0"
+    id "com.github.ben-manes.versions" version "0.29.0"
     id "com.github.hierynomus.license" version "0.15.0"
 }
 
@@ -28,6 +28,12 @@ dependencies {
     compile "com.google.code.findbugs:jsr305:$jsr305Version"
     compile "com.google.guava:guava:$guavaVersion"
     compile "de.alpharogroup:file-worker:$fileWorkerVersion"
+    compile "com.rainerhahnekamp:sneakythrow:$sneakythrowVersion"
+    compile "org.apache.commons:commons-lang3:$commonsLang3Version"
+    implementation("de.alpharogroup:silly-collections:$sillyCollectionsVersion")
+    implementation("de.alpharogroup:silly-strings:$sillyStringsVersion")
+    implementation("commons-io:commons-io:$commonsIoVersion")
+    implementation("de.alpharogroup:silly-io:$sillyIoVersion")
     testCompile "de.alpharogroup:vintage-time:$vintageTimeVersion"
     testCompile "de.alpharogroup:test-objects:$testObjectsVersion"
     testCompile "io.github.benas:random-beans:$randomBeansVersion"

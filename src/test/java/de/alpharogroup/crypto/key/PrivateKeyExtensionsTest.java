@@ -351,7 +351,7 @@ public class PrivateKeyExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyExtensions#toPKCS8Format(PrivateKey)}
+	 * Test method for {@link PrivateKeyExtensions#toPKCS1Format(PrivateKey)}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.

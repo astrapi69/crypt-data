@@ -233,7 +233,7 @@ public class CertFactoryTest
 		publicKey = PublicKeyReader.readPemPublicKey(publickeyPemFile);
 
 		subject = "CN=Test subject";
-		issuer = "CN=Test issue";
+		issuer = "CN=ALPHA RO GROUP LTD FOR TESTS";
 		signatureAlgorithm = HashAlgorithm.SHA256.getAlgorithm() + UnionWord.With.name()
 			+ KeyPairGeneratorAlgorithm.RSA.getAlgorithm();
 
@@ -248,7 +248,7 @@ public class CertFactoryTest
 		assertNotNull(cert);
 
 		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
-		certificateFile = new File(pemDir, "certificate.cert");
+		certificateFile = new File(pemDir, "certificate.cer");
 		// save it ...
 		CertificateWriter.writeInPemFormat(cert, certificateFile);
 		// read it ...
