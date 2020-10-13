@@ -31,6 +31,8 @@ repositories {
 }
 
 dependencies {
+    compileOnly("org.projectlombok:lombok:$lombokVersion")
+    annotationProcessor("org.projectlombok:lombok:$lombokVersion")
     implementation("de.alpharogroup:crypt-api:$cryptApiVersion")
     implementation("javax.xml.bind:jaxb-api:$jaxbApiVersion")
     implementation("commons-codec:commons-codec:$commonsCodecVersion")
