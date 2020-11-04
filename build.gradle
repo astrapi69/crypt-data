@@ -203,6 +203,7 @@ dependencies {
     testImplementation("de.alpharogroup:test-objects:$testObjectsVersion")
     testImplementation("io.github.benas:random-beans:$randomBeansVersion")
     testImplementation("de.alpharogroup:randomizer-core:$randomizerCoreVersion")
+    testImplementation("de.alpharogroup:randomizer-data:$randomizerCoreVersion")
     testImplementation("de.alpharogroup:checksum-up:$checksumUpVersion")
     testImplementation("org.meanbean:meanbean:$meanbeanVersion")
     testImplementation("de.alpharogroup:jobj-contract-verifier:$jobjContractVerifierVersion")

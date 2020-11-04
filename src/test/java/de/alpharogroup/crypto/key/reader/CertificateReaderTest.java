@@ -35,6 +35,7 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
 
+import de.alpharogroup.random.number.RandomBigIntegerFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
 import org.testng.AssertJUnit;
@@ -48,7 +49,6 @@ import de.alpharogroup.crypto.key.KeyFileFormat;
 import de.alpharogroup.crypto.key.writer.CertificateWriter;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
-import de.alpharogroup.random.RandomExtensions;
 
 /**
  * The unit test class for the class {@link CertificateReaderTest}
@@ -105,7 +105,7 @@ public class CertificateReaderTest
 			LocalDate.of(2017, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 		end = Date.from(
 			LocalDate.of(2027, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-		serialNumber = RandomExtensions.randomSerialNumber();
+		serialNumber = RandomBigIntegerFactory.randomSerialNumber();
 		// create certificate
 		cert = CertFactory.newX509Certificate(publicKey, privateKey, serialNumber, subject, issuer,
 			signatureAlgorithm, start, end);
@@ -171,7 +171,7 @@ public class CertificateReaderTest
 			LocalDate.of(2017, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 		end = Date.from(
 			LocalDate.of(2027, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-		serialNumber = RandomExtensions.randomSerialNumber();
+		serialNumber = RandomBigIntegerFactory.randomSerialNumber();
 		// create certificate
 		cert = CertFactory.newX509Certificate(publicKey, privateKey, serialNumber, subject, issuer,
 			signatureAlgorithm, start, end);
