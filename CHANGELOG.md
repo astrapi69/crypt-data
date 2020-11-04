@@ -4,6 +4,16 @@
 Version 7.4-SNAPSHOT
 -------------
 
+ADDED:
+ 
+- new jar task for build manifest file
+- added lombok dependency
+
+CHANGED:
+
+- update of gradle version to 6.7
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.34.0
+
 Version 7.3
 -------------
 
