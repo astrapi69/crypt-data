@@ -42,25 +42,25 @@ public final class KeyStoreFactory
 {
 
 	/**
-	 * Factory method for load the {@link KeyStore} object from the given file.
+	 * Factory method for load the {@link KeyStore} object from the given already existing file
 	 *
 	 * @param type
 	 *            the type of the keystore
 	 * @param password
 	 *            the password of the keystore
 	 * @param keystoreFile
-	 *            the keystore file
+	 *            the already existing keystore file
 	 * @return the loaded {@link KeyStore} object
 	 * @throws NoSuchAlgorithmException
-	 *             the no such algorithm exception
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws CertificateException
-	 *             the certificate exception
+	 *             is thrown if there is an error with an certificate
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the keystore file not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws KeyStoreException
-	 *             the key store exception
+	 *             is thrown if there is an error accessing the key store
 	 */
 	public static KeyStore newKeyStore(final String type, final String password,
 		final File keystoreFile) throws NoSuchAlgorithmException, CertificateException,
@@ -79,32 +79,36 @@ public final class KeyStoreFactory
 	 *            the password of the keystore
 	 * @param keystoreFile
 	 *            the keystore file
-	 * @param newEmpty
+	 * @param createNewKeyStore
 	 *            if the {@linkplain KeyStore} should be new created.
 	 * @return the loaded {@link KeyStore} object
 	 * @throws NoSuchAlgorithmException
-	 *             the no such algorithm exception
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws CertificateException
-	 *             the certificate exception
+	 *             is thrown if there is an error with an certificate
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the keystore file not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws KeyStoreException
-	 *             the key store exception
+	 *             is thrown if there is an error accessing the key store
 	 */
 	public static KeyStore newKeyStore(final String type, final String password,
-		final File keystoreFile, final boolean newEmpty) throws NoSuchAlgorithmException,
+		final File keystoreFile, final boolean createNewKeyStore) throws NoSuchAlgorithmException,
 		CertificateException, FileNotFoundException, IOException, KeyStoreException
 	{
 		final KeyStore keyStore = KeyStore.getInstance(type);
-		if (newEmpty)
+		if (createNewKeyStore)
 		{
+			// initialize keystore
 			keyStore.load(null, password.toCharArray());
+			// get output stream
 			OutputStream out = new FileOutputStream(keystoreFile);
+			// store to new file
 			keyStore.store(out, password.toCharArray());
 			return keyStore;
 		}
+		// load from existing file
 		keyStore.load(new FileInputStream(keystoreFile), password.toCharArray());
 		return keyStore;
 	}

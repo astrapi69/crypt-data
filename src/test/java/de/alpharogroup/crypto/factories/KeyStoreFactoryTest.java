@@ -76,6 +76,14 @@ public class KeyStoreFactoryTest
 		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
 			keystoreJksFile, true);
 		AssertJUnit.assertNotNull(keystore);
+
+		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
+			keystoreJksFile, false);
+		AssertJUnit.assertNotNull(keystore);
+
+		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
+			keystoreJksFile);
+		AssertJUnit.assertNotNull(keystore);
 		FileUtils.deleteQuietly(keystoreJksFile);
 	}
 
