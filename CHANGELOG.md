@@ -6,6 +6,7 @@ Version 7.4-SNAPSHOT
 
 ADDED:
  
+- added new factory method to KeyStoreFactory class
 - new jar task for build manifest file
 - added lombok dependency
 
