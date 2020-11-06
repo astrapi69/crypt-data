@@ -24,18 +24,7 @@
  */
 package de.alpharogroup.crypto.key.reader;
 
-import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import de.alpharogroup.crypto.algorithm.UnionWord;
-import de.alpharogroup.crypto.factories.CertFactory;
-import de.alpharogroup.crypto.key.KeyFileFormat;
-import de.alpharogroup.crypto.key.writer.CertificateWriter;
-import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.search.PathFinder;
-import de.alpharogroup.random.number.RandomBigIntegerFactory;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertNotNull;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -48,7 +37,19 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
 
-import static org.testng.Assert.assertNotNull;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.meanbean.test.BeanTester;
+import org.testng.annotations.Test;
+
+import de.alpharogroup.crypto.algorithm.HashAlgorithm;
+import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import de.alpharogroup.crypto.algorithm.UnionWord;
+import de.alpharogroup.crypto.factories.CertFactory;
+import de.alpharogroup.crypto.key.KeyFileFormat;
+import de.alpharogroup.crypto.key.writer.CertificateWriter;
+import de.alpharogroup.file.delete.DeleteFileExtensions;
+import de.alpharogroup.file.search.PathFinder;
+import de.alpharogroup.random.number.RandomBigIntegerFactory;
 
 /**
  * The unit test class for the class {@link CertificateReaderTest}
@@ -59,9 +60,11 @@ public class CertificateReaderTest
 	/**
 	 * Test method for {@link CertificateReader#readCertificate(File)}
 	 *
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
-	@Test public void testReadDerCertificateFile() throws Exception
+	@Test
+	public void testReadDerCertificateFile() throws Exception
 	{
 		File derDir;
 		File certificateDerFile;
@@ -96,8 +99,8 @@ public class CertificateReaderTest
 
 		subject = "CN=Test subject";
 		issuer = "CN=Test issue";
-		signatureAlgorithm = HashAlgorithm.SHA256.getAlgorithm() + UnionWord.With
-			.name() + KeyPairGeneratorAlgorithm.RSA.getAlgorithm();
+		signatureAlgorithm = HashAlgorithm.SHA256.getAlgorithm() + UnionWord.With.name()
+			+ KeyPairGeneratorAlgorithm.RSA.getAlgorithm();
 
 		start = Date.from(
 			LocalDate.of(2017, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -123,9 +126,11 @@ public class CertificateReaderTest
 	/**
 	 * Test method for {@link CertificateReader#readPemCertificate(File)}
 	 *
-	 * @throws Exception the exception
+	 * @throws Exception
+	 *             the exception
 	 */
-	@Test public void testReadPemCertificateFile() throws Exception
+	@Test
+	public void testReadPemCertificateFile() throws Exception
 	{
 		File pemDir;
 		File certificateFile;
@@ -160,8 +165,8 @@ public class CertificateReaderTest
 
 		subject = "CN=Test subject";
 		issuer = "CN=Test issue";
-		signatureAlgorithm = HashAlgorithm.SHA256.getAlgorithm() + UnionWord.With
-			.name() + KeyPairGeneratorAlgorithm.RSA.getAlgorithm();
+		signatureAlgorithm = HashAlgorithm.SHA256.getAlgorithm() + UnionWord.With.name()
+			+ KeyPairGeneratorAlgorithm.RSA.getAlgorithm();
 
 		start = Date.from(
 			LocalDate.of(2017, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -187,7 +192,8 @@ public class CertificateReaderTest
 	/**
 	 * Test method for {@link CertificateReader} with {@link BeanTester}
 	 */
-	@Test public void testWithBeanTester()
+	@Test
+	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(CertificateReader.class);

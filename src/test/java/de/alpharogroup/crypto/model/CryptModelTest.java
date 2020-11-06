@@ -32,12 +32,12 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.crypto.Cipher;
 
-import de.alpharogroup.random.object.RandomStringFactory;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.crypto.algorithm.SunJCEAlgorithm;
 import de.alpharogroup.crypto.compound.CompoundAlgorithm;
 import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
+import de.alpharogroup.random.object.RandomStringFactory;
 
 /**
  * The unit test class for the class {@link CryptModel}

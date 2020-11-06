@@ -24,9 +24,9 @@
  */
 package de.alpharogroup.crypto.algorithm;
 
-import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertEquals;
+
+import org.testng.annotations.Test;
 
 /**
  * Test class for enum {@link KeyPairWithModeAndPaddingAlgorithm}.
@@ -37,7 +37,8 @@ public class KeyPairWithModeAndPaddingAlgorithmTest
 	/**
 	 * Test method for {@link KeyPairWithModeAndPaddingAlgorithm#getAlgorithm()}.
 	 */
-	@Test public void testGetAlgorithm()
+	@Test
+	public void testGetAlgorithm()
 	{
 		assertEquals(
 			KeyPairWithModeAndPaddingAlgorithm.RSA_ECB_OAEPWithSHA1AndMGF1Padding.getAlgorithm(),

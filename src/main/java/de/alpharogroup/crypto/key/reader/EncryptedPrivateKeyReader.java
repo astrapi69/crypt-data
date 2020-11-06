@@ -221,7 +221,8 @@ public final class EncryptedPrivateKeyReader
 		else
 		{
 			encryptedPrivateKeyBytes = Files.readAllBytes(encryptedPrivateKeyFile.toPath());
-			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyBytes, password, algorithm);
+			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyBytes, password,
+				algorithm);
 		}
 		return privateKey;
 	}

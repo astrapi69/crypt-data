@@ -24,7 +24,12 @@
  */
 package de.alpharogroup.crypto.factories;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -56,77 +61,13 @@ public final class KeyStoreFactory
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static KeyStore loadKeyStore(final File keystoreFile, final String type, final String password)
+	public static KeyStore loadKeyStore(final File keystoreFile, final String type,
+		final String password)
 		throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException
 	{
 		final KeyStore keyStore = KeyStore.getInstance(type);
 		keyStore.load(new FileInputStream(keystoreFile), password.toCharArray());
 		return keyStore;
-	}
-
-	/**
-	 * Factory method for load the {@link KeyStore} object from the given already existing file
-	 *
-	 * @param type
-	 *            the type of the keystore
-	 * @param password
-	 *            the password of the keystore
-	 * @param keystoreFile
-	 *            the already existing keystore file
-	 * @return the loaded {@link KeyStore} object
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails
-	 * @throws CertificateException
-	 *             is thrown if there is an error with an certificate
-	 * @throws FileNotFoundException
-	 *             is thrown if the keystore file not found
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @throws KeyStoreException
-	 *             is thrown if there is an error accessing the key store
-	 * @deprecated use instead the method <code>loadKeyStore</code>
-	 * Note: will be removed in the next minor version
-	 */
-	public static KeyStore newKeyStore(final String type, final String password,
-		final File keystoreFile)
-		throws NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException,
-		KeyStoreException
-	{
-		return newKeyStore(type, password, keystoreFile, false);
-	}
-
-	/**
-	 * Factory method for create a new empty {@link KeyStore} object and save it to the given file
-	 * with the given parameters or load an existing {@link KeyStore} object from the given file.
-	 *
-	 * @param type
-	 *            the type of the keystore
-	 * @param password
-	 *            the password of the keystore
-	 * @param keystoreFile
-	 *            the keystore file
-	 * @param createNewKeyStore
-	 *            if the {@linkplain KeyStore} should be new created.
-	 * @return the loaded {@link KeyStore} object
-	 * @throws KeyStoreException
-	 *             is thrown if there is an error accessing the key store
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails
-	 * @throws CertificateException
-	 *             is thrown if there is an error with an certificate
-	 * @throws FileNotFoundException
-	 *             is thrown if the keystore file not found
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static KeyStore newKeyStore(final String type, final String password,
-		final File keystoreFile, final boolean createNewKeyStore)
-		throws KeyStoreException, NoSuchAlgorithmException, CertificateException,
-		FileNotFoundException, IOException
-	{
-		return createNewKeyStore ?
-			newKeyStore(keystoreFile, type, password) :
-			loadKeyStore(keystoreFile, type, password);
 	}
 
 	/**
@@ -163,6 +104,69 @@ public final class KeyStoreFactory
 		// store to new file
 		keyStore.store(out, password.toCharArray());
 		return keyStore;
+	}
+
+	/**
+	 * Factory method for load the {@link KeyStore} object from the given already existing file
+	 *
+	 * @param type
+	 *            the type of the keystore
+	 * @param password
+	 *            the password of the keystore
+	 * @param keystoreFile
+	 *            the already existing keystore file
+	 * @return the loaded {@link KeyStore} object
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 * @throws CertificateException
+	 *             is thrown if there is an error with an certificate
+	 * @throws FileNotFoundException
+	 *             is thrown if the keystore file not found
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws KeyStoreException
+	 *             is thrown if there is an error accessing the key store
+	 * @deprecated use instead the method <code>loadKeyStore</code> Note: will be removed in the
+	 *             next minor version
+	 */
+	public static KeyStore newKeyStore(final String type, final String password,
+		final File keystoreFile) throws NoSuchAlgorithmException, CertificateException,
+		FileNotFoundException, IOException, KeyStoreException
+	{
+		return newKeyStore(type, password, keystoreFile, false);
+	}
+
+	/**
+	 * Factory method for create a new empty {@link KeyStore} object and save it to the given file
+	 * with the given parameters or load an existing {@link KeyStore} object from the given file.
+	 *
+	 * @param type
+	 *            the type of the keystore
+	 * @param password
+	 *            the password of the keystore
+	 * @param keystoreFile
+	 *            the keystore file
+	 * @param createNewKeyStore
+	 *            if the {@linkplain KeyStore} should be new created.
+	 * @return the loaded {@link KeyStore} object
+	 * @throws KeyStoreException
+	 *             is thrown if there is an error accessing the key store
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 * @throws CertificateException
+	 *             is thrown if there is an error with an certificate
+	 * @throws FileNotFoundException
+	 *             is thrown if the keystore file not found
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static KeyStore newKeyStore(final String type, final String password,
+		final File keystoreFile, final boolean createNewKeyStore) throws KeyStoreException,
+		NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException
+	{
+		return createNewKeyStore
+			? newKeyStore(keystoreFile, type, password)
+			: loadKeyStore(keystoreFile, type, password);
 	}
 
 	private KeyStoreFactory()

@@ -122,21 +122,6 @@ public final class KeyPairFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPair} from the given parameters.
-	 *
-	 * @param publicKey
-	 *            the public key
-	 * @param privateKey
-	 *            the private key
-	 * @return the new {@link KeyPair} from the given parameters.
-	 */
-	public static KeyPair newKeyPair(final PublicKey publicKey, final PrivateKey privateKey)
-	{
-		final KeyPair keyPair = new KeyPair(publicKey, privateKey);
-		return keyPair;
-	}
-
-	/**
 	 * Factory method for creating a new {@link KeyPair} from the given private key
 	 *
 	 * @param privateKey
@@ -150,7 +135,23 @@ public final class KeyPairFactory
 	public static KeyPair newKeyPair(final PrivateKey privateKey)
 		throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
-		final KeyPair keyPair = new KeyPair(PrivateKeyExtensions.generatePublicKey(privateKey), privateKey);
+		final KeyPair keyPair = new KeyPair(PrivateKeyExtensions.generatePublicKey(privateKey),
+			privateKey);
+		return keyPair;
+	}
+
+	/**
+	 * Factory method for creating a new {@link KeyPair} from the given parameters.
+	 *
+	 * @param publicKey
+	 *            the public key
+	 * @param privateKey
+	 *            the private key
+	 * @return the new {@link KeyPair} from the given parameters.
+	 */
+	public static KeyPair newKeyPair(final PublicKey publicKey, final PrivateKey privateKey)
+	{
+		final KeyPair keyPair = new KeyPair(publicKey, privateKey);
 		return keyPair;
 	}
 

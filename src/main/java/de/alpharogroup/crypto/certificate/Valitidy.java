@@ -7,61 +7,129 @@ import java.time.ZonedDateTime;
  **/
 public class Valitidy
 {
-	private ZonedDateTime notBefore;
+	public static abstract class ValitidyBuilder<C extends Valitidy, B extends Valitidy.ValitidyBuilder<C, B>>
+	{
+		private static void $fillValuesFromInstanceIntoBuilder(Valitidy instance,
+			Valitidy.ValitidyBuilder<?, ?> b)
+		{
+			b.notBefore(instance.notBefore);
+			b.notAfter(instance.notAfter);
+		}
+		private ZonedDateTime notAfter;
+
+		private ZonedDateTime notBefore;
+
+		protected B $fillValuesFrom(C instance)
+		{
+			ValitidyBuilder.$fillValuesFromInstanceIntoBuilder(instance, this);
+			return self();
+		}
+
+		public abstract C build();
+
+		public B notAfter(ZonedDateTime notAfter)
+		{
+			this.notAfter = notAfter;
+			return self();
+		}
+
+		public B notBefore(ZonedDateTime notBefore)
+		{
+			this.notBefore = notBefore;
+			return self();
+		}
+
+		protected abstract B self();
+
+		public String toString()
+		{
+			return "Valitidy.ValitidyBuilder(notBefore=" + this.notBefore + ", notAfter="
+				+ this.notAfter + ")";
+		}
+	}
+	private static final class ValitidyBuilderImpl
+		extends
+			ValitidyBuilder<Valitidy, ValitidyBuilderImpl>
+	{
+		private ValitidyBuilderImpl()
+		{
+		}
+
+		public Valitidy build()
+		{
+			return new Valitidy(this);
+		}
+
+		protected Valitidy.ValitidyBuilderImpl self()
+		{
+			return this;
+		}
+	}
+
+	public static ValitidyBuilder<?, ?> builder()
+	{
+		return new ValitidyBuilderImpl();
+	}
+
 	private ZonedDateTime notAfter;
 
-	public Valitidy(ZonedDateTime notBefore, ZonedDateTime notAfter) {
-		this.notBefore = notBefore;
-		this.notAfter = notAfter;
+	private ZonedDateTime notBefore;
+
+	public Valitidy()
+	{
 	}
 
-	public Valitidy() {
-	}
-
-	protected Valitidy(ValitidyBuilder<?, ?> b) {
+	protected Valitidy(ValitidyBuilder<?, ?> b)
+	{
 		this.notBefore = b.notBefore;
 		this.notAfter = b.notAfter;
 	}
 
-	public static ValitidyBuilder<?, ?> builder() {
-		return new ValitidyBuilderImpl();
-	}
-
-	public ZonedDateTime getNotBefore() {
-		return this.notBefore;
-	}
-
-	public ZonedDateTime getNotAfter() {
-		return this.notAfter;
-	}
-
-	public void setNotBefore(ZonedDateTime notBefore) {
+	public Valitidy(ZonedDateTime notBefore, ZonedDateTime notAfter)
+	{
 		this.notBefore = notBefore;
-	}
-
-	public void setNotAfter(ZonedDateTime notAfter) {
 		this.notAfter = notAfter;
 	}
 
-	public boolean equals(final Object o) {
-		if (o == this) return true;
-		if (!(o instanceof Valitidy)) return false;
-		final Valitidy other = (Valitidy) o;
-		if (!other.canEqual((Object) this)) return false;
-		final Object this$notBefore = this.getNotBefore();
-		final Object other$notBefore = other.getNotBefore();
-		if (this$notBefore == null ? other$notBefore != null : !this$notBefore.equals(other$notBefore)) return false;
-		final Object this$notAfter = this.getNotAfter();
-		final Object other$notAfter = other.getNotAfter();
-		if (this$notAfter == null ? other$notAfter != null : !this$notAfter.equals(other$notAfter)) return false;
-		return true;
-	}
-
-	protected boolean canEqual(final Object other) {
+	protected boolean canEqual(final Object other)
+	{
 		return other instanceof Valitidy;
 	}
 
-	public int hashCode() {
+	public boolean equals(final Object o)
+	{
+		if (o == this)
+			return true;
+		if (!(o instanceof Valitidy))
+			return false;
+		final Valitidy other = (Valitidy)o;
+		if (!other.canEqual((Object)this))
+			return false;
+		final Object this$notBefore = this.getNotBefore();
+		final Object other$notBefore = other.getNotBefore();
+		if (this$notBefore == null
+			? other$notBefore != null
+			: !this$notBefore.equals(other$notBefore))
+			return false;
+		final Object this$notAfter = this.getNotAfter();
+		final Object other$notAfter = other.getNotAfter();
+		if (this$notAfter == null ? other$notAfter != null : !this$notAfter.equals(other$notAfter))
+			return false;
+		return true;
+	}
+
+	public ZonedDateTime getNotAfter()
+	{
+		return this.notAfter;
+	}
+
+	public ZonedDateTime getNotBefore()
+	{
+		return this.notBefore;
+	}
+
+	public int hashCode()
+	{
 		final int PRIME = 59;
 		int result = 1;
 		final Object $notBefore = this.getNotBefore();
@@ -71,58 +139,25 @@ public class Valitidy
 		return result;
 	}
 
-	public String toString() {
-		return "Valitidy(notBefore=" + this.getNotBefore() + ", notAfter=" + this.getNotAfter() + ")";
+	public void setNotAfter(ZonedDateTime notAfter)
+	{
+		this.notAfter = notAfter;
 	}
 
-	public ValitidyBuilder<?, ?> toBuilder() {
+	public void setNotBefore(ZonedDateTime notBefore)
+	{
+		this.notBefore = notBefore;
+	}
+
+	public ValitidyBuilder<?, ?> toBuilder()
+	{
 		return new ValitidyBuilderImpl().$fillValuesFrom(this);
 	}
 
-	public static abstract class ValitidyBuilder<C extends Valitidy, B extends Valitidy.ValitidyBuilder<C, B>> {
-		private ZonedDateTime notBefore;
-		private ZonedDateTime notAfter;
-
-		private static void $fillValuesFromInstanceIntoBuilder(Valitidy instance, Valitidy.ValitidyBuilder<?, ?> b) {
-			b.notBefore(instance.notBefore);
-			b.notAfter(instance.notAfter);
-		}
-
-		public B notBefore(ZonedDateTime notBefore) {
-			this.notBefore = notBefore;
-			return self();
-		}
-
-		public B notAfter(ZonedDateTime notAfter) {
-			this.notAfter = notAfter;
-			return self();
-		}
-
-		protected B $fillValuesFrom(C instance) {
-			ValitidyBuilder.$fillValuesFromInstanceIntoBuilder(instance, this);
-			return self();
-		}
-
-		protected abstract B self();
-
-		public abstract C build();
-
-		public String toString() {
-			return "Valitidy.ValitidyBuilder(notBefore=" + this.notBefore + ", notAfter=" + this.notAfter + ")";
-		}
-	}
-
-	private static final class ValitidyBuilderImpl extends ValitidyBuilder<Valitidy, ValitidyBuilderImpl> {
-		private ValitidyBuilderImpl() {
-		}
-
-		protected Valitidy.ValitidyBuilderImpl self() {
-			return this;
-		}
-
-		public Valitidy build() {
-			return new Valitidy(this);
-		}
+	public String toString()
+	{
+		return "Valitidy(notBefore=" + this.getNotBefore() + ", notAfter=" + this.getNotAfter()
+			+ ")";
 	}
 }
 

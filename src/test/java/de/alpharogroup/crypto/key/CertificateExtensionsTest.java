@@ -24,15 +24,8 @@
  */
 package de.alpharogroup.crypto.key;
 
-import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import de.alpharogroup.crypto.compound.CompoundAlgorithm;
-import de.alpharogroup.crypto.key.reader.CertificateReader;
-import de.alpharogroup.file.search.PathFinder;
-import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.meanbean.test.BeanTestException;
-import org.meanbean.test.BeanTester;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.AssertJUnit.assertEquals;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -43,8 +36,16 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.AssertJUnit.assertEquals;
+import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import de.alpharogroup.crypto.algorithm.HashAlgorithm;
+import de.alpharogroup.crypto.compound.CompoundAlgorithm;
+import de.alpharogroup.crypto.key.reader.CertificateReader;
+import de.alpharogroup.file.search.PathFinder;
 
 /**
  * The unit test class for the class {@link CertificateExtensions}
@@ -62,7 +63,8 @@ public class CertificateExtensionsTest
 	 * @throws Exception
 	 *             is thrown if any error occurs on the execution
 	 */
-	@BeforeMethod protected void setUp() throws Exception
+	@BeforeMethod
+	protected void setUp() throws Exception
 	{
 		if (certificate == null)
 		{
@@ -79,7 +81,8 @@ public class CertificateExtensionsTest
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	@Test public void testGetCountry() throws CertificateEncodingException
+	@Test
+	public void testGetCountry() throws CertificateEncodingException
 	{
 		String expected;
 		String actual;
@@ -97,8 +100,8 @@ public class CertificateExtensionsTest
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails.
 	 */
-	@Test public void testGetFingerprint()
-		throws CertificateEncodingException, NoSuchAlgorithmException
+	@Test
+	public void testGetFingerprint() throws CertificateEncodingException, NoSuchAlgorithmException
 	{
 		String expected;
 		String actual;
@@ -127,7 +130,8 @@ public class CertificateExtensionsTest
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	@Test public void testGetFirstValueOf() throws CertificateEncodingException
+	@Test
+	public void testGetFirstValueOf() throws CertificateEncodingException
 	{
 		String expected;
 		String actual;
@@ -140,7 +144,8 @@ public class CertificateExtensionsTest
 	/**
 	 * Test method for {@link CertificateExtensions#getIssuedBy(X509Certificate)}
 	 */
-	@Test public void testGetIssuedBy()
+	@Test
+	public void testGetIssuedBy()
 	{
 		String expected;
 		String actual;
@@ -153,7 +158,8 @@ public class CertificateExtensionsTest
 	/**
 	 * Test method for {@link CertificateExtensions#getIssuedTo(X509Certificate)}
 	 */
-	@Test public void testGetIssuedTo()
+	@Test
+	public void testGetIssuedTo()
 	{
 		String expected;
 		String actual;
@@ -169,7 +175,8 @@ public class CertificateExtensionsTest
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	@Test public void testGetLocality() throws CertificateEncodingException
+	@Test
+	public void testGetLocality() throws CertificateEncodingException
 	{
 		String expected;
 		String actual;
@@ -185,7 +192,8 @@ public class CertificateExtensionsTest
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	@Test public void testGetOrganization() throws CertificateEncodingException
+	@Test
+	public void testGetOrganization() throws CertificateEncodingException
 	{
 		String expected;
 		String actual;
@@ -198,7 +206,8 @@ public class CertificateExtensionsTest
 	/**
 	 * Test method for {@link CertificateExtensions#getSignatureAlgorithm(X509Certificate)}
 	 */
-	@Test public void testGetSignatureAlgorithm()
+	@Test
+	public void testGetSignatureAlgorithm()
 	{
 		String expected;
 		String actual;
@@ -211,7 +220,8 @@ public class CertificateExtensionsTest
 	/**
 	 * Test method for {@link CertificateExtensions#getValidFrom(X509Certificate)}
 	 */
-	@Test public void testGetValidFrom()
+	@Test
+	public void testGetValidFrom()
 	{
 		Date expected;
 		Date actual;
@@ -225,7 +235,8 @@ public class CertificateExtensionsTest
 	/**
 	 * Test method for {@link CertificateExtensions#getValidUntil(X509Certificate)}
 	 */
-	@Test public void testGetValidUntil()
+	@Test
+	public void testGetValidUntil()
 	{
 		Date expected;
 		Date actual;
@@ -240,7 +251,8 @@ public class CertificateExtensionsTest
 	 * Test method for {@link CertificateExtensions} with {@link BeanTester}
 	 */
 	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-		UnsupportedOperationException.class }) public void testWithBeanTester()
+			UnsupportedOperationException.class })
+	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(CertificateExtensions.class);

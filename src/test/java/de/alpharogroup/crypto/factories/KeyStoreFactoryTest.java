@@ -24,11 +24,7 @@
  */
 package de.alpharogroup.crypto.factories;
 
-import de.alpharogroup.crypto.algorithm.KeystoreType;
-import de.alpharogroup.file.search.PathFinder;
-import org.apache.commons.io.FileUtils;
-import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertNotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,7 +34,12 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-import static org.testng.Assert.assertNotNull;
+import org.apache.commons.io.FileUtils;
+import org.meanbean.test.BeanTester;
+import org.testng.annotations.Test;
+
+import de.alpharogroup.crypto.algorithm.KeystoreType;
+import de.alpharogroup.file.search.PathFinder;
 
 /**
  * The unit test class for the class {@link KeyStoreFactory}
@@ -61,9 +62,9 @@ public class KeyStoreFactoryTest
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test public void testNewKeyStore()
-		throws NoSuchAlgorithmException, CertificateException, FileNotFoundException,
-		KeyStoreException, IOException
+	@Test
+	public void testNewKeyStore() throws NoSuchAlgorithmException, CertificateException,
+		FileNotFoundException, KeyStoreException, IOException
 	{
 		File publickeyDerDir;
 		File keystoreJksFile;
@@ -72,16 +73,16 @@ public class KeyStoreFactoryTest
 		publickeyDerDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
 		keystoreJksFile = new File(publickeyDerDir, "keystore.jks");
 
-		keystore = KeyStoreFactory
-			.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw", keystoreJksFile, true);
+		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
+			keystoreJksFile, true);
 		assertNotNull(keystore);
 
-		keystore = KeyStoreFactory
-			.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw", keystoreJksFile, false);
+		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
+			keystoreJksFile, false);
 		assertNotNull(keystore);
 
-		keystore = KeyStoreFactory
-			.loadKeyStore(keystoreJksFile, KeystoreType.JKS.name(), "foobar-secret-pw");
+		keystore = KeyStoreFactory.loadKeyStore(keystoreJksFile, KeystoreType.JKS.name(),
+			"foobar-secret-pw");
 		assertNotNull(keystore);
 		FileUtils.deleteQuietly(keystoreJksFile);
 	}
@@ -89,7 +90,8 @@ public class KeyStoreFactoryTest
 	/**
 	 * Test method for {@link KeyStoreFactory} with {@link BeanTester}
 	 */
-	@Test public void testWithBeanTester()
+	@Test
+	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(KeyStoreFactory.class);

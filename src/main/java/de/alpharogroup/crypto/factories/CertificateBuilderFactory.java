@@ -82,16 +82,15 @@ public final class CertificateBuilderFactory
 	 *            date after which the certificate is not valid.
 	 * @param subject
 	 *            X500Name representing the subject of this certificate.
-	 * @param publicKeyInfo
-	 *            the info structure for the public key to be associated with this certificate.
+	 * @param publicKey
+	 *            the public key to be associated with this certificate.
 	 * @return the new {@link X509v3CertificateBuilder} object
 	 */
 	public static X509v3CertificateBuilder newX509v3CertificateBuilder(X500Name issuer,
-																	   BigInteger serial, Date notBefore, Date notAfter, X500Name subject,
-																	   SubjectPublicKeyInfo publicKeyInfo)
+		BigInteger serial, Date notBefore, Date notAfter, X500Name subject, PublicKey publicKey)
 	{
-		final X509v3CertificateBuilder certBuilder = new X509v3CertificateBuilder(issuer, serial,
-				notBefore, notAfter, subject, publicKeyInfo);
+		final X509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(issuer, serial,
+			notBefore, notAfter, subject, publicKey);
 		return certBuilder;
 	}
 
@@ -109,16 +108,16 @@ public final class CertificateBuilderFactory
 	 *            date after which the certificate is not valid.
 	 * @param subject
 	 *            X500Name representing the subject of this certificate.
-	 * @param publicKey
-	 *            the public key to be associated with this certificate.
+	 * @param publicKeyInfo
+	 *            the info structure for the public key to be associated with this certificate.
 	 * @return the new {@link X509v3CertificateBuilder} object
 	 */
 	public static X509v3CertificateBuilder newX509v3CertificateBuilder(X500Name issuer,
-																	   BigInteger serial, Date notBefore, Date notAfter, X500Name subject,
-																	   PublicKey publicKey)
+		BigInteger serial, Date notBefore, Date notAfter, X500Name subject,
+		SubjectPublicKeyInfo publicKeyInfo)
 	{
-		final X509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(issuer, serial,
-				notBefore, notAfter, subject, publicKey);
+		final X509v3CertificateBuilder certBuilder = new X509v3CertificateBuilder(issuer, serial,
+			notBefore, notAfter, subject, publicKeyInfo);
 		return certBuilder;
 	}
 
