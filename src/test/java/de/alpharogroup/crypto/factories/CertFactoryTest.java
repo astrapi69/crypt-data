@@ -61,7 +61,7 @@ import de.alpharogroup.crypto.key.reader.PublicKeyReader;
 import de.alpharogroup.crypto.key.writer.CertificateWriter;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
-import de.alpharogroup.random.RandomExtensions;
+import de.alpharogroup.random.number.RandomBigIntegerFactory;
 
 /**
  * The unit test class for the class {@link CertFactory}
@@ -194,7 +194,7 @@ public class CertFactoryTest
 
 	/**
 	 * Test method for
-	 * {@link CertFactory#newX509Certificate(PublicKey, PrivateKey, String, String, String, Date, Date)}
+	 * {@link CertFactory#newX509Certificate(PublicKey, PrivateKey, BigInteger, String, String, String, Date, Date)}
 	 */
 	@Test
 	public void testNewX509CertificatePublicKeyPrivateKeyStringStringStringDateDate()
@@ -233,7 +233,7 @@ public class CertFactoryTest
 		publicKey = PublicKeyReader.readPemPublicKey(publickeyPemFile);
 
 		subject = "CN=Test subject";
-		issuer = "CN=Test issue";
+		issuer = "CN=ALPHA RO GROUP LTD FOR TESTS";
 		signatureAlgorithm = HashAlgorithm.SHA256.getAlgorithm() + UnionWord.With.name()
 			+ KeyPairGeneratorAlgorithm.RSA.getAlgorithm();
 
@@ -241,14 +241,14 @@ public class CertFactoryTest
 			LocalDate.of(2017, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 		end = Date.from(
 			LocalDate.of(2027, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-		serialNumber = RandomExtensions.randomSerialNumber();
+		serialNumber = RandomBigIntegerFactory.randomSerialNumber();
 		// create certificate
 		cert = CertFactory.newX509Certificate(publicKey, privateKey, serialNumber, subject, issuer,
 			signatureAlgorithm, start, end);
 		assertNotNull(cert);
 
 		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
-		certificateFile = new File(pemDir, "certificate.cert");
+		certificateFile = new File(pemDir, "certificate.cer");
 		// save it ...
 		CertificateWriter.writeInPemFormat(cert, certificateFile);
 		// read it ...

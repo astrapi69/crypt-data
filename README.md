@@ -55,7 +55,7 @@ Than you can add the dependency to your dependencies:
 	<properties>
 			...
 		<!-- CRYPT-DATA version -->
-		<crypt-data.version>7.3</crypt-data.version>
+		<crypt-data.version>7.4</crypt-data.version>
 			...
 	</properties>
 			...
@@ -77,14 +77,27 @@ Than you can add the dependency to your dependencies:
 You can first define the version in the ext section and add than the following gradle dependency to your project `build.gradle` if you want to import the core functionality of mystic-crypt:
 
 ```
+define version in file gradle.properties
+
+cryptDataVersion=7.4
+```
+
+or in build.gradle ext area
+
+```
 ext {
 			...
-    cryptDataVersion = '7.3'
+    cryptDataVersion = '7.4'
 			...
 }
+```
+
+and than add the dependency to the dependencies area
+ 
+```
 dependencies {
 			...
-compile group: 'de.alpharogroup', name: 'crypt-data', version: '${cryptDataVersion}'
+implementation("de.alpharogroup:crypt-data:$cryptDataVersion")
 			...
 }
 ```

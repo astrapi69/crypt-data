@@ -60,7 +60,7 @@ import de.alpharogroup.crypto.key.reader.PrivateKeyReader;
 import de.alpharogroup.crypto.key.reader.PublicKeyReader;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
-import de.alpharogroup.random.RandomExtensions;
+import de.alpharogroup.random.number.RandomBigIntegerFactory;
 
 /**
  * The unit test class for the class {@link CertificateWriter}
@@ -125,7 +125,7 @@ public class CertificateWriterTest
 			LocalDate.of(2017, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 		end = Date.from(
 			LocalDate.of(2027, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-		serialNumber = RandomExtensions.randomSerialNumber();
+		serialNumber = RandomBigIntegerFactory.randomSerialNumber();
 		// create certificate
 		cert = CertFactory.newX509Certificate(publicKey, privateKey, serialNumber, subject, issuer,
 			signatureAlgorithm, start, end);

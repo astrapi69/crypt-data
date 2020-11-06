@@ -24,6 +24,8 @@
  */
 package de.alpharogroup.crypto.factories;
 
+import static org.testng.Assert.assertNotNull;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,12 +34,11 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
+import org.apache.commons.io.FileUtils;
 import org.meanbean.test.BeanTester;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.crypto.algorithm.KeystoreType;
-import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
 
 /**
@@ -66,16 +67,24 @@ public class KeyStoreFactoryTest
 		FileNotFoundException, KeyStoreException, IOException
 	{
 		File publickeyDerDir;
-		File privatekeyDerFile;
+		File keystoreJksFile;
 		KeyStore keystore;
 
 		publickeyDerDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
-		privatekeyDerFile = new File(publickeyDerDir, "keystore.jks");
+		keystoreJksFile = new File(publickeyDerDir, "keystore.jks");
 
 		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
-			privatekeyDerFile, true);
-		AssertJUnit.assertNotNull(keystore);
-		DeleteFileExtensions.delete(privatekeyDerFile);
+			keystoreJksFile, true);
+		assertNotNull(keystore);
+
+		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
+			keystoreJksFile, false);
+		assertNotNull(keystore);
+
+		keystore = KeyStoreFactory.loadKeyStore(keystoreJksFile, KeystoreType.JKS.name(),
+			"foobar-secret-pw");
+		assertNotNull(keystore);
+		FileUtils.deleteQuietly(keystoreJksFile);
 	}
 
 	/**

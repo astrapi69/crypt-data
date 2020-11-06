@@ -37,7 +37,7 @@ import org.testng.annotations.Test;
 import de.alpharogroup.crypto.algorithm.SunJCEAlgorithm;
 import de.alpharogroup.crypto.compound.CompoundAlgorithm;
 import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
-import de.alpharogroup.random.RandomExtensions;
+import de.alpharogroup.random.object.RandomStringFactory;
 
 /**
  * The unit test class for the class {@link CryptModel}
@@ -82,7 +82,7 @@ public class CryptModelTest
 		actual = EqualsHashCodeAndToStringEvaluator
 			.evaluateEqualsHashcodeAndToString(CryptModel.class, clazz -> {
 				return CryptModel.<Cipher, String, String> builder()
-					.key(RandomExtensions.getRandomHexString(16).toUpperCase())
+					.key(RandomStringFactory.randomHexString(16).toUpperCase())
 					.algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
 					.iterationCount(19).operationMode(Cipher.ENCRYPT_MODE)
 					.decorator(StringDecorator.builder().prefix("s").suffix("s").build()).build();

@@ -41,9 +41,9 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 	public static class ObfuscationOperationRuleBuilder<C, RW>
 	{
 		private C character;
-		private Set<Integer> indexes;
+		private Set<Integer> indexes = SetFactory.newHashSet();
 		private boolean inverted;
-		private Optional<C> operatedCharacter;
+		private Optional<C> operatedCharacter = Optional.empty();
 		private Operation operation;
 		private RW replaceWith;
 

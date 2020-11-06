@@ -37,6 +37,7 @@ import java.security.spec.InvalidKeySpecException;
 
 import de.alpharogroup.crypto.algorithm.Algorithm;
 import de.alpharogroup.crypto.key.KeySize;
+import de.alpharogroup.crypto.key.PrivateKeyExtensions;
 import de.alpharogroup.crypto.key.reader.PrivateKeyReader;
 import de.alpharogroup.crypto.key.reader.PublicKeyReader;
 
@@ -118,6 +119,25 @@ public final class KeyPairFactory
 		final PublicKey publicKey = PublicKeyReader.readPublicKey(publicKeyDerFile);
 		final PrivateKey privateKey = PrivateKeyReader.readPrivateKey(privateKeyDerFile);
 		return newKeyPair(publicKey, privateKey);
+	}
+
+	/**
+	 * Factory method for creating a new {@link KeyPair} from the given private key
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @return the new {@link KeyPair} from the given parameters
+	 * @throws NoSuchAlgorithmException
+	 *             the no such algorithm exception
+	 * @throws InvalidKeySpecException
+	 *             the invalid key spec exception
+	 */
+	public static KeyPair newKeyPair(final PrivateKey privateKey)
+		throws NoSuchAlgorithmException, InvalidKeySpecException
+	{
+		final KeyPair keyPair = new KeyPair(PrivateKeyExtensions.generatePublicKey(privateKey),
+			privateKey);
+		return keyPair;
 	}
 
 	/**

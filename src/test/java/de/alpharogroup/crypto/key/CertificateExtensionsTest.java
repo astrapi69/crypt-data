@@ -24,6 +24,7 @@
  */
 package de.alpharogroup.crypto.key;
 
+import static org.testng.Assert.assertNotNull;
 import static org.testng.AssertJUnit.assertEquals;
 
 import java.io.File;
@@ -38,7 +39,6 @@ import java.util.Date;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
-import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -71,7 +71,7 @@ public class CertificateExtensionsTest
 			final File pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 			final File certificatePemFile = new File(pemDir, "certificate.pem");
 			certificate = CertificateReader.readPemCertificate(certificatePemFile);
-			AssertJUnit.assertNotNull(certificate);
+			assertNotNull(certificate);
 		}
 	}
 

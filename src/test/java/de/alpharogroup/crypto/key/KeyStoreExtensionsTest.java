@@ -24,6 +24,7 @@
  */
 package de.alpharogroup.crypto.key;
 
+import static org.testng.Assert.assertNotNull;
 import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -35,7 +36,6 @@ import java.security.cert.X509Certificate;
 
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -74,7 +74,7 @@ public class KeyStoreExtensionsTest
 			final File pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 			final File certificatePemFile = new File(pemDir, "certificate.pem");
 			certificate = CertificateReader.readPemCertificate(certificatePemFile);
-			AssertJUnit.assertNotNull(certificate);
+			assertNotNull(certificate);
 
 		}
 
@@ -82,7 +82,7 @@ public class KeyStoreExtensionsTest
 		privatekeyDerFile = new File(publickeyDerDir, "keystore.jks");
 		KeyStore keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password,
 			privatekeyDerFile, true);
-		AssertJUnit.assertNotNull(keyStore);
+		assertNotNull(keyStore);
 		assertFalse(keyStore.containsAlias(alias));
 		keyStore.setCertificateEntry(alias, certificate);
 
@@ -92,12 +92,9 @@ public class KeyStoreExtensionsTest
 
 	/**
 	 * Tear down method will be invoked after every unit test method
-	 *
-	 * @throws Exception
-	 *             is thrown if an exception occurs
 	 */
 	@AfterMethod
-	protected void tearDown() throws Exception
+	protected void tearDown()
 	{
 		privatekeyDerFile.delete();
 	}

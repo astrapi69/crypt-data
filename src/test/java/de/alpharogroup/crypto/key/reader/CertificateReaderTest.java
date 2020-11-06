@@ -24,6 +24,8 @@
  */
 package de.alpharogroup.crypto.key.reader;
 
+import static org.testng.Assert.assertNotNull;
+
 import java.io.File;
 import java.math.BigInteger;
 import java.security.PrivateKey;
@@ -37,7 +39,6 @@ import java.util.Date;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
@@ -48,7 +49,7 @@ import de.alpharogroup.crypto.key.KeyFileFormat;
 import de.alpharogroup.crypto.key.writer.CertificateWriter;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
-import de.alpharogroup.random.RandomExtensions;
+import de.alpharogroup.random.number.RandomBigIntegerFactory;
 
 /**
  * The unit test class for the class {@link CertificateReaderTest}
@@ -105,11 +106,11 @@ public class CertificateReaderTest
 			LocalDate.of(2017, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 		end = Date.from(
 			LocalDate.of(2027, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-		serialNumber = RandomExtensions.randomSerialNumber();
+		serialNumber = RandomBigIntegerFactory.randomSerialNumber();
 		// create certificate
 		cert = CertFactory.newX509Certificate(publicKey, privateKey, serialNumber, subject, issuer,
 			signatureAlgorithm, start, end);
-		AssertJUnit.assertNotNull(cert);
+		assertNotNull(cert);
 
 		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
 		certificateDerFile = new File(derDir, "certificate.der");
@@ -117,7 +118,7 @@ public class CertificateReaderTest
 		CertificateWriter.write(cert, certificateDerFile, KeyFileFormat.DER);
 
 		certificate = CertificateReader.readCertificate(certificateDerFile);
-		AssertJUnit.assertNotNull(certificate);
+		assertNotNull(certificate);
 
 		DeleteFileExtensions.delete(certificateDerFile);
 	}
@@ -171,11 +172,11 @@ public class CertificateReaderTest
 			LocalDate.of(2017, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 		end = Date.from(
 			LocalDate.of(2027, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-		serialNumber = RandomExtensions.randomSerialNumber();
+		serialNumber = RandomBigIntegerFactory.randomSerialNumber();
 		// create certificate
 		cert = CertFactory.newX509Certificate(publicKey, privateKey, serialNumber, subject, issuer,
 			signatureAlgorithm, start, end);
-		AssertJUnit.assertNotNull(cert);
+		assertNotNull(cert);
 
 		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 		certificateFile = new File(pemDir, "certificate.cert");
@@ -183,7 +184,7 @@ public class CertificateReaderTest
 		CertificateWriter.write(cert, certificateFile, KeyFileFormat.PEM);
 
 		certificate = CertificateReader.readPemCertificate(certificateFile);
-		AssertJUnit.assertNotNull(certificate);
+		assertNotNull(certificate);
 
 		DeleteFileExtensions.delete(certificateFile);
 	}
