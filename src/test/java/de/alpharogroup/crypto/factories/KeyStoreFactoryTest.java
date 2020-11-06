@@ -1,8 +1,8 @@
 /**
  * The MIT License
- *
+ * <p>
  * Copyright (C) 2015 Asterios Raptis
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -10,10 +10,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -24,6 +24,12 @@
  */
 package de.alpharogroup.crypto.factories;
 
+import de.alpharogroup.crypto.algorithm.KeystoreType;
+import de.alpharogroup.file.search.PathFinder;
+import org.apache.commons.io.FileUtils;
+import org.meanbean.test.BeanTester;
+import org.testng.annotations.Test;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,14 +38,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-import org.apache.commons.io.FileUtils;
-import org.meanbean.test.BeanTester;
-import org.testng.AssertJUnit;
-import org.testng.annotations.Test;
-
-import de.alpharogroup.crypto.algorithm.KeystoreType;
-import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.search.PathFinder;
+import static org.testng.Assert.assertNotNull;
 
 /**
  * The unit test class for the class {@link KeyStoreFactory}
@@ -62,9 +61,9 @@ public class KeyStoreFactoryTest
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test
-	public void testNewKeyStore() throws NoSuchAlgorithmException, CertificateException,
-		FileNotFoundException, KeyStoreException, IOException
+	@Test public void testNewKeyStore()
+		throws NoSuchAlgorithmException, CertificateException, FileNotFoundException,
+		KeyStoreException, IOException
 	{
 		File publickeyDerDir;
 		File keystoreJksFile;
@@ -73,25 +72,24 @@ public class KeyStoreFactoryTest
 		publickeyDerDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
 		keystoreJksFile = new File(publickeyDerDir, "keystore.jks");
 
-		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
-			keystoreJksFile, true);
-		AssertJUnit.assertNotNull(keystore);
+		keystore = KeyStoreFactory
+			.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw", keystoreJksFile, true);
+		assertNotNull(keystore);
 
-		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
-			keystoreJksFile, false);
-		AssertJUnit.assertNotNull(keystore);
+		keystore = KeyStoreFactory
+			.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw", keystoreJksFile, false);
+		assertNotNull(keystore);
 
-		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
-			keystoreJksFile);
-		AssertJUnit.assertNotNull(keystore);
+		keystore = KeyStoreFactory
+			.loadKeyStore(keystoreJksFile, KeystoreType.JKS.name(), "foobar-secret-pw");
+		assertNotNull(keystore);
 		FileUtils.deleteQuietly(keystoreJksFile);
 	}
 
 	/**
 	 * Test method for {@link KeyStoreFactory} with {@link BeanTester}
 	 */
-	@Test
-	public void testWithBeanTester()
+	@Test public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(KeyStoreFactory.class);

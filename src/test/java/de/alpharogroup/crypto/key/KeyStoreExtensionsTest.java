@@ -1,8 +1,8 @@
 /**
  * The MIT License
- *
+ * <p>
  * Copyright (C) 2015 Asterios Raptis
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -10,10 +10,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -24,8 +24,15 @@
  */
 package de.alpharogroup.crypto.key;
 
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertTrue;
+import de.alpharogroup.crypto.algorithm.KeystoreType;
+import de.alpharogroup.crypto.factories.KeyStoreFactory;
+import de.alpharogroup.crypto.key.reader.CertificateReader;
+import de.alpharogroup.file.search.PathFinder;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,17 +40,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 
-import org.meanbean.test.BeanTestException;
-import org.meanbean.test.BeanTester;
-import org.testng.AssertJUnit;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import de.alpharogroup.crypto.algorithm.KeystoreType;
-import de.alpharogroup.crypto.factories.KeyStoreFactory;
-import de.alpharogroup.crypto.key.reader.CertificateReader;
-import de.alpharogroup.file.search.PathFinder;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
 
 /**
  * The unit test class for the class {@link KeyStoreExtensions}
@@ -66,23 +65,22 @@ public class KeyStoreExtensionsTest
 	 * @throws Exception
 	 *             is thrown if any error occurs on the execution
 	 */
-	@BeforeMethod
-	protected void setUp() throws Exception
+	@BeforeMethod protected void setUp() throws Exception
 	{
 		if (certificate == null)
 		{
 			final File pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 			final File certificatePemFile = new File(pemDir, "certificate.pem");
 			certificate = CertificateReader.readPemCertificate(certificatePemFile);
-			AssertJUnit.assertNotNull(certificate);
+			assertNotNull(certificate);
 
 		}
 
 		publickeyDerDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
 		privatekeyDerFile = new File(publickeyDerDir, "keystore.jks");
-		KeyStore keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password,
-			privatekeyDerFile, true);
-		AssertJUnit.assertNotNull(keyStore);
+		KeyStore keyStore = KeyStoreFactory
+			.newKeyStore(KeystoreType.JKS.name(), password, privatekeyDerFile, true);
+		assertNotNull(keyStore);
 		assertFalse(keyStore.containsAlias(alias));
 		keyStore.setCertificateEntry(alias, certificate);
 
@@ -92,12 +90,8 @@ public class KeyStoreExtensionsTest
 
 	/**
 	 * Tear down method will be invoked after every unit test method
-	 *
-	 * @throws Exception
-	 *             is thrown if an exception occurs
 	 */
-	@AfterMethod
-	protected void tearDown() throws Exception
+	@AfterMethod protected void tearDown()
 	{
 		privatekeyDerFile.delete();
 	}
@@ -105,16 +99,15 @@ public class KeyStoreExtensionsTest
 	/**
 	 * Test method for {@link KeyStoreExtensions#deleteAlias(File, String, String)}
 	 */
-	@Test
-	public void testDeleteAlias() throws Exception
+	@Test public void testDeleteAlias() throws Exception
 	{
 		KeyStore keyStore;
 		boolean containsAlias;
 
 		KeyStoreExtensions.deleteAlias(privatekeyDerFile, alias, password);
 
-		keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password, privatekeyDerFile,
-			true);
+		keyStore = KeyStoreFactory
+			.newKeyStore(KeystoreType.JKS.name(), password, privatekeyDerFile, true);
 		containsAlias = keyStore.containsAlias(alias);
 
 		assertFalse(containsAlias);
@@ -124,8 +117,7 @@ public class KeyStoreExtensionsTest
 	 * Test method for {@link KeyStoreExtensions} with {@link BeanTester}
 	 */
 	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
-	public void testWithBeanTester()
+		UnsupportedOperationException.class }) public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(KeyStoreExtensions.class);

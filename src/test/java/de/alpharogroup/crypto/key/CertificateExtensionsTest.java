@@ -1,8 +1,8 @@
 /**
  * The MIT License
- *
+ * <p>
  * Copyright (C) 2015 Asterios Raptis
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -10,10 +10,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -24,7 +24,15 @@
  */
 package de.alpharogroup.crypto.key;
 
-import static org.testng.AssertJUnit.assertEquals;
+import de.alpharogroup.crypto.algorithm.HashAlgorithm;
+import de.alpharogroup.crypto.compound.CompoundAlgorithm;
+import de.alpharogroup.crypto.key.reader.CertificateReader;
+import de.alpharogroup.file.search.PathFinder;
+import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -35,17 +43,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.meanbean.test.BeanTestException;
-import org.meanbean.test.BeanTester;
-import org.testng.AssertJUnit;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import de.alpharogroup.crypto.compound.CompoundAlgorithm;
-import de.alpharogroup.crypto.key.reader.CertificateReader;
-import de.alpharogroup.file.search.PathFinder;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.AssertJUnit.assertEquals;
 
 /**
  * The unit test class for the class {@link CertificateExtensions}
@@ -63,15 +62,14 @@ public class CertificateExtensionsTest
 	 * @throws Exception
 	 *             is thrown if any error occurs on the execution
 	 */
-	@BeforeMethod
-	protected void setUp() throws Exception
+	@BeforeMethod protected void setUp() throws Exception
 	{
 		if (certificate == null)
 		{
 			final File pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 			final File certificatePemFile = new File(pemDir, "certificate.pem");
 			certificate = CertificateReader.readPemCertificate(certificatePemFile);
-			AssertJUnit.assertNotNull(certificate);
+			assertNotNull(certificate);
 		}
 	}
 
@@ -81,8 +79,7 @@ public class CertificateExtensionsTest
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	@Test
-	public void testGetCountry() throws CertificateEncodingException
+	@Test public void testGetCountry() throws CertificateEncodingException
 	{
 		String expected;
 		String actual;
@@ -100,8 +97,8 @@ public class CertificateExtensionsTest
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails.
 	 */
-	@Test
-	public void testGetFingerprint() throws CertificateEncodingException, NoSuchAlgorithmException
+	@Test public void testGetFingerprint()
+		throws CertificateEncodingException, NoSuchAlgorithmException
 	{
 		String expected;
 		String actual;
@@ -130,8 +127,7 @@ public class CertificateExtensionsTest
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	@Test
-	public void testGetFirstValueOf() throws CertificateEncodingException
+	@Test public void testGetFirstValueOf() throws CertificateEncodingException
 	{
 		String expected;
 		String actual;
@@ -144,8 +140,7 @@ public class CertificateExtensionsTest
 	/**
 	 * Test method for {@link CertificateExtensions#getIssuedBy(X509Certificate)}
 	 */
-	@Test
-	public void testGetIssuedBy()
+	@Test public void testGetIssuedBy()
 	{
 		String expected;
 		String actual;
@@ -158,8 +153,7 @@ public class CertificateExtensionsTest
 	/**
 	 * Test method for {@link CertificateExtensions#getIssuedTo(X509Certificate)}
 	 */
-	@Test
-	public void testGetIssuedTo()
+	@Test public void testGetIssuedTo()
 	{
 		String expected;
 		String actual;
@@ -175,8 +169,7 @@ public class CertificateExtensionsTest
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	@Test
-	public void testGetLocality() throws CertificateEncodingException
+	@Test public void testGetLocality() throws CertificateEncodingException
 	{
 		String expected;
 		String actual;
@@ -192,8 +185,7 @@ public class CertificateExtensionsTest
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
 	 */
-	@Test
-	public void testGetOrganization() throws CertificateEncodingException
+	@Test public void testGetOrganization() throws CertificateEncodingException
 	{
 		String expected;
 		String actual;
@@ -206,8 +198,7 @@ public class CertificateExtensionsTest
 	/**
 	 * Test method for {@link CertificateExtensions#getSignatureAlgorithm(X509Certificate)}
 	 */
-	@Test
-	public void testGetSignatureAlgorithm()
+	@Test public void testGetSignatureAlgorithm()
 	{
 		String expected;
 		String actual;
@@ -220,8 +211,7 @@ public class CertificateExtensionsTest
 	/**
 	 * Test method for {@link CertificateExtensions#getValidFrom(X509Certificate)}
 	 */
-	@Test
-	public void testGetValidFrom()
+	@Test public void testGetValidFrom()
 	{
 		Date expected;
 		Date actual;
@@ -235,8 +225,7 @@ public class CertificateExtensionsTest
 	/**
 	 * Test method for {@link CertificateExtensions#getValidUntil(X509Certificate)}
 	 */
-	@Test
-	public void testGetValidUntil()
+	@Test public void testGetValidUntil()
 	{
 		Date expected;
 		Date actual;
@@ -251,8 +240,7 @@ public class CertificateExtensionsTest
 	 * Test method for {@link CertificateExtensions} with {@link BeanTester}
 	 */
 	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
-	public void testWithBeanTester()
+		UnsupportedOperationException.class }) public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(CertificateExtensions.class);
