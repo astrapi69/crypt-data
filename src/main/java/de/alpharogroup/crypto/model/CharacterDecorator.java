@@ -24,57 +24,13 @@
  */
 package de.alpharogroup.crypto.model;
 
+import lombok.experimental.SuperBuilder;
+
 /**
- * The class {@link CharacterDecorator} that can decorate an crypt object with a {@link Character}
- * in prefix and suffix
+ * The class {@link CryptModel} holds a character prefix and a suffix that can decorate an crypt
+ * object
  */
+@SuperBuilder
 public final class CharacterDecorator extends CryptObjectDecorator<Character>
 {
-	public static abstract class CharacterDecoratorBuilder<C extends CharacterDecorator, B extends CharacterDecoratorBuilder<C, B>>
-		extends
-			CryptObjectDecorator.CryptObjectDecoratorBuilder<Character, C, B>
-	{
-		@Override
-		public abstract C build();
-
-		@Override
-		protected abstract B self();
-
-		@Override
-		public String toString()
-		{
-			return "CharacterDecorator.CharacterDecoratorBuilder(super=" + super.toString() + ")";
-		}
-	}
-
-	private static final class CharacterDecoratorBuilderImpl
-		extends
-			CharacterDecoratorBuilder<CharacterDecorator, CharacterDecoratorBuilderImpl>
-	{
-		private CharacterDecoratorBuilderImpl()
-		{
-		}
-
-		@Override
-		public CharacterDecorator build()
-		{
-			return new CharacterDecorator(this);
-		}
-
-		@Override
-		protected CharacterDecorator.CharacterDecoratorBuilderImpl self()
-		{
-			return this;
-		}
-	}
-
-	public static CharacterDecoratorBuilder<?, ?> builder()
-	{
-		return new CharacterDecoratorBuilderImpl();
-	}
-
-	protected CharacterDecorator(CharacterDecoratorBuilder<?, ?> b)
-	{
-		super(b);
-	}
 }
