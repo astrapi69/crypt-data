@@ -129,6 +129,7 @@ public final class KeyStoreFactory
 	 * @deprecated use instead the method <code>loadKeyStore</code> Note: will be removed in the
 	 *             next minor version
 	 */
+	@Deprecated
 	public static KeyStore newKeyStore(final String type, final String password,
 		final File keystoreFile) throws NoSuchAlgorithmException, CertificateException,
 		FileNotFoundException, IOException, KeyStoreException

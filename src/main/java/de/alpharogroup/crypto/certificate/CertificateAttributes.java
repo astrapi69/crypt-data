@@ -92,6 +92,7 @@ public class CertificateAttributes
 			return self();
 		}
 
+		@Override
 		public String toString()
 		{
 			return "CertificateAttributes.CertificateAttributesBuilder(commonName="
@@ -108,11 +109,13 @@ public class CertificateAttributes
 		{
 		}
 
+		@Override
 		public CertificateAttributes build()
 		{
 			return new CertificateAttributes(this);
 		}
 
+		@Override
 		protected CertificateAttributes.CertificateAttributesBuilderImpl self()
 		{
 			return this;
@@ -162,6 +165,7 @@ public class CertificateAttributes
 		return other instanceof CertificateAttributes;
 	}
 
+	@Override
 	public boolean equals(final Object o)
 	{
 		if (o == this)
@@ -169,7 +173,7 @@ public class CertificateAttributes
 		if (!(o instanceof CertificateAttributes))
 			return false;
 		final CertificateAttributes other = (CertificateAttributes)o;
-		if (!other.canEqual((Object)this))
+		if (!other.canEqual(this))
 			return false;
 		final Object this$commonName = this.getCommonName();
 		final Object other$commonName = other.getCommonName();
@@ -236,6 +240,7 @@ public class CertificateAttributes
 		return this.state;
 	}
 
+	@Override
 	public int hashCode()
 	{
 		final int PRIME = 59;
@@ -336,6 +341,7 @@ public class CertificateAttributes
 		return result;
 	}
 
+	@Override
 	public String toString()
 	{
 		return "CertificateAttributes(commonName=" + this.getCommonName() + ", organisation="

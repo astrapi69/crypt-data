@@ -65,6 +65,7 @@ public class Valitidy
 
 		protected abstract B self();
 
+		@Override
 		public String toString()
 		{
 			return "Valitidy.ValitidyBuilder(notBefore=" + this.notBefore + ", notAfter="
@@ -79,11 +80,13 @@ public class Valitidy
 		{
 		}
 
+		@Override
 		public Valitidy build()
 		{
 			return new Valitidy(this);
 		}
 
+		@Override
 		protected Valitidy.ValitidyBuilderImpl self()
 		{
 			return this;
@@ -120,6 +123,7 @@ public class Valitidy
 		return other instanceof Valitidy;
 	}
 
+	@Override
 	public boolean equals(final Object o)
 	{
 		if (o == this)
@@ -127,7 +131,7 @@ public class Valitidy
 		if (!(o instanceof Valitidy))
 			return false;
 		final Valitidy other = (Valitidy)o;
-		if (!other.canEqual((Object)this))
+		if (!other.canEqual(this))
 			return false;
 		final Object this$notBefore = this.getNotBefore();
 		final Object other$notBefore = other.getNotBefore();
@@ -152,6 +156,7 @@ public class Valitidy
 		return this.notBefore;
 	}
 
+	@Override
 	public int hashCode()
 	{
 		final int PRIME = 59;
@@ -178,6 +183,7 @@ public class Valitidy
 		return new ValitidyBuilderImpl().$fillValuesFrom(this);
 	}
 
+	@Override
 	public String toString()
 	{
 		return "Valitidy(notBefore=" + this.getNotBefore() + ", notAfter=" + this.getNotAfter()

@@ -95,6 +95,7 @@ public class CertificateInfo
 			return self();
 		}
 
+		@Override
 		public String toString()
 		{
 			return "CertificateInfo.CertificateInfoBuilder(version=" + this.version
@@ -130,11 +131,13 @@ public class CertificateInfo
 		{
 		}
 
+		@Override
 		public CertificateInfo build()
 		{
 			return new CertificateInfo(this);
 		}
 
+		@Override
 		protected CertificateInfo.CertificateInfoBuilderImpl self()
 		{
 			return this;
@@ -191,6 +194,7 @@ public class CertificateInfo
 		return other instanceof CertificateInfo;
 	}
 
+	@Override
 	public boolean equals(final Object o)
 	{
 		if (o == this)
@@ -198,7 +202,7 @@ public class CertificateInfo
 		if (!(o instanceof CertificateInfo))
 			return false;
 		final CertificateInfo other = (CertificateInfo)o;
-		if (!other.canEqual((Object)this))
+		if (!other.canEqual(this))
 			return false;
 		if (this.getVersion() != other.getVersion())
 			return false;
@@ -281,6 +285,7 @@ public class CertificateInfo
 		return this.x509v3Extensions;
 	}
 
+	@Override
 	public int hashCode()
 	{
 		final int PRIME = 59;
@@ -349,6 +354,7 @@ public class CertificateInfo
 		return new CertificateInfoBuilderImpl().$fillValuesFrom(this);
 	}
 
+	@Override
 	public String toString()
 	{
 		return "CertificateInfo(version=" + this.getVersion() + ", serialNumber="
