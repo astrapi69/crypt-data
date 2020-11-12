@@ -110,12 +110,15 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 				+ ", replaceWith=" + this.replaceWith + ")";
 		}
 	}
+
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
+
 	public static <C, RW> ObfuscationOperationRuleBuilder<C, RW> builder()
 	{
 		return new ObfuscationOperationRuleBuilder<C, RW>();
 	}
+
 	/** The character. */
 	private C character;
 	/** The index where this rule will execute. */

@@ -45,6 +45,7 @@ public class CertificateInfo
 			b.signatureAlgorithm(instance.signatureAlgorithm);
 			b.x509v3Extensions(instance.x509v3Extensions);
 		}
+
 		private String issuer;
 		private PublicKey publicKey;
 		private BigInteger serialNumber;
@@ -143,10 +144,12 @@ public class CertificateInfo
 			return this;
 		}
 	}
+
 	public static CertificateInfoBuilder<?, ?> builder()
 	{
 		return new CertificateInfoBuilderImpl();
 	}
+
 	private String issuer;
 	private PublicKey publicKey;
 	private BigInteger serialNumber;
