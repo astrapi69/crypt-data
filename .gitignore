@@ -85,3 +85,4 @@
 /.gradle
 /gradle
 /pom.xml.bak
+/.attach_pid*

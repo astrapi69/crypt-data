@@ -27,7 +27,6 @@ package de.alpharogroup.crypto.model;
 import java.io.Serializable;
 import java.util.List;
 
-import de.alpharogroup.crypto.algorithm.Algorithm;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,6 +34,7 @@ import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import de.alpharogroup.crypto.algorithm.Algorithm;
 
 /**
  * The class {@link CryptModel} holds data for the encryption or decryption process.

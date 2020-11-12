@@ -35,10 +35,6 @@ import javax.crypto.spec.PBEParameterSpec;
 public final class AlgorithmParameterSpecFactory
 {
 
-	private AlgorithmParameterSpecFactory()
-	{
-	}
-
 	/**
 	 * Factory method for creating a new {@link PBEParameterSpec} from the given salt and iteration
 	 * count.
@@ -54,5 +50,9 @@ public final class AlgorithmParameterSpecFactory
 	{
 		final AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
 		return paramSpec;
+	}
+
+	private AlgorithmParameterSpecFactory()
+	{
 	}
 }

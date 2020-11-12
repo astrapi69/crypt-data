@@ -39,7 +39,6 @@ public class Valitidy
 			b.notBefore(instance.notBefore);
 			b.notAfter(instance.notAfter);
 		}
-
 		private ZonedDateTime notAfter;
 
 		private ZonedDateTime notBefore;

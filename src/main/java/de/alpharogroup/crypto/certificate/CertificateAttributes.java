@@ -38,7 +38,6 @@ public class CertificateAttributes
 			b.state(instance.state);
 			b.location(instance.location);
 		}
-
 		private String commonName;
 		private String countryCode;
 		private String location;
@@ -119,12 +118,10 @@ public class CertificateAttributes
 			return this;
 		}
 	}
-
 	public static CertificateAttributesBuilder<?, ?> builder()
 	{
 		return new CertificateAttributesBuilderImpl();
 	}
-
 	private String commonName;
 	private String countryCode;
 	private String location;

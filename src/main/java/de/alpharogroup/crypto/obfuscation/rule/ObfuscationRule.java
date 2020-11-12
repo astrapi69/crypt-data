@@ -64,10 +64,8 @@ public class ObfuscationRule<C, RW> implements Serializable
 				+ ", replaceWith=" + this.replaceWith + ")";
 		}
 	}
-
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
-
 	public static <C, RW> ObfuscationRuleBuilder<C, RW> builder()
 	{
 		return new ObfuscationRuleBuilder<C, RW>();
