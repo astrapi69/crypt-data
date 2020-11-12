@@ -48,20 +48,14 @@ import org.bouncycastle.util.io.pem.PemWriter;
 
 import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import de.alpharogroup.crypto.hex.HexExtensions;
+import de.alpharogroup.crypto.key.reader.KeyStringEntry;
 import de.alpharogroup.crypto.key.reader.PemObjectReader;
-import de.alpharogroup.crypto.key.reader.PrivateKeyReader;
 
 /**
  * The class {@link PrivateKeyExtensions}.
  */
 public final class PrivateKeyExtensions
 {
-
-	private PrivateKeyExtensions()
-	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
-	}
 
 	/**
 	 * Transform the given byte array(of private key in PKCS#1 format) to a PEM formatted
@@ -76,7 +70,7 @@ public final class PrivateKeyExtensions
 	public static String fromPKCS1ToPemFormat(final byte[] privateKeyPKCS1Formatted)
 		throws IOException
 	{
-		PemObject pemObject = new PemObject(PrivateKeyReader.RSA_PRIVATE_KEY,
+		PemObject pemObject = new PemObject(KeyStringEntry.RSA_PRIVATE_KEY.getValue(),
 			privateKeyPKCS1Formatted);
 		StringWriter stringWriter = new StringWriter();
 		PemWriter pemWriter = new PemWriter(stringWriter);
@@ -239,7 +233,7 @@ public final class PrivateKeyExtensions
 	public static String toPemFormat(final PrivateKey privateKey) throws IOException
 	{
 		return PemObjectReader.toPemFormat(
-			new PemObject(PrivateKeyReader.RSA_PRIVATE_KEY, toPKCS1Format(privateKey)));
+			new PemObject(KeyStringEntry.RSA_PRIVATE_KEY.getValue(), toPKCS1Format(privateKey)));
 	}
 
 	/**
@@ -259,6 +253,12 @@ public final class PrivateKeyExtensions
 		final ASN1Primitive asn1Primitive = asn1Encodable.toASN1Primitive();
 		final byte[] privateKeyPKCS1Formatted = asn1Primitive.getEncoded();
 		return privateKeyPKCS1Formatted;
+	}
+
+	private PrivateKeyExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
 	}
 
 

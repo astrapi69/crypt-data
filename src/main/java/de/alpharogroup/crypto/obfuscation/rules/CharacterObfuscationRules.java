@@ -33,6 +33,39 @@ import com.google.common.collect.BiMap;
 public class CharacterObfuscationRules extends ObfuscationBiMapRules<Character, Character>
 {
 
+	public static class CharacterObfuscationRulesBuilder
+	{
+		private BiMap<Character, Character> obfuscationRules;
+
+		CharacterObfuscationRulesBuilder()
+		{
+		}
+
+		public CharacterObfuscationRules build()
+		{
+			return new CharacterObfuscationRules(obfuscationRules);
+		}
+
+		public CharacterObfuscationRules.CharacterObfuscationRulesBuilder obfuscationRules(
+			BiMap<Character, Character> obfuscationRules)
+		{
+			this.obfuscationRules = obfuscationRules;
+			return this;
+		}
+
+		@Override
+		public String toString()
+		{
+			return "CharacterObfuscationRules.CharacterObfuscationRulesBuilder(obfuscationRules="
+				+ this.obfuscationRules + ")";
+		}
+	}
+
+	public static CharacterObfuscationRulesBuilder rulesBuilder()
+	{
+		return new CharacterObfuscationRulesBuilder();
+	}
+
 	/**
 	 * Instantiates a new {@link CharacterObfuscationRules}.
 	 *
@@ -43,11 +76,6 @@ public class CharacterObfuscationRules extends ObfuscationBiMapRules<Character, 
 	public CharacterObfuscationRules(BiMap<Character, Character> obfuscationRules)
 	{
 		super(obfuscationRules);
-	}
-
-	public static CharacterObfuscationRulesBuilder rulesBuilder()
-	{
-		return new CharacterObfuscationRulesBuilder();
 	}
 
 	@Override
@@ -82,33 +110,5 @@ public class CharacterObfuscationRules extends ObfuscationBiMapRules<Character, 
 	public String toString()
 	{
 		return "CharacterObfuscationRules(super=" + super.toString() + ")";
-	}
-
-	public static class CharacterObfuscationRulesBuilder
-	{
-		private BiMap<Character, Character> obfuscationRules;
-
-		CharacterObfuscationRulesBuilder()
-		{
-		}
-
-		public CharacterObfuscationRules build()
-		{
-			return new CharacterObfuscationRules(obfuscationRules);
-		}
-
-		public CharacterObfuscationRules.CharacterObfuscationRulesBuilder obfuscationRules(
-			BiMap<Character, Character> obfuscationRules)
-		{
-			this.obfuscationRules = obfuscationRules;
-			return this;
-		}
-
-		@Override
-		public String toString()
-		{
-			return "CharacterObfuscationRules.CharacterObfuscationRulesBuilder(obfuscationRules="
-				+ this.obfuscationRules + ")";
-		}
 	}
 }

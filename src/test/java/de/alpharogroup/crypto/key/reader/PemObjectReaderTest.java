@@ -64,7 +64,7 @@ public class PemObjectReaderTest
 
 		pemObject = PemObjectReader.getPemObject(privatekeyPemFile);
 		actual = pemObject.getType();
-		expected = PrivateKeyReader.RSA_PRIVATE_KEY;
+		expected = KeyStringEntry.RSA_PRIVATE_KEY.getValue();
 		assertEquals(expected, actual);
 
 	}

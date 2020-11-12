@@ -45,26 +45,6 @@ import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
 public final class PrivateKeyReader
 {
 
-	/** The Constant RSA_PRIVATE_KEY. */
-	public static final String RSA_PRIVATE_KEY = "RSA PRIVATE KEY";
-
-	/** The Constant BEGIN_PRIVATE_KEY_PREFIX. */
-	public static final String BEGIN_PRIVATE_KEY_PREFIX = "-----BEGIN PRIVATE KEY-----";
-
-	/** The Constant END_PRIVATE_KEY_SUFFIX. */
-	public static final String END_PRIVATE_KEY_SUFFIX = "-----END PRIVATE KEY-----";
-
-	/** The Constant BEGIN_RSA_PRIVATE_KEY_PREFIX. */
-	public static final String BEGIN_RSA_PRIVATE_KEY_PREFIX = "-----BEGIN " + RSA_PRIVATE_KEY
-		+ "-----\n";
-
-	/** The Constant END_RSA_PRIVATE_KEY_SUFFIX. */
-	public static final String END_RSA_PRIVATE_KEY_SUFFIX = "\n-----END " + RSA_PRIVATE_KEY
-		+ "-----";
-
-	private PrivateKeyReader()
-	{
-	}
 
 	/**
 	 * Checks if the given {@link File} is in pem format.
@@ -81,12 +61,12 @@ public final class PrivateKeyReader
 		boolean result = false;
 		final byte[] keyBytes = Files.readAllBytes(file.toPath());
 		final String privateKeyPem = new String(keyBytes);
-		if (privateKeyPem.indexOf(BEGIN_PRIVATE_KEY_PREFIX) != -1)
+		if (privateKeyPem.indexOf(KeyStringEntry.BEGIN_PRIVATE_KEY_PREFIX.getValue()) != -1)
 		{
 			result = true;
 			return result;
 		}
-		if (privateKeyPem.indexOf(BEGIN_RSA_PRIVATE_KEY_PREFIX) != -1)
+		if (privateKeyPem.indexOf(KeyStringEntry.BEGIN_RSA_PRIVATE_KEY_PREFIX.getValue()) != -1)
 		{
 			result = true;
 			return result;
@@ -149,17 +129,17 @@ public final class PrivateKeyReader
 		final byte[] keyBytes = Files.readAllBytes(file.toPath());
 		final String privateKeyPem = new String(keyBytes);
 		String privateKeyAsBase64String = null;
-		if (privateKeyPem.indexOf(BEGIN_PRIVATE_KEY_PREFIX) != -1)
+		if (privateKeyPem.indexOf(KeyStringEntry.BEGIN_PRIVATE_KEY_PREFIX.getValue()) != -1)
 		{
 			// PKCS#8 format
-			privateKeyAsBase64String = new String(keyBytes).replace(BEGIN_PRIVATE_KEY_PREFIX, "")
-				.replace(END_PRIVATE_KEY_SUFFIX, "").trim();
+			privateKeyAsBase64String = new String(keyBytes).replace(KeyStringEntry.BEGIN_PRIVATE_KEY_PREFIX.getValue(), "")
+				.replace(KeyStringEntry.END_PRIVATE_KEY_SUFFIX.getValue(), "").trim();
 		}
-		if (privateKeyPem.indexOf(BEGIN_RSA_PRIVATE_KEY_PREFIX) != -1)
+		if (privateKeyPem.indexOf(KeyStringEntry.BEGIN_RSA_PRIVATE_KEY_PREFIX.getValue()) != -1)
 		{
 			// PKCS#1 format
 			privateKeyAsBase64String = new String(keyBytes)
-				.replace(BEGIN_RSA_PRIVATE_KEY_PREFIX, "").replace(END_RSA_PRIVATE_KEY_SUFFIX, "")
+				.replace(KeyStringEntry.BEGIN_RSA_PRIVATE_KEY_PREFIX.getValue(), "").replace(KeyStringEntry.END_RSA_PRIVATE_KEY_SUFFIX.getValue(), "")
 				.trim();
 		}
 		return privateKeyAsBase64String;
@@ -374,6 +354,10 @@ public final class PrivateKeyReader
 
 		final PrivateKey privateKey = PrivateKeyReader.readPrivateKey(privatekeyFile);
 		return privateKey;
+	}
+
+	private PrivateKeyReader()
+	{
 	}
 
 }

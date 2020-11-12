@@ -47,10 +47,6 @@ import de.alpharogroup.crypto.key.reader.PublicKeyReader;
 public final class KeyPairFactory
 {
 
-	private KeyPairFactory()
-	{
-	}
-
 	/**
 	 * Factory method for creating a new {@link KeyPair} from the given algorithm and key size.
 	 *
@@ -235,6 +231,10 @@ public final class KeyPairFactory
 		final KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm);
 		generator.initialize(keySize, secureRandom);
 		return generator;
+	}
+
+	private KeyPairFactory()
+	{
 	}
 
 }

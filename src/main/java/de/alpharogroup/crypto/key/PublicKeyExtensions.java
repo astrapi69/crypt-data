@@ -46,12 +46,6 @@ import de.alpharogroup.string.StringExtensions;
 public final class PublicKeyExtensions
 {
 
-	private PublicKeyExtensions()
-	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
-	}
-
 	/**
 	 * Gets the key length of the given {@link PublicKey}.
 	 *
@@ -160,6 +154,12 @@ public final class PublicKeyExtensions
 		sb.append(PublicKeyReader.END_PUBLIC_KEY_SUFFIX);
 		sb.append(System.lineSeparator());
 		return sb.toString();
+	}
+
+	private PublicKeyExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
 	}
 
 }

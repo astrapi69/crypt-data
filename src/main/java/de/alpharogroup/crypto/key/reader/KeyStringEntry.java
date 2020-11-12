@@ -22,48 +22,35 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package de.alpharogroup.crypto.key.writer;
+package de.alpharogroup.crypto.key.reader;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.security.Key;
-import java.util.Objects;
-
-import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
-
-import de.alpharogroup.file.write.WriteFileExtensions;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
 /**
- * The class {@link KeyWriter} is a utility class for write security keys in files.
+ * The enum {@link KeyStringEntry} holds prefixes for PEM value entries
  */
-public final class KeyWriter
+@Getter
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public enum KeyStringEntry
 {
-
-	/**
-	 * Write the given {@link Key} into the given {@link File}.
-	 *
-	 * @param key
-	 *            the security key
-	 * @param file
-	 *            the file to write in
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static void writeInPemFormat(final Key key, final File file) throws IOException
-	{
-		Objects.requireNonNull(file);
-		StringWriter stringWriter = new StringWriter();
-		JcaPEMWriter pemWriter = new JcaPEMWriter(stringWriter);
-		pemWriter.writeObject(key);
-		pemWriter.close();
-		String pemFormat = stringWriter.toString();
-		pemFormat = pemFormat.replaceAll("\\r\\n", "\\\n");
-		WriteFileExtensions.string2File(file, pemFormat);
-	}
-
-	private KeyWriter()
-	{
-	}
-
+	/** The prefix for the begin of a private key  */
+	BEGIN_PRIVATE_KEY_PREFIX("-----BEGIN PRIVATE KEY-----"),
+	/** The prefix for the begin of a rsa private key  */
+	BEGIN_RSA_PRIVATE_KEY_PREFIX(
+		"-----BEGIN " + KeyStringEntry.RSA_PRIVATE_KEY_NAME + "-----\n"),
+	/** The suffix for the begin of a private key  */
+	END_PRIVATE_KEY_SUFFIX("-----END PRIVATE KEY-----"),
+	/** The suffix for the begin of a rsa private key  */
+	END_RSA_PRIVATE_KEY_SUFFIX("\n-----END " + KeyStringEntry.RSA_PRIVATE_KEY_NAME
+		+ "-----"),
+	/** The prefix for the begin of a rsa private key  */
+	RSA_PRIVATE_KEY(KeyStringEntry.RSA_PRIVATE_KEY_NAME);
+	/** The Constant RSA_PRIVATE_KEY. */
+	private static final String RSA_PRIVATE_KEY_NAME = "RSA PRIVATE KEY";
+	/** The value the PEM entry */
+	String value;
 }

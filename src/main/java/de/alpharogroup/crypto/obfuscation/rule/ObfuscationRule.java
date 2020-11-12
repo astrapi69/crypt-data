@@ -29,10 +29,51 @@ import java.util.Objects;
 
 public class ObfuscationRule<C, RW> implements Serializable
 {
+	public static class ObfuscationRuleBuilder<C, RW>
+	{
+		private C character;
+		private RW replaceWith;
+
+		ObfuscationRuleBuilder()
+		{
+		}
+
+		public ObfuscationRule<C, RW> build()
+		{
+			return new ObfuscationRule<C, RW>(character, replaceWith);
+		}
+
+		public ObfuscationRule.ObfuscationRuleBuilder<C, RW> character(C character)
+		{
+			Objects.requireNonNull(character);
+			this.character = character;
+			return this;
+		}
+
+		public ObfuscationRule.ObfuscationRuleBuilder<C, RW> replaceWith(RW replaceWith)
+		{
+			Objects.requireNonNull(replaceWith);
+			this.replaceWith = replaceWith;
+			return this;
+		}
+
+		@Override
+		public String toString()
+		{
+			return "ObfuscationRule.ObfuscationRuleBuilder(character=" + this.character
+				+ ", replaceWith=" + this.replaceWith + ")";
+		}
+	}
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
+	public static <C, RW> ObfuscationRuleBuilder<C, RW> builder()
+	{
+		return new ObfuscationRuleBuilder<C, RW>();
+	}
+
 	/** The character. */
 	private C character;
+
 	/** The character(s) that will be replaced with. */
 	private RW replaceWith;
 
@@ -46,11 +87,6 @@ public class ObfuscationRule<C, RW> implements Serializable
 		Objects.requireNonNull(replaceWith);
 		this.character = character;
 		this.replaceWith = replaceWith;
-	}
-
-	public static <C, RW> ObfuscationRuleBuilder<C, RW> builder()
-	{
-		return new ObfuscationRuleBuilder<C, RW>();
 	}
 
 	protected boolean canEqual(final Object other)
@@ -88,21 +124,9 @@ public class ObfuscationRule<C, RW> implements Serializable
 		return this.character;
 	}
 
-	public void setCharacter(C character)
-	{
-		Objects.requireNonNull(character);
-		this.character = character;
-	}
-
 	public RW getReplaceWith()
 	{
 		return this.replaceWith;
-	}
-
-	public void setReplaceWith(RW replaceWith)
-	{
-		Objects.requireNonNull(replaceWith);
-		this.replaceWith = replaceWith;
 	}
 
 	@Override
@@ -117,6 +141,18 @@ public class ObfuscationRule<C, RW> implements Serializable
 		return result;
 	}
 
+	public void setCharacter(C character)
+	{
+		Objects.requireNonNull(character);
+		this.character = character;
+	}
+
+	public void setReplaceWith(RW replaceWith)
+	{
+		Objects.requireNonNull(replaceWith);
+		this.replaceWith = replaceWith;
+	}
+
 	public ObfuscationRuleBuilder<C, RW> toBuilder()
 	{
 		return new ObfuscationRuleBuilder<C, RW>().character(this.character)
@@ -128,41 +164,5 @@ public class ObfuscationRule<C, RW> implements Serializable
 	{
 		return "ObfuscationRule(character=" + this.getCharacter() + ", replaceWith="
 			+ this.getReplaceWith() + ")";
-	}
-
-	public static class ObfuscationRuleBuilder<C, RW>
-	{
-		private C character;
-		private RW replaceWith;
-
-		ObfuscationRuleBuilder()
-		{
-		}
-
-		public ObfuscationRule<C, RW> build()
-		{
-			return new ObfuscationRule<C, RW>(character, replaceWith);
-		}
-
-		public ObfuscationRule.ObfuscationRuleBuilder<C, RW> character(C character)
-		{
-			Objects.requireNonNull(character);
-			this.character = character;
-			return this;
-		}
-
-		public ObfuscationRule.ObfuscationRuleBuilder<C, RW> replaceWith(RW replaceWith)
-		{
-			Objects.requireNonNull(replaceWith);
-			this.replaceWith = replaceWith;
-			return this;
-		}
-
-		@Override
-		public String toString()
-		{
-			return "ObfuscationRule.ObfuscationRuleBuilder(character=" + this.character
-				+ ", replaceWith=" + this.replaceWith + ")";
-		}
 	}
 }

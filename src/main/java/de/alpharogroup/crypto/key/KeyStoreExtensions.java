@@ -42,12 +42,6 @@ import de.alpharogroup.crypto.factories.KeyStoreFactory;
 public final class KeyStoreExtensions
 {
 
-	private KeyStoreExtensions()
-	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
-	}
-
 	/**
 	 * Delete the given alias from the given keystore file.
 	 *
@@ -77,6 +71,12 @@ public final class KeyStoreExtensions
 
 		keyStore.deleteEntry(alias);
 		keyStore.store(new FileOutputStream(keystoreFile), password.toCharArray());
+	}
+
+	private KeyStoreExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
 	}
 
 }

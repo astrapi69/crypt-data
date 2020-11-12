@@ -42,10 +42,6 @@ import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 public final class CertificateBuilderFactory
 {
 
-	private CertificateBuilderFactory()
-	{
-	}
-
 	/**
 	 * Factory method for creating a new {@link X509v1CertificateBuilder} object of version 1 of
 	 * X.509 from the given parameters.
@@ -123,5 +119,9 @@ public final class CertificateBuilderFactory
 		final X509v3CertificateBuilder certBuilder = new X509v3CertificateBuilder(issuer, serial,
 			notBefore, notAfter, subject, publicKeyInfo);
 		return certBuilder;
+	}
+
+	private CertificateBuilderFactory()
+	{
 	}
 }

@@ -47,10 +47,6 @@ public final class CertificateReader
 	/** The Constant END_CERTIFICATE_SUFFIX. */
 	public static final String END_CERTIFICATE_SUFFIX = "-----END CERTIFICATE-----";
 
-	private CertificateReader()
-	{
-	}
-
 	/**
 	 * Reads the given byte array and tries to create a {@link X509Certificate} object.
 	 *
@@ -128,6 +124,10 @@ public final class CertificateReader
 		final String publicKeyAsBase64String = new String(keyBytes)
 			.replace(BEGIN_CERTIFICATE_PREFIX, "").replace(END_CERTIFICATE_SUFFIX, "");
 		return publicKeyAsBase64String;
+	}
+
+	private CertificateReader()
+	{
 	}
 
 }

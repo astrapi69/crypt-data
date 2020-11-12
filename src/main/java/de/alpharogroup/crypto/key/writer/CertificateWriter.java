@@ -45,10 +45,6 @@ import de.alpharogroup.crypto.key.reader.CertificateReader;
 public final class CertificateWriter
 {
 
-	private CertificateWriter()
-	{
-	}
-
 	/**
 	 * Write the given {@link X509Certificate} into the given {@link File} in the given
 	 * {@link KeyFileFormat} format.
@@ -183,6 +179,10 @@ public final class CertificateWriter
 	{
 		Objects.requireNonNull(outputStream);
 		write(certificate, outputStream, KeyFileFormat.PEM);
+	}
+
+	private CertificateWriter()
+	{
 	}
 
 }

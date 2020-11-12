@@ -41,10 +41,6 @@ import java.security.cert.CertificateException;
 public final class KeyStoreFactory
 {
 
-	private KeyStoreFactory()
-	{
-	}
-
 	/**
 	 * Factory method for create a new {@link KeyStore} object loaded from an existing
 	 * {@link KeyStore} object from the given file.
@@ -171,6 +167,10 @@ public final class KeyStoreFactory
 		return createNewKeyStore
 			? newKeyStore(keystoreFile, type, password)
 			: loadKeyStore(keystoreFile, type, password);
+	}
+
+	private KeyStoreFactory()
+	{
 	}
 
 }

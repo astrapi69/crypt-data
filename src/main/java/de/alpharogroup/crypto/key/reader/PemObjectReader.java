@@ -51,10 +51,6 @@ import de.alpharogroup.crypto.provider.SecurityProvider;
 public final class PemObjectReader
 {
 
-	private PemObjectReader()
-	{
-	}
-
 	/**
 	 * Gets the pem object.
 	 *
@@ -120,5 +116,9 @@ public final class PemObjectReader
 		pemWriter.close();
 		final String pemString = stringWriter.toString();
 		return pemString;
+	}
+
+	private PemObjectReader()
+	{
 	}
 }
