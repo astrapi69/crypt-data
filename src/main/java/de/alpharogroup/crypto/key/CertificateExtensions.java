@@ -49,6 +49,12 @@ import de.alpharogroup.crypto.hex.HexExtensions;
 public final class CertificateExtensions
 {
 
+	private CertificateExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
+	}
+
 	/**
 	 * Gets the country value of the given {@link X509Certificate}.
 	 *
@@ -211,11 +217,5 @@ public final class CertificateExtensions
 	public static Date getValidUntil(final X509Certificate certificate)
 	{
 		return certificate.getNotAfter();
-	}
-
-	private CertificateExtensions()
-	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
 	}
 }

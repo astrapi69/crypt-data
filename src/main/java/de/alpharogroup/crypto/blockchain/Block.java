@@ -111,6 +111,12 @@ public class Block implements IBlock
 	}
 
 	@Override
+	public void setHash(byte[] hash)
+	{
+		this.hash = hash;
+	}
+
+	@Override
 	public int getLeadingZerosCount()
 	{
 		for (int i = 0; i < getHash().length; i++)
@@ -130,9 +136,21 @@ public class Block implements IBlock
 	}
 
 	@Override
+	public void setMerkleRoot(byte[] merkleRoot)
+	{
+		this.merkleRoot = merkleRoot;
+	}
+
+	@Override
 	public byte[] getPreviousBlockHash()
 	{
 		return this.previousBlockHash;
+	}
+
+	@Override
+	public void setPreviousBlockHash(byte[] previousBlockHash)
+	{
+		this.previousBlockHash = previousBlockHash;
 	}
 
 	@Override
@@ -142,15 +160,33 @@ public class Block implements IBlock
 	}
 
 	@Override
+	public void setTimestamp(long timestamp)
+	{
+		this.timestamp = timestamp;
+	}
+
+	@Override
 	public List<ITransaction> getTransactions()
 	{
 		return this.transactions;
 	}
 
 	@Override
+	public void setTransactions(List<ITransaction> transactions)
+	{
+		this.transactions = transactions;
+	}
+
+	@Override
 	public long getTries()
 	{
 		return this.tries;
+	}
+
+	@Override
+	public void setTries(long tries)
+	{
+		this.tries = tries;
 	}
 
 	@Override
@@ -168,41 +204,5 @@ public class Block implements IBlock
 		final long $tries = this.getTries();
 		result = result * PRIME + (int)($tries >>> 32 ^ $tries);
 		return result;
-	}
-
-	@Override
-	public void setHash(byte[] hash)
-	{
-		this.hash = hash;
-	}
-
-	@Override
-	public void setMerkleRoot(byte[] merkleRoot)
-	{
-		this.merkleRoot = merkleRoot;
-	}
-
-	@Override
-	public void setPreviousBlockHash(byte[] previousBlockHash)
-	{
-		this.previousBlockHash = previousBlockHash;
-	}
-
-	@Override
-	public void setTimestamp(long timestamp)
-	{
-		this.timestamp = timestamp;
-	}
-
-	@Override
-	public void setTransactions(List<ITransaction> transactions)
-	{
-		this.transactions = transactions;
-	}
-
-	@Override
-	public void setTries(long tries)
-	{
-		this.tries = tries;
 	}
 }

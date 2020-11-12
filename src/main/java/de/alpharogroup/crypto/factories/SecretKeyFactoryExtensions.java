@@ -40,6 +40,10 @@ import javax.crypto.spec.SecretKeySpec;
 public final class SecretKeyFactoryExtensions
 {
 
+	private SecretKeyFactoryExtensions()
+	{
+	}
+
 	/**
 	 * Factory method for creating a new {@link SecretKey} from the given password and algorithm.
 	 *
@@ -117,10 +121,6 @@ public final class SecretKeyFactoryExtensions
 		final SecretKey secretKey = keyGenerator.generateKey();
 		final byte[] secretKeyEncoded = secretKey.getEncoded();
 		return newSecretKeySpec(secretKeyEncoded, algorithm);
-	}
-
-	private SecretKeyFactoryExtensions()
-	{
 	}
 
 }

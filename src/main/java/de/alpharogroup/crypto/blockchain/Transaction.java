@@ -95,9 +95,21 @@ public class Transaction implements ITransaction
 	}
 
 	@Override
+	public void setHash(byte[] hash)
+	{
+		this.hash = hash;
+	}
+
+	@Override
 	public byte[] getSenderHash()
 	{
 		return this.senderHash;
+	}
+
+	@Override
+	public void setSenderHash(byte[] senderHash)
+	{
+		this.senderHash = senderHash;
 	}
 
 	@Override
@@ -113,15 +125,33 @@ public class Transaction implements ITransaction
 	}
 
 	@Override
+	public void setSignature(byte[] signature)
+	{
+		this.signature = signature;
+	}
+
+	@Override
 	public String getText()
 	{
 		return this.text;
 	}
 
 	@Override
+	public void setText(String text)
+	{
+		this.text = text;
+	}
+
+	@Override
 	public long getTimestamp()
 	{
 		return this.timestamp;
+	}
+
+	@Override
+	public void setTimestamp(long timestamp)
+	{
+		this.timestamp = timestamp;
 	}
 
 	@Override
@@ -137,35 +167,5 @@ public class Transaction implements ITransaction
 		final long $timestamp = this.getTimestamp();
 		result = result * PRIME + (int)($timestamp >>> 32 ^ $timestamp);
 		return result;
-	}
-
-	@Override
-	public void setHash(byte[] hash)
-	{
-		this.hash = hash;
-	}
-
-	@Override
-	public void setSenderHash(byte[] senderHash)
-	{
-		this.senderHash = senderHash;
-	}
-
-	@Override
-	public void setSignature(byte[] signature)
-	{
-		this.signature = signature;
-	}
-
-	@Override
-	public void setText(String text)
-	{
-		this.text = text;
-	}
-
-	@Override
-	public void setTimestamp(long timestamp)
-	{
-		this.timestamp = timestamp;
 	}
 }

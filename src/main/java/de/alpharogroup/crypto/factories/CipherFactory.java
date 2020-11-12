@@ -46,6 +46,10 @@ import de.alpharogroup.crypto.model.CryptModel;
 public final class CipherFactory
 {
 
+	private CipherFactory()
+	{
+	}
+
 	/**
 	 * Factory method for creating a new {@link Cipher} from the given parameters. This method is
 	 * invoked in the constructor from the derived classes and can be overridden so users can
@@ -114,7 +118,6 @@ public final class CipherFactory
 		return cipher;
 	}
 
-
 	/**
 	 * Factory method for creating a new {@link Cipher} from the given algorithm.
 	 *
@@ -133,7 +136,6 @@ public final class CipherFactory
 		final Cipher cipher = Cipher.getInstance(algorithm);
 		return cipher;
 	}
-
 
 	/**
 	 * Factory method for creating a new {@link Cipher} from the given algorithm and provider.
@@ -157,7 +159,6 @@ public final class CipherFactory
 		final Cipher cipher = Cipher.getInstance(algorithm, provider);
 		return cipher;
 	}
-
 
 	/**
 	 * Factory method for creating a new {@link Cipher} from the given parameters. This method is
@@ -200,10 +201,6 @@ public final class CipherFactory
 		final AlgorithmParameterSpec paramSpec = AlgorithmParameterSpecFactory
 			.newPBEParameterSpec(salt, iterationCount);
 		return newCipher(operationMode, key, paramSpec, key.getAlgorithm());
-	}
-
-	private CipherFactory()
-	{
 	}
 
 }

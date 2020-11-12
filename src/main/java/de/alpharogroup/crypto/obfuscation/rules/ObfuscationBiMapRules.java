@@ -35,39 +35,6 @@ import com.google.common.collect.BiMap;
 public class ObfuscationBiMapRules<K, V>
 {
 
-	public static class ObfuscationBiMapRulesBuilder<K, V>
-	{
-		private BiMap<K, V> obfuscationRules;
-
-		ObfuscationBiMapRulesBuilder()
-		{
-		}
-
-		public ObfuscationBiMapRules<K, V> build()
-		{
-			return new ObfuscationBiMapRules<K, V>(obfuscationRules);
-		}
-
-		public ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder<K, V> obfuscationRules(
-			BiMap<K, V> obfuscationRules)
-		{
-			this.obfuscationRules = obfuscationRules;
-			return this;
-		}
-
-		@Override
-		public String toString()
-		{
-			return "ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder(obfuscationRules="
-				+ this.obfuscationRules + ")";
-		}
-	}
-
-	public static <K, V> ObfuscationBiMapRulesBuilder<K, V> builder()
-	{
-		return new ObfuscationBiMapRulesBuilder<K, V>();
-	}
-
 	/**
 	 * The rules for encrypt the string.
 	 */
@@ -83,6 +50,11 @@ public class ObfuscationBiMapRules<K, V>
 	{
 		Objects.requireNonNull(obfuscationRules);
 		this.obfuscationRules = obfuscationRules;
+	}
+
+	public static <K, V> ObfuscationBiMapRulesBuilder<K, V> builder()
+	{
+		return new ObfuscationBiMapRulesBuilder<K, V>();
 	}
 
 	protected boolean canEqual(final Object other)
@@ -128,5 +100,33 @@ public class ObfuscationBiMapRules<K, V>
 	public String toString()
 	{
 		return "ObfuscationBiMapRules(obfuscationRules=" + this.getObfuscationRules() + ")";
+	}
+
+	public static class ObfuscationBiMapRulesBuilder<K, V>
+	{
+		private BiMap<K, V> obfuscationRules;
+
+		ObfuscationBiMapRulesBuilder()
+		{
+		}
+
+		public ObfuscationBiMapRules<K, V> build()
+		{
+			return new ObfuscationBiMapRules<K, V>(obfuscationRules);
+		}
+
+		public ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder<K, V> obfuscationRules(
+			BiMap<K, V> obfuscationRules)
+		{
+			this.obfuscationRules = obfuscationRules;
+			return this;
+		}
+
+		@Override
+		public String toString()
+		{
+			return "ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder(obfuscationRules="
+				+ this.obfuscationRules + ")";
+		}
 	}
 }

@@ -43,6 +43,10 @@ import de.alpharogroup.crypto.key.PrivateKeyExtensions;
 public final class PrivateKeyWriter
 {
 
+	private PrivateKeyWriter()
+	{
+	}
+
 	/**
 	 * Write the given {@link PrivateKey} into the given {@link File} in the *.der format.
 	 *
@@ -140,10 +144,6 @@ public final class PrivateKeyWriter
 	{
 		Objects.requireNonNull(file);
 		KeyWriter.writeInPemFormat(privateKey, file);
-	}
-
-	private PrivateKeyWriter()
-	{
 	}
 
 }

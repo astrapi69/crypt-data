@@ -73,6 +73,10 @@ import de.alpharogroup.crypto.provider.SecurityProvider;
 public final class CertFactory
 {
 
+	private CertFactory()
+	{
+	}
+
 	/**
 	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
 	 * X.509 from the given parameters that can be used as an end entity certificate.
@@ -343,10 +347,6 @@ public final class CertFactory
 			.setProvider(SecurityProvider.BC.name()).build(keyPair.getPrivate());
 		return new JcaX509CertificateConverter().setProvider(SecurityProvider.BC.name())
 			.getCertificate(certBuilder.build(signer));
-	}
-
-	private CertFactory()
-	{
 	}
 
 }

@@ -57,6 +57,12 @@ import de.alpharogroup.crypto.key.reader.PrivateKeyReader;
 public final class PrivateKeyExtensions
 {
 
+	private PrivateKeyExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
+	}
+
 	/**
 	 * Transform the given byte array(of private key in PKCS#1 format) to a PEM formatted
 	 * {@link String}.
@@ -253,12 +259,6 @@ public final class PrivateKeyExtensions
 		final ASN1Primitive asn1Primitive = asn1Encodable.toASN1Primitive();
 		final byte[] privateKeyPKCS1Formatted = asn1Primitive.getEncoded();
 		return privateKeyPKCS1Formatted;
-	}
-
-	private PrivateKeyExtensions()
-	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
 	}
 
 

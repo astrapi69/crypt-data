@@ -38,6 +38,10 @@ import java.util.Objects;
 public final class PublicKeyWriter
 {
 
+	private PublicKeyWriter()
+	{
+	}
+
 	/**
 	 * Write the given {@link PublicKey} into the given {@link File}.
 	 *
@@ -89,10 +93,6 @@ public final class PublicKeyWriter
 	{
 		Objects.requireNonNull(file);
 		KeyWriter.writeInPemFormat(publicKey, file);
-	}
-
-	private PublicKeyWriter()
-	{
 	}
 
 }

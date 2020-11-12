@@ -47,13 +47,17 @@ public final class CertificateReader
 	/** The Constant END_CERTIFICATE_SUFFIX. */
 	public static final String END_CERTIFICATE_SUFFIX = "-----END CERTIFICATE-----";
 
+	private CertificateReader()
+	{
+	}
+
 	/**
 	 * Reads the given byte array and tries to create a {@link X509Certificate} object.
 	 *
 	 * @param decoded
 	 *            the decoded
 	 * @return the {@link X509Certificate} object from the given byte array.
-	 * 
+	 *
 	 * @throws CertificateException
 	 *             is thrown if no Provider supports a CertificateFactorySpi implementation for the
 	 *             specified type.
@@ -73,7 +77,7 @@ public final class CertificateReader
 	 * @param file
 	 *            the file
 	 * @return the {@link X509Certificate} object from the given byte array.
-	 * 
+	 *
 	 * @throws CertificateException
 	 *             is thrown if no Provider supports a CertificateFactorySpi implementation for the
 	 *             specified type.
@@ -93,7 +97,7 @@ public final class CertificateReader
 	 * @param file
 	 *            the file
 	 * @return the certificate
-	 * 
+	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws CertificateException
@@ -114,7 +118,7 @@ public final class CertificateReader
 	 * @param file
 	 *            the file in pem format that contains the public key.
 	 * @return the base64 encoded {@link String} value.
-	 * 
+	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -124,10 +128,6 @@ public final class CertificateReader
 		final String publicKeyAsBase64String = new String(keyBytes)
 			.replace(BEGIN_CERTIFICATE_PREFIX, "").replace(END_CERTIFICATE_SUFFIX, "");
 		return publicKeyAsBase64String;
-	}
-
-	private CertificateReader()
-	{
 	}
 
 }

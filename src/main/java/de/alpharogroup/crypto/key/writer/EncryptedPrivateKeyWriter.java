@@ -59,6 +59,10 @@ import de.alpharogroup.crypto.factories.SecretKeyFactoryExtensions;
 public final class EncryptedPrivateKeyWriter
 {
 
+	private EncryptedPrivateKeyWriter()
+	{
+	}
+
 	/**
 	 * Encrypt the given {@link PrivateKey} with the given password and write the result to the
 	 * given {@link File}.
@@ -196,10 +200,6 @@ public final class EncryptedPrivateKeyWriter
 		final EncryptedPrivateKeyInfo encinfo = new EncryptedPrivateKeyInfo(algparms, ciphertext);
 
 		return encinfo.getEncoded();
-	}
-
-	private EncryptedPrivateKeyWriter()
-	{
 	}
 
 }

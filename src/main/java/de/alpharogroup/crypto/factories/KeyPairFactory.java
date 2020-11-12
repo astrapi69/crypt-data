@@ -47,6 +47,10 @@ import de.alpharogroup.crypto.key.reader.PublicKeyReader;
 public final class KeyPairFactory
 {
 
+	private KeyPairFactory()
+	{
+	}
+
 	/**
 	 * Factory method for creating a new {@link KeyPair} from the given algorithm and key size.
 	 *
@@ -55,7 +59,7 @@ public final class KeyPairFactory
 	 * @param keySize
 	 *            the key size
 	 * @return the new {@link KeyPair} from the given salt and iteration count
-	 * 
+	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -78,7 +82,7 @@ public final class KeyPairFactory
 	 * @param keySize
 	 *            the key size as enum
 	 * @return the new {@link KeyPair} from the given salt and iteration count
-	 * 
+	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -100,7 +104,7 @@ public final class KeyPairFactory
 	 * @param privateKeyDerFile
 	 *            the private key der file
 	 * @return the new {@link KeyPair} from the given parameters.
-	 * 
+	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws NoSuchAlgorithmException
@@ -163,7 +167,7 @@ public final class KeyPairFactory
 	 * @param keySize
 	 *            the key size
 	 * @return the new {@link KeyPair} from the given parameters
-	 * 
+	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -186,7 +190,7 @@ public final class KeyPairFactory
 	 * @param keySize
 	 *            the key size
 	 * @return the new {@link KeyPairGenerator} from the given parameters
-	 * 
+	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -220,7 +224,7 @@ public final class KeyPairFactory
 	 * @param secureRandom
 	 *            the secure random
 	 * @return the new {@link KeyPairGenerator} from the given parameters
-	 * 
+	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -231,10 +235,6 @@ public final class KeyPairFactory
 		final KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm);
 		generator.initialize(keySize, secureRandom);
 		return generator;
-	}
-
-	private KeyPairFactory()
-	{
 	}
 
 }

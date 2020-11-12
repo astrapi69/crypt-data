@@ -36,6 +36,10 @@ import de.alpharogroup.crypto.compound.CompoundAlgorithm;
 public final class KeySpecFactory
 {
 
+	private KeySpecFactory()
+	{
+	}
+
 	/**
 	 * Factory method for creating a new {@link PBEKeySpec} from the given private key.
 	 *
@@ -72,10 +76,6 @@ public final class KeySpecFactory
 				iterationCount);
 		}
 		return new PBEKeySpec(privateKey.toCharArray(), salt, iterationCount);
-	}
-
-	private KeySpecFactory()
-	{
 	}
 
 }

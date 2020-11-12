@@ -62,6 +62,10 @@ public final class PrivateKeyReader
 	public static final String END_RSA_PRIVATE_KEY_SUFFIX = "\n-----END " + RSA_PRIVATE_KEY
 		+ "-----";
 
+	private PrivateKeyReader()
+	{
+	}
+
 	/**
 	 * Checks if the given {@link File} is in pem format.
 	 *
@@ -370,10 +374,6 @@ public final class PrivateKeyReader
 
 		final PrivateKey privateKey = PrivateKeyReader.readPrivateKey(privatekeyFile);
 		return privateKey;
-	}
-
-	private PrivateKeyReader()
-	{
 	}
 
 }
