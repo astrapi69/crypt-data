@@ -37,18 +37,17 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum KeyStringEntry
 {
-	/** The prefix for the begin of a private key  */
+	/** The prefix for the begin of a private key */
 	BEGIN_PRIVATE_KEY_PREFIX("-----BEGIN PRIVATE KEY-----"),
-	/** The prefix for the begin of a rsa private key  */
-	BEGIN_RSA_PRIVATE_KEY_PREFIX(
-		"-----BEGIN " + KeyStringEntry.RSA_PRIVATE_KEY_NAME + "-----\n"),
-	/** The suffix for the begin of a private key  */
+	/** The prefix for the begin of a rsa private key */
+	BEGIN_RSA_PRIVATE_KEY_PREFIX("-----BEGIN " + KeyStringEntry.RSA_PRIVATE_KEY_NAME + "-----\n"),
+	/** The suffix for the begin of a private key */
 	END_PRIVATE_KEY_SUFFIX("-----END PRIVATE KEY-----"),
-	/** The suffix for the begin of a rsa private key  */
-	END_RSA_PRIVATE_KEY_SUFFIX("\n-----END " + KeyStringEntry.RSA_PRIVATE_KEY_NAME
-		+ "-----"),
-	/** The prefix for the begin of a rsa private key  */
+	/** The suffix for the begin of a rsa private key */
+	END_RSA_PRIVATE_KEY_SUFFIX("\n-----END " + KeyStringEntry.RSA_PRIVATE_KEY_NAME + "-----"),
+	/** The prefix for the begin of a rsa private key */
 	RSA_PRIVATE_KEY(KeyStringEntry.RSA_PRIVATE_KEY_NAME);
+
 	/** The Constant RSA_PRIVATE_KEY. */
 	private static final String RSA_PRIVATE_KEY_NAME = "RSA PRIVATE KEY";
 	/** The value the PEM entry */

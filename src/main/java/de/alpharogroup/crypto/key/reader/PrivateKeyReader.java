@@ -132,15 +132,16 @@ public final class PrivateKeyReader
 		if (privateKeyPem.indexOf(KeyStringEntry.BEGIN_PRIVATE_KEY_PREFIX.getValue()) != -1)
 		{
 			// PKCS#8 format
-			privateKeyAsBase64String = new String(keyBytes).replace(KeyStringEntry.BEGIN_PRIVATE_KEY_PREFIX.getValue(), "")
+			privateKeyAsBase64String = new String(keyBytes)
+				.replace(KeyStringEntry.BEGIN_PRIVATE_KEY_PREFIX.getValue(), "")
 				.replace(KeyStringEntry.END_PRIVATE_KEY_SUFFIX.getValue(), "").trim();
 		}
 		if (privateKeyPem.indexOf(KeyStringEntry.BEGIN_RSA_PRIVATE_KEY_PREFIX.getValue()) != -1)
 		{
 			// PKCS#1 format
 			privateKeyAsBase64String = new String(keyBytes)
-				.replace(KeyStringEntry.BEGIN_RSA_PRIVATE_KEY_PREFIX.getValue(), "").replace(KeyStringEntry.END_RSA_PRIVATE_KEY_SUFFIX.getValue(), "")
-				.trim();
+				.replace(KeyStringEntry.BEGIN_RSA_PRIVATE_KEY_PREFIX.getValue(), "")
+				.replace(KeyStringEntry.END_RSA_PRIVATE_KEY_SUFFIX.getValue(), "").trim();
 		}
 		return privateKeyAsBase64String;
 	}
