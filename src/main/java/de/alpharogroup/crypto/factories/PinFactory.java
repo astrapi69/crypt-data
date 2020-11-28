@@ -2,6 +2,7 @@ package de.alpharogroup.crypto.factories;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 
 import lombok.NonNull;
@@ -25,6 +26,7 @@ public final class PinFactory
 				result.add(localDate.format(DateTimeFormatter.ofPattern(datePattern)));
 			}
 		}
+		result.sort(Comparator.naturalOrder());
 		return result;
 	}
 }
