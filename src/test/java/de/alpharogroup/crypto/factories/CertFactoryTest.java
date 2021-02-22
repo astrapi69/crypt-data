@@ -31,11 +31,13 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.KeyPair;
+import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
@@ -54,6 +56,7 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
 import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import de.alpharogroup.crypto.algorithm.KeystoreType;
 import de.alpharogroup.crypto.algorithm.UnionWord;
 import de.alpharogroup.crypto.key.reader.CertificateReader;
 import de.alpharogroup.crypto.key.reader.PrivateKeyReader;
@@ -61,7 +64,9 @@ import de.alpharogroup.crypto.key.reader.PublicKeyReader;
 import de.alpharogroup.crypto.key.writer.CertificateWriter;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
+import de.alpharogroup.lang.ClassExtensions;
 import de.alpharogroup.random.number.RandomBigIntegerFactory;
+import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
  * The unit test class for the class {@link CertFactory}
@@ -319,6 +324,86 @@ public class CertFactoryTest
 		assertNotNull(cert);
 
 	}
+
+	/**
+	 * Test method for {@link CertFactory} with an example that reads from a JKS keystore file
+	 */
+	@Test
+	public void testWithKeystoreJksFile()
+	{
+		String pkAlias;
+		String keystoreFilename;
+		File keystoreFile;
+		KeyStore keyStore;
+		String keystorePassword;
+		X509Certificate cert;
+		File certificatePemFile;
+		Certificate certificate;
+		File jksDir;
+
+		pkAlias = "app-priv-key";
+		keystorePassword = "keystore-pw";
+		keystoreFilename = "jks/keystore.jks";
+		keystoreFile = RuntimeExceptionDecorator
+			.decorate(() -> ClassExtensions.getResourceAsFile(keystoreFilename));
+		assertNotNull(keystoreFile);
+		keyStore = RuntimeExceptionDecorator.decorate(() -> KeyStoreFactory
+			.loadKeyStore(keystoreFile, KeystoreType.JKS.name(), keystorePassword));
+		assertNotNull(keyStore);
+
+		certificate = RuntimeExceptionDecorator.decorate(() -> keyStore.getCertificate(pkAlias));
+
+		jksDir = new File(PathFinder.getSrcTestResourcesDir(), "jks");
+		certificatePemFile = new File(jksDir, "certificate-ks.cer");
+		// read it ...
+		cert = RuntimeExceptionDecorator
+			.decorate(() -> CertificateReader.readPemCertificate(certificatePemFile));
+		// check null
+		assertNotNull(certificate);
+		// check equal
+		assertEquals(cert, certificate);
+	}
+
+	/**
+	 * Test method for {@link CertFactory} with an example that reads from a PKCS12 keystore file
+	 */
+	@Test
+	public void testWithKeystorePfxFile()
+	{
+		String pkAlias;
+		String keystoreFilename;
+		File keystoreFile;
+		KeyStore keyStore;
+		String keystorePassword;
+		X509Certificate cert;
+		File certificatePemFile;
+		Certificate certificate;
+		File pfxDir;
+
+		pkAlias = "selfsigned_authuserkeystore";
+		keystorePassword = "f00B4r@gmol.org";
+		keystoreFilename = "pfx/ssl-rest-authusers.pfx";
+		keystoreFile = RuntimeExceptionDecorator
+			.decorate(() -> ClassExtensions.getResourceAsFile(keystoreFilename));
+		assertNotNull(keystoreFile);
+		keyStore = RuntimeExceptionDecorator.decorate(() -> KeyStoreFactory
+			.loadKeyStore(keystoreFile, KeystoreType.PKCS12.name(), keystorePassword));
+		assertNotNull(keyStore);
+
+		certificate = RuntimeExceptionDecorator.decorate(() -> keyStore.getCertificate(pkAlias));
+
+		pfxDir = new File(PathFinder.getSrcTestResourcesDir(), "pfx");
+		certificatePemFile = new File(pfxDir, "certificate-ks.cer");
+		// read it ...
+		cert = RuntimeExceptionDecorator
+			.decorate(() -> CertificateReader.readPemCertificate(certificatePemFile));
+		// check null
+		assertNotNull(certificate);
+		// check equal
+		assertEquals(cert, certificate);
+
+	}
+
 
 	/**
 	 * Test method for {@link CertFactory} with {@link BeanTester}

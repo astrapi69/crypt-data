@@ -199,6 +199,8 @@ dependencies {
     implementation("de.alpharogroup:silly-collections:$sillyCollectionsVersion")
     implementation("de.alpharogroup:silly-strings:$sillyStringsVersion")
     implementation("de.alpharogroup:silly-io:$sillyIoVersion")
+    testImplementation("de.alpharogroup:jobj-core:$jobjCoreVersion")
+    testImplementation("io.github.astrapi69:throw-able:$throwAbleVersion")
     testImplementation("de.alpharogroup:vintage-time:$vintageTimeVersion")
     testImplementation("io.github.astrapi69:time-machine:$timeMachineVersion")
     testImplementation("de.alpharogroup:test-objects:$testObjectsVersion")
