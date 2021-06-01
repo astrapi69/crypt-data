@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Build Status](https://travis-ci.com/github/astrapi69/crypt-data.svg?branch=develop)](https://travis-ci.com/github/astrapi69/crypt-data) 
+[![Build Status](https://travis-ci.com/github/astrapi69/crypt-data.svg?branch=develop)](https://travis-ci.com/astrapi69/crypt-data) 
 [![Coverage Status](https://codecov.io/gh/astrapi69/crypt-data/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/crypt-data)
 [![Open Issues](https://img.shields.io/github/issues/astrapi69/crypt-data.svg?style=flat)](https://github.com/astrapi69/crypt-data/issues) 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/crypt-data/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/crypt-data)
