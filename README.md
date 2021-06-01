@@ -169,7 +169,7 @@ Do not hesitate to contact the crypt-data developers with your questions, concer
 
 |**Travis CI**|
 |     :---:      |
-|[![Travis CI](https://travis-ci.com/images/logos/TravisCI-Full-Color.png)](https://coveralls.io/github/astrapi69/crypt-data?branch=develop)|
+|[![Travis CI](https://travis-ci.com/images/logos/TravisCI-Full-Color.png)](https://travis-ci.com)|
 |Special thanks to [Travis CI](https://travis-ci.com) for providing a free continuous integration service for open source projects|
 |     <img width=1000/>     |
 
