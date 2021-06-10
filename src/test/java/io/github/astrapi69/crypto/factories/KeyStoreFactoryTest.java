@@ -38,7 +38,7 @@ import org.apache.commons.io.FileUtils;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.crypto.algorithm.KeystoreType;
+import io.github.astrapi69.crypto.algorithm.KeystoreType;
 import de.alpharogroup.file.search.PathFinder;
 
 /**

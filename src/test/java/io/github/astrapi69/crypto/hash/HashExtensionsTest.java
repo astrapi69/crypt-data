@@ -33,7 +33,7 @@ import java.util.Arrays;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
 
 /**
  * The unit test class for the class {@link HashExtensions}

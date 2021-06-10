@@ -53,11 +53,11 @@ import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.bouncycastle.openssl.jcajce.JcePEMDecryptorProviderBuilder;
 
-import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.factories.CipherFactory;
 import io.github.astrapi69.crypto.factories.KeySpecFactory;
 import io.github.astrapi69.crypto.factories.SecretKeyFactoryExtensions;
-import de.alpharogroup.crypto.provider.SecurityProvider;
+import io.github.astrapi69.crypto.provider.SecurityProvider;
 
 /**
  * The class {@link EncryptedPrivateKeyReader} is a utility class for reading encrypted private keys

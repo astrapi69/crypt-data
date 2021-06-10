@@ -60,7 +60,7 @@ import org.bouncycastle.x509.X509V3CertificateGenerator;
 
 import com.rainerhahnekamp.sneakythrow.Sneaky;
 
-import de.alpharogroup.crypto.provider.SecurityProvider;
+import io.github.astrapi69.crypto.provider.SecurityProvider;
 
 /**
  * The factory class {@link CertFactory} holds methods for creating {@link Certificate} objects and

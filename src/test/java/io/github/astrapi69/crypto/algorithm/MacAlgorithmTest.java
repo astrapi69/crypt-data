@@ -26,7 +26,7 @@ package io.github.astrapi69.crypto.algorithm;
 
 import static org.testng.AssertJUnit.assertEquals;
 
-import de.alpharogroup.crypto.algorithm.MacAlgorithm;
+import io.github.astrapi69.crypto.algorithm.MacAlgorithm;
 import org.testng.annotations.Test;
 
 /**

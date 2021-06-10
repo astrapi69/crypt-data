@@ -44,10 +44,10 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.crypto.algorithm.SunJCEAlgorithm;
-import de.alpharogroup.crypto.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
+import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypto.model.CryptModel;
-import de.alpharogroup.crypto.provider.SecurityProvider;
+import io.github.astrapi69.crypto.provider.SecurityProvider;
 
 /**
  * The unit test class for the class {@link CipherFactory}

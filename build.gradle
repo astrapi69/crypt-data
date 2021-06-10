@@ -27,7 +27,6 @@ sourceCompatibility = "$projectSourceCompatibility"
 repositories {
     mavenLocal()
     mavenCentral()
-    jcenter()
 }
 
 tasks.withType(GenerateModuleMetadata) {
@@ -187,7 +186,7 @@ gradle.startParameter.excludedTaskNames += "licenseTest"
 dependencies {
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
-    implementation("de.alpharogroup:crypt-api:$cryptApiVersion")
+    implementation("io.github.astrapi69:crypt-api:$cryptApiVersion")
     implementation("javax.xml.bind:jaxb-api:$jaxbApiVersion")
     implementation("commons-codec:commons-codec:$commonsCodecVersion")
     implementation("org.apache.commons:commons-lang3:$commonsLang3Version")
@@ -208,7 +207,7 @@ dependencies {
     testImplementation("io.github.benas:random-beans:$randomBeansVersion")
     testImplementation("de.alpharogroup:randomizer-core:$randomizerCoreVersion")
     testImplementation("de.alpharogroup:randomizer-data:$randomizerCoreVersion")
-    testImplementation("de.alpharogroup:checksum-up:$checksumUpVersion")
+    testImplementation("io.github.astrapi69:checksum-up:$checksumUpVersion")
     testImplementation("org.meanbean:meanbean:$meanbeanVersion")
     testImplementation("de.alpharogroup:jobj-contract-verifier:$jobjContractVerifierVersion")
     testImplementation("org.testng:testng:$testngVersion")

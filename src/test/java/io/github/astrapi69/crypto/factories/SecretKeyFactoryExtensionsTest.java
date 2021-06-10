@@ -36,9 +36,9 @@ import javax.crypto.spec.SecretKeySpec;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.crypto.algorithm.AesAlgorithm;
-import de.alpharogroup.crypto.algorithm.SunJCEAlgorithm;
-import de.alpharogroup.crypto.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypto.algorithm.AesAlgorithm;
+import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
+import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 
 /**
  * The unit test class for the class {@link SecretKeyFactoryExtensions}

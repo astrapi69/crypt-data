@@ -34,8 +34,8 @@ import javax.crypto.Cipher;
 
 import org.testng.annotations.Test;
 
-import de.alpharogroup.crypto.algorithm.SunJCEAlgorithm;
-import de.alpharogroup.crypto.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
+import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 import de.alpharogroup.random.object.RandomStringFactory;
 

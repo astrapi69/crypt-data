@@ -24,7 +24,7 @@
  */
 package io.github.astrapi69.crypto.algorithm;
 
-import de.alpharogroup.crypto.algorithm.Algorithm;
+import io.github.astrapi69.crypto.algorithm.Algorithm;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;

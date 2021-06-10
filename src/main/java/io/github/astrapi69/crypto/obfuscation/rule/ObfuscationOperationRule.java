@@ -30,7 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import de.alpharogroup.collections.set.SetFactory;
-import de.alpharogroup.crypto.obfuscation.rule.Operation;
+import io.github.astrapi69.crypto.obfuscation.rule.Operation;
 
 /**
  * The class {@link ObfuscationOperationRule} builds a complex rule for obfuscating a single

@@ -36,7 +36,7 @@ import java.security.spec.X509EncodedKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
-import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 
 
 /**

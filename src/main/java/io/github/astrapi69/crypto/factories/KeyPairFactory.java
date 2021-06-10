@@ -35,8 +35,8 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
-import de.alpharogroup.crypto.algorithm.Algorithm;
-import de.alpharogroup.crypto.key.KeySize;
+import io.github.astrapi69.crypto.algorithm.Algorithm;
+import io.github.astrapi69.crypto.key.KeySize;
 import io.github.astrapi69.crypto.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;

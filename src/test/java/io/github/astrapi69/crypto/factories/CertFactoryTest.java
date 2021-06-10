@@ -54,10 +54,10 @@ import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import de.alpharogroup.crypto.algorithm.KeystoreType;
-import de.alpharogroup.crypto.algorithm.UnionWord;
+import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.algorithm.KeystoreType;
+import io.github.astrapi69.crypto.algorithm.UnionWord;
 import io.github.astrapi69.crypto.key.reader.CertificateReader;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;

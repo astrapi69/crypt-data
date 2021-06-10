@@ -26,7 +26,7 @@ package io.github.astrapi69.crypto.algorithm;
 
 import static org.testng.Assert.assertEquals;
 
-import de.alpharogroup.crypto.algorithm.KeyPairWithModeAndPaddingAlgorithm;
+import io.github.astrapi69.crypto.algorithm.KeyPairWithModeAndPaddingAlgorithm;
 import org.testng.annotations.Test;
 
 /**

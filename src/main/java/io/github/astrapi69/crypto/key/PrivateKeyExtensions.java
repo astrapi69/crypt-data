@@ -39,7 +39,7 @@ import java.security.spec.RSAPublicKeySpec;
 
 import javax.xml.bind.DatatypeConverter;
 
-import de.alpharogroup.crypto.key.KeySize;
+import io.github.astrapi69.crypto.key.KeySize;
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Primitive;
@@ -47,7 +47,7 @@ import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemWriter;
 
-import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.hex.HexExtensions;
 import io.github.astrapi69.crypto.key.reader.KeyStringEntry;
 import io.github.astrapi69.crypto.key.reader.PemObjectReader;

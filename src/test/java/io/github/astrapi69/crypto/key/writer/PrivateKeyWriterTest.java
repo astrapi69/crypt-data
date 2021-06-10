@@ -40,10 +40,10 @@ import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.checksum.FileChecksumExtensions;
-import de.alpharogroup.crypto.algorithm.MdAlgorithm;
-import de.alpharogroup.crypto.key.KeyFileFormat;
-import de.alpharogroup.crypto.key.KeyFormat;
+import io.github.astrapi69.checksum.FileChecksumExtensions;
+import io.github.astrapi69.crypto.algorithm.MdAlgorithm;
+import io.github.astrapi69.crypto.key.KeyFileFormat;
+import io.github.astrapi69.crypto.key.KeyFormat;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;

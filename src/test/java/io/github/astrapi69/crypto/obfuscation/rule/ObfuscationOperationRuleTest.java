@@ -26,7 +26,7 @@ package io.github.astrapi69.crypto.obfuscation.rule;
 
 import static org.testng.AssertJUnit.assertEquals;
 
-import de.alpharogroup.crypto.obfuscation.rule.Operation;
+import io.github.astrapi69.crypto.obfuscation.rule.Operation;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 

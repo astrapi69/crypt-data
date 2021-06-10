@@ -27,7 +27,7 @@ package io.github.astrapi69.crypto.model;
 import java.io.Serializable;
 import java.util.List;
 
-import de.alpharogroup.crypto.algorithm.Algorithm;
+import io.github.astrapi69.crypto.algorithm.Algorithm;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

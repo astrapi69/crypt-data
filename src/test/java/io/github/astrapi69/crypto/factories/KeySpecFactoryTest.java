@@ -31,7 +31,7 @@ import java.security.spec.KeySpec;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.crypto.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 
 /**
  * The unit test class for the class {@link KeySpecFactory}

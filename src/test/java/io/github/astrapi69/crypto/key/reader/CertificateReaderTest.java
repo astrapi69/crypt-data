@@ -41,11 +41,11 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import de.alpharogroup.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import de.alpharogroup.crypto.algorithm.UnionWord;
+import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.algorithm.UnionWord;
 import io.github.astrapi69.crypto.factories.CertFactory;
-import de.alpharogroup.crypto.key.KeyFileFormat;
+import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.crypto.key.writer.CertificateWriter;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;

@@ -28,7 +28,7 @@ import java.security.spec.KeySpec;
 
 import javax.crypto.spec.PBEKeySpec;
 
-import de.alpharogroup.crypto.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 
 /**
  * The factory class {@link KeySpecFactory} holds methods for creating {@link KeySpec} objects.

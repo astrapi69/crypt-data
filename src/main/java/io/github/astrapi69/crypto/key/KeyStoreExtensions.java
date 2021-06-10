@@ -33,7 +33,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-import de.alpharogroup.crypto.algorithm.KeystoreType;
+import io.github.astrapi69.crypto.algorithm.KeystoreType;
 import io.github.astrapi69.crypto.factories.KeyStoreFactory;
 
 /**

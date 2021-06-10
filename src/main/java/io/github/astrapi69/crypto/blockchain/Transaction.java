@@ -24,8 +24,8 @@
  */
 package io.github.astrapi69.crypto.blockchain;
 
-import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import de.alpharogroup.crypto.blockchain.api.ITransaction;
+import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypto.blockchain.api.ITransaction;
 import io.github.astrapi69.crypto.hash.HashExtensions;
 
 /**

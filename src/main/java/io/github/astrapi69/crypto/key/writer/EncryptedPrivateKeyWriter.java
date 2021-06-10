@@ -46,7 +46,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
-import de.alpharogroup.crypto.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypto.factories.AlgorithmParameterSpecFactory;
 import io.github.astrapi69.crypto.factories.SecretKeyFactoryExtensions;
 

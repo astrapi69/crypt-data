@@ -28,9 +28,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import de.alpharogroup.crypto.blockchain.api.IBlock;
-import de.alpharogroup.crypto.blockchain.api.ITransaction;
+import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypto.blockchain.api.IBlock;
+import io.github.astrapi69.crypto.blockchain.api.ITransaction;
 import io.github.astrapi69.crypto.hash.HashExtensions;
 
 /**
@@ -50,6 +50,8 @@ public class Block implements IBlock
 	private List<ITransaction> transactions;
 
 	private long tries;
+
+	private String data;
 
 	public Block()
 	{
@@ -154,6 +156,12 @@ public class Block implements IBlock
 	}
 
 	@Override
+	public String getData()
+	{
+		return this.data;
+	}
+
+	@Override
 	public int hashCode()
 	{
 		final int PRIME = 59;
@@ -204,5 +212,11 @@ public class Block implements IBlock
 	public void setTries(long tries)
 	{
 		this.tries = tries;
+	}
+
+	@Override
+	public void setData(String data)
+	{
+		this.data = data;
 	}
 }

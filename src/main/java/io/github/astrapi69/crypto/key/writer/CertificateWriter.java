@@ -35,7 +35,7 @@ import java.util.Objects;
 
 import org.apache.commons.codec.binary.Base64;
 
-import de.alpharogroup.crypto.key.KeyFileFormat;
+import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.crypto.key.reader.CertificateReader;
 
 /**

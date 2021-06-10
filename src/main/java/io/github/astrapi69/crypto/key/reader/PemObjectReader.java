@@ -43,7 +43,7 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 
-import de.alpharogroup.crypto.provider.SecurityProvider;
+import io.github.astrapi69.crypto.provider.SecurityProvider;
 
 /**
  * The class {@link PemObjectReader} is a utility class for reading {@link PemObject} from a file.

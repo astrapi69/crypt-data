@@ -24,7 +24,7 @@
  */
 package io.github.astrapi69.crypto.obfuscation.rule;
 
-import de.alpharogroup.crypto.obfuscation.rule.Operation;
+import io.github.astrapi69.crypto.obfuscation.rule.Operation;
 
 import java.util.Optional;
 import java.util.Set;
