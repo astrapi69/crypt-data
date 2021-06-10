@@ -5,9 +5,10 @@ Version 7.5-SNAPSHOT
 -------------
 
 ADDED:
- 
+
 - added new factory class for generate pins from given dates and date patterns
 - added new test dependency time-machine in version 1.2
+- added new factory class for generate algorithm instances from given string
 
 Version 7.4
 -------------
