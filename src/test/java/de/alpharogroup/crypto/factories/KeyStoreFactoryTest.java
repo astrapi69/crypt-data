@@ -46,7 +46,6 @@ import de.alpharogroup.file.search.PathFinder;
  */
 public class KeyStoreFactoryTest
 {
-
 	/**
 	 * Test method for {@link KeyStoreFactory#newKeyStore(String, String, File, boolean)}
 	 *
@@ -85,6 +84,33 @@ public class KeyStoreFactoryTest
 			"foobar-secret-pw");
 		assertNotNull(keystore);
 		FileUtils.deleteQuietly(keystoreJksFile);
+	}
+	/**
+	 * Test method for {@link KeyStoreFactory#loadKeyStore(File, String, String)}
+	 *
+	 * @throws KeyStoreException
+	 *             is thrown if there is an error accessing the key store
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 * @throws CertificateException
+	 *             is thrown if there is an error with an certificate
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testLoadKeyStore()
+		throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException
+	{
+		File jksDir;
+		File keystoreJksFile;
+		KeyStore keystore;
+
+		jksDir = new File(PathFinder.getSrcTestResourcesDir(), "jks");
+		keystoreJksFile = new File(jksDir, "keystore.jks");
+
+		keystore = KeyStoreFactory.loadKeyStore(keystoreJksFile, 
+			KeystoreType.JKS.name(), "keystore-pw");
+		assertNotNull(keystore);
 	}
 
 	/**
