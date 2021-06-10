@@ -61,6 +61,16 @@ public class CryptoAlgorithm implements Algorithm
 	}
 
 	/**
+	 * Gets the name of this algorithm
+	 * 
+	 * @return the name of this algorithm
+	 */
+	public String name()
+	{
+		return this.algorithm;
+	}
+
+	/**
 	 * Factory method for creating a new {@link Algorithm} from the given string algorithm
 	 *
 	 * @param algorithm

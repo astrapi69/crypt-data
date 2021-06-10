@@ -10,7 +10,14 @@ ADDED:
 - added new test dependency time-machine in version 1.2
 - added new factory class for generate algorithm instances from given string
 
-Version 7.4
+CHANGED:
+
+- update of lombok dependency version to 1.18.20
+- update of commons-lang3 dependency version to 3.12.0
+- update of bcpkix-jdk15on dependency version to 1.69
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.39.0
+  
+  Version 7.4
 -------------
 
 ADDED:
