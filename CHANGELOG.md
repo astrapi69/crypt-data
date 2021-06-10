@@ -16,6 +16,7 @@ CHANGED:
 - update of commons-lang3 dependency version to 3.12.0
 - update of bcpkix-jdk15on dependency version to 1.69
 - update of com.github.ben-manes.versions.gradle.plugin to new version 0.39.0
+- changed to new package io.github.astrapi69
   
   Version 7.4
 -------------

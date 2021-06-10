@@ -5,8 +5,8 @@
 [![Build Status](https://api.travis-ci.com/astrapi69/crypt-data.svg?branch=develop)](https://travis-ci.com/github/astrapi69/crypt-data) 
 [![Coverage Status](https://codecov.io/gh/astrapi69/crypt-data/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/crypt-data)
 [![Open Issues](https://img.shields.io/github/issues/astrapi69/crypt-data.svg?style=flat)](https://github.com/astrapi69/crypt-data/issues) 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/crypt-data/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/crypt-data)
-[![Javadocs](http://www.javadoc.io/badge/de.alpharogroup/crypt-data.svg)](http://www.javadoc.io/doc/de.alpharogroup/crypt-data)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/crypt-data/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/crypt-data)
+[![Javadocs](http://www.javadoc.io/badge/io.github.astrapi69/crypt-data.svg)](http://www.javadoc.io/doc/io.github.astrapi69/crypt-data)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](http://opensource.org/licenses/MIT)
 
 </div>
@@ -81,10 +81,10 @@ No animals were harmed in the making of this library.
 
 The source code comes under the liberal MIT License, making crypt-data great for all types of applications.
 
-## Maven dependency [![Maven Central](https://img.shields.io/maven-central/v/de.alpharogroup/crypt-data.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22de.alpharogroup%22%20AND%20a:%22crypt-data%22)
+## Maven dependency [![Maven Central](https://img.shields.io/maven-central/v/io.github.astrapi69/crypt-data.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.astrapi69%22%20AND%20a:%22crypt-data%22)
 
 Maven dependency is now on sonatype.
-Check out [sonatype repository](https://oss.sonatype.org/index.html#nexus-search;gav~de.alpharogroup~crypt-data~~~) for latest snapshots and releases.
+Check out [sonatype repository](https://oss.sonatype.org/index.html#nexus-search;gav~io.github.astrapi69~crypt-data~~~) for latest snapshots and releases.
 
 Add the following maven dependency to your project `pom.xml` if you want to import the core functionality of crypt-data:
 
@@ -101,7 +101,7 @@ Than you can add the dependency to your dependencies:
 			...
 			<!-- CRYPT-DATA DEPENDENCY -->
 			<dependency>
-				<groupId>de.alpharogroup</groupId>
+				<groupId>io.github.astrapi69</groupId>
 				<artifactId>crypt-data</artifactId>
 				<version>${crypt-data.version}</version>
 				<scope>test</scope>
@@ -135,7 +135,7 @@ and than add the dependency to the dependencies area
 ```
 dependencies {
 			...
-implementation("de.alpharogroup:crypt-data:$cryptDataVersion")
+implementation("io.github.astrapi69:crypt-data:$cryptDataVersion")
 			...
 }
 ```
@@ -175,7 +175,7 @@ Do not hesitate to contact the crypt-data developers with your questions, concer
 
 |**Nexus Sonatype repositories**|
 |     :---:      |
-|[![sonatype repository](https://img.shields.io/nexus/r/https/oss.sonatype.org/de.alpharogroup/crypt-data.svg?style=for-the-badge)](https://oss.sonatype.org/index.html#nexus-search;gav~de.alpharogroup~crypt-data~~~)|
+|[![sonatype repository](https://img.shields.io/nexus/r/https/oss.sonatype.org/io.github.astrapi69/crypt-data.svg?style=for-the-badge)](https://oss.sonatype.org/index.html#nexus-search;gav~io.github.astrapi69~crypt-data~~~)|
 |Special thanks to [sonatype repository](https://www.sonatype.com) for providing a free maven repository service for open source projects|
 |     <img width=1000/>     |
 
@@ -187,7 +187,7 @@ Do not hesitate to contact the crypt-data developers with your questions, concer
 
 |**javadoc.io**|
 |     :---:      |
-|[![Javadocs](http://www.javadoc.io/badge/de.alpharogroup/crypt-data.svg)](http://www.javadoc.io/doc/de.alpharogroup/crypt-data)|
+|[![Javadocs](http://www.javadoc.io/badge/io.github.astrapi69/crypt-data.svg)](http://www.javadoc.io/doc/io.github.astrapi69/crypt-data)|
 |Special thanks to [javadoc.io](http://www.javadoc.io) for providing a free javadoc documentation for open source projects|
 |     <img width=1000/>     |
 
