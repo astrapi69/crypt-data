@@ -1,7 +1,24 @@
 ## Change log
 ----------------------
 
-Version 7.4
+Version 7.5
+-------------
+
+ADDED:
+
+- added new factory class for generate pins from given dates and date patterns
+- added new test dependency time-machine in version 1.2
+- added new factory class for generate algorithm instances from given string
+
+CHANGED:
+
+- update of lombok dependency version to 1.18.20
+- update of commons-lang3 dependency version to 3.12.0
+- update of bcpkix-jdk15on dependency version to 1.69
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.39.0
+- changed to new package io.github.astrapi69
+  
+  Version 7.4
 -------------
 
 ADDED:

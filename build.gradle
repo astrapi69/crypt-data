@@ -27,7 +27,6 @@ sourceCompatibility = "$projectSourceCompatibility"
 repositories {
     mavenLocal()
     mavenCentral()
-    jcenter()
 }
 
 tasks.withType(GenerateModuleMetadata) {
@@ -43,6 +42,7 @@ javadoc {
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
+//    options.compilerArgs << "-Xlint:deprecation"
 }
 
 test {
@@ -186,7 +186,7 @@ gradle.startParameter.excludedTaskNames += "licenseTest"
 dependencies {
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
-    implementation("de.alpharogroup:crypt-api:$cryptApiVersion")
+    implementation("io.github.astrapi69:crypt-api:$cryptApiVersion")
     implementation("javax.xml.bind:jaxb-api:$jaxbApiVersion")
     implementation("commons-codec:commons-codec:$commonsCodecVersion")
     implementation("org.apache.commons:commons-lang3:$commonsLang3Version")
@@ -199,12 +199,15 @@ dependencies {
     implementation("de.alpharogroup:silly-collections:$sillyCollectionsVersion")
     implementation("de.alpharogroup:silly-strings:$sillyStringsVersion")
     implementation("de.alpharogroup:silly-io:$sillyIoVersion")
+    testImplementation("de.alpharogroup:jobj-core:$jobjCoreVersion")
+    testImplementation("io.github.astrapi69:throw-able:$throwAbleVersion")
     testImplementation("de.alpharogroup:vintage-time:$vintageTimeVersion")
+    testImplementation("io.github.astrapi69:time-machine:$timeMachineVersion")
     testImplementation("de.alpharogroup:test-objects:$testObjectsVersion")
     testImplementation("io.github.benas:random-beans:$randomBeansVersion")
     testImplementation("de.alpharogroup:randomizer-core:$randomizerCoreVersion")
     testImplementation("de.alpharogroup:randomizer-data:$randomizerCoreVersion")
-    testImplementation("de.alpharogroup:checksum-up:$checksumUpVersion")
+    testImplementation("io.github.astrapi69:checksum-up:$checksumUpVersion")
     testImplementation("org.meanbean:meanbean:$meanbeanVersion")
     testImplementation("de.alpharogroup:jobj-contract-verifier:$jobjContractVerifierVersion")
     testImplementation("org.testng:testng:$testngVersion")
