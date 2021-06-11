@@ -204,7 +204,7 @@ dependencies {
     testImplementation("io.github.astrapi69:throw-able:$throwAbleVersion")
     testImplementation("de.alpharogroup:vintage-time:$vintageTimeVersion")
     testImplementation("io.github.astrapi69:time-machine:$timeMachineVersion")
-    testImplementation("de.alpharogroup:test-objects:$testObjectsVersion")
+    testImplementation("io.github.astrapi69:test-objects:$testObjectsVersion")
     testImplementation("io.github.benas:random-beans:$randomBeansVersion")
     testImplementation("de.alpharogroup:randomizer-core:$randomizerCoreVersion")
     testImplementation("de.alpharogroup:randomizer-data:$randomizerCoreVersion")
