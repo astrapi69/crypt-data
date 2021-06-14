@@ -42,13 +42,15 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.file.search.PathFinder;
+import de.alpharogroup.random.SecureRandomBuilder;
 import io.github.astrapi69.crypto.algorithm.Algorithm;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.key.KeySize;
+import io.github.astrapi69.crypto.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
-import de.alpharogroup.file.search.PathFinder;
-import de.alpharogroup.random.SecureRandomBuilder;
+import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
  * The unit test class for the class {@link KeyPairFactory}
@@ -135,6 +137,12 @@ public class KeyPairFactoryTest
 		actual = KeyPairFactory.newKeyPairGenerator(KeyPairGeneratorAlgorithm.RSA.getAlgorithm(),
 			KeySize.KEYSIZE_2048.getKeySize(), SecureRandomBuilder.getInstance().build());
 		assertNotNull(actual);
+		KeyPair keyPair = actual.generateKeyPair();
+		String base64 = PrivateKeyExtensions.toBase64(keyPair.getPrivate());
+		assertNotNull(base64);
+		PrivateKey privateKey = RuntimeExceptionDecorator.decorate(() -> PrivateKeyReader
+			.readPemPrivateKey(base64, KeyPairGeneratorAlgorithm.RSA.getAlgorithm()));
+		assertNotNull(privateKey);
 	}
 
 	/**
