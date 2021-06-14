@@ -43,6 +43,8 @@ import lombok.experimental.SuperBuilder;
  *            the generic type of the cipher
  * @param <K>
  *            the generic type of the key
+ * @param <T>
+ *            the generic type of the decorator objects
  */
 @Data
 @NoArgsConstructor
@@ -81,4 +83,22 @@ public class CryptModel<C, K, T> implements Serializable
 
 	/** The salt byte array. */
 	byte[] salt;
+
+	/**
+	 * Factory method for create a new {@link CryptModel} from the given key
+	 *
+	 * @param <C>
+	 *            the generic type of the cipher
+	 * @param <K>
+	 *            the generic type of the key
+	 * @param <T>
+	 *            the generic type of the decorator objects
+	 * @param key
+	 *            the key
+	 * @return the new created {@link CryptModel} object
+	 */
+	public static<C, K, T> CryptModel<C, K, T> of(K key)
+	{
+		return CryptModel.<C, K, T> builder().key(key).build();
+	}
 }

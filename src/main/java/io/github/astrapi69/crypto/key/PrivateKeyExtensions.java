@@ -39,7 +39,6 @@ import java.security.spec.RSAPublicKeySpec;
 
 import javax.xml.bind.DatatypeConverter;
 
-import io.github.astrapi69.crypto.key.KeySize;
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Primitive;
@@ -254,6 +253,46 @@ public final class PrivateKeyExtensions
 		final ASN1Primitive asn1Primitive = asn1Encodable.toASN1Primitive();
 		final byte[] privateKeyPKCS1Formatted = asn1Primitive.getEncoded();
 		return privateKeyPKCS1Formatted;
+	}
+
+	/**
+	 * Get the standard algorithm name from the given {@link PrivateKey}
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @return the standard algorithm name from the given {@link PrivateKey}
+	 */
+	public static String getAlgorithm(final PrivateKey privateKey)
+	{
+		return privateKey.getAlgorithm();
+	}
+
+	/**
+	 * Get the name of the primary encoding format from the given {@link PrivateKey} or null it does
+	 * not support encoding
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @return the name of the primary encoding format from the given {@link PrivateKey} or null it
+	 *         does not support encoding
+	 */
+	public static String getFormat(final PrivateKey privateKey)
+	{
+		return privateKey.getFormat();
+	}
+
+	/**
+	 * Get the {@link PrivateKey} in its primary encoding format, or null if this key does not
+	 * support encoding
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @return the {@link PrivateKey} in its primary encoding format, or null if this key does not
+	 * 	 * support encoding
+	 */
+	public static byte[] getEncoded(final PrivateKey privateKey)
+	{
+		return privateKey.getEncoded();
 	}
 
 	private PrivateKeyExtensions()

@@ -30,9 +30,15 @@ import static org.testng.AssertJUnit.assertNotNull;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Security;
+import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.NoSuchPaddingException;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMException;
@@ -41,21 +47,22 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 
 /**
  * The unit test class for the class {@link EncryptedPrivateKeyReader}
  */
 public class EncryptedPrivateKeyReaderTest
 {
-	PrivateKey actual;
 	File derDir;
 	File encryptedPrivateKeyFile;
+	File pwProtectedPrivateKeyFile;
 
-	PrivateKey expected;
 	String password;
 	File pemDir;
-	PrivateKey readedPrivateKey;
+	PrivateKey pwProtectedPrivateKey;
 
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.
@@ -69,19 +76,8 @@ public class EncryptedPrivateKeyReaderTest
 		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
 		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 		encryptedPrivateKeyFile = new File(pemDir, "test.key");
+		pwProtectedPrivateKeyFile = new File(derDir, "pwp-private-key-pw-is-secret.der");
 	}
-
-	/**
-	 * Tear down method will be invoked after every unit test method in this class.
-	 *
-	 * @throws Exception
-	 *             the exception
-	 */
-	@AfterMethod
-	protected void tearDown() throws Exception
-	{
-	}
-
 
 	/**
 	 * Test method for {@link EncryptedPrivateKeyReader#getKeyPair(File, String)}
@@ -97,7 +93,8 @@ public class EncryptedPrivateKeyReaderTest
 	public void testGetKeyPair() throws FileNotFoundException, PEMException, IOException
 	{
 		Security.addProvider(new BouncyCastleProvider());
-		KeyPair keyPair = EncryptedPrivateKeyReader.getKeyPair(encryptedPrivateKeyFile, "bosco");
+		password = "bosco";
+		KeyPair keyPair = EncryptedPrivateKeyReader.getKeyPair(encryptedPrivateKeyFile, password);
 		assertNotNull(keyPair);
 	}
 
@@ -105,27 +102,48 @@ public class EncryptedPrivateKeyReaderTest
 	 * Test method for
 	 * {@link EncryptedPrivateKeyReader#readPasswordProtectedPrivateKey(byte[], String, String)}
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testReadPasswordProtectedPrivateKeyByteArrayStringString()
+		throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException,
+		NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException
 	{
+		password = "secret";
+		byte[] bytes = ReadFileExtensions.readFileToBytearray(pwProtectedPrivateKeyFile);
+		pwProtectedPrivateKey = EncryptedPrivateKeyReader
+			.readPasswordProtectedPrivateKey(bytes, password,
+				KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		assertNotNull(pwProtectedPrivateKey);
 	}
 
 	/**
 	 * Test method for
 	 * {@link EncryptedPrivateKeyReader#readPasswordProtectedPrivateKey(File, String)}
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testReadPasswordProtectedPrivateKeyFileString()
+		throws InvalidAlgorithmParameterException, NoSuchPaddingException, IOException,
+		NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException
 	{
+		password = "secret";
+		pwProtectedPrivateKey = EncryptedPrivateKeyReader
+			.readPasswordProtectedPrivateKey(pwProtectedPrivateKeyFile, password);
+		assertNotNull(pwProtectedPrivateKey);
 	}
 
 	/**
 	 * Test method for
 	 * {@link EncryptedPrivateKeyReader#readPasswordProtectedPrivateKey(File, String, String)}
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testReadPasswordProtectedPrivateKeyFileStringString()
+		throws InvalidAlgorithmParameterException, NoSuchPaddingException, IOException,
+		NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException
 	{
+		password = "secret";
+		pwProtectedPrivateKey = EncryptedPrivateKeyReader
+			.readPasswordProtectedPrivateKey(pwProtectedPrivateKeyFile, password,
+				KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		assertNotNull(pwProtectedPrivateKey);
 	}
 
 	/**

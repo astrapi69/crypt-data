@@ -26,6 +26,7 @@ package io.github.astrapi69.crypto.key;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.DSAPublicKey;
 import java.security.interfaces.ECPublicKey;
@@ -45,6 +46,46 @@ import de.alpharogroup.string.StringExtensions;
  */
 public final class PublicKeyExtensions
 {
+
+	/**
+	 * Get the standard algorithm name from the given {@link PublicKey}
+	 *
+	 * @param publicKey
+	 *            the public key
+	 * @return the standard algorithm name from the given {@link PublicKey}
+	 */
+	public static String getAlgorithm(final PublicKey publicKey)
+	{
+		return publicKey.getAlgorithm();
+	}
+
+	/**
+	 * Get the name of the primary encoding format from the given {@link PublicKey} or null it does
+	 * not support encoding
+	 *
+	 * @param publicKey
+	 *            the public key
+	 * @return the name of the primary encoding format from the given {@link PublicKey} or null it
+	 *         does not support encoding
+	 */
+	public static String getFormat(final PublicKey publicKey)
+	{
+		return publicKey.getFormat();
+	}
+
+	/**
+	 * Get the {@link PublicKey} in its primary encoding format, or null if this key does not
+	 * support encoding
+	 *
+	 * @param publicKey
+	 *            the public key
+	 * @return the {@link PublicKey} in its primary encoding format, or null if this key does not
+	 * 	 * support encoding
+	 */
+	public static byte[] getEncoded(final PublicKey publicKey)
+	{
+		return publicKey.getEncoded();
+	}
 
 	/**
 	 * Gets the key length of the given {@link PublicKey}.

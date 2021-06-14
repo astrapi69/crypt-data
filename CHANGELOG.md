@@ -4,6 +4,13 @@
 Version 7.6-SNAPSHOT
 -------------
 
+ADDED:
+
+- new factory class CryptModelFactory for generate objects from class CryptModel
+- new factory method in CryptModel with generic key argument
+- new delegator methods for PublicKey in PublicKeyExtensions
+- new delegator methods for PrivateKey in PrivateKeyExtensions
+
 CHANGED:
 
 - update of gradle version to 6.9

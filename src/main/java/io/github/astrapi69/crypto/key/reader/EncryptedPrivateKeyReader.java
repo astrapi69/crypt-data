@@ -110,7 +110,7 @@ public final class EncryptedPrivateKeyReader
 	 * Reads the given byte array that contains a password protected private key.
 	 *
 	 * @param encryptedPrivateKeyBytes
-	 *            the byte array that contains the password protected private key
+	 *            the password protected private key as the byte array
 	 * @param password
 	 *            the password
 	 * @param algorithm
@@ -208,7 +208,7 @@ public final class EncryptedPrivateKeyReader
 		InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException
 	{
 		PrivateKey privateKey = null;
-		byte[] encryptedPrivateKeyBytes = null;
+		byte[] encryptedPrivateKeyBytes;
 		boolean pemFormat = PrivateKeyReader.isPemFormat(encryptedPrivateKeyFile);
 		if (pemFormat)
 		{
