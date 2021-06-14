@@ -177,7 +177,7 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#readPemPrivateKey(File, SecurityProvider)}
+	 * Test method for {@link PrivateKeyReader#readPemPrivateKey(File)}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
