@@ -121,7 +121,7 @@ public final class EncryptedPrivateKeyReader
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails.
 	 * @throws NoSuchPaddingException
-	 *             the no such padding exception
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
 	 *             is thrown if generation of the SecretKey object fails.
 	 * @throws InvalidKeyException
@@ -162,7 +162,7 @@ public final class EncryptedPrivateKeyReader
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails.
 	 * @throws NoSuchPaddingException
-	 *             the no such padding exception
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
 	 *             is thrown if generation of the SecretKey object fails.
 	 * @throws InvalidKeyException
@@ -194,7 +194,7 @@ public final class EncryptedPrivateKeyReader
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails.
 	 * @throws NoSuchPaddingException
-	 *             the no such padding exception
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
 	 *             is thrown if generation of the SecretKey object fails.
 	 * @throws InvalidKeyException

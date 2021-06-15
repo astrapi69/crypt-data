@@ -10,6 +10,7 @@ ADDED:
 - new factory method in CryptModel with generic key argument
 - new delegator methods for PublicKey in PublicKeyExtensions
 - new delegator methods for PrivateKey in PrivateKeyExtensions
+- new method that can get the private key from an password encrypted byte array
 
 CHANGED:
 

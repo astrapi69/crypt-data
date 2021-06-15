@@ -25,6 +25,7 @@
 package io.github.astrapi69.crypto.key.writer;
 
 import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -100,7 +101,7 @@ public class EncryptedPrivateKeyWriterTest
 	 * @throws InvalidKeySpecException
 	 *             is thrown if generation of the SecretKey object fails.
 	 * @throws NoSuchPaddingException
-	 *             the no such padding exception
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeyException
 	 *             is thrown if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
@@ -108,7 +109,8 @@ public class EncryptedPrivateKeyWriterTest
 	 * @throws IllegalBlockSizeException
 	 *             the illegal block size exception
 	 * @throws BadPaddingException
-	 *             the bad padding exception
+	 *              is thrown when a particular padding mechanism is expected for the input data but
+	 *              the data is not padded properly.
 	 * @throws InvalidParameterSpecException
 	 *             the invalid parameter spec exception
 	 * @throws IOException
@@ -140,6 +142,54 @@ public class EncryptedPrivateKeyWriterTest
 		expected = readedPrivateKey;
 		actual = decryptedPrivateKey;
 		assertEquals(expected, actual);
+	}
+
+	/**
+	 * Test method for
+	 * {@link EncryptedPrivateKeyWriter#getPasswordProtectedPrivateKey(byte[], String)}
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cypher object fails.
+	 * @throws NoSuchPaddingException
+	 *             is thrown if instantiation of the cypher object fails
+	 *             list.
+	 * @throws IllegalBlockSizeException
+	 *             is thrown when the length of data provided to a block cipher is incorrect, i.e.,
+	 *             does not match the block size of the cipher.
+	 * @throws BadPaddingException
+	 *              is thrown when a particular padding mechanism is expected for the input data but
+	 *              the data is not padded properly.
+	 * @throws InvalidParameterSpecException
+	 *             is thrown if the InvalidParameterSpec creation fails
+	 */
+	@Test
+	public void testEncryptPrivateKeyWithPasswordPrivateKeyString()
+		throws NoSuchAlgorithmException, InvalidKeySpecException, IOException,
+		NoSuchProviderException, InvalidAlgorithmParameterException, NoSuchPaddingException,
+		IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException,
+		InvalidKeyException
+	{
+		PrivateKey readedPrivateKey;
+		String password;
+		readedPrivateKey = PrivateKeyReader.readPrivateKey(PathFinder.getSrcTestResourcesDir(),
+			"der", "private.der");
+		password = "secret";
+		byte[] bytes = EncryptedPrivateKeyWriter
+			.encryptPrivateKeyWithPassword(readedPrivateKey, password);
+		assertNotNull(bytes);
+
+		PrivateKey passwordProtectedPrivateKey = EncryptedPrivateKeyWriter
+			.getPasswordProtectedPrivateKey(bytes, password);
+		assertNotNull(passwordProtectedPrivateKey);
+		assertEquals(readedPrivateKey, passwordProtectedPrivateKey);
 	}
 
 	/**

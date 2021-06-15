@@ -31,12 +31,15 @@ import java.io.OutputStream;
 import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
+import java.security.spec.KeySpec;
 import java.util.Objects;
 
 import javax.crypto.BadPaddingException;
@@ -45,7 +48,10 @@ import javax.crypto.EncryptedPrivateKeyInfo;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypto.factories.AlgorithmParameterSpecFactory;
 import io.github.astrapi69.crypto.factories.SecretKeyFactoryExtensions;
@@ -74,7 +80,7 @@ public final class EncryptedPrivateKeyWriter
 	 * @throws InvalidKeySpecException
 	 *             is thrown if generation of the SecretKey object fails.
 	 * @throws NoSuchPaddingException
-	 *             the no such padding exception
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeyException
 	 *             is thrown if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
@@ -82,7 +88,8 @@ public final class EncryptedPrivateKeyWriter
 	 * @throws IllegalBlockSizeException
 	 *             the illegal block size exception
 	 * @throws BadPaddingException
-	 *             the bad padding exception
+	 *              is thrown when a particular padding mechanism is expected for the input data but
+	 *              the data is not padded properly.
 	 * @throws InvalidParameterSpecException
 	 *             the invalid parameter spec exception
 	 * @throws IOException
@@ -111,7 +118,7 @@ public final class EncryptedPrivateKeyWriter
 	 * @throws InvalidKeySpecException
 	 *             is thrown if generation of the SecretKey object fails.
 	 * @throws NoSuchPaddingException
-	 *             the no such padding exception
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeyException
 	 *             is thrown if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
@@ -119,7 +126,8 @@ public final class EncryptedPrivateKeyWriter
 	 * @throws IllegalBlockSizeException
 	 *             the illegal block size exception
 	 * @throws BadPaddingException
-	 *             the bad padding exception
+	 *              is thrown when a particular padding mechanism is expected for the input data but
+	 *              the data is not padded properly.
 	 * @throws InvalidParameterSpecException
 	 *             the invalid parameter spec exception
 	 * @throws IOException
@@ -152,7 +160,7 @@ public final class EncryptedPrivateKeyWriter
 	 * @throws InvalidKeySpecException
 	 *             is thrown if generation of the SecretKey object fails.
 	 * @throws NoSuchPaddingException
-	 *             the no such padding exception
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeyException
 	 *             is thrown if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
@@ -160,7 +168,8 @@ public final class EncryptedPrivateKeyWriter
 	 * @throws IllegalBlockSizeException
 	 *             the illegal block size exception
 	 * @throws BadPaddingException
-	 *             the bad padding exception
+	 *              is thrown when a particular padding mechanism is expected for the input data but
+	 *              the data is not padded properly.
 	 * @throws InvalidParameterSpecException
 	 *             the invalid parameter spec exception
 	 * @throws IOException
@@ -190,12 +199,54 @@ public final class EncryptedPrivateKeyWriter
 
 		final byte[] ciphertext = pbeCipher.doFinal(privateKeyEncoded);
 
-		final AlgorithmParameters algparms = AlgorithmParameters
+		final AlgorithmParameters algorithmParameters = AlgorithmParameters
 			.getInstance(CompoundAlgorithm.PBE_WITH_SHA1_AND_DES_EDE.getAlgorithm());
-		algparms.init(algorithmParameterSpec);
-		final EncryptedPrivateKeyInfo encinfo = new EncryptedPrivateKeyInfo(algparms, ciphertext);
+		algorithmParameters.init(algorithmParameterSpec);
+		final EncryptedPrivateKeyInfo encinfo = new EncryptedPrivateKeyInfo(algorithmParameters,
+			ciphertext);
 
 		return encinfo.getEncoded();
+	}
+
+	/**
+	 * Gets the private key from the given encrypted byte array with the given password. This method
+	 * is the counterpart of the method
+	 * {@link EncryptedPrivateKeyWriter#encryptPrivateKeyWithPassword(PrivateKey, String)}
+	 * 
+	 * @param derEncodedPkcs8byteArray
+	 *            the DER encoded PKCS#8 encrypted key as byte array
+	 * @param password
+	 *            the password
+	 * @return
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws NoSuchPaddingException
+	 *             is thrown if instantiation of the cypher object fails
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails
+	 */
+	public static PrivateKey getPasswordProtectedPrivateKey(byte[] derEncodedPkcs8byteArray,
+		String password) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException,
+		InvalidKeySpecException, InvalidAlgorithmParameterException, InvalidKeyException
+	{
+		EncryptedPrivateKeyInfo encryptPKInfo = new EncryptedPrivateKeyInfo(
+			derEncodedPkcs8byteArray);
+
+		Cipher cipher = Cipher.getInstance(encryptPKInfo.getAlgName());
+		PBEKeySpec pbeKeySpec = new PBEKeySpec(password.toCharArray());
+		SecretKeyFactory secFac = SecretKeyFactory.getInstance(encryptPKInfo.getAlgName());
+		Key pbeKey = secFac.generateSecret(pbeKeySpec);
+		AlgorithmParameters algParams = encryptPKInfo.getAlgParameters();
+		cipher.init(Cipher.DECRYPT_MODE, pbeKey, algParams);
+		KeySpec pkcs8KeySpec = encryptPKInfo.getKeySpec(cipher);
+		KeyFactory kf = KeyFactory.getInstance(KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		return kf.generatePrivate(pkcs8KeySpec);
 	}
 
 	private EncryptedPrivateKeyWriter()
