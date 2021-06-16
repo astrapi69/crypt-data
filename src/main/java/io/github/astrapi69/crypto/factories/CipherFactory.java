@@ -37,7 +37,10 @@ import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
 
+import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypto.model.CryptModel;
 
 /**
@@ -47,9 +50,7 @@ public final class CipherFactory
 {
 
 	/**
-	 * Factory method for creating a new {@link Cipher} from the given parameters. This method is
-	 * invoked in the constructor from the derived classes and can be overridden so users can
-	 * provide their own version of a new {@link Cipher} from the given parameters.
+	 * Factory method for creating a new {@link Cipher} from the given parameters.
 	 *
 	 * @param model
 	 *            the model bean for create the cipher
@@ -157,16 +158,14 @@ public final class CipherFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link Cipher} from the given parameters. This method is
-	 * invoked in the constructor from the derived classes and can be overridden so users can
-	 * provide their own version of a new {@link Cipher} from the given parameters.
+	 * Factory method for creating a new {@link Cipher} from the given parameters.
 	 *
 	 * @param privateKey
 	 *            the private key
 	 * @param algorithm
 	 *            the algorithm
 	 * @param salt
-	 *            the salt.
+	 *            the salt
 	 * @param iterationCount
 	 *            the iteration count
 	 * @param operationMode
@@ -196,6 +195,78 @@ public final class CipherFactory
 		final SecretKey key = factory.generateSecret(keySpec);
 		final AlgorithmParameterSpec paramSpec = AlgorithmParameterSpecFactory
 			.newPBEParameterSpec(salt, iterationCount);
+		return newCipher(operationMode, key, paramSpec, key.getAlgorithm());
+	}
+
+	/**
+	 * Factory method for creating a new PBE {@link Cipher} from the given parameters.
+	 *
+	 * @param password
+	 *            the password
+	 * @param operationMode
+	 *            the operation mode
+	 * @param algorithm
+	 *            the algorithm
+	 *
+	 * @return the cipher
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchPaddingException
+	 *             is thrown if instantiation of the cipher object fails.
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails.
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails.
+	 */
+	public static Cipher newPBECipher(char[] password, int operationMode, String algorithm)
+		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
+		InvalidAlgorithmParameterException, InvalidKeyException
+	{
+		final PBEKeySpec keySpec = new PBEKeySpec(password);
+		final SecretKeyFactory factory = SecretKeyFactory.getInstance(algorithm);
+		final SecretKey key = factory.generateSecret(keySpec);
+		final PBEParameterSpec paramSpec = new PBEParameterSpec(CompoundAlgorithm.SALT,
+			CompoundAlgorithm.ITERATIONCOUNT);
+		return newCipher(operationMode, key, paramSpec, key.getAlgorithm());
+	}
+
+	/**
+	 * Factory method for creating a new PBE {@link Cipher} from the given parameters.
+	 *
+	 * @param password
+	 *            the password
+	 * @param operationMode
+	 *            the operation mode
+	 * @param algorithm
+	 *            the algorithm
+	 * @param salt
+	 *            the salt
+	 * @param iterationCount
+	 *            the iteration count
+	 *
+	 * @return the cipher
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchPaddingException
+	 *             is thrown if instantiation of the cipher object fails.
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails.
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails.
+	 */
+	public static Cipher newPBECipher(char[] password, int operationMode, String algorithm,
+		final byte[] salt, final int iterationCount)
+		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
+		InvalidAlgorithmParameterException, InvalidKeyException
+	{
+		final PBEKeySpec keySpec = new PBEKeySpec(password);
+		final SecretKeyFactory factory = SecretKeyFactory.getInstance(algorithm);
+		final SecretKey key = factory.generateSecret(keySpec);
+		final PBEParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
 		return newCipher(operationMode, key, paramSpec, key.getAlgorithm());
 	}
 

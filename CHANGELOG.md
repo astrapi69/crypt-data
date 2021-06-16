@@ -11,6 +11,7 @@ ADDED:
 - new delegator methods for PublicKey in PublicKeyExtensions
 - new delegator methods for PrivateKey in PrivateKeyExtensions
 - new method that can get the private key from an password encrypted byte array
+- new factory methods in CipherFactory for create a PBE Cipher object
 
 CHANGED:
 
