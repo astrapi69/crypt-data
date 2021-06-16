@@ -224,12 +224,8 @@ public final class CipherFactory
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
 		InvalidAlgorithmParameterException, InvalidKeyException
 	{
-		final PBEKeySpec keySpec = new PBEKeySpec(password);
-		final SecretKeyFactory factory = SecretKeyFactory.getInstance(algorithm);
-		final SecretKey key = factory.generateSecret(keySpec);
-		final PBEParameterSpec paramSpec = new PBEParameterSpec(CompoundAlgorithm.SALT,
+		return newPBECipher(password, operationMode, algorithm, CompoundAlgorithm.SALT,
 			CompoundAlgorithm.ITERATIONCOUNT);
-		return newCipher(operationMode, key, paramSpec, key.getAlgorithm());
 	}
 
 	/**
