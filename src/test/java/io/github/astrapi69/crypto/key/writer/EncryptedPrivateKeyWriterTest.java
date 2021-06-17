@@ -46,11 +46,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.file.delete.DeleteFileExtensions;
+import de.alpharogroup.file.search.PathFinder;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.key.reader.EncryptedPrivateKeyReader;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
-import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.search.PathFinder;
 
 /**
  * The unit test class for the class {@link EncryptedPrivateKeyWriter}.
@@ -109,8 +109,8 @@ public class EncryptedPrivateKeyWriterTest
 	 * @throws IllegalBlockSizeException
 	 *             the illegal block size exception
 	 * @throws BadPaddingException
-	 *              is thrown when a particular padding mechanism is expected for the input data but
-	 *              the data is not padded properly.
+	 *             is thrown when a particular padding mechanism is expected for the input data but
+	 *             the data is not padded properly.
 	 * @throws InvalidParameterSpecException
 	 *             the invalid parameter spec exception
 	 * @throws IOException
@@ -159,31 +159,29 @@ public class EncryptedPrivateKeyWriterTest
 	 * @throws InvalidAlgorithmParameterException
 	 *             is thrown if initialization of the cypher object fails.
 	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cypher object fails
-	 *             list.
+	 *             is thrown if instantiation of the cypher object fails list.
 	 * @throws IllegalBlockSizeException
 	 *             is thrown when the length of data provided to a block cipher is incorrect, i.e.,
 	 *             does not match the block size of the cipher.
 	 * @throws BadPaddingException
-	 *              is thrown when a particular padding mechanism is expected for the input data but
-	 *              the data is not padded properly.
+	 *             is thrown when a particular padding mechanism is expected for the input data but
+	 *             the data is not padded properly.
 	 * @throws InvalidParameterSpecException
 	 *             is thrown if the InvalidParameterSpec creation fails
 	 */
 	@Test
-	public void testEncryptPrivateKeyWithPasswordPrivateKeyString()
-		throws NoSuchAlgorithmException, InvalidKeySpecException, IOException,
-		NoSuchProviderException, InvalidAlgorithmParameterException, NoSuchPaddingException,
-		IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException,
-		InvalidKeyException
+	public void testEncryptPrivateKeyWithPasswordPrivateKeyString() throws NoSuchAlgorithmException,
+		InvalidKeySpecException, IOException, NoSuchProviderException,
+		InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
+		BadPaddingException, InvalidParameterSpecException, InvalidKeyException
 	{
 		PrivateKey readedPrivateKey;
 		String password;
 		readedPrivateKey = PrivateKeyReader.readPrivateKey(PathFinder.getSrcTestResourcesDir(),
 			"der", "private.der");
 		password = "secret";
-		byte[] bytes = EncryptedPrivateKeyWriter
-			.encryptPrivateKeyWithPassword(readedPrivateKey, password);
+		byte[] bytes = EncryptedPrivateKeyWriter.encryptPrivateKeyWithPassword(readedPrivateKey,
+			password);
 		assertNotNull(bytes);
 
 		PrivateKey passwordProtectedPrivateKey = EncryptedPrivateKeyWriter

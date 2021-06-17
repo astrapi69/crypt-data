@@ -46,6 +46,10 @@ public final class PrivateKeyReader
 {
 
 
+	private PrivateKeyReader()
+	{
+	}
+
 	/**
 	 * Checks if the given {@link File} is in pem format.
 	 *
@@ -355,10 +359,6 @@ public final class PrivateKeyReader
 
 		final PrivateKey privateKey = PrivateKeyReader.readPrivateKey(privatekeyFile);
 		return privateKey;
-	}
-
-	private PrivateKeyReader()
-	{
 	}
 
 }

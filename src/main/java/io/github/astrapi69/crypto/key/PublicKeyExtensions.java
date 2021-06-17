@@ -26,7 +26,6 @@ package io.github.astrapi69.crypto.key;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.DSAPublicKey;
 import java.security.interfaces.ECPublicKey;
@@ -36,16 +35,22 @@ import java.util.Objects;
 
 import org.apache.commons.codec.binary.Base64;
 
+import de.alpharogroup.string.StringExtensions;
 import io.github.astrapi69.crypto.hex.HexExtensions;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypto.key.writer.PublicKeyWriter;
-import de.alpharogroup.string.StringExtensions;
 
 /**
  * The class {@link PublicKeyExtensions}.
  */
 public final class PublicKeyExtensions
 {
+
+	private PublicKeyExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
+	}
 
 	/**
 	 * Get the standard algorithm name from the given {@link PublicKey}
@@ -79,8 +84,8 @@ public final class PublicKeyExtensions
 	 *
 	 * @param publicKey
 	 *            the public key
-	 * @return the {@link PublicKey} in its primary encoding format, or null if this key does not
-	 * 	 * support encoding
+	 * @return the {@link PublicKey} in its primary encoding format, or null if this key does not *
+	 *         support encoding
 	 */
 	public static byte[] getEncoded(final PublicKey publicKey)
 	{
@@ -195,12 +200,6 @@ public final class PublicKeyExtensions
 		sb.append(PublicKeyReader.END_PUBLIC_KEY_SUFFIX);
 		sb.append(System.lineSeparator());
 		return sb.toString();
-	}
-
-	private PublicKeyExtensions()
-	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
 	}
 
 }

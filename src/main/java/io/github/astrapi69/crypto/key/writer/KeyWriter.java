@@ -40,6 +40,10 @@ import de.alpharogroup.file.write.WriteFileExtensions;
 public final class KeyWriter
 {
 
+	private KeyWriter()
+	{
+	}
+
 	/**
 	 * Write the given {@link Key} into the given {@link File}.
 	 *
@@ -60,10 +64,6 @@ public final class KeyWriter
 		String pemFormat = stringWriter.toString();
 		pemFormat = pemFormat.replaceAll("\\r\\n", "\\\n");
 		WriteFileExtensions.string2File(file, pemFormat);
-	}
-
-	private KeyWriter()
-	{
 	}
 
 }

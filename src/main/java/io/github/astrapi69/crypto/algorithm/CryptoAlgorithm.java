@@ -24,7 +24,6 @@
  */
 package io.github.astrapi69.crypto.algorithm;
 
-import io.github.astrapi69.crypto.algorithm.Algorithm;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
@@ -53,6 +52,18 @@ public class CryptoAlgorithm implements Algorithm
 	}
 
 	/**
+	 * Factory method for creating a new {@link Algorithm} from the given string algorithm
+	 *
+	 * @param algorithm
+	 *            the algorithm
+	 * @return the new {@link Algorithm}
+	 */
+	public static Algorithm newAlgorithm(@NonNull String algorithm)
+	{
+		return new CryptoAlgorithm(algorithm);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -63,23 +74,11 @@ public class CryptoAlgorithm implements Algorithm
 
 	/**
 	 * Gets the name of this algorithm
-	 * 
+	 *
 	 * @return the name of this algorithm
 	 */
 	public String name()
 	{
 		return this.algorithm;
-	}
-
-	/**
-	 * Factory method for creating a new {@link Algorithm} from the given string algorithm
-	 *
-	 * @param algorithm
-	 *            the algorithm
-	 * @return the new {@link Algorithm}
-	 */
-	public static Algorithm newAlgorithm(@NonNull String algorithm)
-	{
-		return new CryptoAlgorithm(algorithm);
 	}
 }

@@ -38,8 +38,8 @@ import org.apache.commons.io.FileUtils;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.crypto.algorithm.KeystoreType;
 import de.alpharogroup.file.search.PathFinder;
+import io.github.astrapi69.crypto.algorithm.KeystoreType;
 
 /**
  * The unit test class for the class {@link KeyStoreFactory}
@@ -85,6 +85,7 @@ public class KeyStoreFactoryTest
 		assertNotNull(keystore);
 		FileUtils.deleteQuietly(keystoreJksFile);
 	}
+
 	/**
 	 * Test method for {@link KeyStoreFactory#loadKeyStore(File, String, String)}
 	 *
@@ -108,8 +109,8 @@ public class KeyStoreFactoryTest
 		jksDir = new File(PathFinder.getSrcTestResourcesDir(), "jks");
 		keystoreJksFile = new File(jksDir, "keystore.jks");
 
-		keystore = KeyStoreFactory.loadKeyStore(keystoreJksFile, 
-			KeystoreType.JKS.name(), "keystore-pw");
+		keystore = KeyStoreFactory.loadKeyStore(keystoreJksFile, KeystoreType.JKS.name(),
+			"keystore-pw");
 		assertNotNull(keystore);
 	}
 

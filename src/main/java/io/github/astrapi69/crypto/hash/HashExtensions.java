@@ -46,6 +46,10 @@ import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
 public final class HashExtensions
 {
 
+	private HashExtensions()
+	{
+	}
+
 	/**
 	 * Gets the hash value of the given queue and the given algorithm.
 	 *
@@ -308,10 +312,6 @@ public final class HashExtensions
 		final String hashedAndBase64 = new Base64()
 			.encodeToString(hash(hashIt, salt, hashAlgorithm, charset).getBytes(charset));
 		return hashedAndBase64;
-	}
-
-	private HashExtensions()
-	{
 	}
 
 }

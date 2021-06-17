@@ -95,15 +95,33 @@ public class Address implements IAddress
 	}
 
 	@Override
+	public void setHash(byte[] hash)
+	{
+		this.hash = hash;
+	}
+
+	@Override
 	public String getName()
 	{
 		return this.name;
 	}
 
 	@Override
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	@Override
 	public byte[] getPublicKey()
 	{
 		return this.publicKey;
+	}
+
+	@Override
+	public void setPublicKey(byte[] publicKey)
+	{
+		this.publicKey = publicKey;
 	}
 
 	@Override
@@ -116,23 +134,5 @@ public class Address implements IAddress
 		result = result * PRIME + ($name == null ? 43 : $name.hashCode());
 		result = result * PRIME + java.util.Arrays.hashCode(this.getPublicKey());
 		return result;
-	}
-
-	@Override
-	public void setHash(byte[] hash)
-	{
-		this.hash = hash;
-	}
-
-	@Override
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-
-	@Override
-	public void setPublicKey(byte[] publicKey)
-	{
-		this.publicKey = publicKey;
 	}
 }

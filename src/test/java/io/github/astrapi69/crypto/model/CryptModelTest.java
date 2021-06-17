@@ -34,10 +34,10 @@ import javax.crypto.Cipher;
 
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
-import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 import de.alpharogroup.random.object.RandomStringFactory;
+import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
+import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 
 /**
  * The unit test class for the class {@link CryptModel}

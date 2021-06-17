@@ -27,7 +27,6 @@ package io.github.astrapi69.crypto.model;
 import java.io.Serializable;
 import java.util.List;
 
-import io.github.astrapi69.crypto.algorithm.Algorithm;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,6 +34,7 @@ import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import io.github.astrapi69.crypto.algorithm.Algorithm;
 
 /**
  * The class {@link CryptModel} holds data for the encryption or decryption process.
@@ -99,7 +99,7 @@ public class CryptModel<C, K, T> implements Serializable
 	 *            the key
 	 * @return the new created {@link CryptModel} object
 	 */
-	public static<C, K, T> CryptModel<C, K, T> of(K key)
+	public static <C, K, T> CryptModel<C, K, T> of(K key)
 	{
 		return CryptModel.<C, K, T> builder().key(key).build();
 	}

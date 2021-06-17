@@ -26,116 +26,11 @@ package io.github.astrapi69.crypto.certificate;
 
 public class CertificateAttributes
 {
-	public static abstract class CertificateAttributesBuilder<C extends CertificateAttributes, B extends CertificateAttributes.CertificateAttributesBuilder<C, B>>
-	{
-		private static void $fillValuesFromInstanceIntoBuilder(CertificateAttributes instance,
-			CertificateAttributes.CertificateAttributesBuilder<?, ?> b)
-		{
-			b.commonName(instance.commonName);
-			b.organisation(instance.organisation);
-			b.organisationUnit(instance.organisationUnit);
-			b.countryCode(instance.countryCode);
-			b.state(instance.state);
-			b.location(instance.location);
-		}
-
-		private String commonName;
-		private String countryCode;
-		private String location;
-		private String organisation;
-		private String organisationUnit;
-
-		private String state;
-
-		protected B $fillValuesFrom(C instance)
-		{
-			CertificateAttributesBuilder.$fillValuesFromInstanceIntoBuilder(instance, this);
-			return self();
-		}
-
-		public abstract C build();
-
-		public B commonName(String commonName)
-		{
-			this.commonName = commonName;
-			return self();
-		}
-
-		public B countryCode(String countryCode)
-		{
-			this.countryCode = countryCode;
-			return self();
-		}
-
-		public B location(String location)
-		{
-			this.location = location;
-			return self();
-		}
-
-		public B organisation(String organisation)
-		{
-			this.organisation = organisation;
-			return self();
-		}
-
-		public B organisationUnit(String organisationUnit)
-		{
-			this.organisationUnit = organisationUnit;
-			return self();
-		}
-
-		protected abstract B self();
-
-		public B state(String state)
-		{
-			this.state = state;
-			return self();
-		}
-
-		@Override
-		public String toString()
-		{
-			return "CertificateAttributes.CertificateAttributesBuilder(commonName="
-				+ this.commonName + ", organisation=" + this.organisation + ", organisationUnit="
-				+ this.organisationUnit + ", countryCode=" + this.countryCode + ", state="
-				+ this.state + ", location=" + this.location + ")";
-		}
-	}
-	private static final class CertificateAttributesBuilderImpl
-		extends
-			CertificateAttributesBuilder<CertificateAttributes, CertificateAttributesBuilderImpl>
-	{
-		private CertificateAttributesBuilderImpl()
-		{
-		}
-
-		@Override
-		public CertificateAttributes build()
-		{
-			return new CertificateAttributes(this);
-		}
-
-		@Override
-		protected CertificateAttributes.CertificateAttributesBuilderImpl self()
-		{
-			return this;
-		}
-	}
-
-	public static CertificateAttributesBuilder<?, ?> builder()
-	{
-		return new CertificateAttributesBuilderImpl();
-	}
-
 	private String commonName;
 	private String countryCode;
 	private String location;
-
 	private String organisation;
-
 	private String organisationUnit;
-
 	private String state;
 
 	public CertificateAttributes()
@@ -161,6 +56,11 @@ public class CertificateAttributes
 		this.countryCode = countryCode;
 		this.state = state;
 		this.location = location;
+	}
+
+	public static CertificateAttributesBuilder<?, ?> builder()
+	{
+		return new CertificateAttributesBuilderImpl();
 	}
 
 	protected boolean canEqual(final Object other)
@@ -218,9 +118,19 @@ public class CertificateAttributes
 		return this.commonName;
 	}
 
+	public void setCommonName(String commonName)
+	{
+		this.commonName = commonName;
+	}
+
 	public String getCountryCode()
 	{
 		return this.countryCode;
+	}
+
+	public void setCountryCode(String countryCode)
+	{
+		this.countryCode = countryCode;
 	}
 
 	public String getLocation()
@@ -228,9 +138,19 @@ public class CertificateAttributes
 		return this.location;
 	}
 
+	public void setLocation(String location)
+	{
+		this.location = location;
+	}
+
 	public String getOrganisation()
 	{
 		return this.organisation;
+	}
+
+	public void setOrganisation(String organisation)
+	{
+		this.organisation = organisation;
 	}
 
 	public String getOrganisationUnit()
@@ -238,9 +158,19 @@ public class CertificateAttributes
 		return this.organisationUnit;
 	}
 
+	public void setOrganisationUnit(String organisationUnit)
+	{
+		this.organisationUnit = organisationUnit;
+	}
+
 	public String getState()
 	{
 		return this.state;
+	}
+
+	public void setState(String state)
+	{
+		this.state = state;
 	}
 
 	@Override
@@ -272,36 +202,6 @@ public class CertificateAttributes
 			return true;
 		}
 		return false;
-	}
-
-	public void setCommonName(String commonName)
-	{
-		this.commonName = commonName;
-	}
-
-	public void setCountryCode(String countryCode)
-	{
-		this.countryCode = countryCode;
-	}
-
-	public void setLocation(String location)
-	{
-		this.location = location;
-	}
-
-	public void setOrganisation(String organisation)
-	{
-		this.organisation = organisation;
-	}
-
-	public void setOrganisationUnit(String organisationUnit)
-	{
-		this.organisationUnit = organisationUnit;
-	}
-
-	public void setState(String state)
-	{
-		this.state = state;
 	}
 
 	public CertificateAttributesBuilder<?, ?> toBuilder()
@@ -351,5 +251,102 @@ public class CertificateAttributes
 			+ this.getOrganisation() + ", organisationUnit=" + this.getOrganisationUnit()
 			+ ", countryCode=" + this.getCountryCode() + ", state=" + this.getState()
 			+ ", location=" + this.getLocation() + ")";
+	}
+
+	public static abstract class CertificateAttributesBuilder<C extends CertificateAttributes, B extends CertificateAttributes.CertificateAttributesBuilder<C, B>>
+	{
+		private String commonName;
+		private String countryCode;
+		private String location;
+		private String organisation;
+		private String organisationUnit;
+		private String state;
+
+		private static void $fillValuesFromInstanceIntoBuilder(CertificateAttributes instance,
+			CertificateAttributes.CertificateAttributesBuilder<?, ?> b)
+		{
+			b.commonName(instance.commonName);
+			b.organisation(instance.organisation);
+			b.organisationUnit(instance.organisationUnit);
+			b.countryCode(instance.countryCode);
+			b.state(instance.state);
+			b.location(instance.location);
+		}
+
+		protected B $fillValuesFrom(C instance)
+		{
+			CertificateAttributesBuilder.$fillValuesFromInstanceIntoBuilder(instance, this);
+			return self();
+		}
+
+		public abstract C build();
+
+		public B commonName(String commonName)
+		{
+			this.commonName = commonName;
+			return self();
+		}
+
+		public B countryCode(String countryCode)
+		{
+			this.countryCode = countryCode;
+			return self();
+		}
+
+		public B location(String location)
+		{
+			this.location = location;
+			return self();
+		}
+
+		public B organisation(String organisation)
+		{
+			this.organisation = organisation;
+			return self();
+		}
+
+		public B organisationUnit(String organisationUnit)
+		{
+			this.organisationUnit = organisationUnit;
+			return self();
+		}
+
+		protected abstract B self();
+
+		public B state(String state)
+		{
+			this.state = state;
+			return self();
+		}
+
+		@Override
+		public String toString()
+		{
+			return "CertificateAttributes.CertificateAttributesBuilder(commonName="
+				+ this.commonName + ", organisation=" + this.organisation + ", organisationUnit="
+				+ this.organisationUnit + ", countryCode=" + this.countryCode + ", state="
+				+ this.state + ", location=" + this.location + ")";
+		}
+	}
+
+	private static final class CertificateAttributesBuilderImpl
+		extends
+			CertificateAttributesBuilder<CertificateAttributes, CertificateAttributesBuilderImpl>
+	{
+		private CertificateAttributesBuilderImpl()
+		{
+		}
+
+		@Override
+		public CertificateAttributes build()
+		{
+			return new CertificateAttributes(this);
+		}
+
+		@Override
+		protected CertificateAttributes.CertificateAttributesBuilderImpl self()
+		{
+			return this;
+		}
 	}
 }

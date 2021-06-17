@@ -51,6 +51,10 @@ public final class PublicKeyReader
 	/** The Constant END_PUBLIC_KEY_SUFFIX. */
 	public static final String END_PUBLIC_KEY_SUFFIX = "-----END PUBLIC KEY-----";
 
+	private PublicKeyReader()
+	{
+	}
+
 	/**
 	 * Read the public key from a pem file as base64 encoded {@link String} value.
 	 *
@@ -159,10 +163,6 @@ public final class PublicKeyReader
 	{
 		final byte[] keyBytes = Files.readAllBytes(file.toPath());
 		return readPublicKey(keyBytes);
-	}
-
-	private PublicKeyReader()
-	{
 	}
 
 }

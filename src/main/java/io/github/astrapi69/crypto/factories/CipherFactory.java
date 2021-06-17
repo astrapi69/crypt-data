@@ -49,6 +49,10 @@ import io.github.astrapi69.crypto.model.CryptModel;
 public final class CipherFactory
 {
 
+	private CipherFactory()
+	{
+	}
+
 	/**
 	 * Factory method for creating a new {@link Cipher} from the given parameters.
 	 *
@@ -264,10 +268,6 @@ public final class CipherFactory
 		final SecretKey key = factory.generateSecret(keySpec);
 		final PBEParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
 		return newCipher(operationMode, key, paramSpec, key.getAlgorithm());
-	}
-
-	private CipherFactory()
-	{
 	}
 
 }

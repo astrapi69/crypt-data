@@ -66,6 +66,10 @@ import io.github.astrapi69.crypto.provider.SecurityProvider;
 public final class EncryptedPrivateKeyReader
 {
 
+	private EncryptedPrivateKeyReader()
+	{
+	}
+
 	/**
 	 * Reads from the given {@link File} that contains the password protected {@link KeyPair} and
 	 * returns it
@@ -225,10 +229,6 @@ public final class EncryptedPrivateKeyReader
 				algorithm);
 		}
 		return privateKey;
-	}
-
-	private EncryptedPrivateKeyReader()
-	{
 	}
 
 }

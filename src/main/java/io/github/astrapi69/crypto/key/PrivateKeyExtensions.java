@@ -57,6 +57,12 @@ import io.github.astrapi69.crypto.key.reader.PemObjectReader;
 public final class PrivateKeyExtensions
 {
 
+	private PrivateKeyExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
+	}
+
 	/**
 	 * Transform the given byte array(of private key in PKCS#1 format) to a PEM formatted
 	 * {@link String}.
@@ -287,18 +293,12 @@ public final class PrivateKeyExtensions
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the {@link PrivateKey} in its primary encoding format, or null if this key does not
-	 * 	 * support encoding
+	 * @return the {@link PrivateKey} in its primary encoding format, or null if this key does not *
+	 *         support encoding
 	 */
 	public static byte[] getEncoded(final PrivateKey privateKey)
 	{
 		return privateKey.getEncoded();
-	}
-
-	private PrivateKeyExtensions()
-	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
 	}
 
 

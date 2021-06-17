@@ -31,76 +31,7 @@ import java.time.ZonedDateTime;
  **/
 public class Valitidy
 {
-	public static abstract class ValitidyBuilder<C extends Valitidy, B extends Valitidy.ValitidyBuilder<C, B>>
-	{
-		private static void $fillValuesFromInstanceIntoBuilder(Valitidy instance,
-			Valitidy.ValitidyBuilder<?, ?> b)
-		{
-			b.notBefore(instance.notBefore);
-			b.notAfter(instance.notAfter);
-		}
-
-		private ZonedDateTime notAfter;
-
-		private ZonedDateTime notBefore;
-
-		protected B $fillValuesFrom(C instance)
-		{
-			ValitidyBuilder.$fillValuesFromInstanceIntoBuilder(instance, this);
-			return self();
-		}
-
-		public abstract C build();
-
-		public B notAfter(ZonedDateTime notAfter)
-		{
-			this.notAfter = notAfter;
-			return self();
-		}
-
-		public B notBefore(ZonedDateTime notBefore)
-		{
-			this.notBefore = notBefore;
-			return self();
-		}
-
-		protected abstract B self();
-
-		@Override
-		public String toString()
-		{
-			return "Valitidy.ValitidyBuilder(notBefore=" + this.notBefore + ", notAfter="
-				+ this.notAfter + ")";
-		}
-	}
-	private static final class ValitidyBuilderImpl
-		extends
-			ValitidyBuilder<Valitidy, ValitidyBuilderImpl>
-	{
-		private ValitidyBuilderImpl()
-		{
-		}
-
-		@Override
-		public Valitidy build()
-		{
-			return new Valitidy(this);
-		}
-
-		@Override
-		protected Valitidy.ValitidyBuilderImpl self()
-		{
-			return this;
-		}
-	}
-
-	public static ValitidyBuilder<?, ?> builder()
-	{
-		return new ValitidyBuilderImpl();
-	}
-
 	private ZonedDateTime notAfter;
-
 	private ZonedDateTime notBefore;
 
 	public Valitidy()
@@ -117,6 +48,11 @@ public class Valitidy
 	{
 		this.notBefore = notBefore;
 		this.notAfter = notAfter;
+	}
+
+	public static ValitidyBuilder<?, ?> builder()
+	{
+		return new ValitidyBuilderImpl();
 	}
 
 	protected boolean canEqual(final Object other)
@@ -152,9 +88,19 @@ public class Valitidy
 		return this.notAfter;
 	}
 
+	public void setNotAfter(ZonedDateTime notAfter)
+	{
+		this.notAfter = notAfter;
+	}
+
 	public ZonedDateTime getNotBefore()
 	{
 		return this.notBefore;
+	}
+
+	public void setNotBefore(ZonedDateTime notBefore)
+	{
+		this.notBefore = notBefore;
 	}
 
 	@Override
@@ -169,16 +115,6 @@ public class Valitidy
 		return result;
 	}
 
-	public void setNotAfter(ZonedDateTime notAfter)
-	{
-		this.notAfter = notAfter;
-	}
-
-	public void setNotBefore(ZonedDateTime notBefore)
-	{
-		this.notBefore = notBefore;
-	}
-
 	public ValitidyBuilder<?, ?> toBuilder()
 	{
 		return new ValitidyBuilderImpl().$fillValuesFrom(this);
@@ -189,6 +125,69 @@ public class Valitidy
 	{
 		return "Valitidy(notBefore=" + this.getNotBefore() + ", notAfter=" + this.getNotAfter()
 			+ ")";
+	}
+
+	public static abstract class ValitidyBuilder<C extends Valitidy, B extends Valitidy.ValitidyBuilder<C, B>>
+	{
+		private ZonedDateTime notAfter;
+		private ZonedDateTime notBefore;
+
+		private static void $fillValuesFromInstanceIntoBuilder(Valitidy instance,
+			Valitidy.ValitidyBuilder<?, ?> b)
+		{
+			b.notBefore(instance.notBefore);
+			b.notAfter(instance.notAfter);
+		}
+
+		protected B $fillValuesFrom(C instance)
+		{
+			ValitidyBuilder.$fillValuesFromInstanceIntoBuilder(instance, this);
+			return self();
+		}
+
+		public abstract C build();
+
+		public B notAfter(ZonedDateTime notAfter)
+		{
+			this.notAfter = notAfter;
+			return self();
+		}
+
+		public B notBefore(ZonedDateTime notBefore)
+		{
+			this.notBefore = notBefore;
+			return self();
+		}
+
+		protected abstract B self();
+
+		@Override
+		public String toString()
+		{
+			return "Valitidy.ValitidyBuilder(notBefore=" + this.notBefore + ", notAfter="
+				+ this.notAfter + ")";
+		}
+	}
+
+	private static final class ValitidyBuilderImpl
+		extends
+			ValitidyBuilder<Valitidy, ValitidyBuilderImpl>
+	{
+		private ValitidyBuilderImpl()
+		{
+		}
+
+		@Override
+		public Valitidy build()
+		{
+			return new Valitidy(this);
+		}
+
+		@Override
+		protected Valitidy.ValitidyBuilderImpl self()
+		{
+			return this;
+		}
 	}
 }
 

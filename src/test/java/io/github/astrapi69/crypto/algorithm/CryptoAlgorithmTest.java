@@ -1,8 +1,9 @@
 package io.github.astrapi69.crypto.algorithm;
 
-import org.testng.annotations.Test;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 /**
  * Test class for the class {@link CryptoAlgorithm}
@@ -13,7 +14,8 @@ public class CryptoAlgorithmTest
 	/**
 	 * Test method for {@link CryptoAlgorithm#newAlgorithm(String)}
 	 */
-	@Test public void testNewAlgorithm()
+	@Test
+	public void testNewAlgorithm()
 	{
 		String algorithmName = "AES";
 		CryptoAlgorithm aes = (CryptoAlgorithm)CryptoAlgorithm.newAlgorithm(algorithmName);

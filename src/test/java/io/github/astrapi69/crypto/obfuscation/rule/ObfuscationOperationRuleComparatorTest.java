@@ -50,7 +50,6 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.util.Comparator;
 import java.util.Set;
 
-import io.github.astrapi69.crypto.obfuscation.rule.Operation;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.collections.set.SetFactory;

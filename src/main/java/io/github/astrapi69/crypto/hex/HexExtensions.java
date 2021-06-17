@@ -40,6 +40,10 @@ public final class HexExtensions
 	private static final char[] HEXADECIMAL_DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
 			'9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
+	private HexExtensions()
+	{
+	}
+
 	/**
 	 * Transform the given byte array that contains the binary data decoded to a String object. The
 	 * given byte array comes usually from the {@link HexExtensions#decodeHex(char[])} method.
@@ -210,10 +214,6 @@ public final class HexExtensions
 		final StringBuilder sb = new StringBuilder();
 		sb.append(HexExtensions.encodeHex(data, lowerCase));
 		return sb.toString();
-	}
-
-	private HexExtensions()
-	{
 	}
 
 }

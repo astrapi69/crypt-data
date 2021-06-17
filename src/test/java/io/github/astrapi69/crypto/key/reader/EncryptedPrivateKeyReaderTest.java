@@ -43,7 +43,6 @@ import javax.crypto.NoSuchPaddingException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMException;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -109,9 +108,8 @@ public class EncryptedPrivateKeyReaderTest
 	{
 		password = "secret";
 		byte[] bytes = ReadFileExtensions.readFileToBytearray(pwProtectedPrivateKeyFile);
-		pwProtectedPrivateKey = EncryptedPrivateKeyReader
-			.readPasswordProtectedPrivateKey(bytes, password,
-				KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		pwProtectedPrivateKey = EncryptedPrivateKeyReader.readPasswordProtectedPrivateKey(bytes,
+			password, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
 		assertNotNull(pwProtectedPrivateKey);
 	}
 
@@ -140,9 +138,8 @@ public class EncryptedPrivateKeyReaderTest
 		NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException
 	{
 		password = "secret";
-		pwProtectedPrivateKey = EncryptedPrivateKeyReader
-			.readPasswordProtectedPrivateKey(pwProtectedPrivateKeyFile, password,
-				KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		pwProtectedPrivateKey = EncryptedPrivateKeyReader.readPasswordProtectedPrivateKey(
+			pwProtectedPrivateKeyFile, password, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
 		assertNotNull(pwProtectedPrivateKey);
 	}
 

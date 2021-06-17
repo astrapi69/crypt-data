@@ -40,10 +40,9 @@ import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.file.search.PathFinder;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.key.PrivateKeyExtensions;
-import io.github.astrapi69.crypto.provider.SecurityProvider;
-import de.alpharogroup.file.search.PathFinder;
 
 /**
  * The unit test class for the class {@link PrivateKeyReader}

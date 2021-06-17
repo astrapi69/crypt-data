@@ -65,6 +65,10 @@ import io.github.astrapi69.crypto.factories.SecretKeyFactoryExtensions;
 public final class EncryptedPrivateKeyWriter
 {
 
+	private EncryptedPrivateKeyWriter()
+	{
+	}
+
 	/**
 	 * Encrypt the given {@link PrivateKey} with the given password and write the result to the
 	 * given {@link File}.
@@ -88,8 +92,8 @@ public final class EncryptedPrivateKeyWriter
 	 * @throws IllegalBlockSizeException
 	 *             the illegal block size exception
 	 * @throws BadPaddingException
-	 *              is thrown when a particular padding mechanism is expected for the input data but
-	 *              the data is not padded properly.
+	 *             is thrown when a particular padding mechanism is expected for the input data but
+	 *             the data is not padded properly.
 	 * @throws InvalidParameterSpecException
 	 *             the invalid parameter spec exception
 	 * @throws IOException
@@ -126,8 +130,8 @@ public final class EncryptedPrivateKeyWriter
 	 * @throws IllegalBlockSizeException
 	 *             the illegal block size exception
 	 * @throws BadPaddingException
-	 *              is thrown when a particular padding mechanism is expected for the input data but
-	 *              the data is not padded properly.
+	 *             is thrown when a particular padding mechanism is expected for the input data but
+	 *             the data is not padded properly.
 	 * @throws InvalidParameterSpecException
 	 *             the invalid parameter spec exception
 	 * @throws IOException
@@ -168,8 +172,8 @@ public final class EncryptedPrivateKeyWriter
 	 * @throws IllegalBlockSizeException
 	 *             the illegal block size exception
 	 * @throws BadPaddingException
-	 *              is thrown when a particular padding mechanism is expected for the input data but
-	 *              the data is not padded properly.
+	 *             is thrown when a particular padding mechanism is expected for the input data but
+	 *             the data is not padded properly.
 	 * @throws InvalidParameterSpecException
 	 *             the invalid parameter spec exception
 	 * @throws IOException
@@ -212,7 +216,7 @@ public final class EncryptedPrivateKeyWriter
 	 * Gets the private key from the given encrypted byte array with the given password. This method
 	 * is the counterpart of the method
 	 * {@link EncryptedPrivateKeyWriter#encryptPrivateKeyWithPassword(PrivateKey, String)}
-	 * 
+	 *
 	 * @param derEncodedPkcs8byteArray
 	 *            the DER encoded PKCS#8 encrypted key as byte array
 	 * @param password
@@ -247,10 +251,6 @@ public final class EncryptedPrivateKeyWriter
 		KeySpec pkcs8KeySpec = encryptPKInfo.getKeySpec(cipher);
 		KeyFactory kf = KeyFactory.getInstance(KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
 		return kf.generatePrivate(pkcs8KeySpec);
-	}
-
-	private EncryptedPrivateKeyWriter()
-	{
 	}
 
 }
