@@ -75,7 +75,9 @@ public class CryptModel<C, K, T> implements Serializable
 	/** The iteration count. */
 	Integer iterationCount;
 
-	/** The key. */
+	/**
+	 * The key. Can be a string like password or an object like public or private key
+	 */
 	K key;
 
 	/** The operation mode that indicates if an encryption or decryption process will start. */

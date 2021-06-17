@@ -16,7 +16,8 @@ ADDED:
 CHANGED:
 
 - update of gradle version to 6.9
-- update of dependency commons-io dependency version to 2.9.0
+- update of crypt-api dependency version to 7.5
+- update of dependency commons-io dependency version to 2.10.0
 - update of dependency guava version to 30.1.1-jre
 - update of test dependency test-objects version to 5.4
 
