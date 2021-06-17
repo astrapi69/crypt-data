@@ -221,7 +221,7 @@ public final class EncryptedPrivateKeyWriter
 	 *            the DER encoded PKCS#8 encrypted key as byte array
 	 * @param password
 	 *            the password
-	 * @return
+	 * @return the private key from the given encrypted byte array with the given password
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws NoSuchPaddingException
