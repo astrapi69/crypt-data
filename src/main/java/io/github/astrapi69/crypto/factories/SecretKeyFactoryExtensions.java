@@ -34,8 +34,8 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * The factory class {@link SecretKeyFactory} holds methods for creating {@link SecretKeySpec}
- * objects.
+ * The factory class {@link SecretKeyFactoryExtensions} holds methods for creating
+ * {@link SecretKeySpec} objects.
  */
 public final class SecretKeyFactoryExtensions
 {
@@ -116,11 +116,45 @@ public final class SecretKeyFactoryExtensions
 	public static SecretKeySpec newSecretKeySpec(final String algorithm, final int keyLength)
 		throws NoSuchAlgorithmException
 	{
-		final KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm);
-		keyGenerator.init(keyLength);
-		final SecretKey secretKey = keyGenerator.generateKey();
+		final SecretKey secretKey = newSecretKey(algorithm, keyLength);
 		final byte[] secretKeyEncoded = secretKey.getEncoded();
 		return newSecretKeySpec(secretKeyEncoded, algorithm);
 	}
 
+	/**
+	 * Factory method for creating a new symmetric {@link SecretKey} from the given algorithm and
+	 * the given key length.
+	 *
+	 * @param algorithm
+	 *            the algorithm
+	 * @param keyLength
+	 *            the key length
+	 * @return the new {@link SecretKey} from the given algorithm and the given key length.
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 */
+	public static SecretKey newSecretKey(final String algorithm, final int keyLength)
+		throws NoSuchAlgorithmException
+	{
+		final KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm);
+		keyGenerator.init(keyLength);
+		return keyGenerator.generateKey();
+	}
+	/**
+	 * Factory method for creating a new symmetric {@link SecretKey} from the given algorithm and
+	 * the given key length.
+	 *
+	 * @param decryptedKey
+	 *            the symmetric key as byte array
+	 * @param algorithm
+	 *            the algorithm
+	 * @return the new {@link SecretKey} from the given algorithm and the given key length.
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 */
+	public static SecretKey newSecretKey(byte[] decryptedKey, final String algorithm)
+		throws NoSuchAlgorithmException
+	{
+		return new SecretKeySpec(decryptedKey, 0, decryptedKey.length, algorithm);
+	}
 }
