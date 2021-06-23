@@ -6,7 +6,7 @@ Version 7.7-SNAPSHOT
 
 ADDED:
 
-- new factory class AesRsaCryptData for transfer object of crypt data 
+- new class AesRsaCryptModel for transfer of crypt data 
 - new factory methods for create symmetric keys
   
 CHANGED:
