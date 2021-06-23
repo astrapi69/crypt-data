@@ -40,9 +40,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.date.CalculateDateExtensions;
-import de.alpharogroup.file.search.PathFinder;
-import de.alpharogroup.random.number.RandomBigIntegerFactory;
+import io.github.astrapi69.date.CalculateDateExtensions;
+import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.random.number.RandomBigIntegerFactory;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
 
 /**

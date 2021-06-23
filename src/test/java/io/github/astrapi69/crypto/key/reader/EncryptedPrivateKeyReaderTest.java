@@ -46,8 +46,8 @@ import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.search.PathFinder;
+import io.github.astrapi69.read.ReadFileExtensions;
+import io.github.astrapi69.search.PathFinder;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 
 /**

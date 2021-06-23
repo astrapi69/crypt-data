@@ -40,8 +40,8 @@ import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.search.PathFinder;
+import io.github.astrapi69.delete.DeleteFileExtensions;
+import io.github.astrapi69.search.PathFinder;
 import de.alpharogroup.io.StreamExtensions;
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypto.algorithm.MdAlgorithm;

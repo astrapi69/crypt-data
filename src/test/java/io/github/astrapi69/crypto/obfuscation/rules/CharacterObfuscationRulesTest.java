@@ -38,8 +38,8 @@ import org.testng.annotations.Test;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import de.alpharogroup.evaluate.object.api.ContractViolation;
-import de.alpharogroup.evaluate.object.checkers.EqualsHashCodeAndToStringCheck;
+import io.github.astrapi69.evaluate.object.api.ContractViolation;
+import io.github.astrapi69.evaluate.object.checkers.EqualsHashCodeAndToStringCheck;
 
 /**
  * The class {@link CharacterObfuscationRules}

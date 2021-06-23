@@ -29,7 +29,7 @@ import static org.testng.AssertJUnit.assertNotNull;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.evaluate.object.verifier.ContractVerifier;
+import io.github.astrapi69.evaluate.object.verifier.ContractVerifier;
 
 /**
  * The unit test class for the class {@link ObfuscationRule}.

@@ -35,7 +35,7 @@ import javax.crypto.Cipher;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.search.PathFinder;
+import io.github.astrapi69.search.PathFinder;
 import io.github.astrapi69.crypto.algorithm.Algorithm;
 import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;

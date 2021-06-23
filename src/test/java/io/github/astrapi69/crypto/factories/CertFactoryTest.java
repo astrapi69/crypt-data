@@ -54,10 +54,10 @@ import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.search.PathFinder;
-import de.alpharogroup.lang.ClassExtensions;
-import de.alpharogroup.random.number.RandomBigIntegerFactory;
+import io.github.astrapi69.delete.DeleteFileExtensions;
+import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.lang.ClassExtensions;
+import io.github.astrapi69.random.number.RandomBigIntegerFactory;
 import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.algorithm.KeystoreType;

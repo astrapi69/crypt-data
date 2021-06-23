@@ -34,8 +34,8 @@ import java.util.Optional;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.evaluate.object.api.ContractViolation;
-import de.alpharogroup.evaluate.object.checkers.EqualsHashCodeAndToStringCheck;
+import io.github.astrapi69.evaluate.object.api.ContractViolation;
+import io.github.astrapi69.evaluate.object.checkers.EqualsHashCodeAndToStringCheck;
 
 /**
  * The unit test class for the class {@link ObfuscationRules}.

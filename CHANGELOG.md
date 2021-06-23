@@ -12,6 +12,12 @@ ADDED:
 CHANGED:
 
 - removed dependency com.rainerhahnekamp:sneakythrow
+- update of dependency file-worker to new version to 5.8
+- update of test dependency randomizer-core to new version to 8.2
+- update of test dependency randomizer-data to new version to 8.2
+- update of test dependency jobj-core to new version to 3.7
+- update of test dependency vintage-time to new version to 5.3
+- update of test dependency jobj-contract-verifier to new version to 3.4
 
 Version 7.6
 -------------

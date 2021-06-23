@@ -37,7 +37,7 @@ import org.testng.annotations.Test;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
+import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 
 /**
  * The unit test class for the class {@link ObfuscationBiMapRules}

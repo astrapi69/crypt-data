@@ -35,7 +35,7 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.search.PathFinder;
+import io.github.astrapi69.search.PathFinder;
 
 
 /**

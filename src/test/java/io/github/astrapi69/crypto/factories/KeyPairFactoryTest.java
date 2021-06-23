@@ -42,8 +42,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.search.PathFinder;
-import de.alpharogroup.random.SecureRandomBuilder;
+import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.random.SecureRandomBuilder;
 import io.github.astrapi69.crypto.algorithm.Algorithm;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.key.KeySize;
