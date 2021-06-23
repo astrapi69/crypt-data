@@ -8,6 +8,10 @@ ADDED:
 
 - new factory class AesRsaCryptData for transfer object of crypt data 
 - new factory methods for create symmetric keys
+  
+CHANGED:
+
+- removed dependency com.rainerhahnekamp:sneakythrow
 
 Version 7.6
 -------------
