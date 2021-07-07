@@ -42,7 +42,7 @@ import org.testng.annotations.Test;
 
 import io.github.astrapi69.delete.DeleteFileExtensions;
 import io.github.astrapi69.search.PathFinder;
-import de.alpharogroup.io.StreamExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypto.algorithm.MdAlgorithm;
 import io.github.astrapi69.crypto.key.KeyFileFormat;

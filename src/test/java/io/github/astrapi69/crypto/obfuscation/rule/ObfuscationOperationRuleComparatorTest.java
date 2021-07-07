@@ -52,7 +52,7 @@ import java.util.Set;
 
 import org.testng.annotations.Test;
 
-import de.alpharogroup.collections.set.SetFactory;
+import io.github.astrapi69.collections.set.SetFactory;
 
 /**
  * The unit test class for the class {@link ObfuscationOperationRuleComparator}.

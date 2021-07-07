@@ -1,6 +1,6 @@
 # Overview
 
-<div align="center">
+<div style="text-align: center">
 
 [![Build Status](https://api.travis-ci.com/astrapi69/crypt-data.svg?branch=develop)](https://travis-ci.com/github/astrapi69/crypt-data) 
 [![Coverage Status](https://codecov.io/gh/astrapi69/crypt-data/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/crypt-data)
@@ -70,7 +70,7 @@ alt="Donation Monero Wallet" width="250"/>
 or over flattr:
   
 <a href="http://flattr.com/thing/4067696/astrapi69crypt-data-on-GitHub" target="_blank">
-<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />
+<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" style="border: none" />
 </a>
 
 ## Note

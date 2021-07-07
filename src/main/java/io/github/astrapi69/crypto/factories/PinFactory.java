@@ -30,7 +30,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import lombok.NonNull;
-import de.alpharogroup.collections.list.ListFactory;
+import io.github.astrapi69.collections.list.ListFactory;
 
 /**
  * The factory class {@link PinFactory} holds methods for creating list of possible pins

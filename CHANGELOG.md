@@ -4,6 +4,18 @@
 Version 7.8-SNAPSHOT
 -------------
 
+ADDED:
+
+- new dependency silly-collections in version 8.7
+  
+  CHANGED:
+
+- update gradle to new version 7.1
+- changed all dependencies from groupid de.alpharogroup to new groupid io.github.astrapi69
+- update gradle-plugin dependency of gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin to new version 0.16.1
+- update of dependency silly-strings to new version to 5.6
+- update of test dependency silly-io to new version to 1.4
+
 Version 7.7
 -------------
 

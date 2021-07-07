@@ -35,7 +35,7 @@ import java.util.Objects;
 
 import org.apache.commons.codec.binary.Base64;
 
-import de.alpharogroup.string.StringExtensions;
+import io.github.astrapi69.string.StringExtensions;
 import io.github.astrapi69.crypto.hex.HexExtensions;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypto.key.writer.PublicKeyWriter;
