@@ -34,6 +34,7 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 
+import io.github.astrapi69.crypto.key.KeyFileFormat;
 import org.apache.commons.codec.binary.Base64;
 
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
@@ -79,11 +80,33 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Checks if the given {@link File}( in *.der format) is password protected
+	 * Resolves the format of the given {@link File}.
 	 *
 	 * @param file
-	 *            the file( in *.der format) that contains the private key
-	 * @return true, if if the given {@link File}( in *.der format) is password protected otherwise
+	 *            the file
+	 * @return true, if the given {@link File} is in pem format otherwise false
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static KeyFileFormat getKeyFormat(final File file) throws IOException
+	{
+//		if(validatePrivateKey(file))
+//		{
+//			return KeyFileFormat.UNKNOWN;
+//		}
+		if(isPemFormat(file)) {
+			return KeyFileFormat.PEM;
+		}
+		return KeyFileFormat.DER;
+	}
+
+	/**
+	 * Checks if the given {@link File} is password protected
+	 *
+	 * @param file
+	 *            the file that contains the private key
+	 * @return true, if if the given {@link File} is password protected otherwise
 	 *         false
 	 *
 	 * @throws IOException
@@ -114,9 +137,46 @@ public final class PrivateKeyReader
 				result = true;
 			}
 		}
-
-
 		return result;
+	}
+
+	/**
+	 * Checks if the given {@link File} is a valid private key file
+	 *
+	 * @param file
+	 *            the file to check
+	 * @return true, if if the given {@link File}(is a valid private key file otherwise
+	 *         false
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static boolean validatePrivateKey(final File file) throws IOException
+	{
+		boolean valid = true;
+		if (isPemFormat(file))
+		{
+			try
+			{
+				readPemPrivateKey(file);
+			}
+			catch (Exception e)
+			{
+				valid = false;
+			}
+		}
+		else
+		{
+			try
+			{
+				readPrivateKey(file);
+			}
+			catch (Exception e)
+			{
+				valid = false;
+			}
+		}
+		return valid;
 	}
 
 	/**

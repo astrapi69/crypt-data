@@ -24,6 +24,7 @@
  */
 package io.github.astrapi69.crypto.key;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.KeyFactory;
@@ -39,6 +40,7 @@ import java.security.spec.RSAPublicKeySpec;
 
 import javax.xml.bind.DatatypeConverter;
 
+import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Primitive;
@@ -62,6 +64,7 @@ public final class PrivateKeyExtensions
 		throw new UnsupportedOperationException(
 			"This is a utility class and cannot be instantiated");
 	}
+
 
 	/**
 	 * Transform the given byte array(of private key in PKCS#1 format) to a PEM formatted

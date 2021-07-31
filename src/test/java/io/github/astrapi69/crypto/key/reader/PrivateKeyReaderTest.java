@@ -138,6 +138,47 @@ public class PrivateKeyReaderTest
 		assertEquals(actual, expected);
 	}
 
+
+	/**
+	 * Test method for {@link PrivateKeyReader#validatePrivateKey(File)}
+	 */
+	@Test
+	public void testValidatePrivateKey() throws Exception
+	{
+		boolean actual;
+		boolean expected;
+		PrivateKey passwordProtectedPrivateKey;
+		// new scenario
+		actual = PrivateKeyReader.validatePrivateKey(privateKeyDerFile);
+		expected = true;
+		assertEquals(actual, expected);
+		// new scenario
+		// check if the pk is pwp...
+		passwordProtectedPrivateKey = EncryptedPrivateKeyReader
+			.readPasswordProtectedPrivateKey(passwordProtectedPrivateKeyDerFile, "secret");
+
+		assertNotNull(passwordProtectedPrivateKey);
+
+		actual = PrivateKeyReader.validatePrivateKey(passwordProtectedPrivateKeyDerFile);
+		expected = false;
+		assertEquals(actual, expected);
+
+		// new scenario
+		passwordProtectedPrivateKey = EncryptedPrivateKeyReader
+			.readPasswordProtectedPrivateKey(passwordProtectedPrivateKeyPemFile, "secret");
+
+		assertNotNull(passwordProtectedPrivateKey);
+
+		actual = PrivateKeyReader.validatePrivateKey(passwordProtectedPrivateKeyDerFile);
+		expected = false;
+		assertEquals(actual, expected);
+
+		// new scenario
+		actual = PrivateKeyReader.validatePrivateKey(privateKeyPemFile);
+		expected = true;
+		assertEquals(actual, expected);
+	}
+
 	/**
 	 * Test method for {@link PrivateKeyReader#readPrivateKey(File)}
 	 *

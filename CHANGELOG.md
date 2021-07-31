@@ -7,8 +7,9 @@ Version 7.8-SNAPSHOT
 ADDED:
 
 - new dependency silly-collections in version 8.7
+- new method for get the format of the key file
   
-  CHANGED:
+CHANGED:
 
 - update gradle to new version 7.1
 - changed all dependencies from groupid de.alpharogroup to new groupid io.github.astrapi69
