@@ -8,6 +8,7 @@ ADDED:
 
 - new dependency silly-collections in version 8.7
 - new method for get the format of the key file
+- new factory method for creation of pbe cipher
   
 CHANGED:
 
@@ -16,6 +17,7 @@ CHANGED:
 - update gradle-plugin dependency of gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin to new version 0.16.1
 - update of dependency silly-strings to new version to 5.6
 - update of test dependency silly-io to new version to 1.4
+- update of dependency commons-io dependency version to 2.11.0
 
 Version 7.7
 -------------

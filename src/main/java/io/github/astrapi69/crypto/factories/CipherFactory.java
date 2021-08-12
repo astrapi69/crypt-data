@@ -32,6 +32,7 @@ import java.security.NoSuchProviderException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.text.Normalizer;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -268,6 +269,45 @@ public final class CipherFactory
 		final SecretKey key = factory.generateSecret(keySpec);
 		final PBEParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
 		return newCipher(operationMode, key, paramSpec, key.getAlgorithm());
+	}
+	
+	/**
+	 * Factory method for creating a new PBE {@link Cipher} from the given parameters.
+	 *
+	 * @param password
+	 *            the password
+	 * @param algorithm
+	 *            the algorithm
+	 * @param salt
+	 *            the salt
+	 * @param iterationCount
+	 *            the iteration count
+	 * @param operationMode
+	 *            the operation mode for the new cipher object
+	 * @return the cipher
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchPaddingException
+	 *             is thrown if instantiation of the cipher object fails.
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails.
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails.
+	 * @throws UnsupportedEncodingException
+	 *             is thrown if the named charset is not supported.
+	 */
+	public static Cipher newPBECipher(final String privateKey, final String algorithm, final byte[] salt,
+		final int iterationCount, final int operationMode)
+		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
+		InvalidKeyException, InvalidAlgorithmParameterException, UnsupportedEncodingException
+	{
+		String normalizedPassword = Normalizer.normalize(privateKey, Normalizer.Form.NFC);
+		final Cipher cipher = CipherFactory.newPBECipher(normalizedPassword.toCharArray(),
+			operationMode, algorithm, salt, iterationCount);
+		return cipher;
 	}
 
 }
