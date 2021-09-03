@@ -39,17 +39,42 @@ public enum KeyStringEntry
 {
 	/** The prefix for the begin of a private key */
 	BEGIN_PRIVATE_KEY_PREFIX("-----BEGIN PRIVATE KEY-----"),
+	/** The prefix for the begin of a public key */
+	BEGIN_PUBLIC_KEY_PREFIX("-----BEGIN PUBLIC KEY-----"),
 	/** The prefix for the begin of a rsa private key */
 	BEGIN_RSA_PRIVATE_KEY_PREFIX("-----BEGIN " + KeyStringEntry.RSA_PRIVATE_KEY_NAME + "-----\n"),
+	/** The prefix for the begin of a rsa public key */
+	BEGIN_RSA_PUBLIC_KEY_PREFIX("-----BEGIN " + KeyStringEntry.RSA_PUBLIC_KEY_NAME + "-----\n"),
 	/** The suffix for the begin of a private key */
 	END_PRIVATE_KEY_SUFFIX("-----END PRIVATE KEY-----"),
+	/** The suffix for the begin of a public key */
+	END_PUBLIC_KEY_SUFFIX("-----END PUBLIC KEY-----"),
 	/** The suffix for the begin of a rsa private key */
 	END_RSA_PRIVATE_KEY_SUFFIX("\n-----END " + KeyStringEntry.RSA_PRIVATE_KEY_NAME + "-----"),
+	/** The suffix for the begin of a rsa private key */
+	END_RSA_PUBLIC_KEY_SUFFIX("\n-----END " + KeyStringEntry.RSA_PUBLIC_KEY_NAME + "-----"),
 	/** The prefix for the begin of a rsa private key */
 	RSA_PRIVATE_KEY(KeyStringEntry.RSA_PRIVATE_KEY_NAME);
 
-	/** The Constant RSA_PRIVATE_KEY. */
-	private static final String RSA_PRIVATE_KEY_NAME = "RSA PRIVATE KEY";
+	/** The Constant RSA_PRIVATE_KEY_NAME. */
+	private static final String PRIVATE_KEY_NAME = "PRIVATE KEY";
+	/** The Constant RSA_PUBLIC_KEY_NAME. */
+	private static final String PUBLIC_KEY_NAME = "PUBLIC KEY";
+	/** The Constant RSA_PRIVATE_KEY_NAME. */
+	private static final String RSA_PRIVATE_KEY_NAME = "RSA " +	PRIVATE_KEY_NAME;
+	/** The Constant RSA_PUBLIC_KEY_NAME. */
+	private static final String RSA_PUBLIC_KEY_NAME = "RSA " + PUBLIC_KEY_NAME;
+	/** The Constant PKCS7_KEY_NAME. */
+	private static final String PKCS7_KEY_NAME = "PKCS7";
+	/** The Constant DSA_PRIVATE_KEY_NAME. */
+	private static final String DSA_PRIVATE_KEY_NAME = "DSA " +	PRIVATE_KEY_NAME;
+	/** The Constant EC_PRIVATE_KEY_NAME. */
+	private static final String EC_PRIVATE_KEY_NAME = "EC " +	PRIVATE_KEY_NAME;
+	/** The Constant PGP_PRIVATE_KEY_NAME. */
+	private static final String PGP_PRIVATE_KEY_NAME = "PGP " + PRIVATE_KEY_NAME + " BLOCK";
+	/** The Constant PGP_PRIVATE_KEY_NAME. */
+	private static final String PGP_PUBLIC_KEY_NAME = "PGP " + PUBLIC_KEY_NAME + " BLOCK";
+
 	/** The value the PEM entry */
 	String value;
 }

@@ -91,10 +91,10 @@ public final class PrivateKeyReader
 	 */
 	public static KeyFileFormat getKeyFormat(final File file) throws IOException
 	{
-//		if(validatePrivateKey(file))
-//		{
-//			return KeyFileFormat.UNKNOWN;
-//		}
+		if(!validatePrivateKey(file))
+		{
+			return KeyFileFormat.UNKNOWN;
+		}
 		if(isPemFormat(file)) {
 			return KeyFileFormat.PEM;
 		}
@@ -114,7 +114,7 @@ public final class PrivateKeyReader
 	 */
 	public static boolean isPrivateKeyPasswordProtected(final File file) throws IOException
 	{
-		boolean result = false;
+		boolean passwordProtected = false;
 		if (isPemFormat(file))
 		{
 			try
@@ -123,7 +123,7 @@ public final class PrivateKeyReader
 			}
 			catch (Exception e)
 			{
-				result = true;
+				passwordProtected = true;
 			}
 		}
 		else
@@ -134,10 +134,10 @@ public final class PrivateKeyReader
 			}
 			catch (Exception e)
 			{
-				result = true;
+				passwordProtected = true;
 			}
 		}
-		return result;
+		return passwordProtected;
 	}
 
 	/**

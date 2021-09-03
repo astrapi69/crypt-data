@@ -35,6 +35,7 @@ import java.security.PrivateKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 
+import io.github.astrapi69.crypto.key.KeyFileFormat;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
@@ -57,6 +58,8 @@ public class PrivateKeyReaderTest
 	File passwordProtectedPrivateKeyPemFile;
 	File pemDir;
 
+	File encryptedPrivateKeyFile;
+
 	File privateKeyDerFile;
 	File privateKeyPemFile;
 	File privateKeyPemFile2;
@@ -77,6 +80,37 @@ public class PrivateKeyReaderTest
 		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
 		privateKeyDerFile = new File(derDir, "private.der");
 		passwordProtectedPrivateKeyDerFile = new File(derDir, "pwp-private-key-pw-is-secret.der");
+
+
+		encryptedPrivateKeyFile = new File(pemDir, "test.key");
+	}
+
+
+	/**
+	 * Test method for {@link PrivateKeyReader#getKeyFormat(File)}
+	 */
+	@Test
+	public void testGetKeyFormat() throws IOException
+	{
+		KeyFileFormat actual;
+		KeyFileFormat expected;
+
+		actual = PrivateKeyReader.getKeyFormat(privateKeyDerFile);
+		expected = KeyFileFormat.DER;
+		assertEquals(actual, expected);
+
+		actual = PrivateKeyReader.getKeyFormat(privateKeyPemFile);
+		expected = KeyFileFormat.PEM;
+		assertEquals(actual, expected);
+
+		actual = PrivateKeyReader.getKeyFormat(privateKeyPemFile2);
+		expected = KeyFileFormat.PEM;
+		assertEquals(actual, expected);
+
+		actual = PrivateKeyReader.getKeyFormat(encryptedPrivateKeyFile);
+		expected = KeyFileFormat.UNKNOWN;
+		assertEquals(actual, expected);
+
 	}
 
 	/**
