@@ -103,19 +103,19 @@ public enum KeyStringEntry
 	/** The Constant PEM_KEY_PREFIX. */
 	private static final String PEM_KEY_NAME_SUFFIX = FIVE_HYPHENS + "\n";
 	/** The Constant RSA_PRIVATE_KEY_NAME. */
-	private static final String PRIVATE_KEY_NAME = "PRIVATE KEY";
+	public static final String PRIVATE_KEY_NAME = "PRIVATE KEY";
 	/** The Constant RSA_PUBLIC_KEY_NAME. */
-	private static final String PUBLIC_KEY_NAME = "PUBLIC KEY";
+	public static final String PUBLIC_KEY_NAME = "PUBLIC KEY";
 	/** The Constant RSA_PRIVATE_KEY_NAME. */
-	private static final String RSA_PRIVATE_KEY_NAME = "RSA " +	PRIVATE_KEY_NAME;
+	public static final String RSA_PRIVATE_KEY_NAME = "RSA " +	PRIVATE_KEY_NAME;
 	/** The Constant RSA_PUBLIC_KEY_NAME. */
-	private static final String RSA_PUBLIC_KEY_NAME = "RSA " + PUBLIC_KEY_NAME;
+	public static final String RSA_PUBLIC_KEY_NAME = "RSA " + PUBLIC_KEY_NAME;
 	/** The Constant PKCS7_KEY_NAME. */
-	private static final String PKCS7_KEY_NAME = "PKCS7";
+	public static final String PKCS7_KEY_NAME = "PKCS7";
 	/** The Constant DSA_PRIVATE_KEY_NAME. */
-	private static final String DSA_PRIVATE_KEY_NAME = "DSA " +	PRIVATE_KEY_NAME;
+	public static final String DSA_PRIVATE_KEY_NAME = "DSA " +	PRIVATE_KEY_NAME;
 	/** The Constant EC_PRIVATE_KEY_NAME. */
-	private static final String EC_PRIVATE_KEY_NAME = "EC " +	PRIVATE_KEY_NAME;
+	public static final String EC_PRIVATE_KEY_NAME = "EC " +	PRIVATE_KEY_NAME;
 	/** The Constant PGP_PRIVATE_KEY_NAME. */
 	private static final String PGP_PRIVATE_KEY_NAME = "PGP " + PRIVATE_KEY_NAME + " BLOCK";
 	/** The Constant PGP_PRIVATE_KEY_NAME. */

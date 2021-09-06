@@ -58,13 +58,35 @@ public class PemObjectReaderTest
 		File privatekeyPemDir;
 		File privatekeyPemFile;
 		PemObject pemObject;
+		File rsaPublickeyFile;
+		File dsaPPPrivatekeyFile;
+		File crlCertFile;
 		// new scenario...
 		privatekeyPemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 		privatekeyPemFile = new File(privatekeyPemDir, "private.pem");
 
 		pemObject = PemObjectReader.getPemObject(privatekeyPemFile);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.RSA_PRIVATE_KEY.getValue();
+		expected = KeyStringEntry.RSA_PRIVATE_KEY_NAME;
+		assertEquals(expected, actual);
+
+		// new scenario...
+		rsaPublickeyFile = new File(privatekeyPemDir, "rsa-public-key.pem");
+		pemObject = PemObjectReader.getPemObject(rsaPublickeyFile);
+		actual = pemObject.getType();
+		expected = KeyStringEntry.RSA_PUBLIC_KEY_NAME;
+		assertEquals(expected, actual);
+		// new scenario...
+		dsaPPPrivatekeyFile = new File(privatekeyPemDir, "dsa-pwp-pk-pw-is-123456.pem");
+		pemObject = PemObjectReader.getPemObject(dsaPPPrivatekeyFile);
+		actual = pemObject.getType();
+		expected = KeyStringEntry.DSA_PRIVATE_KEY_NAME;
+		assertEquals(expected, actual);
+		// new scenario...
+		crlCertFile = new File(privatekeyPemDir, "crl-cert.pem");
+		pemObject = PemObjectReader.getPemObject(crlCertFile);
+		actual = pemObject.getType();
+		expected = "X509 CRL";
 		assertEquals(expected, actual);
 
 	}
@@ -82,9 +104,11 @@ public class PemObjectReaderTest
 		File privatekeyPemDir;
 		File privatekeyPemFile;
 		PrivateKey privateKey;
+		File rsaPublickeyFile;
 		// new scenario...
 		privatekeyPemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 		privatekeyPemFile = new File(privatekeyPemDir, "id_rsa");
+		rsaPublickeyFile = new File(privatekeyPemDir, "rsa-public-key.pem");
 
 		privateKey = PemObjectReader.readPemPrivateKey(privatekeyPemFile, "secret");
 		assertNotNull(privateKey);
