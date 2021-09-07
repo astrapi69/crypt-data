@@ -56,25 +56,43 @@ public class PemObjectReaderTest
 		String actual;
 		String expected;
 		File privatekeyPemDir;
-		File privatekeyPemFile;
+		File rsaPrivatekeyPemFile;
+		File privatekey2PemFile;
 		PemObject pemObject;
 		File rsaPublickeyFile;
+		File publickeyFile;
 		File dsaPPPrivatekeyFile;
+		File rsaPPPrivatekeyFile;
 		File crlCertFile;
-		// new scenario...
+		File crtCertFile;
+		File csrCertFile;
+		File newCsrCertFile;
+		File pkcs7File;
 		privatekeyPemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
-		privatekeyPemFile = new File(privatekeyPemDir, "private.pem");
 
-		pemObject = PemObjectReader.getPemObject(privatekeyPemFile);
+		// new scenario...
+		rsaPrivatekeyPemFile = new File(privatekeyPemDir, "private.pem");
+		pemObject = PemObjectReader.getPemObject(rsaPrivatekeyPemFile);
 		actual = pemObject.getType();
 		expected = KeyStringEntry.RSA_PRIVATE_KEY_NAME;
 		assertEquals(expected, actual);
-
+		// new scenario...
+		privatekey2PemFile = new File(privatekeyPemDir, "private2.pem");
+		pemObject = PemObjectReader.getPemObject(privatekey2PemFile);
+		actual = pemObject.getType();
+		expected = KeyStringEntry.PRIVATE_KEY_NAME;
+		assertEquals(expected, actual);
 		// new scenario...
 		rsaPublickeyFile = new File(privatekeyPemDir, "rsa-public-key.pem");
 		pemObject = PemObjectReader.getPemObject(rsaPublickeyFile);
 		actual = pemObject.getType();
 		expected = KeyStringEntry.RSA_PUBLIC_KEY_NAME;
+		assertEquals(expected, actual);
+		// new scenario...
+		publickeyFile = new File(privatekeyPemDir, "public.pem");
+		pemObject = PemObjectReader.getPemObject(publickeyFile);
+		actual = pemObject.getType();
+		expected = KeyStringEntry.PUBLIC_KEY_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
 		dsaPPPrivatekeyFile = new File(privatekeyPemDir, "dsa-pwp-pk-pw-is-123456.pem");
@@ -83,10 +101,40 @@ public class PemObjectReaderTest
 		expected = KeyStringEntry.DSA_PRIVATE_KEY_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
+		rsaPPPrivatekeyFile = new File(privatekeyPemDir, "rsa-pwp-pk-pw-is-123456.pem");
+		pemObject = PemObjectReader.getPemObject(rsaPPPrivatekeyFile);
+		actual = pemObject.getType();
+		expected = KeyStringEntry.RSA_PRIVATE_KEY_NAME;
+		assertEquals(expected, actual);
+		// new scenario...
 		crlCertFile = new File(privatekeyPemDir, "crl-cert.pem");
 		pemObject = PemObjectReader.getPemObject(crlCertFile);
 		actual = pemObject.getType();
-		expected = "X509 CRL";
+		expected = KeyStringEntry.X509_CRL_NAME;
+		assertEquals(expected, actual);
+		// new scenario...
+		crtCertFile = new File(privatekeyPemDir, "certificate.pem");
+		pemObject = PemObjectReader.getPemObject(crtCertFile);
+		actual = pemObject.getType();
+		expected = KeyStringEntry.CERTIFICATE_NAME;
+		assertEquals(expected, actual);
+		// new scenario...
+		csrCertFile = new File(privatekeyPemDir, "csr-cert.pem");
+		pemObject = PemObjectReader.getPemObject(csrCertFile);
+		actual = pemObject.getType();
+		expected = KeyStringEntry.CERTIFICATE_REQUEST_NAME;
+		assertEquals(expected, actual);
+		// new scenario...
+		newCsrCertFile = new File(privatekeyPemDir, "new-csr-cert.pem");
+		pemObject = PemObjectReader.getPemObject(newCsrCertFile);
+		actual = pemObject.getType();
+		expected = KeyStringEntry.NEW_CERTIFICATE_REQUEST_NAME;
+		assertEquals(expected, actual);
+		// new scenario...
+		pkcs7File = new File(privatekeyPemDir, "pkcs7.pem");
+		pemObject = PemObjectReader.getPemObject(pkcs7File);
+		actual = pemObject.getType();
+		expected = KeyStringEntry.PKCS7_KEY_NAME;
 		assertEquals(expected, actual);
 
 	}
@@ -104,11 +152,9 @@ public class PemObjectReaderTest
 		File privatekeyPemDir;
 		File privatekeyPemFile;
 		PrivateKey privateKey;
-		File rsaPublickeyFile;
 		// new scenario...
 		privatekeyPemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 		privatekeyPemFile = new File(privatekeyPemDir, "id_rsa");
-		rsaPublickeyFile = new File(privatekeyPemDir, "rsa-public-key.pem");
 
 		privateKey = PemObjectReader.readPemPrivateKey(privatekeyPemFile, "secret");
 		assertNotNull(privateKey);

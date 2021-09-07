@@ -18,8 +18,12 @@ CHANGED:
 - changed all dependencies from groupid de.alpharogroup to new groupid io.github.astrapi69
 - update gradle-plugin dependency of gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin to new version 0.16.1
 - update of dependency silly-strings to new version to 5.6
-- update of test dependency silly-io to new version to 1.4
 - update of dependency commons-io dependency version to 2.11.0
+- update of test dependency silly-io to new version to 1.6
+- update of test dependency test-objects to new version to 5.5
+- update of test dependency jobj-core to new version to 3.9
+- update of test dependency randomizer-core to new version to 8.3
+- update of test dependency randomizer-data to new version to 8.3
 
 Version 7.7
 -------------

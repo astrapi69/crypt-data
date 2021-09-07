@@ -106,12 +106,20 @@ public enum KeyStringEntry
 	public static final String PRIVATE_KEY_NAME = "PRIVATE KEY";
 	/** The Constant RSA_PUBLIC_KEY_NAME. */
 	public static final String PUBLIC_KEY_NAME = "PUBLIC KEY";
+	/** The Constant PKCS7_KEY_NAME. */
+	public static final String PKCS7_KEY_NAME = "PKCS7";
+	/** The Constant X509_CRL_NAME. */
+	public static final String X509_CRL_NAME = "X509 CRL";
+	/** The Constant CERTIFICATE_NAME. */
+	public static final String CERTIFICATE_NAME = "CERTIFICATE";
+	/** The Constant CERTIFICATE_REQUEST_NAME. */
+	public static final String CERTIFICATE_REQUEST_NAME = CERTIFICATE_NAME + " REQUEST";
+	/** The Constant NEW_CERTIFICATE_REQUEST_NAME. */
+	public static final String NEW_CERTIFICATE_REQUEST_NAME = "NEW " + CERTIFICATE_REQUEST_NAME;
 	/** The Constant RSA_PRIVATE_KEY_NAME. */
 	public static final String RSA_PRIVATE_KEY_NAME = "RSA " +	PRIVATE_KEY_NAME;
 	/** The Constant RSA_PUBLIC_KEY_NAME. */
 	public static final String RSA_PUBLIC_KEY_NAME = "RSA " + PUBLIC_KEY_NAME;
-	/** The Constant PKCS7_KEY_NAME. */
-	public static final String PKCS7_KEY_NAME = "PKCS7";
 	/** The Constant DSA_PRIVATE_KEY_NAME. */
 	public static final String DSA_PRIVATE_KEY_NAME = "DSA " +	PRIVATE_KEY_NAME;
 	/** The Constant EC_PRIVATE_KEY_NAME. */
