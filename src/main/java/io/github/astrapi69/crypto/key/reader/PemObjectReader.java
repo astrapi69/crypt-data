@@ -75,6 +75,20 @@ public final class PemObjectReader
 	}
 
 	/**
+	 * Checks if the given File contains a pem object
+	 *
+	 * @param file
+	 *            the file
+	 * @return true if the file contains a pem object otherwise false
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static boolean isPemObject(final File file) throws IOException
+	{
+		return getPemObject(file) != null;
+	}
+
+	/**
 	 * Reads the given {@link File}( in *.pem format) that contains a password protected private
 	 * key.
 	 *
@@ -121,4 +135,17 @@ public final class PemObjectReader
 		final String pemString = stringWriter.toString();
 		return pemString;
 	}
+
+	/**
+	 * Transform the given {@link PemObject} object in to a byte array in the der format.
+	 *
+	 * @param pemObject
+	 *            the pem object
+	 * @return the byte array in the der format
+	 */
+	public static byte[] toDer(final PemObject pemObject)
+	{
+		return pemObject.getContent();
+	}
+
 }

@@ -26,6 +26,8 @@ package io.github.astrapi69.crypto.key.reader;
 
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertNull;
+import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +35,7 @@ import java.security.PrivateKey;
 
 import org.bouncycastle.util.io.pem.PemObject;
 import org.meanbean.test.BeanTester;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import io.github.astrapi69.search.PathFinder;
@@ -43,6 +46,37 @@ import io.github.astrapi69.search.PathFinder;
  */
 public class PemObjectReaderTest
 {
+
+	File pemDir;
+	File derDir;
+	File privateKeyDerFile;
+	PemObject pemObject;
+
+	/**
+	 * Sets up method will be invoked before every unit test method in this class
+	 */
+	@BeforeMethod
+	protected void setUp()
+	{
+		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
+		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
+		privateKeyDerFile = new File(derDir, "private.der");
+	}
+
+	/**
+	 * Test method for {@link PemObjectReader#getPemObject(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testGetPemObjectOnDerFile() throws IOException
+	{
+		pemObject = PemObjectReader.getPemObject(privateKeyDerFile);
+		assertNull(pemObject);
+		pemObject = PemObjectReader.getPemObject(new File(pemDir, "test.txt"));
+		assertNull(pemObject);
+	}
 
 	/**
 	 * Test method for {@link PemObjectReader#getPemObject(File)}
@@ -55,10 +89,8 @@ public class PemObjectReaderTest
 	{
 		String actual;
 		String expected;
-		File privatekeyPemDir;
 		File rsaPrivatekeyPemFile;
 		File privatekey2PemFile;
-		PemObject pemObject;
 		File rsaPublickeyFile;
 		File publickeyFile;
 		File dsaPPPrivatekeyFile;
@@ -68,75 +100,75 @@ public class PemObjectReaderTest
 		File csrCertFile;
 		File newCsrCertFile;
 		File pkcs7File;
-		privatekeyPemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 
 		// new scenario...
-		rsaPrivatekeyPemFile = new File(privatekeyPemDir, "private.pem");
+		rsaPrivatekeyPemFile = new File(pemDir, "private.pem");
+		assertTrue(PemObjectReader.isPemObject(rsaPrivatekeyPemFile));
 		pemObject = PemObjectReader.getPemObject(rsaPrivatekeyPemFile);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.RSA_PRIVATE_KEY_NAME;
+		expected = PemType.RSA_PRIVATE_KEY_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
-		privatekey2PemFile = new File(privatekeyPemDir, "private2.pem");
+		privatekey2PemFile = new File(pemDir, "private2.pem");
+		assertTrue(PemObjectReader.isPemObject(privatekey2PemFile));
 		pemObject = PemObjectReader.getPemObject(privatekey2PemFile);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.PRIVATE_KEY_NAME;
+		expected = PemType.PRIVATE_KEY_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
-		rsaPublickeyFile = new File(privatekeyPemDir, "rsa-public-key.pem");
+		rsaPublickeyFile = new File(pemDir, "rsa-public-key.pem");
 		pemObject = PemObjectReader.getPemObject(rsaPublickeyFile);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.RSA_PUBLIC_KEY_NAME;
+		expected = PemType.RSA_PUBLIC_KEY_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
-		publickeyFile = new File(privatekeyPemDir, "public.pem");
+		publickeyFile = new File(pemDir, "public.pem");
 		pemObject = PemObjectReader.getPemObject(publickeyFile);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.PUBLIC_KEY_NAME;
+		expected = PemType.PUBLIC_KEY_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
-		dsaPPPrivatekeyFile = new File(privatekeyPemDir, "dsa-pwp-pk-pw-is-123456.pem");
+		dsaPPPrivatekeyFile = new File(pemDir, "dsa-pwp-pk-pw-is-123456.pem");
 		pemObject = PemObjectReader.getPemObject(dsaPPPrivatekeyFile);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.DSA_PRIVATE_KEY_NAME;
+		expected = PemType.DSA_PRIVATE_KEY_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
-		rsaPPPrivatekeyFile = new File(privatekeyPemDir, "rsa-pwp-pk-pw-is-123456.pem");
+		rsaPPPrivatekeyFile = new File(pemDir, "rsa-pwp-pk-pw-is-123456.pem");
 		pemObject = PemObjectReader.getPemObject(rsaPPPrivatekeyFile);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.RSA_PRIVATE_KEY_NAME;
+		expected = PemType.RSA_PRIVATE_KEY_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
-		crlCertFile = new File(privatekeyPemDir, "crl-cert.pem");
+		crlCertFile = new File(pemDir, "crl-cert.pem");
 		pemObject = PemObjectReader.getPemObject(crlCertFile);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.X509_CRL_NAME;
+		expected = PemType.X509_CRL_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
-		crtCertFile = new File(privatekeyPemDir, "certificate.pem");
+		crtCertFile = new File(pemDir, "certificate.pem");
 		pemObject = PemObjectReader.getPemObject(crtCertFile);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.CERTIFICATE_NAME;
+		expected = PemType.CERTIFICATE_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
-		csrCertFile = new File(privatekeyPemDir, "csr-cert.pem");
+		csrCertFile = new File(pemDir, "csr-cert.pem");
 		pemObject = PemObjectReader.getPemObject(csrCertFile);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.CERTIFICATE_REQUEST_NAME;
+		expected = PemType.CERTIFICATE_REQUEST_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
-		newCsrCertFile = new File(privatekeyPemDir, "new-csr-cert.pem");
+		newCsrCertFile = new File(pemDir, "new-csr-cert.pem");
 		pemObject = PemObjectReader.getPemObject(newCsrCertFile);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.NEW_CERTIFICATE_REQUEST_NAME;
+		expected = PemType.NEW_CERTIFICATE_REQUEST_NAME;
 		assertEquals(expected, actual);
 		// new scenario...
-		pkcs7File = new File(privatekeyPemDir, "pkcs7.pem");
+		pkcs7File = new File(pemDir, "pkcs7.pem");
 		pemObject = PemObjectReader.getPemObject(pkcs7File);
 		actual = pemObject.getType();
-		expected = KeyStringEntry.PKCS7_KEY_NAME;
+		expected = PemType.PKCS7_KEY_NAME;
 		assertEquals(expected, actual);
-
 	}
 
 	/**

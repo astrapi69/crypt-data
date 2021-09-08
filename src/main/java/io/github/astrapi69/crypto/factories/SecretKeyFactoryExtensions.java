@@ -140,6 +140,7 @@ public final class SecretKeyFactoryExtensions
 		keyGenerator.init(keyLength);
 		return keyGenerator.generateKey();
 	}
+
 	/**
 	 * Factory method for creating a new symmetric {@link SecretKey} from the given algorithm and
 	 * the given key length.

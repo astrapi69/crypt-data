@@ -24,7 +24,6 @@
  */
 package io.github.astrapi69.crypto.key;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.KeyFactory;
@@ -40,7 +39,6 @@ import java.security.spec.RSAPublicKeySpec;
 
 import javax.xml.bind.DatatypeConverter;
 
-import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Primitive;
@@ -50,8 +48,8 @@ import org.bouncycastle.util.io.pem.PemWriter;
 
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.hex.HexExtensions;
-import io.github.astrapi69.crypto.key.reader.KeyStringEntry;
 import io.github.astrapi69.crypto.key.reader.PemObjectReader;
+import io.github.astrapi69.crypto.key.reader.PemType;
 
 /**
  * The class {@link PrivateKeyExtensions}.
@@ -79,7 +77,7 @@ public final class PrivateKeyExtensions
 	public static String fromPKCS1ToPemFormat(final byte[] privateKeyPKCS1Formatted)
 		throws IOException
 	{
-		PemObject pemObject = new PemObject(KeyStringEntry.RSA_PRIVATE_KEY.getValue(),
+		PemObject pemObject = new PemObject(PemType.RSA_PRIVATE_KEY.getName(),
 			privateKeyPKCS1Formatted);
 		StringWriter stringWriter = new StringWriter();
 		PemWriter pemWriter = new PemWriter(stringWriter);
@@ -241,8 +239,18 @@ public final class PrivateKeyExtensions
 	 */
 	public static String toPemFormat(final PrivateKey privateKey) throws IOException
 	{
+		if (privateKey instanceof ECPrivateKey)
+		{
+			return PemObjectReader.toPemFormat(
+				new PemObject(PemType.EC_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
+		}
+		if (privateKey instanceof DSAPrivateKey)
+		{
+			return PemObjectReader.toPemFormat(
+				new PemObject(PemType.DSA_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
+		}
 		return PemObjectReader.toPemFormat(
-			new PemObject(KeyStringEntry.RSA_PRIVATE_KEY.getValue(), toPKCS1Format(privateKey)));
+			new PemObject(PemType.RSA_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
 	}
 
 	/**

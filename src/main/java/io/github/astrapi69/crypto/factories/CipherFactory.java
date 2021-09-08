@@ -270,12 +270,10 @@ public final class CipherFactory
 		final PBEParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
 		return newCipher(operationMode, key, paramSpec, key.getAlgorithm());
 	}
-	
+
 	/**
 	 * Factory method for creating a new PBE {@link Cipher} from the given parameters.
 	 *
-	 * @param password
-	 *            the password
 	 * @param algorithm
 	 *            the algorithm
 	 * @param salt
@@ -299,8 +297,8 @@ public final class CipherFactory
 	 * @throws UnsupportedEncodingException
 	 *             is thrown if the named charset is not supported.
 	 */
-	public static Cipher newPBECipher(final String privateKey, final String algorithm, final byte[] salt,
-		final int iterationCount, final int operationMode)
+	public static Cipher newPBECipher(final String privateKey, final String algorithm,
+		final byte[] salt, final int iterationCount, final int operationMode)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
 		InvalidKeyException, InvalidAlgorithmParameterException, UnsupportedEncodingException
 	{

@@ -38,61 +38,59 @@ import lombok.experimental.FieldDefaults;
 public enum KeyStringEntry
 {
 	/** The prefix for the begin of a private key */
-	BEGIN_PRIVATE_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + KeyStringEntry.PRIVATE_KEY_NAME
+	BEGIN_PRIVATE_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + PemType.PRIVATE_KEY_NAME
 		+ KeyStringEntry.FIVE_HYPHENS),
 	/** The prefix for the begin of a public key */
-	BEGIN_PUBLIC_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + KeyStringEntry.PRIVATE_KEY_NAME
+	BEGIN_PUBLIC_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + PemType.PRIVATE_KEY_NAME
 		+ KeyStringEntry.FIVE_HYPHENS),
 	/** The prefix for the begin of a RSA private key */
-	BEGIN_RSA_PRIVATE_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX
-		+ KeyStringEntry.RSA_PRIVATE_KEY_NAME + KeyStringEntry.PEM_KEY_NAME_SUFFIX),
+	BEGIN_RSA_PRIVATE_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + PemType.RSA_PRIVATE_KEY_NAME
+		+ KeyStringEntry.PEM_KEY_NAME_SUFFIX),
 	/** The prefix for the begin of a RSA public key */
-	BEGIN_RSA_PUBLIC_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX
-		+ KeyStringEntry.RSA_PUBLIC_KEY_NAME + KeyStringEntry.PEM_KEY_NAME_SUFFIX),
+	BEGIN_RSA_PUBLIC_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + PemType.RSA_PUBLIC_KEY_NAME
+		+ KeyStringEntry.PEM_KEY_NAME_SUFFIX),
 	/** The prefix for the begin of a DSA private key */
-	BEGIN_DSA_PRIVATE_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX
-		+ KeyStringEntry.DSA_PRIVATE_KEY_NAME + KeyStringEntry.PEM_KEY_NAME_SUFFIX),
+	BEGIN_DSA_PRIVATE_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + PemType.DSA_PRIVATE_KEY_NAME
+		+ KeyStringEntry.PEM_KEY_NAME_SUFFIX),
 	/** The prefix for the begin of a PGP private key */
-	BEGIN_PGP_PRIVATE_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX
-		+ KeyStringEntry.PGP_PRIVATE_KEY_NAME + KeyStringEntry.PEM_KEY_NAME_SUFFIX),
+	BEGIN_PGP_PRIVATE_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + PemType.PGP_PRIVATE_KEY_NAME
+		+ KeyStringEntry.PEM_KEY_NAME_SUFFIX),
 	/** The prefix for the begin of a PGP public key */
-	BEGIN_PGP_PUBLIC_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX
-		+ KeyStringEntry.PGP_PUBLIC_KEY_NAME + KeyStringEntry.PEM_KEY_NAME_SUFFIX),
+	BEGIN_PGP_PUBLIC_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + PemType.PGP_PUBLIC_KEY_NAME
+		+ KeyStringEntry.PEM_KEY_NAME_SUFFIX),
 	/** The prefix for the begin of a Elliptic Curve(EC) private key */
-	BEGIN_EC_PRIVATE_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX
-		+ KeyStringEntry.EC_PRIVATE_KEY_NAME + KeyStringEntry.PEM_KEY_NAME_SUFFIX),
-	/** The prefix for the begin of a PKCS7 key */
-	BEGIN_PKCS7_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + KeyStringEntry.PKCS7_KEY_NAME
+	BEGIN_EC_PRIVATE_KEY_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + PemType.EC_PRIVATE_KEY_NAME
 		+ KeyStringEntry.PEM_KEY_NAME_SUFFIX),
 	/** The prefix for the begin of a PKCS7 key */
-	END_PKCS7_PREFIX(KeyStringEntry.PEM_KEY_END_PREFIX + KeyStringEntry.PKCS7_KEY_NAME
+	BEGIN_PKCS7_PREFIX(KeyStringEntry.PEM_KEY_BEGIN_PREFIX + PemType.PKCS7_KEY_NAME
+		+ KeyStringEntry.PEM_KEY_NAME_SUFFIX),
+	/** The prefix for the begin of a PKCS7 key */
+	END_PKCS7_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + PemType.PKCS7_KEY_NAME
 		+ KeyStringEntry.PEM_KEY_NAME_SUFFIX),
 	/** The suffix for the end of a private key */
-	END_PRIVATE_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + KeyStringEntry.PRIVATE_KEY_NAME
-		+ KeyStringEntry.FIVE_HYPHENS),
+	END_PRIVATE_KEY_SUFFIX(
+		KeyStringEntry.PEM_KEY_END_PREFIX + PemType.PRIVATE_KEY_NAME + KeyStringEntry.FIVE_HYPHENS),
 	/** The suffix for the end of a public key */
-	END_PUBLIC_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + KeyStringEntry.PRIVATE_KEY_NAME
-		+ KeyStringEntry.FIVE_HYPHENS),
+	END_PUBLIC_KEY_SUFFIX(
+		KeyStringEntry.PEM_KEY_END_PREFIX + PemType.PRIVATE_KEY_NAME + KeyStringEntry.FIVE_HYPHENS),
 	/** The suffix for the end of a RSA private key */
-	END_RSA_PRIVATE_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX
-		+ KeyStringEntry.RSA_PRIVATE_KEY_NAME + KeyStringEntry.FIVE_HYPHENS),
+	END_RSA_PRIVATE_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + PemType.RSA_PRIVATE_KEY_NAME
+		+ KeyStringEntry.FIVE_HYPHENS),
 	/** The suffix for the end of a RSA public key */
-	END_RSA_PUBLIC_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + KeyStringEntry.RSA_PUBLIC_KEY_NAME
+	END_RSA_PUBLIC_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + PemType.RSA_PUBLIC_KEY_NAME
 		+ KeyStringEntry.FIVE_HYPHENS),
 	/** The suffix for the end of a DSA private key */
-	END_DSA_PRIVATE_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX
-		+ KeyStringEntry.DSA_PRIVATE_KEY_NAME + KeyStringEntry.FIVE_HYPHENS),
+	END_DSA_PRIVATE_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + PemType.DSA_PRIVATE_KEY_NAME
+		+ KeyStringEntry.FIVE_HYPHENS),
 	/** The suffix for the end of a PGP private key */
-	END_PGP_PRIVATE_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX
-		+ KeyStringEntry.PGP_PRIVATE_KEY_NAME + KeyStringEntry.FIVE_HYPHENS),
+	END_PGP_PRIVATE_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + PemType.PGP_PRIVATE_KEY_NAME
+		+ KeyStringEntry.FIVE_HYPHENS),
 	/** The suffix for the end of a PGP public key */
-	END_PGP_PUBLIC_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + KeyStringEntry.PGP_PUBLIC_KEY_NAME
+	END_PGP_PUBLIC_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + PemType.PGP_PUBLIC_KEY_NAME
 		+ KeyStringEntry.FIVE_HYPHENS),
 	/** The suffix for the end of a Elliptic Curve(EC) private key */
-	END_EC_PRIVATE_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + KeyStringEntry.EC_PRIVATE_KEY_NAME
-		+ KeyStringEntry.FIVE_HYPHENS),
-	/** The RSA private key name */
-	RSA_PRIVATE_KEY(KeyStringEntry.RSA_PRIVATE_KEY_NAME);
+	END_EC_PRIVATE_KEY_SUFFIX(KeyStringEntry.PEM_KEY_END_PREFIX + PemType.EC_PRIVATE_KEY_NAME
+		+ KeyStringEntry.FIVE_HYPHENS);
 
 	/** The Constant PEM_KEY_NAME_PREFIX. */
 	private static final String FIVE_HYPHENS = "-----";
@@ -102,32 +100,6 @@ public enum KeyStringEntry
 	private static final String PEM_KEY_END_PREFIX = FIVE_HYPHENS + "END ";
 	/** The Constant PEM_KEY_PREFIX. */
 	private static final String PEM_KEY_NAME_SUFFIX = FIVE_HYPHENS + "\n";
-	/** The Constant RSA_PRIVATE_KEY_NAME. */
-	public static final String PRIVATE_KEY_NAME = "PRIVATE KEY";
-	/** The Constant RSA_PUBLIC_KEY_NAME. */
-	public static final String PUBLIC_KEY_NAME = "PUBLIC KEY";
-	/** The Constant PKCS7_KEY_NAME. */
-	public static final String PKCS7_KEY_NAME = "PKCS7";
-	/** The Constant X509_CRL_NAME. */
-	public static final String X509_CRL_NAME = "X509 CRL";
-	/** The Constant CERTIFICATE_NAME. */
-	public static final String CERTIFICATE_NAME = "CERTIFICATE";
-	/** The Constant CERTIFICATE_REQUEST_NAME. */
-	public static final String CERTIFICATE_REQUEST_NAME = CERTIFICATE_NAME + " REQUEST";
-	/** The Constant NEW_CERTIFICATE_REQUEST_NAME. */
-	public static final String NEW_CERTIFICATE_REQUEST_NAME = "NEW " + CERTIFICATE_REQUEST_NAME;
-	/** The Constant RSA_PRIVATE_KEY_NAME. */
-	public static final String RSA_PRIVATE_KEY_NAME = "RSA " +	PRIVATE_KEY_NAME;
-	/** The Constant RSA_PUBLIC_KEY_NAME. */
-	public static final String RSA_PUBLIC_KEY_NAME = "RSA " + PUBLIC_KEY_NAME;
-	/** The Constant DSA_PRIVATE_KEY_NAME. */
-	public static final String DSA_PRIVATE_KEY_NAME = "DSA " +	PRIVATE_KEY_NAME;
-	/** The Constant EC_PRIVATE_KEY_NAME. */
-	public static final String EC_PRIVATE_KEY_NAME = "EC " +	PRIVATE_KEY_NAME;
-	/** The Constant PGP_PRIVATE_KEY_NAME. */
-	private static final String PGP_PRIVATE_KEY_NAME = "PGP " + PRIVATE_KEY_NAME + " BLOCK";
-	/** The Constant PGP_PRIVATE_KEY_NAME. */
-	private static final String PGP_PUBLIC_KEY_NAME = "PGP " + PUBLIC_KEY_NAME + " BLOCK";
 
 	/** The value the PEM entry */
 	String value;

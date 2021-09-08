@@ -34,10 +34,10 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 
-import io.github.astrapi69.crypto.key.KeyFileFormat;
 import org.apache.commons.codec.binary.Base64;
 
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.key.KeyFileFormat;
 
 /**
  * The class {@link PrivateKeyReader} is a utility class for reading private keys in *.der or *.pem
@@ -63,20 +63,7 @@ public final class PrivateKeyReader
 	 */
 	public static boolean isPemFormat(final File file) throws IOException
 	{
-		boolean result = false;
-		final byte[] keyBytes = Files.readAllBytes(file.toPath());
-		final String privateKeyPem = new String(keyBytes);
-		if (privateKeyPem.indexOf(KeyStringEntry.BEGIN_PRIVATE_KEY_PREFIX.getValue()) != -1)
-		{
-			result = true;
-			return result;
-		}
-		if (privateKeyPem.indexOf(KeyStringEntry.BEGIN_RSA_PRIVATE_KEY_PREFIX.getValue()) != -1)
-		{
-			result = true;
-			return result;
-		}
-		return result;
+		return PemObjectReader.isPemObject(file);
 	}
 
 	/**
@@ -91,11 +78,12 @@ public final class PrivateKeyReader
 	 */
 	public static KeyFileFormat getKeyFormat(final File file) throws IOException
 	{
-		if(!validatePrivateKey(file))
+		if (!validatePrivateKey(file))
 		{
 			return KeyFileFormat.UNKNOWN;
 		}
-		if(isPemFormat(file)) {
+		if (isPemFormat(file))
+		{
 			return KeyFileFormat.PEM;
 		}
 		return KeyFileFormat.DER;
@@ -106,8 +94,7 @@ public final class PrivateKeyReader
 	 *
 	 * @param file
 	 *            the file that contains the private key
-	 * @return true, if if the given {@link File} is password protected otherwise
-	 *         false
+	 * @return true, if if the given {@link File} is password protected otherwise false
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -145,8 +132,7 @@ public final class PrivateKeyReader
 	 *
 	 * @param file
 	 *            the file to check
-	 * @return true, if if the given {@link File}(is a valid private key file otherwise
-	 *         false
+	 * @return true, if if the given {@link File}(is a valid private key file otherwise false
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.

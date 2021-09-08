@@ -35,15 +35,15 @@ import java.security.PrivateKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 
-import io.github.astrapi69.crypto.key.KeyFileFormat;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.search.PathFinder;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.crypto.key.PrivateKeyExtensions;
+import io.github.astrapi69.search.PathFinder;
 
 /**
  * The unit test class for the class {@link PrivateKeyReader}

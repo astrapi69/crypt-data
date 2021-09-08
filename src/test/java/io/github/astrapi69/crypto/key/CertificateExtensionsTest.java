@@ -42,10 +42,10 @@ import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.search.PathFinder;
 import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
 import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypto.key.reader.CertificateReader;
+import io.github.astrapi69.search.PathFinder;
 
 /**
  * The unit test class for the class {@link CertificateExtensions}

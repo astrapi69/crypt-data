@@ -37,9 +37,9 @@ import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
 import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.search.PathFinder;
-import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
 
 /**
  * The unit test class for the class {@link Transaction}

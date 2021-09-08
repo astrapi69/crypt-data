@@ -44,7 +44,6 @@ import java.util.Date;
 
 import javax.security.auth.x500.X500Principal;
 
-import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.Extension;
@@ -60,6 +59,7 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 
 import io.github.astrapi69.crypto.provider.SecurityProvider;
+import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
  * The factory class {@link CertFactory} holds methods for creating {@link Certificate} objects and
@@ -339,9 +339,8 @@ public final class CertFactory
 				keyPair.getPublic());
 		if (extensions != null && 0 < extensions.length)
 		{
-			Arrays.stream(extensions)
-				.forEach(RuntimeExceptionDecorator
-					.decorate(extension -> certBuilder.addExtension(extension)));
+			Arrays.stream(extensions).forEach(RuntimeExceptionDecorator
+				.decorate(extension -> certBuilder.addExtension(extension)));
 		}
 		ContentSigner signer = new JcaContentSignerBuilder(signatureAlgorithm)
 			.setProvider(SecurityProvider.BC.name()).build(keyPair.getPrivate());
