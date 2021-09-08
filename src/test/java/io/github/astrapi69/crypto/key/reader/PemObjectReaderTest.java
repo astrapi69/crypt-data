@@ -101,7 +101,7 @@ public class PemObjectReaderTest
 		File newCsrCertFile;
 		File pkcs7File;
 
-			// new scenario...
+		// new scenario...
 		rsaPrivatekeyPemFile = new File(pemDir, "private.pem");
 		assertTrue(PemObjectReader.isPemObject(rsaPrivatekeyPemFile));
 		pemObject = PemObjectReader.getPemObject(rsaPrivatekeyPemFile);
