@@ -30,11 +30,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.security.PrivateKey;
-import java.security.Security;
 
 import lombok.NonNull;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMDecryptorProvider;
 import org.bouncycastle.openssl.PEMEncryptedKeyPair;
 import org.bouncycastle.openssl.PEMKeyPair;
@@ -91,6 +89,24 @@ public final class PemObjectReader
 	}
 
 	/**
+	 * Reads the given {@link File}( in *.pem format) that contains a key in pem format
+	 *
+	 * @param keyFile
+	 *            the key in pem format
+	 * @return the key object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static Object readPemKeyObject(File keyFile) throws IOException
+	{
+		try (PEMParser pemParser = new PEMParser(
+			new InputStreamReader(new FileInputStream(keyFile))))
+		{
+			return pemParser.readObject();
+		}
+	}
+
+	/**
 	 * Reads the given {@link File}( in *.pem format) that contains a password protected private
 	 * key.
 	 *
@@ -98,25 +114,26 @@ public final class PemObjectReader
 	 *            the file with the password protected private key
 	 * @param password
 	 *            the password
-	 * @return the {@link PrivateKey} object
+	 * @return the {@link PrivateKey} object or null if the given file is not a password protected
+	 *         private key.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public static PrivateKey readPemPrivateKey(File keyFile, String password) throws IOException
 	{
-		Security.addProvider(new BouncyCastleProvider());
-		try (PEMParser pemParser = new PEMParser(
-			new InputStreamReader(new FileInputStream(keyFile))))
+		Object pemKeyObject = readPemKeyObject(keyFile);
+		if (pemKeyObject instanceof PEMEncryptedKeyPair)
 		{
-			PEMEncryptedKeyPair encryptedKeyPair = (PEMEncryptedKeyPair)pemParser.readObject();
-			PEMDecryptorProvider decryptorProvider = new JcePEMDecryptorProviderBuilder()
+			PEMEncryptedKeyPair encryptedKeyPair = (PEMEncryptedKeyPair)pemKeyObject;
+			PEMDecryptorProvider pemDecryptorProvider = new JcePEMDecryptorProviderBuilder()
 				.build(password.toCharArray());
-			PEMKeyPair pemKeyPair = encryptedKeyPair.decryptKeyPair(decryptorProvider);
+			PEMKeyPair pemKeyPair = encryptedKeyPair.decryptKeyPair(pemDecryptorProvider);
 
 			JcaPEMKeyConverter converter = new JcaPEMKeyConverter()
 				.setProvider(SecurityProvider.BC.name());
 			return converter.getPrivateKey(pemKeyPair.getPrivateKeyInfo());
 		}
+		return null;
 	}
 
 	/**

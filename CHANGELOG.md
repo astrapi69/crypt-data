@@ -11,6 +11,7 @@ ADDED:
 - new factory method for creation of pbe cipher
 - new enum class PemType that holds the type names of PEM value entries
 - new method for get the PemType from a given pem formatted key file
+- new method for get the key object from the key file
   
 CHANGED:
 
