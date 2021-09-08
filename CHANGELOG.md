@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 7.8-SNAPSHOT
+Version 7.8
 -------------
 
 ADDED:
@@ -16,7 +16,7 @@ ADDED:
 CHANGED:
 
 - update gradle to new version 7.2
-- update of crypt-api dependency version to 7.6
+- update of crypt-api dependency version to 7.6.1
 - update of dependency file-worker to new version to 5.9
 - changed all dependencies from groupid de.alpharogroup to new groupid io.github.astrapi69
 - update gradle-plugin dependency of gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin to new version 0.16.1

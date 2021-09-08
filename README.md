@@ -13,7 +13,72 @@
 
 Utility library to provide data beans, writers and readers for encryption and decryption
 
-If you like this project put a ⭐ and donate.
+> Please support this project by simply putting a Github <!-- Place this tag where you want the button to render. -->
+<a class="github-button" href="https://github.com/astrapi69/crypt-data" data-icon="octicon-star" aria-label="Star astrapi69/crypt-data on GitHub">Star ⭐</a>
+>
+> Share this library with friends on Twitter and everywhere else you can
+>
+> If you love this project [![donation](https://img.shields.io/badge/donate-❤-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
+
+## Maven dependency [![Maven Central](https://img.shields.io/maven-central/v/io.github.astrapi69/crypt-data.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.astrapi69%22%20AND%20a:%22crypt-data%22)
+
+Maven dependency is now on sonatype.
+Check out [sonatype repository](https://oss.sonatype.org/index.html#nexus-search;gav~io.github.astrapi69~crypt-data~~~) for latest snapshots and releases.
+
+Add the following maven dependency to your project `pom.xml` if you want to import the core functionality of crypt-data:
+
+Than you can add the dependency to your dependencies:
+
+	<properties>
+			...
+		<!-- CRYPT-DATA version -->
+		<crypt-data.version>7.8</crypt-data.version>
+			...
+	</properties>
+			...
+		<dependencies>
+			...
+			<!-- CRYPT-DATA DEPENDENCY -->
+			<dependency>
+				<groupId>io.github.astrapi69</groupId>
+				<artifactId>crypt-data</artifactId>
+				<version>${crypt-data.version}</version>
+				<scope>test</scope>
+			</dependency>
+			...
+		</dependencies>
+
+
+## gradle dependency
+
+You can first define the version in the ext section and add than the following gradle dependency to
+your project `build.gradle` if you want to import the core functionality of crypt-data:
+
+```
+define version in file gradle.properties
+
+cryptDataVersion=7.8
+```
+
+or in build.gradle ext area
+
+```
+ext {
+			...
+    cryptDataVersion = '7.8'
+			...
+}
+```
+
+and than add the dependency to the dependencies area
+
+```
+dependencies {
+			...
+implementation("io.github.astrapi69:crypt-data:$cryptDataVersion")
+			...
+}
+```
 
 # Donations
 
@@ -80,66 +145,6 @@ No animals were harmed in the making of this library.
 ## License
 
 The source code comes under the liberal MIT License, making crypt-data great for all types of applications.
-
-## Maven dependency [![Maven Central](https://img.shields.io/maven-central/v/io.github.astrapi69/crypt-data.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.astrapi69%22%20AND%20a:%22crypt-data%22)
-
-Maven dependency is now on sonatype.
-Check out [sonatype repository](https://oss.sonatype.org/index.html#nexus-search;gav~io.github.astrapi69~crypt-data~~~) for latest snapshots and releases.
-
-Add the following maven dependency to your project `pom.xml` if you want to import the core functionality of crypt-data:
-
-Than you can add the dependency to your dependencies:
-
-	<properties>
-			...
-		<!-- CRYPT-DATA version -->
-		<crypt-data.version>7.7</crypt-data.version>
-			...
-	</properties>
-			...
-		<dependencies>
-			...
-			<!-- CRYPT-DATA DEPENDENCY -->
-			<dependency>
-				<groupId>io.github.astrapi69</groupId>
-				<artifactId>crypt-data</artifactId>
-				<version>${crypt-data.version}</version>
-				<scope>test</scope>
-			</dependency>
-			...
-		</dependencies>
-
-			
-## gradle dependency
-
-You can first define the version in the ext section and add than the following gradle dependency to 
-your project `build.gradle` if you want to import the core functionality of crypt-data:
-
-```
-define version in file gradle.properties
-
-cryptDataVersion=7.7
-```
-
-or in build.gradle ext area
-
-```
-ext {
-			...
-    cryptDataVersion = '7.7'
-			...
-}
-```
-
-and than add the dependency to the dependencies area
- 
-```
-dependencies {
-			...
-implementation("io.github.astrapi69:crypt-data:$cryptDataVersion")
-			...
-}
-```
 
 ## Semantic Versioning
 
