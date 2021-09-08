@@ -10,6 +10,7 @@ ADDED:
 - new method for get the format of the key file
 - new factory method for creation of pbe cipher
 - new enum class PemType that holds the type names of PEM value entries
+- new method for get the PemType from a given pem formatted key file
   
 CHANGED:
 

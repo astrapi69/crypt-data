@@ -32,6 +32,8 @@ import java.io.StringWriter;
 import java.security.PrivateKey;
 import java.security.Security;
 
+import lombok.NonNull;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMDecryptorProvider;
 import org.bouncycastle.openssl.PEMEncryptedKeyPair;
@@ -146,6 +148,35 @@ public final class PemObjectReader
 	public static byte[] toDer(final PemObject pemObject)
 	{
 		return pemObject.getContent();
+	}
+
+	/**
+	 * Get the {@link PemType} the given {@link PemObject} object
+	 *
+	 * @param pemObject
+	 *            the pem object
+	 * @return the {@link PemType} the given {@link PemObject} object
+	 */
+	public static PemType getPemType(final @NonNull PemObject pemObject)
+	{
+		return PemType.toPemType(pemObject.getType());
+	}
+
+	/**
+	 * Get the {@link PemType} the given {@link File} object
+	 *
+	 * @param file
+	 *            the file
+	 * @return the {@link PemType} the given {@link File} object
+	 */
+	public static PemType getPemType(final File file) throws IOException
+	{
+		PemObject pemObject = getPemObject(file);
+		if (pemObject == null)
+		{
+			throw new RuntimeException("Given file contains no pem formatted key");
+		}
+		return getPemType(pemObject);
 	}
 
 }
