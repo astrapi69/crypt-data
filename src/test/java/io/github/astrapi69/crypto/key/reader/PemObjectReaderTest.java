@@ -232,6 +232,28 @@ public class PemObjectReaderTest
 	}
 
 	/**
+	 * Test method for {@link PemObjectReader#toPemFormat(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testToPemFormatFile() throws IOException
+	{
+		String actual;
+		File privatekeyPemDir;
+		File privatekeyPemFile;
+
+		privatekeyPemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
+		privatekeyPemFile = new File(privatekeyPemDir, "private.pem");
+
+		actual = PemObjectReader.toPemFormat(privatekeyPemFile);
+		System.out.println(actual);
+		actual = PemObjectReader.toPemFormat(privateKeyDerFile);
+		System.out.println(actual);
+	}
+
+	/**
 	 * Test method for {@link PemObjectReader} with {@link BeanTester}
 	 */
 	@Test

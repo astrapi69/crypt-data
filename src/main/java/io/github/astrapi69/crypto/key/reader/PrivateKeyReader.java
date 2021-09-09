@@ -311,12 +311,9 @@ public final class PrivateKeyReader
 	 *             is thrown if instantiation of the cypher object fails.
 	 * @throws InvalidKeySpecException
 	 *             is thrown if generation of the SecretKey object fails.
-	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
 	 */
 	public static PrivateKey readPrivateKey(final byte[] privateKeyBytes, final String algorithm)
-		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
+		throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
 		final KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
@@ -325,7 +322,7 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Reads the given {@link File}( in *.der format) with the default RSA algorithm and returns the
+	 * Reads the given {@link File} with the default RSA algorithm and returns the
 	 * {@link PrivateKey} object.
 	 *
 	 * @param file
@@ -345,6 +342,10 @@ public final class PrivateKeyReader
 	public static PrivateKey readPrivateKey(final File file) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
+		if (isPemFormat(file))
+		{
+			return readPemPrivateKey(file);
+		}
 		return readPrivateKey(file, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
 	}
 

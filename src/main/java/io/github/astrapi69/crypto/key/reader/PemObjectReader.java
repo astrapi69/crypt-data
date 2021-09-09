@@ -156,6 +156,25 @@ public final class PemObjectReader
 	}
 
 	/**
+	 * Transform the given key {@link File} object in pem format {@link String} object
+	 *
+	 * @param file
+	 *            the key file
+	 * @return the string or null if the given key file is not in pem format
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static String toPemFormat(final File file) throws IOException
+	{
+		PemObject pemObject = getPemObject(file);
+		if (pemObject != null)
+		{
+			return toPemFormat(pemObject);
+		}
+		return null;
+	}
+
+	/**
 	 * Transform the given {@link PemObject} object in to a byte array in the der format.
 	 *
 	 * @param pemObject

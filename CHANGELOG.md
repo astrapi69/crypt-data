@@ -4,7 +4,11 @@
 Version 7.9-SNAPSHOT
 -------------
 
-Version 7.8
+ADDED:
+
+- new method that transform a pem formatted key file to a String 
+
+  Version 7.8
 -------------
 
 ADDED:
