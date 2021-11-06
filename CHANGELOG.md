@@ -7,6 +7,7 @@ Version 7.9-SNAPSHOT
 ADDED:
 
 - new method that transform a pem formatted key file to a String 
+- new model class for public and private keys
 
   Version 7.8
 -------------
