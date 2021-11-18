@@ -78,7 +78,9 @@ public class Valitidy
 			return false;
 		final Object this$notAfter = this.getNotAfter();
 		final Object other$notAfter = other.getNotAfter();
-		return this$notAfter == null ? other$notAfter == null : this$notAfter.equals(other$notAfter);
+		return this$notAfter == null
+			? other$notAfter == null
+			: this$notAfter.equals(other$notAfter);
 	}
 
 	public ZonedDateTime getNotAfter()

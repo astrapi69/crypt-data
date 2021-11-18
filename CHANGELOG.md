@@ -6,9 +6,10 @@ Version 7.9-SNAPSHOT
 
 ADDED:
 
-- new method that transform a pem formatted key file to a String 
+- new method that transform a pem formatted key file to a String
 - new model class for public and private keys
-- improve gradle build performance by adding new gradle parameters for caching, parallel, configure on demand and file watch
+- improve gradle build performance by adding new gradle parameters for caching, parallel, configure on demand and file
+  watch
 
 CHANGED:
 
@@ -34,14 +35,15 @@ ADDED:
 - new enum class PemType that holds the type names of PEM value entries
 - new method for get the PemType from a given pem formatted key file
 - new method for get the key object from the key file
-  
+
 CHANGED:
 
 - update gradle to new version 7.2
 - update of crypt-api dependency version to 7.6.1
 - update of dependency file-worker to new version to 5.9
 - changed all dependencies from groupid de.alpharogroup to new groupid io.github.astrapi69
-- update gradle-plugin dependency of gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin to new version 0.16.1
+- update gradle-plugin dependency of gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin to new version
+  0.16.1
 - update of dependency silly-strings to new version to 5.6
 - update of dependency commons-io dependency version to 2.11.0
 - update of test dependency silly-io to new version to 1.6
@@ -55,9 +57,9 @@ Version 7.7
 
 ADDED:
 
-- new class AesRsaCryptModel for transfer of crypt data 
+- new class AesRsaCryptModel for transfer of crypt data
 - new factory methods for create symmetric keys
-  
+
 CHANGED:
 
 - removed dependency com.rainerhahnekamp:sneakythrow
@@ -104,12 +106,13 @@ CHANGED:
 - update of bcpkix-jdk15on dependency version to 1.69
 - update of com.github.ben-manes.versions.gradle.plugin to new version 0.39.0
 - changed to new package io.github.astrapi69
-  
+
   Version 7.4
+
 -------------
 
 ADDED:
- 
+
 - added new factory method to KeyStoreFactory class
 - new jar task for build manifest file
 - added lombok dependency
@@ -123,7 +126,7 @@ Version 7.3
 -------------
 
 ADDED:
- 
+
 - new build system gradle
 - new decorator class for byte array object created
 
@@ -146,7 +149,7 @@ CHANGED:
 - update of parent version to 5.3
 - update of bouncycastle version to 1.64
 - update of guava version to 28.1-jre
-- extended CryptModel class with a List of decorators 
+- extended CryptModel class with a List of decorators
 
 Version 7.1
 -------------

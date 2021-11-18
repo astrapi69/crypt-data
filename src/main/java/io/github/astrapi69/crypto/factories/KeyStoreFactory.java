@@ -131,7 +131,7 @@ public final class KeyStoreFactory
 	@Deprecated
 	public static KeyStore newKeyStore(final String type, final String password,
 		final File keystoreFile) throws NoSuchAlgorithmException, CertificateException,
-		FileNotFoundException, IOException, KeyStoreException
+		IOException, KeyStoreException
 	{
 		return newKeyStore(type, password, keystoreFile, false);
 	}
@@ -161,8 +161,8 @@ public final class KeyStoreFactory
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public static KeyStore newKeyStore(final String type, final String password,
-		final File keystoreFile, final boolean createNewKeyStore) throws KeyStoreException,
-		NoSuchAlgorithmException, CertificateException, IOException
+		final File keystoreFile, final boolean createNewKeyStore)
+		throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException
 	{
 		return createNewKeyStore
 			? newKeyStore(keystoreFile, type, password)

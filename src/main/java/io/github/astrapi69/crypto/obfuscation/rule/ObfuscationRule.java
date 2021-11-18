@@ -76,7 +76,9 @@ public class ObfuscationRule<C, RW> implements Serializable
 			return false;
 		final Object this$replaceWith = this.getReplaceWith();
 		final Object other$replaceWith = other.getReplaceWith();
-		return this$replaceWith == null ? other$replaceWith == null : this$replaceWith.equals(other$replaceWith);
+		return this$replaceWith == null
+			? other$replaceWith == null
+			: this$replaceWith.equals(other$replaceWith);
 	}
 
 	public C getCharacter()

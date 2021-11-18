@@ -1,4 +1,3 @@
-
 buildscript {
     repositories {
         maven {
@@ -31,7 +30,7 @@ repositories {
 
 javadoc {
     failOnError = false
-    if(JavaVersion.current().isJava9Compatible()) {
+    if (JavaVersion.current().isJava9Compatible()) {
         options.addBooleanOption("html5", true)
     }
 }
@@ -78,14 +77,14 @@ publishing {
             pom {
                 name = "$rootProject.name"
                 description = "$projectDescription"
-                url = "$projectScmProviderUrl"+"$projectHolderUsername"+"$slash"+"$rootProject.name"
+                url = "$projectScmProviderUrl" + "$projectHolderUsername" + "$slash" + "$rootProject.name"
                 organization {
                     name = "$projectOrganizationName"
                     url = "$projectOrganizationUrl"
                 }
                 issueManagement {
                     system = "$projectIssueManagementSystem"
-                    url = "$projectScmProviderUrl"+"$projectHolderUsername"+"$slash"+"$rootProject.name"+"$issuesPath"
+                    url = "$projectScmProviderUrl" + "$projectHolderUsername" + "$slash" + "$rootProject.name" + "$issuesPath"
                 }
                 licenses {
                     license {
@@ -144,8 +143,8 @@ jar {
 }
 
 license {
-    ext.year="$projectInceptionYear"
-    ext.owner="$projectLeaderName"
+    ext.year = "$projectInceptionYear"
+    ext.owner = "$projectLeaderName"
     header rootProject.file("src/main/resources/LICENSE.txt")
     excludes(["**/README",
               "**/README.md",

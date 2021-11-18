@@ -108,7 +108,9 @@ public class CertificateAttributes
 			return false;
 		final Object this$location = this.getLocation();
 		final Object other$location = other.getLocation();
-		return this$location == null ? other$location == null : this$location.equals(other$location);
+		return this$location == null
+			? other$location == null
+			: this$location.equals(other$location);
 	}
 
 	public String getCommonName()
