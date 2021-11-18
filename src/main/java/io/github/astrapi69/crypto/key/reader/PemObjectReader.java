@@ -204,6 +204,8 @@ public final class PemObjectReader
 	 * @param file
 	 *            the file
 	 * @return the {@link PemType} the given {@link File} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static PemType getPemType(final File file) throws IOException
 	{

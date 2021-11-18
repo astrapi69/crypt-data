@@ -274,6 +274,8 @@ public final class CipherFactory
 	/**
 	 * Factory method for creating a new PBE {@link Cipher} from the given parameters.
 	 *
+	 * @param privateKey
+	 *            the private key
 	 * @param algorithm
 	 *            the algorithm
 	 * @param salt
@@ -294,13 +296,11 @@ public final class CipherFactory
 	 *             is thrown if initialization of the cipher object fails.
 	 * @throws InvalidAlgorithmParameterException
 	 *             is thrown if initialization of the cipher object fails.
-	 * @throws UnsupportedEncodingException
-	 *             is thrown if the named charset is not supported.
 	 */
 	public static Cipher newPBECipher(final String privateKey, final String algorithm,
 		final byte[] salt, final int iterationCount, final int operationMode)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
-		InvalidKeyException, InvalidAlgorithmParameterException, UnsupportedEncodingException
+		InvalidKeyException, InvalidAlgorithmParameterException
 	{
 		String normalizedPassword = Normalizer.normalize(privateKey, Normalizer.Form.NFC);
 		final Cipher cipher = CipherFactory.newPBECipher(normalizedPassword.toCharArray(),
