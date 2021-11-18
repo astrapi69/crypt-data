@@ -25,16 +25,17 @@
 package io.github.astrapi69.crypto.key.writer;
 
 import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.Security;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
 
+import io.github.astrapi69.file.create.FileCreationState;
+import io.github.astrapi69.file.create.FileFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
@@ -45,9 +46,13 @@ import io.github.astrapi69.crypto.algorithm.MdAlgorithm;
 import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.crypto.key.KeyFormat;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
-import io.github.astrapi69.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.io.StreamExtensions;
-import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.file.search.PathFinder;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 /**
  * The unit test class for the class {@link PrivateKeyWriter}
@@ -160,11 +165,16 @@ public class PrivateKeyWriterTest
 	/**
 	 * Test method for
 	 * {@link PrivateKeyWriter#write(PrivateKey, OutputStream, KeyFileFormat, KeyFormat)}
-	 * 
+	 *
 	 * @throws IOException
-	 * @throws NoSuchProviderException
-	 * @throws InvalidKeySpecException
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list.
 	 */
 	@Test(enabled = true)
 	public void testWritePrivateKeyOutputStreamKeyFileFormatKeyFormat() throws IOException,
@@ -172,15 +182,19 @@ public class PrivateKeyWriterTest
 	{
 		String expected;
 		String actual;
+		boolean createdOrAlreadyExists;
 		OutputStream outputStream;
 		File newWrittenPrivatekeyPemFile;
 		File privatekeyPemFileInDerDir;
+		FileCreationState fileCreationState;
 		// new scenario...
 		privatekeyPemFileInDerDir = new File(derDir, "private.pem");
 		privateKey = PrivateKeyReader.readPrivateKey(privateKeyDerFile);
 
 		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
-		newWrittenPrivatekeyPemFile.createNewFile();
+		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
+		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED || fileCreationState == FileCreationState.ALREADY_EXISTS;
+		assertTrue(createdOrAlreadyExists);
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
 		PrivateKeyWriter.write(privateKey, outputStream, KeyFileFormat.PEM, KeyFormat.PKCS_8);
@@ -191,7 +205,9 @@ public class PrivateKeyWriterTest
 		DeleteFileExtensions.delete(newWrittenPrivatekeyPemFile);
 		// new scenario...
 		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
-		newWrittenPrivatekeyPemFile.createNewFile();
+		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
+		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED || fileCreationState == FileCreationState.ALREADY_EXISTS;
+		assertTrue(createdOrAlreadyExists);
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
 		PrivateKeyWriter.write(privateKey, outputStream, KeyFileFormat.PEM, KeyFormat.PKCS_1);
@@ -205,7 +221,9 @@ public class PrivateKeyWriterTest
 		privateKey = PrivateKeyReader.readPrivateKey(privateKeyDerFile);
 
 		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
-		newWrittenPrivatekeyPemFile.createNewFile();
+		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
+		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED || fileCreationState == FileCreationState.ALREADY_EXISTS;
+		assertTrue(createdOrAlreadyExists);
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
 		PrivateKeyWriter.write(privateKey, outputStream, KeyFileFormat.PEM, null);
@@ -216,7 +234,9 @@ public class PrivateKeyWriterTest
 		DeleteFileExtensions.delete(newWrittenPrivatekeyPemFile);
 		// new scenario...
 		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
-		newWrittenPrivatekeyPemFile.createNewFile();
+		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
+		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED || fileCreationState == FileCreationState.ALREADY_EXISTS;
+		assertTrue(createdOrAlreadyExists);
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
 		PrivateKeyWriter.write(privateKey, outputStream, KeyFileFormat.DER, null);

@@ -62,10 +62,10 @@ import io.github.astrapi69.crypto.key.reader.CertificateReader;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypto.key.writer.CertificateWriter;
-import io.github.astrapi69.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.lang.ClassExtensions;
 import io.github.astrapi69.random.number.RandomBigIntegerFactory;
-import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**

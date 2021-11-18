@@ -46,6 +46,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.operator.OperatorCreationException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -58,9 +59,9 @@ import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.crypto.key.reader.CertificateReader;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
-import io.github.astrapi69.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.random.number.RandomBigIntegerFactory;
-import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.file.search.PathFinder;
 
 /**
  * The unit test class for the class {@link CertificateWriter}
@@ -76,23 +77,10 @@ public class CertificateWriterTest
 
 	File pemDir;
 
-	/**
-	 * Sets up method will be invoked before every unit test method in this class
-	 * 
-	 * @throws IOException
-	 * @throws NoSuchProviderException
-	 * @throws InvalidKeySpecException
-	 * @throws NoSuchAlgorithmException
-	 * @throws SignatureException
-	 * @throws IllegalStateException
-	 * @throws InvalidKeyException
-	 * @throws CertificateEncodingException
-	 */
 	@BeforeMethod
 	protected void setUp() throws NoSuchAlgorithmException, InvalidKeySpecException,
-		NoSuchProviderException, IOException, CertificateEncodingException, InvalidKeyException,
-		IllegalStateException, SignatureException
-	{
+			NoSuchProviderException, IOException, CertificateException, InvalidKeyException,
+			IllegalStateException, SignatureException, OperatorCreationException {
 		Security.addProvider(new BouncyCastleProvider());
 		File privatekeyPemFile;
 		PrivateKey privateKey;
@@ -144,9 +132,12 @@ public class CertificateWriterTest
 
 	/**
 	 * Test method for {@link CertificateWriter#write(X509Certificate, File, KeyFileFormat)}
-	 * 
+	 *
 	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 * @throws CertificateException
+	 *             is thrown if no Provider supports a CertificateFactorySpi implementation for the
+	 *             specified type.
 	 */
 	@Test
 	public void testWrite() throws IOException, CertificateException

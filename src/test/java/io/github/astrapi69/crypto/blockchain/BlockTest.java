@@ -40,7 +40,7 @@ import org.testng.annotations.Test;
 import io.github.astrapi69.collections.list.ListFactory;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
 import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
-import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.file.search.PathFinder;
 
 /**
  * The unit test class for the class {@link Block}
@@ -86,7 +86,7 @@ public class BlockTest
 		transaction = new Transaction(text, address.getHash(), fixedSignature);
 
 		block = new Block(null, ListFactory.newArrayList(transaction), 4847556);
-
+		assertNotNull(block);
 	}
 
 	/**

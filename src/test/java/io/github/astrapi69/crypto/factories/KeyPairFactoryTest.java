@@ -49,7 +49,7 @@ import io.github.astrapi69.crypto.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
 import io.github.astrapi69.random.SecureRandomBuilder;
-import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
@@ -120,17 +120,14 @@ public class KeyPairFactoryTest
 
 	/**
 	 * Test method for {@link KeyPairFactory#newKeyPairGenerator(String, int, SecureRandom)}
-	 * 
-	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
 	 */
 	@Test
 	public void testNewKeyPairGeneratorStringIntSecureRandom()
-		throws NoSuchAlgorithmException, NoSuchProviderException
+		throws NoSuchAlgorithmException
 	{
 		KeyPairGenerator actual;
 

@@ -49,8 +49,8 @@ import org.testng.annotations.Test;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.key.reader.EncryptedPrivateKeyReader;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
-import io.github.astrapi69.delete.DeleteFileExtensions;
-import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.search.PathFinder;
 
 /**
  * The unit test class for the class {@link EncryptedPrivateKeyWriter}.
@@ -115,9 +115,6 @@ public class EncryptedPrivateKeyWriterTest
 	 *             the invalid parameter spec exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
-	 *
-	 * @throws Exception
-	 *             is thrown if any error occurs on the execution
 	 */
 	@Test
 	public void testEncryptPrivateKeyWithPasswordPrivateKeyFileString()

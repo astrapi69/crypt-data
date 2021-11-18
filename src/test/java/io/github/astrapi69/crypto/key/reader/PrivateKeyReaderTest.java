@@ -43,7 +43,7 @@ import org.testng.annotations.Test;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.crypto.key.PrivateKeyExtensions;
-import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.file.search.PathFinder;
 
 /**
  * The unit test class for the class {@link PrivateKeyReader}
@@ -104,7 +104,6 @@ public class PrivateKeyReaderTest
 		assertEquals(actual, expected);
 
 		actual = PrivateKeyReader.getKeyFormat(privateKeyPemFile2);
-		expected = KeyFileFormat.PEM;
 		assertEquals(actual, expected);
 
 		actual = PrivateKeyReader.getKeyFormat(encryptedPrivateKeyFile);
@@ -163,7 +162,6 @@ public class PrivateKeyReaderTest
 		assertNotNull(passwordProtectedPrivateKey);
 
 		actual = PrivateKeyReader.isPrivateKeyPasswordProtected(passwordProtectedPrivateKeyDerFile);
-		expected = true;
 		assertEquals(actual, expected);
 
 		// new scenario
@@ -204,7 +202,6 @@ public class PrivateKeyReaderTest
 		assertNotNull(passwordProtectedPrivateKey);
 
 		actual = PrivateKeyReader.validatePrivateKey(passwordProtectedPrivateKeyDerFile);
-		expected = false;
 		assertEquals(actual, expected);
 
 		// new scenario

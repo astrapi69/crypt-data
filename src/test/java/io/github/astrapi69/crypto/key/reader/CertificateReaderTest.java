@@ -48,9 +48,9 @@ import io.github.astrapi69.crypto.algorithm.UnionWord;
 import io.github.astrapi69.crypto.factories.CertFactory;
 import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.crypto.key.writer.CertificateWriter;
-import io.github.astrapi69.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.random.number.RandomBigIntegerFactory;
-import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.file.search.PathFinder;
 
 /**
  * The unit test class for the class {@link CertificateReaderTest}

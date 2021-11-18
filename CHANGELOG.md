@@ -8,8 +8,22 @@ ADDED:
 
 - new method that transform a pem formatted key file to a String 
 - new model class for public and private keys
+- improve gradle build performance by adding new gradle parameters for caching, parallel, configure on demand and file watch
 
-  Version 7.8
+CHANGED:
+
+- update gradle to new version 7.3
+- update of lombok dependency version to 1.18.22
+- update of dependency guava version to new version 31.0.1-jre
+- update of dependency file-worker to new version to 8.1
+- update of dependency throw-able to new version to 1.7
+- update of dependency silly-strings to new version to 8.1
+- update of dependency silly-collections to new version to 18
+- update of test dependency vintage-time to new version to 5.4
+- removed deprecated class references
+- removed unchecked class references
+
+Version 7.8
 -------------
 
 ADDED:

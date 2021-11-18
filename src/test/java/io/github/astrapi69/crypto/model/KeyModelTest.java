@@ -5,7 +5,7 @@ import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.random.object.RandomStringFactory;
-import io.github.astrapi69.search.PathFinder;
+import io.github.astrapi69.file.search.PathFinder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -77,7 +77,7 @@ public class KeyModelTest {
                             .key(RandomStringFactory.randomHexString(16).toUpperCase())
                             .algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
                             .iterationCount(19).operationMode(Cipher.ENCRYPT_MODE)
-                            .decorator(StringDecorator.builder().prefix("s").suffix("s").build()).build();
+                            .decorator(CryptObjectDecorator.<String>builder().prefix("s").suffix("s").build()).build();
                 });
         expected = true;
         assertEquals(expected, actual);
