@@ -101,9 +101,7 @@ public class Block implements IBlock
 			? other$transactions != null
 			: !this$transactions.equals(other$transactions))
 			return false;
-		if (this.getTries() != other.getTries())
-			return false;
-		return true;
+		return this.getTries() == other.getTries();
 	}
 
 	@Override

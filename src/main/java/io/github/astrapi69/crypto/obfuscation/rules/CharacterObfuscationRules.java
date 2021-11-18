@@ -66,9 +66,7 @@ public class CharacterObfuscationRules extends ObfuscationBiMapRules<Character, 
 		final CharacterObfuscationRules other = (CharacterObfuscationRules)o;
 		if (!other.canEqual(this))
 			return false;
-		if (!super.equals(o))
-			return false;
-		return true;
+		return super.equals(o);
 	}
 
 	@Override

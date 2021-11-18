@@ -28,14 +28,7 @@ import static org.testng.AssertJUnit.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.Security;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -48,8 +41,8 @@ import io.github.astrapi69.crypto.key.KeySize;
 import io.github.astrapi69.crypto.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
-import io.github.astrapi69.random.SecureRandomBuilder;
 import io.github.astrapi69.file.search.PathFinder;
+import io.github.astrapi69.random.SecureRandomBuilder;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
@@ -126,8 +119,7 @@ public class KeyPairFactoryTest
 	 *             specified algorithm
 	 */
 	@Test
-	public void testNewKeyPairGeneratorStringIntSecureRandom()
-		throws NoSuchAlgorithmException
+	public void testNewKeyPairGeneratorStringIntSecureRandom() throws NoSuchAlgorithmException
 	{
 		KeyPairGenerator actual;
 

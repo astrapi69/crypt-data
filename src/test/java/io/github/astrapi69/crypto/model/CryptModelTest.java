@@ -85,7 +85,9 @@ public class CryptModelTest
 					.key(RandomStringFactory.randomHexString(16).toUpperCase())
 					.algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
 					.iterationCount(19).operationMode(Cipher.ENCRYPT_MODE)
-					.decorator(CryptObjectDecorator.<String>builder().prefix("s").suffix("s").build()).build();
+					.decorator(
+						CryptObjectDecorator.<String> builder().prefix("s").suffix("s").build())
+					.build();
 			});
 		expected = true;
 		assertEquals(expected, actual);

@@ -24,12 +24,7 @@
  */
 package io.github.astrapi69.crypto.factories;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -167,7 +162,7 @@ public final class KeyStoreFactory
 	 */
 	public static KeyStore newKeyStore(final String type, final String password,
 		final File keystoreFile, final boolean createNewKeyStore) throws KeyStoreException,
-		NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException
+		NoSuchAlgorithmException, CertificateException, IOException
 	{
 		return createNewKeyStore
 			? newKeyStore(keystoreFile, type, password)

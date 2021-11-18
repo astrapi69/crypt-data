@@ -30,12 +30,12 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.security.*;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.InvalidParameterSpecException;
 
-import io.github.astrapi69.file.create.FileCreationState;
-import io.github.astrapi69.file.create.FileFactory;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
@@ -46,13 +46,11 @@ import io.github.astrapi69.crypto.algorithm.MdAlgorithm;
 import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.crypto.key.KeyFormat;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
+import io.github.astrapi69.file.create.FileCreationState;
+import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.file.search.PathFinder;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
+import io.github.astrapi69.io.StreamExtensions;
 
 /**
  * The unit test class for the class {@link PrivateKeyWriter}
@@ -193,7 +191,8 @@ public class PrivateKeyWriterTest
 
 		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
 		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
-		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED || fileCreationState == FileCreationState.ALREADY_EXISTS;
+		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED
+			|| fileCreationState == FileCreationState.ALREADY_EXISTS;
 		assertTrue(createdOrAlreadyExists);
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
@@ -206,7 +205,8 @@ public class PrivateKeyWriterTest
 		// new scenario...
 		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
 		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
-		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED || fileCreationState == FileCreationState.ALREADY_EXISTS;
+		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED
+			|| fileCreationState == FileCreationState.ALREADY_EXISTS;
 		assertTrue(createdOrAlreadyExists);
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
@@ -222,7 +222,8 @@ public class PrivateKeyWriterTest
 
 		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
 		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
-		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED || fileCreationState == FileCreationState.ALREADY_EXISTS;
+		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED
+			|| fileCreationState == FileCreationState.ALREADY_EXISTS;
 		assertTrue(createdOrAlreadyExists);
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
@@ -235,7 +236,8 @@ public class PrivateKeyWriterTest
 		// new scenario...
 		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
 		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
-		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED || fileCreationState == FileCreationState.ALREADY_EXISTS;
+		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED
+			|| fileCreationState == FileCreationState.ALREADY_EXISTS;
 		assertTrue(createdOrAlreadyExists);
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);

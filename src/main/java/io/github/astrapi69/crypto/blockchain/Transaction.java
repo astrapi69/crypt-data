@@ -83,9 +83,7 @@ public class Transaction implements ITransaction
 		final Object other$text = other.getText();
 		if (this$text == null ? other$text != null : !this$text.equals(other$text))
 			return false;
-		if (this.getTimestamp() != other.getTimestamp())
-			return false;
-		return true;
+		return this.getTimestamp() == other.getTimestamp();
 	}
 
 	@Override

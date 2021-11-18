@@ -27,6 +27,7 @@ package io.github.astrapi69.crypto.hash;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
@@ -58,7 +59,7 @@ public class HashExtensionsTest
 		String salt;
 		HashAlgorithm hashAlgorithm;
 
-		charset = Charset.forName("UTF-8");
+		charset = StandardCharsets.UTF_8;
 		password = "abcdefghijklmnopqrst";
 		newInsertPassword = "abcdefghijklmnopqrst";
 		salt = "NzeCdmaz";
@@ -86,7 +87,7 @@ public class HashExtensionsTest
 		String salt;
 		HashAlgorithm hashAlgorithm;
 
-		charset = Charset.forName("UTF-8");
+		charset = StandardCharsets.UTF_8;
 		password = "secret";
 		newInsertPassword = "secret";
 		salt = "NzeCdmaz";
@@ -114,7 +115,7 @@ public class HashExtensionsTest
 		String salt;
 		HashAlgorithm hashAlgorithm;
 
-		charset = Charset.forName("UTF-8");
+		charset = StandardCharsets.UTF_8;
 		password = "abcdefghijklmnopqrst";
 		newInsertPassword = "abcdefghijklmnopqrst";
 		salt = "NzeCdmaz";

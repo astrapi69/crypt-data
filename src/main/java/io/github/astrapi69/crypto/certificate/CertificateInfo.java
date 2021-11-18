@@ -124,11 +124,7 @@ public class CertificateInfo
 			return false;
 		final Object this$x509v3Extensions = this.getX509v3Extensions();
 		final Object other$x509v3Extensions = other.getX509v3Extensions();
-		if (this$x509v3Extensions == null
-			? other$x509v3Extensions != null
-			: !this$x509v3Extensions.equals(other$x509v3Extensions))
-			return false;
-		return true;
+		return this$x509v3Extensions == null ? other$x509v3Extensions == null : this$x509v3Extensions.equals(other$x509v3Extensions);
 	}
 
 	public String getIssuer()

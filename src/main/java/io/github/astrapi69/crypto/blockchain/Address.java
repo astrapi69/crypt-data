@@ -83,9 +83,7 @@ public class Address implements IAddress
 		final Object other$name = other.getName();
 		if (this$name == null ? other$name != null : !this$name.equals(other$name))
 			return false;
-		if (!java.util.Arrays.equals(this.getPublicKey(), other.getPublicKey()))
-			return false;
-		return true;
+		return java.util.Arrays.equals(this.getPublicKey(), other.getPublicKey());
 	}
 
 	@Override

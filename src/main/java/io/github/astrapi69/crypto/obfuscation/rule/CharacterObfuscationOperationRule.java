@@ -67,9 +67,7 @@ public class CharacterObfuscationOperationRule
 		final CharacterObfuscationOperationRule other = (CharacterObfuscationOperationRule)o;
 		if (!other.canEqual(this))
 			return false;
-		if (!super.equals(o))
-			return false;
-		return true;
+		return super.equals(o);
 	}
 
 	@Override

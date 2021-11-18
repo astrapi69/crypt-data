@@ -74,11 +74,7 @@ public class ObfuscationBiMapRules<K, V>
 			return false;
 		final Object this$obfuscationRules = this.getObfuscationRules();
 		final Object other$obfuscationRules = other.getObfuscationRules();
-		if (this$obfuscationRules == null
-			? other$obfuscationRules != null
-			: !this$obfuscationRules.equals(other$obfuscationRules))
-			return false;
-		return true;
+		return this$obfuscationRules == null ? other$obfuscationRules == null : this$obfuscationRules.equals(other$obfuscationRules);
 	}
 
 	public BiMap<K, V> getObfuscationRules()

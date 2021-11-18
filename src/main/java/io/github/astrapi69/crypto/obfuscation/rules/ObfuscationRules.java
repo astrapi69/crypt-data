@@ -71,9 +71,7 @@ public class ObfuscationRules<C, RW>
 			return false;
 		final Object this$rules = this.getRules();
 		final Object other$rules = other.getRules();
-		if (this$rules == null ? other$rules != null : !this$rules.equals(other$rules))
-			return false;
-		return true;
+		return this$rules == null ? other$rules == null : this$rules.equals(other$rules);
 	}
 
 	public List<ObfuscationRule<C, RW>> getRules()

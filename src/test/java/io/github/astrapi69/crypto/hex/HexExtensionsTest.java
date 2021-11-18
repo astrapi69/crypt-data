@@ -28,6 +28,7 @@ import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.StringUtils;
@@ -84,8 +85,9 @@ public class HexExtensionsTest
 
 	/**
 	 * Test method for {@link HexExtensions#decodeHex(String)}
-	 * 
+	 *
 	 * @throws DecoderException
+	 *             is thrown if an odd number or illegal of characters is supplied
 	 */
 	@Test
 	public void testDecodeHexString() throws DecoderException
@@ -123,11 +125,9 @@ public class HexExtensionsTest
 
 	/**
 	 * Test method for {@link HexExtensions#encodeHex(byte[])}
-	 * 
-	 * @throws DecoderException
 	 */
 	@Test
-	public void testEncodeHex() throws DecoderException
+	public void testEncodeHex()
 	{
 		String actual;
 		String expected;
@@ -175,13 +175,13 @@ public class HexExtensionsTest
 
 		secretMessage = "Secret message";
 		hexString = "536563726574206d657373616765";
-		actual = HexExtensions.encodeHex(secretMessage, Charset.forName("UTF-8"), true);
+		actual = HexExtensions.encodeHex(secretMessage, StandardCharsets.UTF_8, true);
 		expected = hexString;
 		assertEquals(expected, actual);
 
 		secretMessage = "Secret message";
 		hexString = "536563726574206D657373616765";
-		actual = HexExtensions.encodeHex(secretMessage, Charset.forName("UTF-8"), false);
+		actual = HexExtensions.encodeHex(secretMessage, StandardCharsets.UTF_8, false);
 		expected = hexString;
 		assertEquals(expected, actual);
 

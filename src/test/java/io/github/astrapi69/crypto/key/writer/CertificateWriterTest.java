@@ -29,14 +29,7 @@ import static org.testng.AssertJUnit.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.Security;
-import java.security.SignatureException;
-import java.security.cert.CertificateEncodingException;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
@@ -60,8 +53,8 @@ import io.github.astrapi69.crypto.key.reader.CertificateReader;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.random.number.RandomBigIntegerFactory;
 import io.github.astrapi69.file.search.PathFinder;
+import io.github.astrapi69.random.number.RandomBigIntegerFactory;
 
 /**
  * The unit test class for the class {@link CertificateWriter}
@@ -79,8 +72,9 @@ public class CertificateWriterTest
 
 	@BeforeMethod
 	protected void setUp() throws NoSuchAlgorithmException, InvalidKeySpecException,
-			NoSuchProviderException, IOException, CertificateException, InvalidKeyException,
-			IllegalStateException, SignatureException, OperatorCreationException {
+		NoSuchProviderException, IOException, CertificateException, InvalidKeyException,
+		IllegalStateException, SignatureException, OperatorCreationException
+	{
 		Security.addProvider(new BouncyCastleProvider());
 		File privatekeyPemFile;
 		PrivateKey privateKey;
