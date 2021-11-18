@@ -130,8 +130,8 @@ public final class KeyStoreFactory
 	 */
 	@Deprecated
 	public static KeyStore newKeyStore(final String type, final String password,
-		final File keystoreFile) throws NoSuchAlgorithmException, CertificateException,
-		IOException, KeyStoreException
+		final File keystoreFile)
+		throws NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException
 	{
 		return newKeyStore(type, password, keystoreFile, false);
 	}
