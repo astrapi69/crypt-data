@@ -27,10 +27,14 @@ package io.github.astrapi69.crypto.model;
 import java.io.Serializable;
 import java.util.List;
 
-import io.github.astrapi69.crypto.algorithm.Algorithm;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import io.github.astrapi69.crypto.algorithm.Algorithm;
 
 /**
  * The class {@link CryptModel} holds data for the encryption or decryption process.

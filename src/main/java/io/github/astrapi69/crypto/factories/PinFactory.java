@@ -29,8 +29,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
-import io.github.astrapi69.collections.list.ListFactory;
 import lombok.NonNull;
+import io.github.astrapi69.collections.list.ListFactory;
 
 /**
  * The factory class {@link PinFactory} holds methods for creating list of possible pins

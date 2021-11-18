@@ -24,8 +24,14 @@
  */
 package io.github.astrapi69.crypto.key.reader;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.security.PrivateKey;
+
+import lombok.NonNull;
 
 import org.bouncycastle.openssl.PEMDecryptorProvider;
 import org.bouncycastle.openssl.PEMEncryptedKeyPair;
@@ -38,7 +44,6 @@ import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 
 import io.github.astrapi69.crypto.provider.SecurityProvider;
-import lombok.NonNull;
 
 /**
  * The class {@link PemObjectReader} is a utility class for reading {@link PemObject} from a file.
