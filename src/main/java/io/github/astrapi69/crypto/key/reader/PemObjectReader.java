@@ -29,7 +29,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
 
 import lombok.NonNull;
 
@@ -43,6 +47,8 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 
+import io.github.astrapi69.crypto.algorithm.Algorithm;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.provider.SecurityProvider;
 
 /**
@@ -136,6 +142,61 @@ public final class PemObjectReader
 		return null;
 	}
 
+
+	/**
+	 * Reads the given {@link File}( in *.pem format) that contains a password protected private
+	 * key.
+	 *
+	 * @param keyFile
+	 *            the file with the password protected private key
+	 * @return the {@link PrivateKey} object or null if the given file is not a password protected
+	 *         private key.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list.
+	 */
+	public static PrivateKey readPemPrivateKey(File keyFile) throws IOException,
+		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
+	{
+		return readPrivateKey(keyFile, KeyPairGeneratorAlgorithm.RSA);
+	}
+
+
+	/**
+	 * Reads the given {@link File}( in *.pem format) that contains a password protected private
+	 * key.
+	 *
+	 * @param keyFile
+	 *            the file with the password protected private key
+	 * @param algorithm
+	 *            the algorithm for the {@link KeyFactory}
+	 * @return the {@link PrivateKey} object or null if the given file is not a password protected
+	 *         private key.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list.
+	 */
+	public static PrivateKey readPrivateKey(File keyFile, final Algorithm algorithm)
+		throws IOException, NoSuchAlgorithmException, InvalidKeySpecException,
+		NoSuchProviderException
+	{
+		PemObject pemKeyObject = getPemObject(keyFile);
+		byte[] encoded = pemKeyObject.getContent();
+		return PrivateKeyReader.readPrivateKey(encoded, algorithm.getAlgorithm());
+	}
+
 	/**
 	 * Transform the given {@link PemObject} object in pem format {@link String} object.
 	 *
@@ -151,8 +212,7 @@ public final class PemObjectReader
 		final PemWriter pemWriter = new PemWriter(stringWriter);
 		pemWriter.writeObject(pemObject);
 		pemWriter.close();
-		final String pemString = stringWriter.toString();
-		return pemString;
+		return stringWriter.toString();
 	}
 
 	/**

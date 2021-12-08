@@ -4,6 +4,9 @@
 Version 7.10-SNAPSHOT
 -------------
 
+ADDED:
+
+- new method in class PemObjectReader that transform a pem formatted key file to a PrivateKey object
 
 Version 7.9
 -------------

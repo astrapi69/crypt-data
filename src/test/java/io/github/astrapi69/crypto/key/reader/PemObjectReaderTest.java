@@ -31,8 +31,13 @@ import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.Security;
+import java.security.spec.InvalidKeySpecException;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
@@ -58,6 +63,7 @@ public class PemObjectReaderTest
 	@BeforeMethod
 	protected void setUp()
 	{
+		Security.addProvider(new BouncyCastleProvider());
 		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
 		privateKeyDerFile = new File(derDir, "private.der");
@@ -206,6 +212,28 @@ public class PemObjectReaderTest
 		privatekeyPemFile = new File(privatekeyPemDir, "test.key");
 
 		privateKey = PemObjectReader.readPemPrivateKey(privatekeyPemFile, "bosco");
+		assertNotNull(privateKey);
+	}
+
+	/**
+	 * Test method for {@link PemObjectReader#readPemPrivateKey(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testReadPemPrivateKeyWithoutPassword()
+		throws IOException, NoSuchAlgorithmException, InvalidKeySpecException,
+		NoSuchProviderException
+	{
+		File privatekeyPemDir;
+		File privatekeyPemFile;
+		PrivateKey privateKey;
+		// new scenario...
+		privatekeyPemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
+		privatekeyPemFile = new File(privatekeyPemDir, "private.pem");
+
+		privateKey = PemObjectReader.readPemPrivateKey(privatekeyPemFile);
 		assertNotNull(privateKey);
 	}
 
