@@ -36,6 +36,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
+import io.github.astrapi69.crypto.algorithm.CryptoAlgorithm;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.key.KeyFileFormat;
 
@@ -217,9 +218,7 @@ public final class PrivateKeyReader
 	public static PrivateKey readPemPrivateKey(final File file) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
-		final String privateKeyAsString = readPemFileAsBase64(file);
-		final byte[] decoded = new Base64().decode(privateKeyAsString);
-		return readPrivateKey(decoded);
+		return PemObjectReader.readPemPrivateKey(file);
 	}
 
 	/**
@@ -246,8 +245,7 @@ public final class PrivateKeyReader
 		throws IOException, NoSuchAlgorithmException, InvalidKeySpecException,
 		NoSuchProviderException
 	{
-		final String privateKeyAsString = readPemFileAsBase64(file);
-		return readPemPrivateKey(privateKeyAsString, algorithm);
+		return PemObjectReader.readPrivateKey(file, CryptoAlgorithm.newAlgorithm(algorithm));
 	}
 
 	/**
