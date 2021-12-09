@@ -25,6 +25,7 @@
 package io.github.astrapi69.crypto.key.reader;
 
 import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertNull;
 import static org.testng.AssertJUnit.assertTrue;
@@ -36,6 +37,7 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Optional;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.io.pem.PemObject;
@@ -201,18 +203,18 @@ public class PemObjectReaderTest
 	{
 		File privatekeyPemDir;
 		File privatekeyPemFile;
-		PrivateKey privateKey;
+		Optional<PrivateKey> actual;
 		// new scenario...
 		privatekeyPemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 		privatekeyPemFile = new File(privatekeyPemDir, "id_rsa");
 
-		privateKey = PemObjectReader.readPemPrivateKey(privatekeyPemFile, "secret");
-		assertNotNull(privateKey);
+		actual = PemObjectReader.readPemPrivateKey(privatekeyPemFile, "secret");
+		assertTrue(actual.isPresent());
 		// new scenario...
 		privatekeyPemFile = new File(privatekeyPemDir, "test.key");
 
-		privateKey = PemObjectReader.readPemPrivateKey(privatekeyPemFile, "bosco");
-		assertNotNull(privateKey);
+		actual = PemObjectReader.readPemPrivateKey(privatekeyPemFile, "bosco");
+		assertTrue(actual.isPresent());
 	}
 
 	/**
@@ -222,9 +224,8 @@ public class PemObjectReaderTest
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testReadPemPrivateKeyWithoutPassword()
-		throws IOException, NoSuchAlgorithmException, InvalidKeySpecException,
-		NoSuchProviderException
+	public void testReadPemPrivateKeyWithoutPassword() throws IOException, NoSuchAlgorithmException,
+		InvalidKeySpecException, NoSuchProviderException
 	{
 		File privatekeyPemDir;
 		File privatekeyPemFile;
@@ -268,7 +269,7 @@ public class PemObjectReaderTest
 	@Test
 	public void testToPemFormatFile() throws IOException
 	{
-		String actual;
+		Optional<String> actual;
 		File privatekeyPemDir;
 		File privatekeyPemFile;
 

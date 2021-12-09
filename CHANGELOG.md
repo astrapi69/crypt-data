@@ -8,6 +8,10 @@ ADDED:
 
 - new method in class PemObjectReader that transform a pem formatted key file to a PrivateKey object
 
+CHANGED:
+
+- replaced null returns with Optional.empty()
+
 Version 7.9
 -------------
 
