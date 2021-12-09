@@ -99,7 +99,7 @@ public enum KeyStringEntry
 	/** The Constant PEM_KEY_BEGIN_PREFIX. */
 	private static final String PEM_KEY_END_PREFIX = FIVE_HYPHENS + "END ";
 	/** The Constant PEM_KEY_PREFIX. */
-	private static final String PEM_KEY_NAME_SUFFIX = FIVE_HYPHENS + "\n";
+	private static final String PEM_KEY_NAME_SUFFIX = FIVE_HYPHENS;
 
 	/** The value the PEM entry */
 	String value;

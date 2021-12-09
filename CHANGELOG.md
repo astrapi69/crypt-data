@@ -1,6 +1,20 @@
 ## Change log
 ----------------------
 
+Version 7.10
+-------------
+
+ADDED:
+
+- new method in class PemObjectReader that transform a pem formatted key file to a PrivateKey object
+
+CHANGED:
+
+- update gradle to new version 7.3
+- update of bcpkix-jdk15on dependency version to 1.70
+- update of test dependency jobj-core to new version to 5
+- replaced null returns with Optional.empty()
+
 Version 7.9
 -------------
 
