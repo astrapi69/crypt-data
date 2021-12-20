@@ -27,7 +27,11 @@ package io.github.astrapi69.crypto.algorithm;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Test class for the class {@link CryptoAlgorithm}
@@ -47,4 +51,16 @@ public class CryptoAlgorithmTest
 		String name = aes.name();
 		assertEquals(algorithmName, name);
 	}
+
+	/**
+	 * Test method for {@link CryptoAlgorithm} with {@link BeanTester}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
+		UnsupportedOperationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(CryptoAlgorithm.class);
+	}
+
 }

@@ -25,8 +25,7 @@ ADDED:
 
 - new method that transform a pem formatted key file to a String
 - new model class for public and private keys
-- improve gradle build performance by adding new gradle parameters for caching, parallel, configure on demand and file
-  watch
+- improve gradle build performance by adding new gradle parameters for caching, parallel, configure on demand and file watch
 
 CHANGED:
 
