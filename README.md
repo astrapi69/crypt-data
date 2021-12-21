@@ -20,6 +20,30 @@ Utility library to provide data beans, writers and readers for encryption and de
 >
 > If you love this project [![donation](https://img.shields.io/badge/donate-❤-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
 
+## gradle dependency
+
+You can first define the version in the ext section and add than the following gradle dependency to your
+project `build.gradle` if you want to import the core functionality of crypt-data:
+
+define version in file gradle.properties
+
+```
+cryptDataVersion=7.10
+```
+
+or in build.gradle ext area
+
+```
+    cryptDataVersion = '7.10'
+}
+```
+
+and then add the dependency to the dependencies area
+
+```
+implementation("io.github.astrapi69:crypt-data:$cryptDataVersion")
+```
+
 ## Maven dependency [![Maven Central](https://img.shields.io/maven-central/v/io.github.astrapi69/crypt-data.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.astrapi69%22%20AND%20a:%22crypt-data%22)
 
 Maven dependency is now on sonatype. Check
@@ -28,7 +52,7 @@ latest snapshots and releases.
 
 Add the following maven dependency to your project `pom.xml` if you want to import the core functionality of crypt-data:
 
-Than you can add the dependency to your dependencies:
+Add the dependency to your dependencies:
 
 	<properties>
 			...
@@ -44,41 +68,9 @@ Than you can add the dependency to your dependencies:
 				<groupId>io.github.astrapi69</groupId>
 				<artifactId>crypt-data</artifactId>
 				<version>${crypt-data.version}</version>
-				<scope>test</scope>
 			</dependency>
 			...
 		</dependencies>
-
-## gradle dependency
-
-You can first define the version in the ext section and add than the following gradle dependency to your
-project `build.gradle` if you want to import the core functionality of crypt-data:
-
-```
-define version in file gradle.properties
-
-cryptDataVersion=7.10
-```
-
-or in build.gradle ext area
-
-```
-ext {
-			...
-    cryptDataVersion = '7.10'
-			...
-}
-```
-
-and than add the dependency to the dependencies area
-
-```
-dependencies {
-			...
-implementation("io.github.astrapi69:crypt-data:$cryptDataVersion")
-			...
-}
-```
 
 # Donations
 
