@@ -61,13 +61,4 @@ public class ObfuscationRuleTest
 		beanTester.testBean(ObfuscationRule.class);
 	}
 
-	/**
-	 * Test method for {@link ObfuscationRule#equals(Object)} , {@link ObfuscationRule#hashCode()}
-	 * and {@link ObfuscationRule#toString()}
-	 */
-	@Test
-	public void verifyEqualsHashcodeAndToStringContracts()
-	{
-		ContractVerifier.of(ObfuscationRule.class).verify();
-	}
 }

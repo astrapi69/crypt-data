@@ -4,6 +4,21 @@
 Version 7.11-SNAPSHOT
 -------------
 
+ADDED:
+
+- gradle-plugin dependency of 'org.ajoberstar.grgit:grgit-gradle' in version 4.4.1 for create git release tags
+
+CHANGED:
+
+- update gradle to new version 7.3.3
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.41.0
+- update of test dependency jobj-core to new version to 5.2
+- update of test dependency testng to new version to 7.5
+- update of test dependency test-objects to new version to 5.7
+- update of test dependency jobj-contract-verifier to new version to 3.5
+- update of test dependency randomizer to new version to 8.5
+
+
 Version 7.10
 -------------
 
