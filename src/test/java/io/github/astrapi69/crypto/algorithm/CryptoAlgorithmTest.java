@@ -56,7 +56,7 @@ public class CryptoAlgorithmTest
 	 * Test method for {@link CryptoAlgorithm} with {@link BeanTester}
 	 */
 	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-		UnsupportedOperationException.class })
+			UnsupportedOperationException.class })
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
