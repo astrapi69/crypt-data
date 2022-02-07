@@ -2,12 +2,15 @@
 
 <div style="text-align: center">
 
-[![Build Status](https://api.travis-ci.com/astrapi69/crypt-data.svg?branch=develop)](https://travis-ci.com/github/astrapi69/crypt-data)
+[![Java CI with Gradle](https://github.com/astrapi69/crypt-data/actions/workflows/gradle.yml/badge.svg)](https://github.com/astrapi69/crypt-data/actions/workflows/gradle.yml)
 [![Coverage Status](https://codecov.io/gh/astrapi69/crypt-data/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/crypt-data)
 [![Open Issues](https://img.shields.io/github/issues/astrapi69/crypt-data.svg?style=flat)](https://github.com/astrapi69/crypt-data/issues)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/crypt-data/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/crypt-data)
 [![Javadocs](http://www.javadoc.io/badge/io.github.astrapi69/crypt-data.svg)](http://www.javadoc.io/doc/io.github.astrapi69/crypt-data)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](http://opensource.org/licenses/MIT)
+[![Donate](https://img.shields.io/badge/donate-❤-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
+[![Hits Of Code](https://hitsofcode.com/github/astrapi69/crypt-data?branch=develop)](https://hitsofcode.com/github/astrapi69/crypt-data/view?branch=develop)
+[![Lines Of Code](https://tokei.rs/b1/github/astrapi69/crypt-data)](https://github.com/astrapi69/crypt-data)
 
 </div>
 
@@ -54,23 +57,23 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 
 Add the dependency to your dependencies:
 
-	<properties>
-			...
-		<!-- CRYPT-DATA version -->
-		<crypt-data.version>7.10</crypt-data.version>
-			...
-	</properties>
-			...
-		<dependencies>
-			...
-			<!-- CRYPT-DATA DEPENDENCY -->
-			<dependency>
-				<groupId>io.github.astrapi69</groupId>
-				<artifactId>crypt-data</artifactId>
-				<version>${crypt-data.version}</version>
-			</dependency>
-			...
-		</dependencies>
+    <properties>
+            ...
+        <!-- CRYPT-DATA version -->
+        <crypt-data.version>7.10</crypt-data.version>
+            ...
+    </properties>
+            ...
+        <dependencies>
+            ...
+            <!-- CRYPT-DATA DEPENDENCY -->
+            <dependency>
+                <groupId>io.github.astrapi69</groupId>
+                <artifactId>crypt-data</artifactId>
+                <version>${crypt-data.version}</version>
+            </dependency>
+            ...
+        </dependencies>
 
 # Donations
 
@@ -198,4 +201,3 @@ requests.
 |[![Javadocs](http://www.javadoc.io/badge/io.github.astrapi69/crypt-data.svg)](http://www.javadoc.io/doc/io.github.astrapi69/crypt-data)|
 |Special thanks to [javadoc.io](http://www.javadoc.io) for providing a free javadoc documentation for open source projects|
 |     <img width=1000/>     |
-
