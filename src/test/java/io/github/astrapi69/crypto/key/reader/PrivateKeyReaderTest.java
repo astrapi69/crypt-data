@@ -25,24 +25,32 @@
 package io.github.astrapi69.crypto.key.reader;
 
 import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Optional;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import io.github.astrapi69.crypto.algorithm.Algorithm;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.factory.KeyPairFactory;
 import io.github.astrapi69.crypto.key.KeyFileFormat;
+import io.github.astrapi69.crypto.key.KeySize;
 import io.github.astrapi69.crypto.key.PrivateKeyExtensions;
+import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
@@ -87,6 +95,74 @@ public class PrivateKeyReaderTest
 
 
 	/**
+	 * Test method for {@link KeyPairFactory#newKeyPair(Algorithm, KeySize)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testGetPrivateKey() throws IOException
+	{
+
+		Optional<PrivateKey> optionalPrivateKey;
+		File privateKeyFile;
+		PrivateKey privateKey;
+		String algorithm;
+
+
+		privateKeyFile = FileFactory.newFile(
+			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "der", "type"),
+			"dh-pk.der");
+
+		optionalPrivateKey = PrivateKeyReader.getPrivateKey(privateKeyFile);
+		assertTrue(optionalPrivateKey.isPresent());
+		privateKey = optionalPrivateKey.get();
+		algorithm = privateKey.getAlgorithm();
+		assertEquals(algorithm, "DH");
+
+		privateKeyFile = FileFactory.newFile(
+			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "der", "type"),
+			"dsa-pk.der");
+
+		optionalPrivateKey = PrivateKeyReader.getPrivateKey(privateKeyFile);
+		assertTrue(optionalPrivateKey.isPresent());
+		privateKey = optionalPrivateKey.get();
+		algorithm = privateKey.getAlgorithm();
+		assertEquals(algorithm, "DSA");
+
+		privateKeyFile = FileFactory.newFile(
+			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "der", "type"),
+			"ec-pk.der");
+
+		optionalPrivateKey = PrivateKeyReader.getPrivateKey(privateKeyFile);
+		assertTrue(optionalPrivateKey.isPresent());
+		privateKey = optionalPrivateKey.get();
+		algorithm = privateKey.getAlgorithm();
+		assertEquals(algorithm, "EC");
+
+		privateKeyFile = FileFactory.newFile(
+			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "der", "type"),
+			"rsa-pk.der");
+
+		optionalPrivateKey = PrivateKeyReader.getPrivateKey(privateKeyFile);
+		assertTrue(optionalPrivateKey.isPresent());
+		privateKey = optionalPrivateKey.get();
+		algorithm = privateKey.getAlgorithm();
+		assertEquals(algorithm, "RSA");
+
+		privateKeyFile = FileFactory.newFile(
+			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "der", "type"),
+			"rsassa_pss-pk.der");
+
+		optionalPrivateKey = PrivateKeyReader.getPrivateKey(privateKeyFile);
+		assertTrue(optionalPrivateKey.isPresent());
+		privateKey = optionalPrivateKey.get();
+		algorithm = privateKey.getAlgorithm();
+		assertEquals(algorithm, "RSASSA-PSS");
+	}
+
+
+	/**
 	 * Test method for {@link PrivateKeyReader#getKeyFormat(File)}
 	 */
 	@Test
@@ -119,16 +195,13 @@ public class PrivateKeyReaderTest
 	public void testIsPemFormat() throws Exception
 	{
 		boolean actual;
-		boolean expected;
 		// new scenario
 		actual = PrivateKeyReader.isPemFormat(privateKeyDerFile);
-		expected = false;
-		assertEquals(actual, expected);
+		assertFalse(actual);
 
 		// new scenario
 		actual = PrivateKeyReader.isPemFormat(privateKeyPemFile);
-		expected = true;
-		assertEquals(actual, expected);
+		assertTrue(actual);
 	}
 
 	/**
@@ -138,12 +211,10 @@ public class PrivateKeyReaderTest
 	public void testIsPrivateKeyPasswordProtected() throws Exception
 	{
 		boolean actual;
-		boolean expected;
 		PrivateKey passwordProtectedPrivateKey;
 		// new scenario
 		actual = PrivateKeyReader.isPrivateKeyPasswordProtected(privateKeyDerFile);
-		expected = false;
-		assertEquals(actual, expected);
+		assertFalse(actual);
 		// new scenario
 		// check if the pk is pwp...
 		passwordProtectedPrivateKey = EncryptedPrivateKeyReader
@@ -152,8 +223,7 @@ public class PrivateKeyReaderTest
 		assertNotNull(passwordProtectedPrivateKey);
 
 		actual = PrivateKeyReader.isPrivateKeyPasswordProtected(passwordProtectedPrivateKeyDerFile);
-		expected = true;
-		assertEquals(actual, expected);
+		assertTrue(actual);
 
 		// new scenario
 		passwordProtectedPrivateKey = EncryptedPrivateKeyReader
@@ -162,12 +232,11 @@ public class PrivateKeyReaderTest
 		assertNotNull(passwordProtectedPrivateKey);
 
 		actual = PrivateKeyReader.isPrivateKeyPasswordProtected(passwordProtectedPrivateKeyDerFile);
-		assertEquals(actual, expected);
+		assertTrue(actual);
 
 		// new scenario
 		actual = PrivateKeyReader.isPrivateKeyPasswordProtected(privateKeyPemFile);
-		expected = false;
-		assertEquals(actual, expected);
+		assertFalse(actual);
 	}
 
 
@@ -178,12 +247,10 @@ public class PrivateKeyReaderTest
 	public void testValidatePrivateKey() throws Exception
 	{
 		boolean actual;
-		boolean expected;
 		PrivateKey passwordProtectedPrivateKey;
 		// new scenario
 		actual = PrivateKeyReader.validatePrivateKey(privateKeyDerFile);
-		expected = true;
-		assertEquals(actual, expected);
+		assertTrue(actual);
 		// new scenario
 		// check if the pk is pwp...
 		passwordProtectedPrivateKey = EncryptedPrivateKeyReader
@@ -192,8 +259,7 @@ public class PrivateKeyReaderTest
 		assertNotNull(passwordProtectedPrivateKey);
 
 		actual = PrivateKeyReader.validatePrivateKey(passwordProtectedPrivateKeyDerFile);
-		expected = false;
-		assertEquals(actual, expected);
+		assertFalse(actual);
 
 		// new scenario
 		passwordProtectedPrivateKey = EncryptedPrivateKeyReader
@@ -202,12 +268,11 @@ public class PrivateKeyReaderTest
 		assertNotNull(passwordProtectedPrivateKey);
 
 		actual = PrivateKeyReader.validatePrivateKey(passwordProtectedPrivateKeyDerFile);
-		assertEquals(actual, expected);
+		assertFalse(actual);
 
 		// new scenario
 		actual = PrivateKeyReader.validatePrivateKey(privateKeyPemFile);
-		expected = true;
-		assertEquals(actual, expected);
+		assertTrue(actual);
 	}
 
 	/**
@@ -260,7 +325,7 @@ public class PrivateKeyReaderTest
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testReadPemPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException,
 		NoSuchProviderException, IOException
 	{
@@ -334,6 +399,49 @@ public class PrivateKeyReaderTest
 		NoSuchProviderException, IOException
 	{
 		actual = PrivateKeyReader.readPrivateKey(privateKeyDerFile);
+		assertNotNull(actual);
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyReader#readPrivateKey(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list.
+	 */
+	@Test
+	public void testReadPrivateKeyFromByteArray() throws NoSuchAlgorithmException,
+		InvalidKeySpecException, NoSuchProviderException, IOException
+	{
+		actual = PrivateKeyReader.readPrivateKey(Files.readAllBytes(privateKeyDerFile.toPath()));
+		assertNotNull(actual);
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyReader#readPrivateKey(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list.
+	 */
+	@Test
+	public void testReadPrivateKeyFromFileWithAlgorithm() throws NoSuchAlgorithmException,
+		InvalidKeySpecException, NoSuchProviderException, IOException
+	{
+		actual = PrivateKeyReader.readPrivateKey(privateKeyDerFile,
+			KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
 		assertNotNull(actual);
 	}
 
