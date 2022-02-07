@@ -39,11 +39,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.Optional;
+import java.util.logging.Level;
 
 import javax.crypto.Cipher;
 import javax.crypto.EncryptedPrivateKeyInfo;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKeyFactory;
+
+import lombok.extern.java.Log;
 
 import org.bouncycastle.openssl.PEMDecryptorProvider;
 import org.bouncycastle.openssl.PEMEncryptedKeyPair;
@@ -54,15 +58,16 @@ import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.bouncycastle.openssl.jcajce.JcePEMDecryptorProviderBuilder;
 
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import io.github.astrapi69.crypto.factories.CipherFactory;
-import io.github.astrapi69.crypto.factories.KeySpecFactory;
-import io.github.astrapi69.crypto.factories.SecretKeyFactoryExtensions;
+import io.github.astrapi69.crypto.factory.CipherFactory;
+import io.github.astrapi69.crypto.factory.KeySpecFactory;
+import io.github.astrapi69.crypto.factory.SecretKeyFactoryExtensions;
 import io.github.astrapi69.crypto.provider.SecurityProvider;
 
 /**
  * The class {@link EncryptedPrivateKeyReader} is a utility class for reading encrypted private keys
  * that are protected with a password.
  */
+@Log
 public final class EncryptedPrivateKeyReader
 {
 
@@ -80,7 +85,7 @@ public final class EncryptedPrivateKeyReader
 	 *            the password
 	 * @return the key pair
 	 * @throws FileNotFoundException
-	 *             is thrown if the file did not found
+	 *             is thrown if the file not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws PEMException
@@ -154,32 +159,103 @@ public final class EncryptedPrivateKeyReader
 	}
 
 	/**
-	 * Reads the given {@link File} that contains a password protected private key.
+	 * Reads the given {@link File} that contains a password protected private key, if fails null
+	 * will be returned.
 	 *
 	 * @param encryptedPrivateKeyFile
 	 *            the file that contains the password protected private key
 	 * @param password
 	 *            the password
-	 * @return the {@link PrivateKey} object
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
-	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cypher object fails
-	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
-	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails.
-	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cipher object fails.
+	 * @return the {@link PrivateKey} object or null if it fails
 	 */
 	public static PrivateKey readPasswordProtectedPrivateKey(final File encryptedPrivateKeyFile,
-		final String password) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException,
-		InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException
+		final String password)
 	{
-		return readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-			KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		return getPrivateKey(encryptedPrivateKeyFile, password).orElse(null);
+	}
+
+	/**
+	 * Gets an {@link Optional} with the password protected private key from the given file. If it
+	 * does not match the optional is empty.
+	 *
+	 * @param encryptedPrivateKeyFile
+	 *            the file that contains the password protected private key
+	 * @param password
+	 *            the password
+	 * @return the {@link Optional} object with the password protected private key from the given
+	 *         file or an empty {@link Optional} object if it does not match
+	 */
+	public static Optional<PrivateKey> getPrivateKey(final File encryptedPrivateKeyFile,
+		final String password)
+	{
+		Optional<PrivateKey> optionalPrivateKey = Optional.empty();
+		PrivateKey privateKey;
+		try
+		{
+			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
+				KeyPairGeneratorAlgorithm.DIFFIE_HELLMAN.getAlgorithm());
+			optionalPrivateKey = Optional.of(privateKey);
+			return optionalPrivateKey;
+		}
+		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
+			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
+		{
+			log.log(Level.WARNING,
+				"Given password protected private key file is not stored in 'DiffieHellman' algorithm");
+		}
+		try
+		{
+			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
+				KeyPairGeneratorAlgorithm.DSA.getAlgorithm());
+			optionalPrivateKey = Optional.of(privateKey);
+			return optionalPrivateKey;
+		}
+		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
+			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
+		{
+			log.log(Level.WARNING,
+				"Given password protected private key file is not stored in 'DSA' algorithm");
+		}
+		try
+		{
+			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
+				KeyPairGeneratorAlgorithm.EC.getAlgorithm());
+			optionalPrivateKey = Optional.of(privateKey);
+			return optionalPrivateKey;
+		}
+		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
+			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
+		{
+			log.log(Level.WARNING,
+				"Given password protected private key file is not stored in 'EC' algorithm");
+		}
+		try
+		{
+			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
+				KeyPairGeneratorAlgorithm.RSASSA_PSS.getAlgorithm());
+			optionalPrivateKey = Optional.of(privateKey);
+			return optionalPrivateKey;
+		}
+		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
+			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
+		{
+			log.log(Level.WARNING,
+				"Given password protected private key file is not stored in 'RSASSA-PSS' algorithm");
+		}
+		try
+		{
+			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
+				KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+			optionalPrivateKey = Optional.of(privateKey);
+			return optionalPrivateKey;
+		}
+		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
+			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
+		{
+			log.log(Level.WARNING,
+				"Given password protected private key file is not stored in 'RSA' algorithm");
+		}
+		return optionalPrivateKey;
 	}
 
 	/**

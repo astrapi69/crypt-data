@@ -22,7 +22,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.crypto.factories;
+package io.github.astrapi69.crypto.factory;
 
 import static org.testng.AssertJUnit.assertNotNull;
 
@@ -81,10 +81,14 @@ public class KeyPairFactoryTest
 		actual = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.DSA, KeySize.KEYSIZE_2048);
 		assertNotNull(actual);
 
+		actual = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.EC, KeySize.KEYSIZE_2048);
+		assertNotNull(actual);
+
 		actual = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_2048);
 		assertNotNull(actual);
 
-		actual = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.EC, KeySize.KEYSIZE_2048);
+		actual = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSASSA_PSS,
+			KeySize.KEYSIZE_2048);
 		assertNotNull(actual);
 	}
 
@@ -151,20 +155,20 @@ public class KeyPairFactoryTest
 	public void testProtectPrivateKeyWithPassword() throws Exception
 	{
 
-		File publickeyDerDir;
-		File publickeyDerFile;
-		File privatekeyDerFile;
+		File publicKeyDerDir;
+		File publicKeyDerFile;
+		File privateKeyDerFile;
 		PrivateKey privateKey;
 		PublicKey publicKey;
 		KeyPair keyPair;
 
-		publickeyDerDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
-		publickeyDerFile = new File(publickeyDerDir, "public.der");
-		privatekeyDerFile = new File(publickeyDerDir, "private.der");
+		publicKeyDerDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
+		publicKeyDerFile = new File(publicKeyDerDir, "public.der");
+		privateKeyDerFile = new File(publicKeyDerDir, "private.der");
 
-		privateKey = PrivateKeyReader.readPrivateKey(privatekeyDerFile);
+		privateKey = PrivateKeyReader.readPrivateKey(privateKeyDerFile);
 
-		publicKey = PublicKeyReader.readPublicKey(publickeyDerFile);
+		publicKey = PublicKeyReader.readPublicKey(publicKeyDerFile);
 
 		keyPair = KeyPairFactory.newKeyPair(publicKey, privateKey);
 		assertNotNull(keyPair);

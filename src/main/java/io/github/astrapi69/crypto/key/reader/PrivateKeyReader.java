@@ -33,6 +33,10 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.Optional;
+import java.util.logging.Level;
+
+import lombok.extern.java.Log;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -44,6 +48,7 @@ import io.github.astrapi69.crypto.key.KeyFileFormat;
  * The class {@link PrivateKeyReader} is a utility class for reading private keys in *.der or *.pem
  * format.
  */
+@Log
 public final class PrivateKeyReader
 {
 
@@ -95,7 +100,7 @@ public final class PrivateKeyReader
 	 *
 	 * @param file
 	 *            the file that contains the private key
-	 * @return true, if if the given {@link File} is password protected otherwise false
+	 * @return true, if the given {@link File} is password protected otherwise false
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -118,7 +123,7 @@ public final class PrivateKeyReader
 		{
 			try
 			{
-				readPrivateKey(file);
+				passwordProtected = readPrivateKey(file) == null;
 			}
 			catch (Exception e)
 			{
@@ -133,7 +138,7 @@ public final class PrivateKeyReader
 	 *
 	 * @param file
 	 *            the file to check
-	 * @return true, if if the given {@link File}(is a valid private key file otherwise false
+	 * @return true, if the given {@link File}(is a valid private key file otherwise false
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -156,7 +161,7 @@ public final class PrivateKeyReader
 		{
 			try
 			{
-				readPrivateKey(file);
+				valid = readPrivateKey(file) != null;
 			}
 			catch (Exception e)
 			{
@@ -180,14 +185,14 @@ public final class PrivateKeyReader
 		final byte[] keyBytes = Files.readAllBytes(file.toPath());
 		final String privateKeyPem = new String(keyBytes);
 		String privateKeyAsBase64String = null;
-		if (privateKeyPem.indexOf(KeyStringEntry.BEGIN_PRIVATE_KEY_PREFIX.getValue()) != -1)
+		if (privateKeyPem.contains(KeyStringEntry.BEGIN_PRIVATE_KEY_PREFIX.getValue()))
 		{
 			// PKCS#8 format
 			privateKeyAsBase64String = new String(keyBytes)
 				.replace(KeyStringEntry.BEGIN_PRIVATE_KEY_PREFIX.getValue(), "")
 				.replace(KeyStringEntry.END_PRIVATE_KEY_SUFFIX.getValue(), "").trim();
 		}
-		if (privateKeyPem.indexOf(KeyStringEntry.BEGIN_RSA_PRIVATE_KEY_PREFIX.getValue()) != -1)
+		if (privateKeyPem.contains(KeyStringEntry.BEGIN_RSA_PRIVATE_KEY_PREFIX.getValue()))
 		{
 			// PKCS#1 format
 			privateKeyAsBase64String = new String(keyBytes)
@@ -293,7 +298,7 @@ public final class PrivateKeyReader
 	public static PrivateKey readPrivateKey(final byte[] privateKeyBytes)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
-		return readPrivateKey(privateKeyBytes, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		return getPrivateKey(privateKeyBytes).orElse(null);
 	}
 
 	/**
@@ -315,8 +320,7 @@ public final class PrivateKeyReader
 	{
 		final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
 		final KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
-		final PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
-		return privateKey;
+		return keyFactory.generatePrivate(keySpec);
 	}
 
 	/**
@@ -324,7 +328,7 @@ public final class PrivateKeyReader
 	 * {@link PrivateKey} object.
 	 *
 	 * @param file
-	 *            the file( in *.der format) that contains the private key
+	 *            the file that contains the private key
 	 * @return the {@link PrivateKey} object
 	 *
 	 * @throws IOException
@@ -344,7 +348,96 @@ public final class PrivateKeyReader
 		{
 			return readPemPrivateKey(file);
 		}
-		return readPrivateKey(file, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		return getPrivateKey(file).orElse(null);
+	}
+
+	/**
+	 * Gets an {@link Optional} with the private key from the given file. If it does not match the
+	 * optional is empty.
+	 *
+	 * @param privateKeyFile
+	 *            the file that contains the private key
+	 * @return the {@link Optional} object with the private key from the given file or an empty
+	 *         {@link Optional} object if it does not match
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static Optional<PrivateKey> getPrivateKey(File privateKeyFile) throws IOException
+	{
+		return getPrivateKey(Files.readAllBytes(privateKeyFile.toPath()));
+	}
+
+	/**
+	 * Gets an {@link Optional} with the private key from the given file. If it does not match the
+	 * optional is empty.
+	 *
+	 * @param privateKeyBytes
+	 *            the byte array that contains the private key bytes
+	 * @return the {@link Optional} object with the private key from the given file or an empty
+	 *         {@link Optional} object if it does not match
+	 */
+	public static Optional<PrivateKey> getPrivateKey(final byte[] privateKeyBytes)
+	{
+		Optional<PrivateKey> optionalPrivateKey = Optional.empty();
+		PrivateKey privateKey;
+		try
+		{
+			privateKey = PrivateKeyReader.readPrivateKey(privateKeyBytes,
+				KeyPairGeneratorAlgorithm.DIFFIE_HELLMAN.getAlgorithm());
+			optionalPrivateKey = Optional.of(privateKey);
+			return optionalPrivateKey;
+		}
+		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
+		{
+			log.log(Level.WARNING,
+				"Given private key file is not stored in 'DiffieHellman' algorithm");
+		}
+		try
+		{
+			privateKey = PrivateKeyReader.readPrivateKey(privateKeyBytes,
+				KeyPairGeneratorAlgorithm.DSA.getAlgorithm());
+			optionalPrivateKey = Optional.of(privateKey);
+			return optionalPrivateKey;
+		}
+		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
+		{
+			log.log(Level.WARNING, "Given private key file is not stored in 'DSA' algorithm");
+		}
+		try
+		{
+			privateKey = PrivateKeyReader.readPrivateKey(privateKeyBytes,
+				KeyPairGeneratorAlgorithm.EC.getAlgorithm());
+			optionalPrivateKey = Optional.of(privateKey);
+			return optionalPrivateKey;
+		}
+		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
+		{
+			log.log(Level.WARNING, "Given private key file is not stored in 'EC' algorithm");
+		}
+		try
+		{
+			privateKey = PrivateKeyReader.readPrivateKey(privateKeyBytes,
+				KeyPairGeneratorAlgorithm.RSASSA_PSS.getAlgorithm());
+			optionalPrivateKey = Optional.of(privateKey);
+			return optionalPrivateKey;
+		}
+		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
+		{
+			log.log(Level.WARNING,
+				"Given private key file is not stored in 'RSASSA-PSS' algorithm");
+		}
+		try
+		{
+			privateKey = PrivateKeyReader.readPrivateKey(privateKeyBytes,
+				KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+			optionalPrivateKey = Optional.of(privateKey);
+			return optionalPrivateKey;
+		}
+		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
+		{
+			e.printStackTrace();
+		}
+		return optionalPrivateKey;
 	}
 
 	/**
@@ -398,12 +491,7 @@ public final class PrivateKeyReader
 		final String fileName) throws NoSuchAlgorithmException, InvalidKeySpecException,
 		NoSuchProviderException, IOException
 	{
-
-		final File privatekeyDir = new File(root, directory);
-		final File privatekeyFile = new File(privatekeyDir, fileName);
-
-		final PrivateKey privateKey = PrivateKeyReader.readPrivateKey(privatekeyFile);
-		return privateKey;
+		return PrivateKeyReader.readPrivateKey(new File(new File(root, directory), fileName));
 	}
 
 }

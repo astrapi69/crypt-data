@@ -22,60 +22,37 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.crypto.factories;
+package io.github.astrapi69.crypto.factory;
 
-import java.security.spec.KeySpec;
+import java.security.spec.AlgorithmParameterSpec;
 
-import javax.crypto.spec.PBEKeySpec;
-
-import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
+import javax.crypto.spec.PBEParameterSpec;
 
 /**
- * The factory class {@link KeySpecFactory} holds methods for creating {@link KeySpec} objects.
+ * The factory class {@link AlgorithmParameterSpecFactory} holds methods for creating
+ * {@link AlgorithmParameterSpec} objects.
  */
-public final class KeySpecFactory
+public final class AlgorithmParameterSpecFactory
 {
 
-	private KeySpecFactory()
+	private AlgorithmParameterSpecFactory()
 	{
 	}
 
 	/**
-	 * Factory method for creating a new {@link PBEKeySpec} from the given private key.
+	 * Factory method for creating a new {@link PBEParameterSpec} from the given salt and iteration
+	 * count.
 	 *
-	 * @param privateKey
-	 *            the private key
-	 * @return the new {@link PBEKeySpec} from the given private key.
-	 */
-	public static KeySpec newPBEKeySpec(final String privateKey)
-	{
-		if (privateKey == null)
-		{
-			return new PBEKeySpec(CompoundAlgorithm.PRIVATE_KEY.toCharArray());
-		}
-		return new PBEKeySpec(privateKey.toCharArray());
-	}
-
-	/**
-	 * Factory method for creating a new {@link PBEKeySpec} from the given private key.
-	 *
-	 * @param privateKey
-	 *            the private key
 	 * @param salt
 	 *            the salt
 	 * @param iterationCount
 	 *            the iteration count
-	 * @return the new {@link PBEKeySpec} from the given private key.
+	 * @return the new {@link PBEParameterSpec} from the given salt and iteration count.
 	 */
-	public static KeySpec newPBEKeySpec(final String privateKey, final byte[] salt,
+	public static AlgorithmParameterSpec newPBEParameterSpec(final byte[] salt,
 		final int iterationCount)
 	{
-		if (privateKey == null)
-		{
-			return new PBEKeySpec(CompoundAlgorithm.PRIVATE_KEY.toCharArray(), salt,
-				iterationCount);
-		}
-		return new PBEKeySpec(privateKey.toCharArray(), salt, iterationCount);
+		final AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
+		return paramSpec;
 	}
-
 }

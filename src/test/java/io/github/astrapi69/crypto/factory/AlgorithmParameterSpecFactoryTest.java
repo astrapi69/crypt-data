@@ -22,30 +22,43 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.crypto.factories;
+package io.github.astrapi69.crypto.factory;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.security.spec.AlgorithmParameterSpec;
 
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.collections.list.ListFactory;
+import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 
-public class PinFactoryTest
+/**
+ * The unit test class for the class {@link AlgorithmParameterSpecFactory}
+ */
+public class AlgorithmParameterSpecFactoryTest
 {
 
+	/**
+	 * Test method for {@link AlgorithmParameterSpecFactory#newPBEParameterSpec(byte[], int)}
+	 */
 	@Test
-	public void testNewPins()
+	public void testNewPBEParameterSpec() throws Exception
 	{
-		List<LocalDate> localDates;
-		List<String> datePatterns;
-		datePatterns = ListFactory.newArrayList("ddMM", "MMdd", "MMyy", "yyyy");
-		localDates = ListFactory.newArrayList(LocalDate.of(1963, 11, 14), LocalDate.of(1967, 4, 18),
-			LocalDate.of(1977, 5, 21), LocalDate.of(1981, 1, 19), LocalDate.of(1988, 3, 11));
-		List<String> pins = PinFactory.newPins(localDates, datePatterns);
-		assertEquals(pins.size(), 20);
-		// pins.stream().forEach(System.out::println);
+		AlgorithmParameterSpec pbeParameterSpec;
+		pbeParameterSpec = AlgorithmParameterSpecFactory.newPBEParameterSpec(CompoundAlgorithm.SALT,
+			CompoundAlgorithm.ITERATIONCOUNT);
+		assertNotNull(pbeParameterSpec);
 	}
+
+	/**
+	 * Test method for {@link AlgorithmParameterSpecFactory} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(AlgorithmParameterSpecFactory.class);
+	}
+
 }

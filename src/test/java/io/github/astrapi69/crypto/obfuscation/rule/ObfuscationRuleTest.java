@@ -29,8 +29,6 @@ import static org.testng.AssertJUnit.assertNotNull;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.evaluate.object.verifier.ContractVerifier;
-
 /**
  * The unit test class for the class {@link ObfuscationRule}.
  */
@@ -61,13 +59,4 @@ public class ObfuscationRuleTest
 		beanTester.testBean(ObfuscationRule.class);
 	}
 
-	/**
-	 * Test method for {@link ObfuscationRule#equals(Object)} , {@link ObfuscationRule#hashCode()}
-	 * and {@link ObfuscationRule#toString()}
-	 */
-	@Test
-	public void verifyEqualsHashcodeAndToStringContracts()
-	{
-		ContractVerifier.of(ObfuscationRule.class).verify();
-	}
 }

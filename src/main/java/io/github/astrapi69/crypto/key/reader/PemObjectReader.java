@@ -185,9 +185,8 @@ public final class PemObjectReader
 	 *             list.
 	 */
 	public static PrivateKey readPrivateKey(final @NonNull File keyPemFile,
-		final @NonNull Algorithm algorithm)
-		throws IOException, NoSuchAlgorithmException, InvalidKeySpecException,
-		NoSuchProviderException
+		final @NonNull Algorithm algorithm) throws IOException, NoSuchAlgorithmException,
+		InvalidKeySpecException, NoSuchProviderException
 	{
 		return PrivateKeyReader.readPrivateKey(getPemObject(keyPemFile).getContent(),
 			algorithm.getAlgorithm());
