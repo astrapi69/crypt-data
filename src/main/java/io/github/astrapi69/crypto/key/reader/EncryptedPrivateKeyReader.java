@@ -182,6 +182,8 @@ public final class EncryptedPrivateKeyReader
 	 *            the file that contains the password protected private key
 	 * @param password
 	 *            the password
+	 * @return the {@link Optional} object with the password protected private key from the given
+	 *         file or an empty {@link Optional} object if it does not match
 	 */
 	public static Optional<PrivateKey> getPrivateKey(final File encryptedPrivateKeyFile,
 		final String password)
