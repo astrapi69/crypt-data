@@ -53,8 +53,8 @@ import javax.crypto.spec.PBEKeySpec;
 
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
-import io.github.astrapi69.crypto.factories.AlgorithmParameterSpecFactory;
-import io.github.astrapi69.crypto.factories.SecretKeyFactoryExtensions;
+import io.github.astrapi69.crypto.factory.AlgorithmParameterSpecFactory;
+import io.github.astrapi69.crypto.factory.SecretKeyFactoryExtensions;
 
 /**
  * The class {@link EncryptedPrivateKeyWriter} is a utility class for write and protect

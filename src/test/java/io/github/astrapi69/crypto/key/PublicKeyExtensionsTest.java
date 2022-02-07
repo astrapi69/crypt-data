@@ -45,7 +45,7 @@ import org.testng.annotations.Test;
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.algorithm.MdAlgorithm;
-import io.github.astrapi69.crypto.factories.KeyPairFactory;
+import io.github.astrapi69.crypto.factory.KeyPairFactory;
 import io.github.astrapi69.crypto.key.reader.PublicKeyReader;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.read.ReadFileExtensions;

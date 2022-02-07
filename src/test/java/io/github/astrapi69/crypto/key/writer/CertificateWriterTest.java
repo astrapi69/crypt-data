@@ -53,7 +53,7 @@ import org.testng.annotations.Test;
 import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.algorithm.UnionWord;
-import io.github.astrapi69.crypto.factories.CertFactory;
+import io.github.astrapi69.crypto.factory.CertFactory;
 import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.crypto.key.reader.CertificateReader;
 import io.github.astrapi69.crypto.key.reader.PrivateKeyReader;

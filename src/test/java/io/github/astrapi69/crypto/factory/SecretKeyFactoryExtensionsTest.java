@@ -25,7 +25,7 @@
 /**
  *
  */
-package io.github.astrapi69.crypto.factories;
+package io.github.astrapi69.crypto.factory;
 
 import static org.testng.AssertJUnit.assertNotNull;
 

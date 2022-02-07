@@ -17,6 +17,7 @@ CHANGED:
 - update of test dependency test-objects to new version to 5.7
 - update of test dependency jobj-contract-verifier to new version to 3.5
 - update of test dependency randomizer to new version to 8.5
+- renamed package 'io.github.astrapi69.crypto.factories' to 'io.github.astrapi69.crypto.factory'
 
 
 Version 7.10

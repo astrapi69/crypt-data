@@ -34,7 +34,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
 import io.github.astrapi69.crypto.algorithm.KeystoreType;
-import io.github.astrapi69.crypto.factories.KeyStoreFactory;
+import io.github.astrapi69.crypto.factory.KeyStoreFactory;
 
 /**
  * The class {@link KeyStoreExtensions}.
