@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 7.11
+Version 7.11.1
 -------------
 
 ADDED:
