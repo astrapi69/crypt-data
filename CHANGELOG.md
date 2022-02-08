@@ -6,7 +6,7 @@ Version 7.12-SNAPSHOT
 
 
 
-Version 7.11
+Version 7.11.1
 -------------
 
 ADDED:
