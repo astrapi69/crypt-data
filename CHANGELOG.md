@@ -4,7 +4,10 @@
 Version 7.12-SNAPSHOT
 -------------
 
+ADDED:
 
+- new method for transform a certificate to base64 string
+- new method for transform a certificate to hexadecimal string
 
 Version 7.11.1
 -------------

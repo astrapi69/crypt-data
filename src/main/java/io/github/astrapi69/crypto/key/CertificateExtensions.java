@@ -32,6 +32,8 @@ import java.util.Date;
 
 import javax.security.auth.x500.X500Principal;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -53,6 +55,53 @@ public final class CertificateExtensions
 	{
 		throw new UnsupportedOperationException(
 			"This is a utility class and cannot be instantiated");
+	}
+
+	/**
+	 * Transforms the given {@link X509Certificate} object to a hexadecimal {@link String} object
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the hexadecimal {@link String} object from the given {@link X509Certificate} object
+	 * @throws CertificateEncodingException
+	 *             is thrown if an encoding error occurs
+	 */
+	public static String toHex(final X509Certificate certificate)
+		throws CertificateEncodingException
+	{
+		String base64 = toBase64(certificate);
+		byte[] decoded = Base64.decodeBase64(base64);
+		return Hex.encodeHexString(decoded);
+	}
+
+	/**
+	 * Get the {@link X509Certificate} in its primary encoding format
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the {@link X509Certificate} in its primary encoding format
+	 * @throws CertificateEncodingException
+	 *             is thrown if an encoding error occurs
+	 */
+	public static byte[] getEncoded(final X509Certificate certificate)
+		throws CertificateEncodingException
+	{
+		return certificate.getEncoded();
+	}
+
+	/**
+	 * Transforms the given {@link X509Certificate} object to a base64 {@link String} object
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the base64 {@link String} object from the given {@link X509Certificate} object
+	 * @throws CertificateEncodingException
+	 *             is thrown if an encoding error occurs
+	 */
+	public static String toBase64(final X509Certificate certificate)
+		throws CertificateEncodingException
+	{
+		return Base64.encodeBase64String(getEncoded(certificate));
 	}
 
 	/**

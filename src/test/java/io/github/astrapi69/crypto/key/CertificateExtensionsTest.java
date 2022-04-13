@@ -76,6 +76,40 @@ public class CertificateExtensionsTest
 	}
 
 	/**
+	 * Test method for {@link CertificateExtensions#toHex(X509Certificate)}
+	 *
+	 * @throws CertificateEncodingException
+	 *             is thrown if an encoding error occurs.
+	 */
+	@Test
+	public void testToHex() throws CertificateEncodingException
+	{
+		String expected;
+		String actual;
+
+		actual = CertificateExtensions.toHex(certificate);
+		expected = "308202ac30820194a00302010202087d16e0c8bf2831fe300d06092a864886f70d01010b05003015311330110603550403130a54657374206973737565301e170d3136313233313233303030305a170d3236313233313233303030305a3017311530130603550403130c54657374207375626a65637430820122300d06092a864886f70d01010105000382010f003082010a0282010100de9ad9316a7690eeab7c434ee29ed728d2bd3868ac26cc78286d6019f49cb337507c8c56ffa29a0045a08544a17759f6b725fa2e8dd4a80e6df4eca1c949ed5e7010d8264f63936ad9ae4709b1f67bd408cc97623c13425d3b37c08a6b20626fd93d0ef6a90e1bb088aa16638ab9e168650002a312d21bd50e7f80029cefd0570989d68ee6a5f9e8bb28e653e93960910441eac10c9b5e116b0e96d36d8d2ed0a857a200e743e8c6b7d94c12cf121af287d05b96dd3b97b03351938b874bdc3f8db6f1d430b5b2314cbf78cd1e8e13acaa29bd195c2f60f7b87a7f880008794f835de6525081118bf155910c4835125fd9b01dbd134381316d0945b8250766610203010001300d06092a864886f70d01010b05000382010100db2379ea0494e5a4da28c96069f8f71eb3e0827914b1a52a6729578192f41d436f30007e9f14b759068f255e0f7fedd6c9d243fc6a14b261e3565eaf2bafe5e9533da99e89b8d2a9b4bfa86aef5e9376e38f98e7020092dc749560fcb501de94b3cfbf79dac84ceb8ec4c0bbb2cafc04e255947a7d53e93f9ddc94680420b5f0cd91e1da2266b394250ea2c08d738d6df2110be819fe49010cfc3723b1256112bc868b02513609552630c63eb0f7d733d4116b8b06770e8a97a9cef3787f7bacb371ad0297e94b4126f676f35fbd8987c7ba96f33e4818ad4fceb90188c68072de5bfe7f0449b7ef4dcfed5c36f53aa883b7a64fc5eba0dbf49093f7c94cbd88";
+		assertEquals(expected, actual);
+	}
+
+	/**
+	 * Test method for {@link CertificateExtensions#toBase64(X509Certificate)}
+	 *
+	 * @throws CertificateEncodingException
+	 *             is thrown if an encoding error occurs.
+	 */
+	@Test
+	public void testToBase64() throws CertificateEncodingException
+	{
+		String expected;
+		String actual;
+
+		actual = CertificateExtensions.toBase64(certificate);
+		expected = "MIICrDCCAZSgAwIBAgIIfRbgyL8oMf4wDQYJKoZIhvcNAQELBQAwFTETMBEGA1UEAxMKVGVzdCBpc3N1ZTAeFw0xNjEyMzEyMzAwMDBaFw0yNjEyMzEyMzAwMDBaMBcxFTATBgNVBAMTDFRlc3Qgc3ViamVjdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAN6a2TFqdpDuq3xDTuKe1yjSvThorCbMeChtYBn0nLM3UHyMVv+imgBFoIVEoXdZ9rcl+i6N1KgObfTsoclJ7V5wENgmT2OTatmuRwmx9nvUCMyXYjwTQl07N8CKayBib9k9DvapDhuwiKoWY4q54WhlAAKjEtIb1Q5/gAKc79BXCYnWjual+ei7KOZT6TlgkQRB6sEMm14Raw6W022NLtCoV6IA50PoxrfZTBLPEhryh9Bblt07l7AzUZOLh0vcP4228dQwtbIxTL94zR6OE6yqKb0ZXC9g97h6f4gACHlPg13mUlCBEYvxVZEMSDUSX9mwHb0TQ4ExbQlFuCUHZmECAwEAATANBgkqhkiG9w0BAQsFAAOCAQEA2yN56gSU5aTaKMlgafj3HrPggnkUsaUqZylXgZL0HUNvMAB+nxS3WQaPJV4Pf+3WydJD/GoUsmHjVl6vK6/l6VM9qZ6JuNKptL+oau9ek3bjj5jnAgCS3HSVYPy1Ad6Us8+/edrITOuOxMC7ssr8BOJVlHp9U+k/ndyUaAQgtfDNkeHaImazlCUOosCNc41t8hEL6Bn+SQEM/DcjsSVhEryGiwJRNglVJjDGPrD31zPUEWuLBncOipepzvN4f3uss3GtApfpS0Em9nbzX72Jh8e6lvM+SBitT865AYjGgHLeW/5/BEm3703P7Vw29Tqog7emT8XroNv0kJP3yUy9iA==";
+		assertEquals(expected, actual);
+	}
+
+	/**
 	 * Test method for {@link CertificateExtensions#getCountry(X509Certificate)}
 	 *
 	 * @throws CertificateEncodingException
