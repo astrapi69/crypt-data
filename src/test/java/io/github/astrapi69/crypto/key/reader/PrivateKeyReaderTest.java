@@ -382,6 +382,29 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
+	 * Test method for {@link PrivateKeyReader#readPemPrivateKey(String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred. *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list.
+	 */
+	@Test
+	public void testReadPemPrivateKeyString() throws IOException, NoSuchAlgorithmException,
+		InvalidKeySpecException, NoSuchProviderException
+	{
+		String privateKeyAsBase64String;
+		privateKeyAsBase64String = PrivateKeyReader.readPemFileAsBase64(privateKeyPemFile);
+		actual = PrivateKeyReader.readPemPrivateKey(privateKeyAsBase64String);
+		assertNotNull(actual);
+	}
+
+	/**
 	 * Test method for {@link PrivateKeyReader#readPrivateKey(File)}
 	 *
 	 * @throws IOException

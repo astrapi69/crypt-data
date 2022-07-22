@@ -280,6 +280,28 @@ public final class PrivateKeyReader
 	}
 
 	/**
+	 * Reads the given {@link String}( in *.pem format) with given algorithm and returns the
+	 * {@link PrivateKey} object with the default RSA algorithm
+	 *
+	 * @param privateKeyAsString
+	 *            the private key as string( in *.pem format)
+	 * @return the {@link PrivateKey} object
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list.
+	 */
+	public static PrivateKey readPemPrivateKey(final String privateKeyAsString)
+		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
+	{
+		return readPemPrivateKey(privateKeyAsString, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+	}
+
+	/**
 	 * Reads the given byte array with the default RSA algorithm and returns the {@link PrivateKey}
 	 * object.
 	 *
