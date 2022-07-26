@@ -36,6 +36,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Optional;
 import java.util.logging.Level;
 
+import io.github.astrapi69.crypto.key.KeyStringEntry;
 import lombok.extern.java.Log;
 
 import org.apache.commons.codec.binary.Base64;
@@ -308,17 +309,8 @@ public final class PrivateKeyReader
 	 * @param privateKeyBytes
 	 *            the byte array that contains the private key bytes
 	 * @return the {@link PrivateKey} object
-	 *
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cypher object fails.
-	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
-	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
 	 */
 	public static PrivateKey readPrivateKey(final byte[] privateKeyBytes)
-		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
 		return getPrivateKey(privateKeyBytes).orElse(null);
 	}
@@ -477,13 +469,9 @@ public final class PrivateKeyReader
 	 *             is thrown if instantiation of the cypher object fails.
 	 * @throws InvalidKeySpecException
 	 *             is thrown if generation of the SecretKey object fails.
-	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
 	 */
 	public static PrivateKey readPrivateKey(final File file, final String algorithm)
-		throws IOException, NoSuchAlgorithmException, InvalidKeySpecException,
-		NoSuchProviderException
+		throws IOException, NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		final byte[] keyBytes = Files.readAllBytes(file.toPath());
 		return readPrivateKey(keyBytes, algorithm);
