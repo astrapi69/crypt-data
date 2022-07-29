@@ -6,8 +6,14 @@ Version 7.12-SNAPSHOT
 
 ADDED:
 
+- new extension class KeyExtensions for general operations of Key objects
 - new method for transform a certificate to base64 string
 - new method for transform a certificate to hexadecimal string
+- new method for transform a pem string to a PemObject
+
+CHANGED:
+
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.9.0
 
 Version 7.11.1
 -------------

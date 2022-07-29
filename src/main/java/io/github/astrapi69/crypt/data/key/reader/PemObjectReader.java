@@ -24,6 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.key.reader;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -36,7 +37,6 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 
-import io.github.astrapi69.crypto.key.PemType;
 import lombok.NonNull;
 
 import org.bouncycastle.openssl.PEMDecryptorProvider;
@@ -51,6 +51,7 @@ import org.bouncycastle.util.io.pem.PemWriter;
 
 import io.github.astrapi69.crypto.algorithm.Algorithm;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.key.PemType;
 import io.github.astrapi69.crypto.provider.SecurityProvider;
 
 /**
@@ -76,6 +77,26 @@ public final class PemObjectReader
 	{
 		PemObject pemObject;
 		try (PemReader pemReader = new PemReader(new InputStreamReader(new FileInputStream(file))))
+		{
+			pemObject = pemReader.readPemObject();
+		}
+		return pemObject;
+	}
+
+	/**
+	 * Gets the pem object from the given pem string
+	 *
+	 * @param pemString
+	 *            the pem as string
+	 * @return the pem object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static PemObject getPemObject(final @NonNull String pemString) throws IOException
+	{
+		PemObject pemObject;
+		try (PemReader pemReader = new PemReader(
+			new InputStreamReader(new ByteArrayInputStream(pemString.getBytes()))))
 		{
 			pemObject = pemReader.readPemObject();
 		}

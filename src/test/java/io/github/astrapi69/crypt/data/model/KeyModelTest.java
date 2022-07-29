@@ -32,22 +32,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.Cipher;
 
-import io.github.astrapi69.crypt.data.model.CryptModel;
-import io.github.astrapi69.crypt.data.model.CryptObjectDecorator;
-import io.github.astrapi69.crypt.data.model.KeyModel;
-import io.github.astrapi69.crypto.key.KeyType;
+import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
 import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
-import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
+import io.github.astrapi69.crypto.key.KeyType;
 import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.random.object.RandomStringFactory;
@@ -61,6 +60,8 @@ public class KeyModelTest
 
 	File privateKeyDerFile;
 	File privateKeyPemFile;
+	PublicKey publicKey;
+	File publicKeyPemFile;
 
 	/**
 	 * Sets up method will be invoked before every unit test method in this class
@@ -77,21 +78,43 @@ public class KeyModelTest
 		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
 		privateKeyDerFile = new File(derDir, "private.der");
 		privateKey = PrivateKeyReader.readPemPrivateKey(privateKeyPemFile);
+
+		publicKeyPemFile = new File(pemDir, "public.pem");
+		publicKey = PublicKeyReader.readPemPublicKey(publicKeyPemFile);
 	}
 
 	/**
 	 * Test method for {@link KeyModel} constructors and builders
 	 */
 	@Test
-	public final void testConstructors() throws NoSuchAlgorithmException, InvalidKeySpecException
+	public final void testConstructors()
+		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
-		KeyModel keyModel = KeyModel.builder().encoded(privateKey.getEncoded())
-			.keyType(KeyType.PRIVATE_KEY).algorithm(privateKey.getAlgorithm()).build();
-
+		KeyModel keyModel;
+		// @formatter:off
+		keyModel = KeyModel
+			.builder()
+			.encoded(privateKey.getEncoded())
+			.keyType(KeyType.PRIVATE_KEY)
+			.algorithm(privateKey.getAlgorithm()).build();
+		// @formatter:on
 		PrivateKey privateKeyFromModel = PrivateKeyReader.readPrivateKey(keyModel.getEncoded(),
 			keyModel.getAlgorithm());
 
 		assertEquals(privateKey, privateKeyFromModel);
+		// new
+
+		// @formatter:off
+		keyModel = KeyModel
+			.builder()
+			.encoded(publicKey.getEncoded())
+			.keyType(KeyType.PUBLIC_KEY)
+			.algorithm(publicKey.getAlgorithm()).build();
+		// @formatter:on
+		PublicKey publicKeyFromModel = PublicKeyReader.readPublicKey(keyModel.getEncoded(),
+			keyModel.getAlgorithm());
+		assertEquals(publicKey, publicKeyFromModel);
+
 	}
 
 	/**

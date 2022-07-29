@@ -38,14 +38,14 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 
-import io.github.astrapi69.crypt.data.key.reader.PemObjectReader;
-import io.github.astrapi69.crypto.key.PemType;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import io.github.astrapi69.crypt.data.key.PrivateKeyExtensionsTest;
+import io.github.astrapi69.crypto.key.PemType;
 import io.github.astrapi69.file.search.PathFinder;
 
 
@@ -190,6 +190,29 @@ public class PemObjectReaderTest
 		expected = PemType.PKCS7_KEY_NAME;
 		assertEquals(expected, actual);
 		assertEquals(PemType.PKCS7_KEY, PemObjectReader.getPemType(pemObject));
+	}
+
+	/**
+	 * Test method for {@link PemObjectReader#getPemObject(String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testGetPemObjectWithPemString() throws IOException
+	{
+		String actual;
+		String expected;
+		String privateKeyBase64Encoded = PrivateKeyExtensionsTest.PRIVATE_KEY_BASE64_ENCODED;
+		pemObject = PemObjectReader.getPemObject(privateKeyBase64Encoded);
+		assertNotNull(pemObject);
+		actual = pemObject.getType();
+		expected = PemType.RSA_PRIVATE_KEY_NAME;
+		assertEquals(expected, actual);
+		actual = PemObjectReader.toPemFormat(pemObject);
+		assertNotNull(actual);
+		expected = privateKeyBase64Encoded;
+		assertEquals(expected, actual);
 	}
 
 	/**

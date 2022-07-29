@@ -238,6 +238,25 @@ public class PublicKeyExtensionsTest
 	}
 
 	/**
+	 * Test method for {@link PublicKeyExtensions#toBase64(PublicKey)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an security error occurs
+	 */
+	@Test
+	public void testGetFormat() throws Exception
+	{
+		String actual;
+		String expected;
+		// new scenario...
+		publicKey = PublicKeyReader.readPemPublicKey(publicKeyPemFile);
+
+		actual = PublicKeyExtensions.getFormat(publicKey);
+		expected = "X.509";
+		assertEquals(actual, expected);
+	}
+
+	/**
 	 * Test method for {@link PublicKeyExtensions} with {@link BeanTester}
 	 */
 	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,

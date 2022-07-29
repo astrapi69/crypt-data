@@ -33,15 +33,13 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.codec.binary.Base64;
-
 import io.github.astrapi69.crypt.data.hex.HexExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypt.data.key.writer.PublicKeyWriter;
 import io.github.astrapi69.string.StringExtensions;
 
 /**
- * The class {@link PublicKeyExtensions}.
+ * The class {@link PublicKeyExtensions}
  */
 public final class PublicKeyExtensions
 {
@@ -131,8 +129,7 @@ public final class PublicKeyExtensions
 	 */
 	public static String toBase64(final PublicKey publicKey)
 	{
-		final byte[] encoded = publicKey.getEncoded();
-		return Base64.encodeBase64String(encoded);
+		return KeyExtensions.toBase64(publicKey.getEncoded());
 	}
 
 	/**

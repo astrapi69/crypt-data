@@ -37,20 +37,17 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 
-import javax.xml.bind.DatatypeConverter;
-
-import io.github.astrapi69.crypto.key.KeySize;
-import io.github.astrapi69.crypto.key.PemType;
-import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemWriter;
 
-import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.data.hex.HexExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PemObjectReader;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.key.KeySize;
+import io.github.astrapi69.crypto.key.PemType;
 
 /**
  * The class {@link PrivateKeyExtensions}.
@@ -183,9 +180,7 @@ public final class PrivateKeyExtensions
 	 */
 	public static String toBase64(final PrivateKey privateKey)
 	{
-		final byte[] encoded = privateKey.getEncoded();
-		final String privateKeyAsBase64String = Base64.encodeBase64String(encoded);
-		return privateKeyAsBase64String;
+		return KeyExtensions.toBase64(privateKey.getEncoded());
 	}
 
 	/**
@@ -197,9 +192,7 @@ public final class PrivateKeyExtensions
 	 */
 	public static String toBase64Binary(final PrivateKey privateKey)
 	{
-		final byte[] encoded = privateKey.getEncoded();
-		final String privateKeyAsBase64String = DatatypeConverter.printBase64Binary(encoded);
-		return privateKeyAsBase64String;
+		return KeyExtensions.toBase64Binary(privateKey.getEncoded());
 	}
 
 	/**
