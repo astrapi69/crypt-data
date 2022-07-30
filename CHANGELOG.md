@@ -10,6 +10,8 @@ ADDED:
 - new method for transform a certificate to base64 string
 - new method for transform a certificate to hexadecimal string
 - new method for transform a pem string to a PemObject
+- new method for transform a given PemObject to private key
+- new method for transform a given PemObject to public key
 
 CHANGED:
 

@@ -34,10 +34,13 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.Cipher;
 
+import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.testng.annotations.BeforeMethod;
@@ -51,6 +54,9 @@ import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringE
 import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.random.object.RandomStringFactory;
 
+/**
+ * The unit test class for the class {@link KeyModel}
+ */
 public class KeyModelTest
 {
 	File derDir;
@@ -87,10 +93,16 @@ public class KeyModelTest
 	 * Test method for {@link KeyModel} constructors and builders
 	 */
 	@Test
-	public final void testConstructors()
-		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
+	public final void testConstructors() throws NoSuchAlgorithmException, InvalidKeySpecException,
+		NoSuchProviderException, IOException, CertificateException
 	{
+		File keyFile;
 		KeyModel keyModel;
+		PrivateKey privateKeyFromModel;
+		PublicKey publicKeyFromModel;
+		X509Certificate certificate;
+		X509Certificate certificateFromModel;
+		// new scenario...
 		// @formatter:off
 		keyModel = KeyModel
 			.builder()
@@ -98,12 +110,11 @@ public class KeyModelTest
 			.keyType(KeyType.PRIVATE_KEY)
 			.algorithm(privateKey.getAlgorithm()).build();
 		// @formatter:on
-		PrivateKey privateKeyFromModel = PrivateKeyReader.readPrivateKey(keyModel.getEncoded(),
+		privateKeyFromModel = PrivateKeyReader.readPrivateKey(keyModel.getEncoded(),
 			keyModel.getAlgorithm());
 
 		assertEquals(privateKey, privateKeyFromModel);
-		// new
-
+		// new scenario...
 		// @formatter:off
 		keyModel = KeyModel
 			.builder()
@@ -111,10 +122,37 @@ public class KeyModelTest
 			.keyType(KeyType.PUBLIC_KEY)
 			.algorithm(publicKey.getAlgorithm()).build();
 		// @formatter:on
-		PublicKey publicKeyFromModel = PublicKeyReader.readPublicKey(keyModel.getEncoded(),
+		publicKeyFromModel = PublicKeyReader.readPublicKey(keyModel.getEncoded(),
 			keyModel.getAlgorithm());
 		assertEquals(publicKey, publicKeyFromModel);
+		// new scenario...
+		keyFile = new File(pemDir, "8192-ssh-key.pem");
+		privateKey = PrivateKeyReader.readPemPrivateKey(keyFile);
+		// @formatter:off
+		keyModel = KeyModel
+			.builder()
+			.encoded(privateKey.getEncoded())
+			.keyType(KeyType.PRIVATE_KEY)
+			.algorithm(privateKey.getAlgorithm()).build();
+		// @formatter:on
+		privateKeyFromModel = PrivateKeyReader.readPrivateKey(keyModel.getEncoded(),
+			keyModel.getAlgorithm());
 
+		assertEquals(privateKey, privateKeyFromModel);
+		// new scenario...
+		keyFile = new File(pemDir, "certificate.pem");
+		certificate = CertificateReader.readCertificate(keyFile);
+		// @formatter:off
+		keyModel = KeyModel
+			.builder()
+			.encoded(certificate.getEncoded())
+			.keyType(KeyType.CERTIFICATE)
+			.algorithm("")
+			.build();
+		// @formatter:on
+		certificateFromModel = CertificateReader.readCertificate(keyModel.getEncoded());
+
+		assertEquals(certificate, certificateFromModel);
 	}
 
 	/**

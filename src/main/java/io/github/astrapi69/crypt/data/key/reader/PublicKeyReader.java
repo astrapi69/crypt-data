@@ -35,6 +35,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.util.io.pem.PemObject;
 
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 
@@ -139,6 +140,29 @@ public final class PublicKeyReader
 		final KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
 		final PublicKey publicKey = keyFactory.generatePublic(keySpec);
 		return publicKey;
+	}
+
+	/**
+	 * Reads the given {@link PemObject} with given algorithm and returns the {@link PublicKey}
+	 * object
+	 *
+	 * @param pemObject
+	 *            the pem object
+	 * @param algorithm
+	 *            the algorithm for the {@link KeyFactory}
+	 * @return the public key
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list.
+	 */
+	public static PublicKey readPublicKey(final PemObject pemObject, final String algorithm)
+		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
+	{
+		return readPublicKey(pemObject.getContent(), algorithm);
 	}
 
 	/**

@@ -69,8 +69,8 @@ public final class CertificateExtensions
 	public static String toHex(final X509Certificate certificate)
 		throws CertificateEncodingException
 	{
-		String base64 = toBase64(certificate);
-		byte[] decoded = Base64.decodeBase64(base64);
+		String base64 = KeyExtensions.toBase64(certificate.getEncoded());
+		byte[] decoded = KeyExtensions.decodeBase64(base64);
 		return Hex.encodeHexString(decoded);
 	}
 
@@ -101,7 +101,7 @@ public final class CertificateExtensions
 	public static String toBase64(final X509Certificate certificate)
 		throws CertificateEncodingException
 	{
-		return Base64.encodeBase64String(getEncoded(certificate));
+		return KeyExtensions.toBase64(getEncoded(certificate));
 	}
 
 	/**

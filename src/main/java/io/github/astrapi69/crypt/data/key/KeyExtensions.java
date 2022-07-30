@@ -63,4 +63,16 @@ public class KeyExtensions
 	{
 		return DatatypeConverter.printBase64Binary(encodedKey);
 	}
+
+	/**
+	 * Transform the given base64 encoded string to an encoded key as byte array value
+	 *
+	 * @param base64
+	 *            the base64 encoded string
+	 * @return the new encoded key as byte array value
+	 */
+	public static byte[] decodeBase64(String base64) {
+		return Base64.decodeBase64(base64);
+	}
+
 }

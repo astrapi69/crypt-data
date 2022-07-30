@@ -44,6 +44,7 @@ import org.apache.commons.codec.binary.Base64;
 import io.github.astrapi69.crypt.data.algorithm.CryptoAlgorithm;
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypto.key.KeyFileFormat;
+import org.bouncycastle.util.io.pem.PemObject;
 
 /**
  * The class {@link PrivateKeyReader} is a utility class for reading private keys in *.der or *.pem
@@ -277,6 +278,32 @@ public final class PrivateKeyReader
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
 		final byte[] decoded = new Base64().decode(privateKeyAsString);
+		return readPrivateKey(decoded, algorithm);
+	}
+
+	/**
+	 * Reads the given {@link PemObject} with given algorithm and returns the
+	 * {@link PrivateKey} object.
+	 *
+	 * @param pemObject
+	 *            the pem object
+	 * @param algorithm
+	 *            the algorithm
+	 * @return the {@link PrivateKey} object
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list.
+	 */
+	public static PrivateKey readPrivateKey(final PemObject pemObject,
+		final String algorithm)
+		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
+	{
+		final byte[] decoded = pemObject.getContent();
 		return readPrivateKey(decoded, algorithm);
 	}
 
