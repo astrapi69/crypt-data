@@ -282,8 +282,8 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Reads the given {@link PemObject} with given algorithm and returns the
-	 * {@link PrivateKey} object.
+	 * Reads the given {@link PemObject} with given algorithm and returns the {@link PrivateKey}
+	 * object.
 	 *
 	 * @param pemObject
 	 *            the pem object
@@ -299,8 +299,7 @@ public final class PrivateKeyReader
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list.
 	 */
-	public static PrivateKey readPrivateKey(final PemObject pemObject,
-		final String algorithm)
+	public static PrivateKey readPrivateKey(final PemObject pemObject, final String algorithm)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
 		final byte[] decoded = pemObject.getContent();

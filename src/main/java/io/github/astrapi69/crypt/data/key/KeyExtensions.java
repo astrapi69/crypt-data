@@ -71,7 +71,8 @@ public class KeyExtensions
 	 *            the base64 encoded string
 	 * @return the new encoded key as byte array value
 	 */
-	public static byte[] decodeBase64(String base64) {
+	public static byte[] decodeBase64(String base64)
+	{
 		return Base64.decodeBase64(base64);
 	}
 

@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 7.12-SNAPSHOT
+Version 8-SNAPSHOT
 -------------
 
 ADDED:
@@ -15,6 +15,8 @@ ADDED:
 
 CHANGED:
 
+- update to jdk version 11
+- update gradle to new version 7.5
 - update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.9.0
 - update of test dependency time-machine to new version to 2.1
 
