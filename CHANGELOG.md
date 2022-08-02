@@ -16,6 +16,7 @@ ADDED:
 CHANGED:
 
 - update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.9.0
+- update of test dependency time-machine to new version to 2.1
 
 Version 7.11.1
 -------------
