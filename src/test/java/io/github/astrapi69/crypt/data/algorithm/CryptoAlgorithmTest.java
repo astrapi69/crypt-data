@@ -29,10 +29,11 @@ import static org.testng.Assert.assertNotNull;
 
 import java.lang.reflect.InvocationTargetException;
 
-import io.github.astrapi69.crypt.data.algorithm.CryptoAlgorithm;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
+
+import io.github.astrapi69.crypto.algorithm.Algorithm;
 
 /**
  * Test class for the class {@link CryptoAlgorithm}
@@ -46,10 +47,20 @@ public class CryptoAlgorithmTest
 	@Test
 	public void testNewAlgorithm()
 	{
-		String algorithmName = "AES";
-		CryptoAlgorithm aes = (CryptoAlgorithm)CryptoAlgorithm.newAlgorithm(algorithmName);
+		String name;
+		Algorithm interfaceAes;
+		String algorithmName;
+		String algorithm;
+		CryptoAlgorithm aes;
+		algorithmName = "AES";
+		aes = (CryptoAlgorithm)CryptoAlgorithm.newAlgorithm(algorithmName);
 		assertNotNull(aes);
-		String name = aes.name();
+		algorithm = aes.getAlgorithm();
+		name = aes.name();
+		assertEquals(algorithmName, name);
+		assertEquals(algorithm, name);
+		interfaceAes = CryptoAlgorithm.newAlgorithm(algorithmName);
+		name = interfaceAes.getAlgorithm();
 		assertEquals(algorithmName, name);
 	}
 
