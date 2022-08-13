@@ -18,7 +18,7 @@ dependencies {
     testImplementation("io.github.astrapi69:jobj-core:$jobjCoreVersion")
     testImplementation("io.github.astrapi69:vintage-time:$vintageTimeVersion")
     testImplementation("io.github.astrapi69:time-machine:$timeMachineVersion")
-    testImplementation("io.github.astrapi69:test-objects:$testObjectsVersion")
+    testImplementation("io.github.astrapi69:test-object:$testObjectVersion")
     testImplementation("io.github.benas:random-beans:$randomBeansVersion")
     testImplementation("io.github.astrapi69:randomizer:$randomizerVersion")
     testImplementation("io.github.astrapi69:checksum-up:$checksumUpVersion")

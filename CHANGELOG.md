@@ -16,9 +16,14 @@ ADDED:
 CHANGED:
 
 - update to jdk version 11
-- update gradle to new version 7.5
-- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.9.0
+- update gradle to new version 7.5.1
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.9.1
+- update of crypt-api dependency version to 8.2
+- update of dependency file-worker to new version to 11
+- update of dependency silly-collections to new version to 19
 - update of test dependency time-machine to new version to 2.1
+- update of test dependency test-object to new version 7
+- update of test dependency checksum-up to new version to 2
 
 Version 7.11.1
 -------------
