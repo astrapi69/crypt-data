@@ -24,11 +24,10 @@
  */
 package io.github.astrapi69.crypt.data.obfuscation.rule;
 
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import io.github.astrapi69.crypt.data.obfuscation.rule.ObfuscationRule;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
 /**
  * The unit test class for the class {@link ObfuscationRule}.

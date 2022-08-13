@@ -45,17 +45,15 @@
  */
 package io.github.astrapi69.crypt.data.obfuscation.rule;
 
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Comparator;
 import java.util.Set;
 
-import io.github.astrapi69.crypt.data.obfuscation.rule.ObfuscationOperationRule;
-import io.github.astrapi69.crypt.data.obfuscation.rule.ObfuscationOperationRuleComparator;
-import io.github.astrapi69.crypto.obfuscation.rule.Operation;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import io.github.astrapi69.collections.set.SetFactory;
+import io.github.astrapi69.collection.set.SetFactory;
+import io.github.astrapi69.crypto.obfuscation.rule.Operation;
 
 /**
  * The unit test class for the class {@link ObfuscationOperationRuleComparator}.

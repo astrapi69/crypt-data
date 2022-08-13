@@ -24,7 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.key.writer;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,18 +37,17 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-import io.github.astrapi69.crypt.data.key.writer.PublicKeyWriter;
 import org.apache.commons.io.FileUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
-import io.github.astrapi69.crypto.algorithm.MdAlgorithm;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
+import io.github.astrapi69.crypto.algorithm.MdAlgorithm;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
@@ -72,7 +71,7 @@ public class PublicKeyWriterTest
 	/**
 	 * Sets up method will be invoked before every unit test method in this class
 	 */
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp()
 	{
 		Security.addProvider(new BouncyCastleProvider());

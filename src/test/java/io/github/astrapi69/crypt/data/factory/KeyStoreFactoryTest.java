@@ -24,7 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
-import static org.testng.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,10 +34,9 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-import io.github.astrapi69.crypt.data.factory.KeyStoreFactory;
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.crypto.algorithm.KeystoreType;
 import io.github.astrapi69.file.search.PathFinder;

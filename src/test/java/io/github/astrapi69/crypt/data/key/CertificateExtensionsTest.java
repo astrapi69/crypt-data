@@ -24,11 +24,10 @@
  */
 package io.github.astrapi69.crypt.data.key;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
@@ -36,16 +35,14 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-import io.github.astrapi69.crypt.data.key.CertificateExtensions;
 import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.meanbean.test.BeanTestException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
+import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
 import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
 import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
-import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
@@ -64,7 +61,7 @@ public class CertificateExtensionsTest
 	 * @throws Exception
 	 *             is thrown if any error occurs on the execution
 	 */
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		if (certificate == null)
@@ -285,8 +282,7 @@ public class CertificateExtensionsTest
 	/**
 	 * Test method for {@link CertificateExtensions} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

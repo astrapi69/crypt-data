@@ -24,12 +24,11 @@
  */
 package io.github.astrapi69.crypt.data.key;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -39,19 +38,17 @@ import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 
-import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
-import io.github.astrapi69.crypto.key.KeySize;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.io.pem.PemObject;
-import org.meanbean.test.BeanTestException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
-import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.key.KeySize;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
@@ -107,7 +104,7 @@ public class PrivateKeyExtensionsTest
 	/**
 	 * Sets up method will be invoked before every unit test method in this class
 	 */
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp()
 	{
 		Security.addProvider(new BouncyCastleProvider());
@@ -169,7 +166,7 @@ public class PrivateKeyExtensionsTest
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testGetKeyLength() throws NoSuchAlgorithmException, InvalidKeySpecException,
 		NoSuchProviderException, IOException
 	{
@@ -212,7 +209,7 @@ public class PrivateKeyExtensionsTest
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testGetKeySize() throws NoSuchAlgorithmException, InvalidKeySpecException,
 		NoSuchProviderException, IOException
 	{
@@ -261,7 +258,7 @@ public class PrivateKeyExtensionsTest
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testToBase64() throws NoSuchAlgorithmException, InvalidKeySpecException,
 		NoSuchProviderException, IOException
 	{
@@ -281,7 +278,7 @@ public class PrivateKeyExtensionsTest
 	 * @throws Exception
 	 *             is thrown if an security error occurs
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testToBase64Binary() throws Exception
 	{
 		String actual;
@@ -300,7 +297,7 @@ public class PrivateKeyExtensionsTest
 	 * @throws Exception
 	 *             is thrown if an security error occurs
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testToHexString() throws Exception
 	{
 		String actual;
@@ -319,7 +316,7 @@ public class PrivateKeyExtensionsTest
 	 * @throws Exception
 	 *             is thrown if an security error occurs
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testToHexStringBoolean() throws Exception
 	{
 		String actual;
@@ -338,7 +335,7 @@ public class PrivateKeyExtensionsTest
 	 * @throws Exception
 	 *             is thrown if an security error occurs
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testToPemFormat() throws Exception
 	{
 		String expected;
@@ -392,8 +389,7 @@ public class PrivateKeyExtensionsTest
 	/**
 	 * Test method for {@link PrivateKeyExtensions} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

@@ -24,7 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.key.writer;
 
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,21 +44,20 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
 
-import io.github.astrapi69.crypt.data.key.writer.CertificateWriter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.OperatorCreationException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
-import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
-import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import io.github.astrapi69.crypto.algorithm.UnionWord;
 import io.github.astrapi69.crypt.data.factory.CertFactory;
-import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
+import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.algorithm.UnionWord;
+import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.random.number.RandomBigIntegerFactory;
@@ -77,7 +76,7 @@ public class CertificateWriterTest
 
 	File pemDir;
 
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws NoSuchAlgorithmException, InvalidKeySpecException,
 		NoSuchProviderException, IOException, CertificateException, InvalidKeyException,
 		IllegalStateException, SignatureException, OperatorCreationException

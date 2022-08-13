@@ -1,11 +1,12 @@
 ## Change log
 ----------------------
 
-Version 8-SNAPSHOT
+Version 8
 -------------
 
 ADDED:
 
+- new unit test framework junit-jupiter-api(junit5)
 - new extension class KeyExtensions for general operations of Key objects
 - new method for transform a certificate to base64 string
 - new method for transform a certificate to hexadecimal string
@@ -17,6 +18,7 @@ CHANGED:
 
 - update to jdk version 11
 - update gradle to new version 7.5.1
+- remove of unit test framework testng
 - update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.9.1
 - update of crypt-api dependency version to 8.2
 - update of dependency file-worker to new version to 11

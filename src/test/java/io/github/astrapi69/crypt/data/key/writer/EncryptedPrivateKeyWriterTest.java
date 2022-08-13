@@ -24,8 +24,8 @@
  */
 package io.github.astrapi69.crypt.data.key.writer;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,15 +41,14 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import io.github.astrapi69.crypt.data.key.writer.EncryptedPrivateKeyWriter;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
-import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.data.key.reader.EncryptedPrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
@@ -69,7 +68,7 @@ public class EncryptedPrivateKeyWriterTest
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.
 	 */
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp()
 	{
 		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
@@ -82,7 +81,7 @@ public class EncryptedPrivateKeyWriterTest
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws IOException
 	{
 		if (encryptedPrivateKeyFile.exists())

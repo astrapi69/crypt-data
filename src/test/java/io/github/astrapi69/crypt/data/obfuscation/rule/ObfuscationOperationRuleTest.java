@@ -24,14 +24,13 @@
  */
 package io.github.astrapi69.crypt.data.obfuscation.rule;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import io.github.astrapi69.crypt.data.obfuscation.rule.ObfuscationOperationRule;
-import io.github.astrapi69.crypto.obfuscation.rule.Operation;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
-import io.github.astrapi69.collections.set.SetFactory;
+import io.github.astrapi69.collection.set.SetFactory;
+import io.github.astrapi69.crypto.obfuscation.rule.Operation;
 import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 
 /**

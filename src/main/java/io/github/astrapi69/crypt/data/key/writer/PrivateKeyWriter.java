@@ -33,9 +33,9 @@ import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Objects;
 
+import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypto.key.KeyFileFormat;
 import io.github.astrapi69.crypto.key.KeyFormat;
-import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 
 /**
  * The class {@link PrivateKeyWriter} is a utility class for write public keys in files or streams.

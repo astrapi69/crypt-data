@@ -24,9 +24,9 @@
  */
 package io.github.astrapi69.crypt.data.key;
 
-import org.apache.commons.codec.binary.Base64;
-
 import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * The class {@link PublicKeyExtensions}

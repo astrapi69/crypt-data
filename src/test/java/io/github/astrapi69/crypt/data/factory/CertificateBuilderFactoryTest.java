@@ -24,7 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -32,14 +32,13 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.util.Date;
 
-import io.github.astrapi69.crypt.data.factory.CertificateBuilderFactory;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.cert.X509v1CertificateBuilder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.date.CalculateDateExtensions;

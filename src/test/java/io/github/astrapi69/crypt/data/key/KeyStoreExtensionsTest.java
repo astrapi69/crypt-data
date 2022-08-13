@@ -24,26 +24,23 @@
  */
 package io.github.astrapi69.crypt.data.key;
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 
-import io.github.astrapi69.crypt.data.key.KeyStoreExtensions;
-import org.meanbean.test.BeanTestException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
-import io.github.astrapi69.crypto.algorithm.KeystoreType;
 import io.github.astrapi69.crypt.data.factory.KeyStoreFactory;
 import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
+import io.github.astrapi69.crypto.algorithm.KeystoreType;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
@@ -67,7 +64,7 @@ public class KeyStoreExtensionsTest
 	 * @throws Exception
 	 *             is thrown if any error occurs on the execution
 	 */
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		if (certificate == null)
@@ -94,7 +91,7 @@ public class KeyStoreExtensionsTest
 	/**
 	 * Tear down method will be invoked after every unit test method
 	 */
-	@AfterMethod
+	@AfterEach
 	protected void tearDown()
 	{
 		privatekeyDerFile.delete();
@@ -121,8 +118,7 @@ public class KeyStoreExtensionsTest
 	/**
 	 * Test method for {@link KeyStoreExtensions} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

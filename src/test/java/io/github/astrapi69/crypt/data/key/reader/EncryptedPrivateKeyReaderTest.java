@@ -25,7 +25,7 @@
 package io.github.astrapi69.crypt.data.key.reader;
 
 
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,12 +40,11 @@ import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.NoSuchPaddingException;
 
-import io.github.astrapi69.crypt.data.key.reader.EncryptedPrivateKeyReader;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.file.read.ReadFileExtensions;
@@ -70,7 +69,7 @@ public class EncryptedPrivateKeyReaderTest
 	 * @throws Exception
 	 *             the exception
 	 */
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
@@ -89,7 +88,7 @@ public class EncryptedPrivateKeyReaderTest
 	 * @throws PEMException
 	 *             is thrown if an error occurs on read the pem file
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testGetKeyPair() throws FileNotFoundException, PEMException, IOException
 	{
 		Security.addProvider(new BouncyCastleProvider());
@@ -102,7 +101,7 @@ public class EncryptedPrivateKeyReaderTest
 	 * Test method for
 	 * {@link EncryptedPrivateKeyReader#readPasswordProtectedPrivateKey(byte[], String, String)}
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testReadPasswordProtectedPrivateKeyByteArrayStringString()
 		throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException,
 		NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException
@@ -118,7 +117,7 @@ public class EncryptedPrivateKeyReaderTest
 	 * Test method for
 	 * {@link EncryptedPrivateKeyReader#readPasswordProtectedPrivateKey(File, String)}
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testReadPasswordProtectedPrivateKeyFileString()
 		throws InvalidAlgorithmParameterException, NoSuchPaddingException, IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException
@@ -133,7 +132,7 @@ public class EncryptedPrivateKeyReaderTest
 	 * Test method for
 	 * {@link EncryptedPrivateKeyReader#readPasswordProtectedPrivateKey(File, String, String)}
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testReadPasswordProtectedPrivateKeyFileStringString()
 		throws InvalidAlgorithmParameterException, NoSuchPaddingException, IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException

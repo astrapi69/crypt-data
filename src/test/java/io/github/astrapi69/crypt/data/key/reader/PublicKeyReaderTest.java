@@ -24,16 +24,15 @@
  */
 package io.github.astrapi69.crypt.data.key.reader;
 
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.security.PublicKey;
 import java.security.Security;
 
-import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.crypt.data.key.PublicKeyExtensions;
 import io.github.astrapi69.file.search.PathFinder;

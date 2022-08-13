@@ -24,13 +24,12 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.security.spec.AlgorithmParameterSpec;
 
-import io.github.astrapi69.crypt.data.factory.AlgorithmParameterSpecFactory;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 

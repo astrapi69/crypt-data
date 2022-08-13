@@ -24,17 +24,15 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.crypto.Cipher;
 
-import io.github.astrapi69.crypt.data.model.CryptModel;
-import io.github.astrapi69.crypt.data.model.CryptObjectDecorator;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
 import io.github.astrapi69.crypto.compound.CompoundAlgorithm;

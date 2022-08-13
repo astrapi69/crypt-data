@@ -24,16 +24,15 @@
  */
 package io.github.astrapi69.crypt.data.hash;
 
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-import io.github.astrapi69.crypt.data.hash.HashExtensions;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
 
@@ -68,7 +67,7 @@ public class HashExtensionsTest
 		expected = HashExtensions.hash(password, salt, hashAlgorithm, charset);
 		actual = HashExtensions.hash(newInsertPassword, salt, hashAlgorithm, charset);
 
-		assertTrue("'expected' should be equal with 'actual'.", expected.equals(actual));
+		assertTrue(expected.equals(actual));
 	}
 
 	/**
@@ -95,7 +94,7 @@ public class HashExtensionsTest
 		hashAlgorithm = HashAlgorithm.SHA_512;
 		expected = HashExtensions.hashAndBase64(password, salt, hashAlgorithm, charset);
 		actual = HashExtensions.hashAndBase64(newInsertPassword, salt, hashAlgorithm, charset);
-		assertTrue("'expected' should be equal with 'actual'.", expected.equals(actual));
+		assertTrue(expected.equals(actual));
 	}
 
 
@@ -125,13 +124,13 @@ public class HashExtensionsTest
 		actual = HashExtensions.hash(newInsertPassword.getBytes(), salt, hashAlgorithm, charset);
 
 		assertTrue(expected.length == actual.length);
-		assertTrue("'expected' should be equal with 'actual'.", Arrays.equals(expected, actual));
+		assertTrue(Arrays.equals(expected, actual));
 
 		expected = HashExtensions.hash(password.getBytes(), null, hashAlgorithm, charset);
 		actual = HashExtensions.hash(newInsertPassword.getBytes(), null, hashAlgorithm, charset);
 
 		assertTrue(expected.length == actual.length);
-		assertTrue("'expected' should be equal with 'actual'.", Arrays.equals(expected, actual));
+		assertTrue(Arrays.equals(expected, actual));
 	}
 
 	/**
@@ -156,7 +155,7 @@ public class HashExtensionsTest
 		actual = HashExtensions.hash(newInsertPassword.getBytes(), hashAlgorithm);
 
 		assertTrue(expected.length == actual.length);
-		assertTrue("'expected' should be equal with 'actual'.", Arrays.equals(expected, actual));
+		assertTrue(Arrays.equals(expected, actual));
 	}
 
 	/**

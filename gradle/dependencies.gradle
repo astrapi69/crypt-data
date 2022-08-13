@@ -24,5 +24,6 @@ dependencies {
     testImplementation("io.github.astrapi69:checksum-up:$checksumUpVersion")
     testImplementation("org.meanbean:meanbean:$meanbeanVersion")
     testImplementation("io.github.astrapi69:jobj-contract-verifier:$jobjContractVerifierVersion")
-    testImplementation("org.testng:testng:$testngVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
 }

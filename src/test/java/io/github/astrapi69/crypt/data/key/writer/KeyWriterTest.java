@@ -24,9 +24,8 @@
  */
 package io.github.astrapi69.crypt.data.key.writer;
 
-import io.github.astrapi69.crypt.data.key.writer.KeyWriter;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
 /**
  * The unit test class for the class {@link KeyWriter}

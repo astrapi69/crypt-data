@@ -24,7 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -40,17 +40,13 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 
-import io.github.astrapi69.crypt.data.factory.AlgorithmParameterSpecFactory;
-import io.github.astrapi69.crypt.data.factory.CipherFactory;
-import io.github.astrapi69.crypt.data.factory.KeySpecFactory;
-import io.github.astrapi69.crypt.data.factory.SecretKeyFactoryExtensions;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
+import io.github.astrapi69.crypt.data.model.CryptModel;
 import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
 import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
-import io.github.astrapi69.crypt.data.model.CryptModel;
 import io.github.astrapi69.crypto.provider.SecurityProvider;
 
 /**

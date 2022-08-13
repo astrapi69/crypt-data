@@ -24,11 +24,10 @@
  */
 package io.github.astrapi69.crypt.data.key;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
@@ -36,20 +35,17 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 
-import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
-import io.github.astrapi69.crypt.data.key.PublicKeyExtensions;
-import io.github.astrapi69.crypto.key.KeySize;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.meanbean.test.BeanTestException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
-import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import io.github.astrapi69.crypto.algorithm.MdAlgorithm;
 import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
+import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypto.algorithm.MdAlgorithm;
+import io.github.astrapi69.crypto.key.KeySize;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
@@ -93,7 +89,7 @@ public class PublicKeyExtensionsTest
 	/**
 	 * Sets up method will be invoked before every unit test method in this class
 	 */
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp()
 	{
 		Security.addProvider(new BouncyCastleProvider());
@@ -112,7 +108,7 @@ public class PublicKeyExtensionsTest
 	 * @throws Exception
 	 *             is thrown if an security error occurs
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testGetKeyLength() throws Exception
 	{
 		int actual;
@@ -165,7 +161,7 @@ public class PublicKeyExtensionsTest
 	 * @throws Exception
 	 *             is thrown if an security error occurs
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testToHexString() throws Exception
 	{
 		String actual;
@@ -184,7 +180,7 @@ public class PublicKeyExtensionsTest
 	 * @throws Exception
 	 *             is thrown if an security error occurs
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testToHexStringBoolean() throws Exception
 	{
 		String actual;
@@ -259,8 +255,7 @@ public class PublicKeyExtensionsTest
 	/**
 	 * Test method for {@link PublicKeyExtensions} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

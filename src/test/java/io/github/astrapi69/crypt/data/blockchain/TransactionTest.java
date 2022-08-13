@@ -24,20 +24,18 @@
  */
 package io.github.astrapi69.crypt.data.blockchain;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.PublicKey;
 
-import io.github.astrapi69.crypt.data.blockchain.Address;
-import io.github.astrapi69.crypt.data.blockchain.Transaction;
-import org.meanbean.test.BeanTestException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
@@ -54,7 +52,7 @@ public class TransactionTest
 
 	Address address;
 
-	@BeforeMethod
+	@BeforeEach
 	public void setUp() throws Exception
 	{
 
@@ -90,7 +88,8 @@ public class TransactionTest
 	 * Test method for {@link Transaction#equals(Object)} , {@link Transaction#hashCode()} and
 	 * {@link Transaction#toString()}
 	 */
-	@Test(enabled = false)
+	@Test
+	@Disabled
 	public void testEqualsHashcodeAndToStringWithClass()
 		throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException,
 		InstantiationException, ClassNotFoundException, InvocationTargetException, IOException
@@ -108,8 +107,7 @@ public class TransactionTest
 	/**
 	 * Test method for {@link Transaction} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

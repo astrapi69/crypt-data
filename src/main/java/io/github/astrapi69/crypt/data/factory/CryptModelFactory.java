@@ -29,8 +29,8 @@ import java.security.PublicKey;
 
 import javax.crypto.Cipher;
 
-import io.github.astrapi69.crypto.algorithm.Algorithm;
 import io.github.astrapi69.crypt.data.model.CryptModel;
+import io.github.astrapi69.crypto.algorithm.Algorithm;
 
 /**
  * The factory class {@link CryptModelFactory} holds methods for creating {@link CryptModel} objects

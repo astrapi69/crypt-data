@@ -24,10 +24,11 @@
  */
 package io.github.astrapi69.crypt.data.algorithm;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.crypto.algorithm.MacAlgorithm;
-import org.testng.annotations.Test;
 
 /**
  * Test class for enum {@link MacAlgorithm}.

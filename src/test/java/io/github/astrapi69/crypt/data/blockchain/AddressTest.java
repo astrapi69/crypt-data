@@ -24,8 +24,8 @@
  */
 package io.github.astrapi69.crypt.data.blockchain;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,10 +35,9 @@ import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 
-import io.github.astrapi69.crypt.data.blockchain.Address;
-import org.meanbean.test.BeanTestException;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
@@ -77,7 +76,8 @@ public class AddressTest
 	 * Test method for {@link Address#equals(Object)} , {@link Address#hashCode()} and
 	 * {@link Address#toString()}
 	 */
-	@Test(enabled = false)
+	@Test
+	@Disabled
 	public void testEqualsHashcodeAndToStringWithClass()
 		throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException,
 		InstantiationException, ClassNotFoundException, InvocationTargetException, IOException
@@ -96,8 +96,7 @@ public class AddressTest
 	/**
 	 * Test method for {@link Address} with {@link BeanTester}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

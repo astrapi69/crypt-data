@@ -28,10 +28,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.github.astrapi69.crypt.data.hash.HashExtensions;
 import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
 import io.github.astrapi69.crypto.blockchain.api.IBlock;
 import io.github.astrapi69.crypto.blockchain.api.ITransaction;
-import io.github.astrapi69.crypt.data.hash.HashExtensions;
 
 /**
  * The class {@link Block}

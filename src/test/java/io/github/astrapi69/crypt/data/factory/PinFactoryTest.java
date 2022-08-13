@@ -24,15 +24,14 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import io.github.astrapi69.crypt.data.factory.PinFactory;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
-import io.github.astrapi69.collections.list.ListFactory;
+import io.github.astrapi69.collection.list.ListFactory;
 
 public class PinFactoryTest
 {

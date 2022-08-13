@@ -24,7 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,13 +40,13 @@ import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.Cipher;
 
-import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
-import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
+import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
 import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypto.key.KeyType;
@@ -72,7 +72,7 @@ public class KeyModelTest
 	/**
 	 * Sets up method will be invoked before every unit test method in this class
 	 */
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException,
 		NoSuchProviderException
 	{

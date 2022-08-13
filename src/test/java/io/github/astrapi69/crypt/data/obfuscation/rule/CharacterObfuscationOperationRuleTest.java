@@ -27,9 +27,8 @@
  */
 package io.github.astrapi69.crypt.data.obfuscation.rule;
 
-import io.github.astrapi69.crypt.data.obfuscation.rule.CharacterObfuscationOperationRule;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
 /**
  * The unit test class for the class {@link CharacterObfuscationOperationRule}

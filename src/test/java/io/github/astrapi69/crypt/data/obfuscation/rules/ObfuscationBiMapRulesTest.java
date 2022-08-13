@@ -24,16 +24,13 @@
  */
 package io.github.astrapi69.crypt.data.obfuscation.rules;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.github.astrapi69.crypt.data.obfuscation.rules.ObfuscationBiMapRules;
-import org.meanbean.test.BeanTestException;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.Test;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -96,8 +93,7 @@ public class ObfuscationBiMapRulesTest
 	/**
 	 * Test method for {@link ObfuscationBiMapRules}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, InvocationTargetException.class,
-			UnsupportedOperationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

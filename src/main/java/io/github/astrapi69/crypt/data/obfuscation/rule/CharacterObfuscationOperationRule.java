@@ -24,10 +24,10 @@
  */
 package io.github.astrapi69.crypt.data.obfuscation.rule;
 
-import io.github.astrapi69.crypto.obfuscation.rule.Operation;
-
 import java.util.Optional;
 import java.util.Set;
+
+import io.github.astrapi69.crypto.obfuscation.rule.Operation;
 
 /**
  * The class {@link CharacterObfuscationOperationRule} builds a complex rule for obfuscating a
