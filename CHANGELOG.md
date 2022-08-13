@@ -1,6 +1,32 @@
 ## Change log
 ----------------------
 
+Version 8
+-------------
+
+ADDED:
+
+- new unit test framework junit-jupiter-api(junit5)
+- new extension class KeyExtensions for general operations of Key objects
+- new method for transform a certificate to base64 string
+- new method for transform a certificate to hexadecimal string
+- new method for transform a pem string to a PemObject
+- new method for transform a given PemObject to private key
+- new method for transform a given PemObject to public key
+
+CHANGED:
+
+- update to jdk version 11
+- update gradle to new version 7.5.1
+- remove of unit test framework testng
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.9.1
+- update of crypt-api dependency version to 8.2
+- update of dependency file-worker to new version to 11
+- update of dependency silly-collections to new version to 19
+- update of test dependency time-machine to new version to 2.1
+- update of test dependency test-object to new version 7
+- update of test dependency checksum-up to new version to 2
+
 Version 7.11.1
 -------------
 
