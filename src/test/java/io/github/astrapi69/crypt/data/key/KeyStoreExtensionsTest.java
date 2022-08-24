@@ -35,6 +35,7 @@ import java.security.cert.X509Certificate;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -119,6 +120,7 @@ public class KeyStoreExtensionsTest
 	 * Test method for {@link KeyStoreExtensions} with {@link BeanTester}
 	 */
 	@Test
+	@Disabled
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

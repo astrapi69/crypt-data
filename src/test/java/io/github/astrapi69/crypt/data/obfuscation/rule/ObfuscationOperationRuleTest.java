@@ -31,7 +31,7 @@ import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.collection.set.SetFactory;
 import io.github.astrapi69.crypto.obfuscation.rule.Operation;
-import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
+import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 
 /**
  * The unit test class for the class {@link ObfuscationOperationRule}

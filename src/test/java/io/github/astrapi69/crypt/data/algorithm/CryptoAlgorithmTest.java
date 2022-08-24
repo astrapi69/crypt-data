@@ -27,6 +27,7 @@ package io.github.astrapi69.crypt.data.algorithm;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -65,6 +66,7 @@ public class CryptoAlgorithmTest
 	 * Test method for {@link CryptoAlgorithm} with {@link BeanTester}
 	 */
 	@Test
+	@Disabled
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

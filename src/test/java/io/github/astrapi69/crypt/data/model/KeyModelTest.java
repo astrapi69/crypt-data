@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
@@ -38,8 +37,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 
-import javax.crypto.Cipher;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,12 +44,9 @@ import org.junit.jupiter.api.Test;
 import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
-import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
-import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypto.key.KeyType;
-import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
+import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.file.search.PathFinder;
-import io.github.astrapi69.random.object.RandomStringFactory;
 
 /**
  * The unit test class for the class {@link KeyModel}
@@ -156,27 +150,31 @@ public class KeyModelTest
 	}
 
 	/**
-	 * Test method for {@link CryptModel#equals(Object)} , {@link CryptModel#hashCode()} and
-	 * {@link CryptModel#toString()}
+	 * Test method for {@link KeyModel#equals(Object)} , {@link KeyModel#hashCode()} and
+	 * {@link KeyModel#toString()}
 	 */
 	@Test
-	public void testEqualsHashcodeAndToStringWithClass()
-		throws NoSuchMethodException, IllegalAccessException, InstantiationException,
-		NoSuchFieldException, ClassNotFoundException, InvocationTargetException, IOException
+	public void testEqualsHashcodeAndToStringWithClass() throws CertificateException, IOException
 	{
+
+		File keyFile;
+		KeyModel keyModel;
+		X509Certificate certificate;
 		boolean expected;
 		boolean actual;
 
-		actual = EqualsHashCodeAndToStringEvaluator
-			.evaluateEqualsHashcodeAndToString(CryptModel.class, clazz -> {
-				return CryptModel.<Cipher, String, String> builder()
-					.key(RandomStringFactory.randomHexString(16).toUpperCase())
-					.algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
-					.iterationCount(19).operationMode(Cipher.ENCRYPT_MODE)
-					.decorator(
-						CryptObjectDecorator.<String> builder().prefix("s").suffix("s").build())
-					.build();
-			});
+		keyFile = new File(pemDir, "certificate.pem");
+		certificate = CertificateReader.readCertificate(keyFile);
+		// @formatter:off
+		keyModel = KeyModel
+			.builder()
+			.encoded(certificate.getEncoded())
+			.keyType(KeyType.CERTIFICATE)
+			.algorithm("")
+			.build();
+		// @formatter:on
+
+		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(keyModel);
 		expected = true;
 		assertEquals(expected, actual);
 	}

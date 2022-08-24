@@ -41,6 +41,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -390,6 +391,7 @@ public class PrivateKeyExtensionsTest
 	 * Test method for {@link PrivateKeyExtensions} with {@link BeanTester}
 	 */
 	@Test
+	@Disabled
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

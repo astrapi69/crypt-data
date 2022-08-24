@@ -37,6 +37,7 @@ import java.security.spec.InvalidKeySpecException;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -256,6 +257,7 @@ public class PublicKeyExtensionsTest
 	 * Test method for {@link PublicKeyExtensions} with {@link BeanTester}
 	 */
 	@Test
+	@Disabled
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

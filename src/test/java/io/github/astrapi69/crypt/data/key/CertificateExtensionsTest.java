@@ -37,6 +37,7 @@ import java.util.Date;
 
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -283,6 +284,7 @@ public class CertificateExtensionsTest
 	 * Test method for {@link CertificateExtensions} with {@link BeanTester}
 	 */
 	@Test
+	@Disabled
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
