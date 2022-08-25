@@ -22,7 +22,7 @@ import io.github.astrapi69.crypt.data.key.PublicKeyExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PemObjectReader;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
-import io.github.astrapi69.crypto.key.PemType;
+import io.github.astrapi69.crypt.api.key.PemType;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**

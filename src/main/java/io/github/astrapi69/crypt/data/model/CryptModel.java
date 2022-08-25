@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import io.github.astrapi69.crypto.algorithm.Algorithm;
+import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 
 /**
  * The class {@link CryptModel} holds data for the encryption or decryption process.

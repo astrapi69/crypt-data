@@ -47,7 +47,7 @@ import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
-import io.github.astrapi69.crypto.algorithm.MdAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.MdAlgorithm;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
@@ -143,8 +143,10 @@ public class PublicKeyWriterTest
 		publicKey = PrivateKeyExtensions.generatePublicKey(privateKey);
 		convertedPublickeyPemFile = new File(pemDir, "converted-public.pem");
 		PublicKeyWriter.writeInPemFormat(publicKey, convertedPublickeyPemFile);
-		expected = FileChecksumExtensions.getChecksum(publicKeyPemFile, MdAlgorithm.MD5);
-		actual = FileChecksumExtensions.getChecksum(convertedPublickeyPemFile, MdAlgorithm.MD5);
+		expected = FileChecksumExtensions.getChecksum(publicKeyPemFile,
+			MdAlgorithm.MD5.getAlgorithm());
+		actual = FileChecksumExtensions.getChecksum(convertedPublickeyPemFile,
+			MdAlgorithm.MD5.getAlgorithm());
 		assertEquals(expected, actual);
 		DeleteFileExtensions.delete(convertedPublickeyPemFile);
 	}

@@ -54,7 +54,7 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
-import io.github.astrapi69.crypto.provider.SecurityProvider;
+import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**

@@ -43,9 +43,9 @@ import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
-import io.github.astrapi69.crypto.algorithm.MdAlgorithm;
-import io.github.astrapi69.crypto.key.KeyFileFormat;
-import io.github.astrapi69.crypto.key.KeyFormat;
+import io.github.astrapi69.crypt.api.algorithm.MdAlgorithm;
+import io.github.astrapi69.crypt.api.key.KeyFileFormat;
+import io.github.astrapi69.crypt.api.key.KeyFormat;
 import io.github.astrapi69.file.create.FileCreationState;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
@@ -119,8 +119,10 @@ public class PrivateKeyWriterTest
 
 		writtenPrivatekeyDerFile = new File(derDir, "written-private.der");
 		PrivateKeyWriter.write(privateKey, writtenPrivatekeyDerFile);
-		expected = FileChecksumExtensions.getChecksum(privateKeyDerFile, MdAlgorithm.MD5);
-		actual = FileChecksumExtensions.getChecksum(writtenPrivatekeyDerFile, MdAlgorithm.MD5);
+		expected = FileChecksumExtensions.getChecksum(privateKeyDerFile,
+			MdAlgorithm.MD5.getAlgorithm());
+		actual = FileChecksumExtensions.getChecksum(writtenPrivatekeyDerFile,
+			MdAlgorithm.MD5.getAlgorithm());
 		DeleteFileExtensions.delete(writtenPrivatekeyDerFile);
 		assertEquals(actual, expected);
 	}
@@ -154,8 +156,10 @@ public class PrivateKeyWriterTest
 		PrivateKeyWriter.writeInPemFormat(privateKey, convertedPrivatekeyPemFile);
 
 		privatekeyPemFileInDerDir = new File(derDir, "private.pem");
-		expected = FileChecksumExtensions.getChecksum(privatekeyPemFileInDerDir, MdAlgorithm.MD5);
-		actual = FileChecksumExtensions.getChecksum(convertedPrivatekeyPemFile, MdAlgorithm.MD5);
+		expected = FileChecksumExtensions.getChecksum(privatekeyPemFileInDerDir,
+			MdAlgorithm.MD5.getAlgorithm());
+		actual = FileChecksumExtensions.getChecksum(convertedPrivatekeyPemFile,
+			MdAlgorithm.MD5.getAlgorithm());
 		DeleteFileExtensions.delete(convertedPrivatekeyPemFile);
 		assertEquals(expected, actual);
 	}
@@ -197,8 +201,10 @@ public class PrivateKeyWriterTest
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
 		PrivateKeyWriter.write(privateKey, outputStream, KeyFileFormat.PEM, KeyFormat.PKCS_8);
-		expected = FileChecksumExtensions.getChecksum(privatekeyPemFileInDerDir, MdAlgorithm.MD5);
-		actual = FileChecksumExtensions.getChecksum(newWrittenPrivatekeyPemFile, MdAlgorithm.MD5);
+		expected = FileChecksumExtensions.getChecksum(privatekeyPemFileInDerDir,
+			MdAlgorithm.MD5.getAlgorithm());
+		actual = FileChecksumExtensions.getChecksum(newWrittenPrivatekeyPemFile,
+			MdAlgorithm.MD5.getAlgorithm());
 		assertEquals(expected, actual);
 
 		DeleteFileExtensions.delete(newWrittenPrivatekeyPemFile);
@@ -211,8 +217,10 @@ public class PrivateKeyWriterTest
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
 		PrivateKeyWriter.write(privateKey, outputStream, KeyFileFormat.PEM, KeyFormat.PKCS_1);
-		expected = FileChecksumExtensions.getChecksum(privatekeyPemFileInDerDir, MdAlgorithm.MD5);
-		actual = FileChecksumExtensions.getChecksum(newWrittenPrivatekeyPemFile, MdAlgorithm.MD5);
+		expected = FileChecksumExtensions.getChecksum(privatekeyPemFileInDerDir,
+			MdAlgorithm.MD5.getAlgorithm());
+		actual = FileChecksumExtensions.getChecksum(newWrittenPrivatekeyPemFile,
+			MdAlgorithm.MD5.getAlgorithm());
 		assertEquals(expected, actual);
 
 		DeleteFileExtensions.delete(newWrittenPrivatekeyPemFile);
@@ -228,8 +236,10 @@ public class PrivateKeyWriterTest
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
 		PrivateKeyWriter.write(privateKey, outputStream, KeyFileFormat.PEM, null);
-		expected = FileChecksumExtensions.getChecksum(privatekeyPemFileInDerDir, MdAlgorithm.MD5);
-		actual = FileChecksumExtensions.getChecksum(newWrittenPrivatekeyPemFile, MdAlgorithm.MD5);
+		expected = FileChecksumExtensions.getChecksum(privatekeyPemFileInDerDir,
+			MdAlgorithm.MD5.getAlgorithm());
+		actual = FileChecksumExtensions.getChecksum(newWrittenPrivatekeyPemFile,
+			MdAlgorithm.MD5.getAlgorithm());
 		assertEquals(expected, actual);
 
 		DeleteFileExtensions.delete(newWrittenPrivatekeyPemFile);
@@ -242,8 +252,10 @@ public class PrivateKeyWriterTest
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
 		PrivateKeyWriter.write(privateKey, outputStream, KeyFileFormat.DER, null);
-		expected = FileChecksumExtensions.getChecksum(privateKeyDerFile, MdAlgorithm.MD5);
-		actual = FileChecksumExtensions.getChecksum(newWrittenPrivatekeyPemFile, MdAlgorithm.MD5);
+		expected = FileChecksumExtensions.getChecksum(privateKeyDerFile,
+			MdAlgorithm.MD5.getAlgorithm());
+		actual = FileChecksumExtensions.getChecksum(newWrittenPrivatekeyPemFile,
+			MdAlgorithm.MD5.getAlgorithm());
 		assertEquals(expected, actual);
 
 		DeleteFileExtensions.delete(newWrittenPrivatekeyPemFile);

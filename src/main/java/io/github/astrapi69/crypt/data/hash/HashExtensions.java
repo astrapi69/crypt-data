@@ -36,7 +36,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.google.common.primitives.Longs;
 
-import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 
 /**
  * The class {@link HashExtensions}.

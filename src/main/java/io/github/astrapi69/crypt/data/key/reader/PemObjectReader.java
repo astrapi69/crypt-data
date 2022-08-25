@@ -49,10 +49,10 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 
-import io.github.astrapi69.crypto.algorithm.Algorithm;
-import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import io.github.astrapi69.crypto.key.PemType;
-import io.github.astrapi69.crypto.provider.SecurityProvider;
+import io.github.astrapi69.crypt.api.algorithm.Algorithm;
+import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypt.api.key.PemType;
+import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 
 /**
  * The class {@link PemObjectReader} is a utility class for reading {@link PemObject} from a file.

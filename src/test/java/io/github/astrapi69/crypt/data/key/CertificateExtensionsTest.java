@@ -42,8 +42,8 @@ import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
-import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
-import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypt.api.compound.CompoundAlgorithm;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**

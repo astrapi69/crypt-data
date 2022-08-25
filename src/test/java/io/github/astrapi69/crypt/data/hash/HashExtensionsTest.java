@@ -34,7 +34,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
-import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 
 /**
  * The unit test class for the class {@link HashExtensions}
