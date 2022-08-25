@@ -31,7 +31,7 @@ import java.security.spec.AlgorithmParameterSpec;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
-import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypt.api.compound.CompoundAlgorithm;
 
 /**
  * The unit test class for the class {@link AlgorithmParameterSpecFactory}

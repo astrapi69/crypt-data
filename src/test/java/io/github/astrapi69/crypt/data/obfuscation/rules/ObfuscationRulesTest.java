@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.evaluate.object.api.ContractViolation;
-import io.github.astrapi69.evaluate.object.checkers.EqualsHashCodeAndToStringCheck;
+import io.github.astrapi69.evaluate.object.checker.EqualsHashCodeAndToStringCheck;
 
 /**
  * The unit test class for the class {@link ObfuscationRules}.

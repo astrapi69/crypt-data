@@ -45,9 +45,9 @@ import org.bouncycastle.util.io.pem.PemWriter;
 
 import io.github.astrapi69.crypt.data.hex.HexExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PemObjectReader;
-import io.github.astrapi69.crypto.algorithm.KeyPairGeneratorAlgorithm;
-import io.github.astrapi69.crypto.key.KeySize;
-import io.github.astrapi69.crypto.key.PemType;
+import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypt.api.key.KeySize;
+import io.github.astrapi69.crypt.api.key.PemType;
 
 /**
  * The class {@link PrivateKeyExtensions}.

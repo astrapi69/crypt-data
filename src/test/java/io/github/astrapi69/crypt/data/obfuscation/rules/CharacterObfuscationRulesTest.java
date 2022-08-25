@@ -39,7 +39,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import io.github.astrapi69.evaluate.object.api.ContractViolation;
-import io.github.astrapi69.evaluate.object.checkers.EqualsHashCodeAndToStringCheck;
+import io.github.astrapi69.evaluate.object.checker.EqualsHashCodeAndToStringCheck;
 
 /**
  * The class {@link CharacterObfuscationRules}

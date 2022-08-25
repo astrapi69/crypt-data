@@ -13,7 +13,7 @@ dependencies {
     implementation("io.github.astrapi69:throwable:$throwableVersion")
     implementation("io.github.astrapi69:file-worker:$fileWorkerVersion")
     implementation("io.github.astrapi69:silly-strings:$sillyStringsVersion")
-    implementation("io.github.astrapi69:silly-collections:$sillyCollectionsVersion")
+    implementation("io.github.astrapi69:silly-collection:$sillyCollectionVersion")
     testImplementation("io.github.astrapi69:silly-io:$sillyIoVersion")
     testImplementation("io.github.astrapi69:jobj-core:$jobjCoreVersion")
     testImplementation("io.github.astrapi69:vintage-time:$vintageTimeVersion")

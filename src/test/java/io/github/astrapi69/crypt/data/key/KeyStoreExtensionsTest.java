@@ -35,12 +35,13 @@ import java.security.cert.X509Certificate;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.data.factory.KeyStoreFactory;
 import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
-import io.github.astrapi69.crypto.algorithm.KeystoreType;
+import io.github.astrapi69.crypt.api.algorithm.KeystoreType;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
@@ -119,6 +120,7 @@ public class KeyStoreExtensionsTest
 	 * Test method for {@link KeyStoreExtensions} with {@link BeanTester}
 	 */
 	@Test
+	@Disabled
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

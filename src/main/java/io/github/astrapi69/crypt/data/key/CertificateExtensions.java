@@ -41,7 +41,7 @@ import org.bouncycastle.asn1.x500.style.IETFUtils;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 
 import io.github.astrapi69.crypt.data.hex.HexExtensions;
-import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 
 /**
  * The class {@link CertificateExtensions} provides extension methods for {@link X509Certificate}

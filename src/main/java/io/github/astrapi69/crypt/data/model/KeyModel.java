@@ -30,7 +30,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import io.github.astrapi69.crypto.key.KeyType;
+import io.github.astrapi69.crypt.api.key.KeyType;
 
 @Data
 @RequiredArgsConstructor

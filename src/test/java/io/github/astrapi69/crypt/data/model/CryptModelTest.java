@@ -34,9 +34,9 @@ import javax.crypto.Cipher;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.astrapi69.crypto.algorithm.SunJCEAlgorithm;
-import io.github.astrapi69.crypto.compound.CompoundAlgorithm;
-import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
+import io.github.astrapi69.crypt.api.algorithm.SunJCEAlgorithm;
+import io.github.astrapi69.crypt.api.compound.CompoundAlgorithm;
+import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.random.object.RandomStringFactory;
 
 /**
@@ -79,16 +79,17 @@ public class CryptModelTest
 		boolean expected;
 		boolean actual;
 
-		actual = EqualsHashCodeAndToStringEvaluator
-			.evaluateEqualsHashcodeAndToString(CryptModel.class, clazz -> {
-				return CryptModel.<Cipher, String, String> builder()
-					.key(RandomStringFactory.randomHexString(16).toUpperCase())
-					.algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
-					.iterationCount(19).operationMode(Cipher.ENCRYPT_MODE)
-					.decorator(
-						CryptObjectDecorator.<String> builder().prefix("s").suffix("s").build())
-					.build();
-			});
+
+		CryptModel<Cipher, String, String> cryptModel;
+
+		cryptModel = CryptModel.<Cipher, String, String> builder()
+			.key(RandomStringFactory.randomHexString(16).toUpperCase())
+			.algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
+			.iterationCount(19).operationMode(Cipher.ENCRYPT_MODE)
+			.decorator(CryptObjectDecorator.<String> builder().prefix("s").suffix("s").build())
+			.build();
+
+		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(cryptModel);
 		expected = true;
 		assertEquals(expected, actual);
 	}

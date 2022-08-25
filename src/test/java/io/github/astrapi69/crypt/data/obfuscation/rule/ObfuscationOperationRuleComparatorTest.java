@@ -53,7 +53,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.collection.set.SetFactory;
-import io.github.astrapi69.crypto.obfuscation.rule.Operation;
+import io.github.astrapi69.crypt.api.obfuscation.rule.Operation;
 
 /**
  * The unit test class for the class {@link ObfuscationOperationRuleComparator}.

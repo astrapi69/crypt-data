@@ -36,7 +36,7 @@ import java.util.Objects;
 import org.apache.commons.codec.binary.Base64;
 
 import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
-import io.github.astrapi69.crypto.key.KeyFileFormat;
+import io.github.astrapi69.crypt.api.key.KeyFileFormat;
 
 /**
  * The class {@link CertificateWriter} is a utility class for write certificates in files or streams

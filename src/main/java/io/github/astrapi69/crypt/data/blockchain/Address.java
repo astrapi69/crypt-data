@@ -25,8 +25,8 @@
 package io.github.astrapi69.crypt.data.blockchain;
 
 import io.github.astrapi69.crypt.data.hash.HashExtensions;
-import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
-import io.github.astrapi69.crypto.blockchain.api.IAddress;
+import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypt.api.blockchain.IAddress;
 
 /**
  * The class {@link Address}

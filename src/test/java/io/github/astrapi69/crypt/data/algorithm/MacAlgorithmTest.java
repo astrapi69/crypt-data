@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.astrapi69.crypto.algorithm.MacAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.MacAlgorithm;
 
 /**
  * Test class for enum {@link MacAlgorithm}.
