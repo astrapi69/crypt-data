@@ -33,9 +33,12 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
+import io.github.astrapi69.crypt.api.key.KeyType;
+import io.github.astrapi69.crypt.data.model.KeyModel;
 import lombok.extern.java.Log;
 
 import org.apache.commons.codec.binary.Base64;
@@ -361,6 +364,28 @@ public final class PrivateKeyReader
 		final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
 		final KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
 		return keyFactory.generatePrivate(keySpec);
+	}
+
+	/**
+	 * Reads the given byte array with the given algorithm and returns the {@link PrivateKey}
+	 * object.
+	 *
+	 * @param keyModel
+	 *            the info model for create the private key
+	 * @return the {@link PrivateKey} object
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 */
+	public static PrivateKey readPrivateKey(KeyModel keyModel)
+		throws NoSuchAlgorithmException, InvalidKeySpecException
+	{
+		Objects.requireNonNull(keyModel);
+		if(!keyModel.getKeyType().equals(KeyType.PRIVATE_KEY)) {
+			throw new RuntimeException("Given KeyModel:" + keyModel.toString() + "\n is not a private key");
+		}
+		return readPrivateKey(keyModel.getEncoded(), keyModel.getAlgorithm());
 	}
 
 	/**
