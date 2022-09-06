@@ -26,6 +26,7 @@ package io.github.astrapi69.crypt.data.key;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Objects;
@@ -37,6 +38,10 @@ import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypt.data.model.KeyModel;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
+/**
+ * The class {@link KeyModelExtensions} provides algorithms for transform a given {@link KeyModel}
+ * object to the appropriate key objects and given keys to the appropriate {@link KeyModel} object
+ */
 public class KeyModelExtensions
 {
 
@@ -101,20 +106,40 @@ public class KeyModelExtensions
 			.decorate(() -> CertificateReader.readCertificate(keyModel.getEncoded()));
 	}
 
+	/**
+	 * Transforms the given {@link PrivateKey} object to a {@link KeyModel} object
+	 * 
+	 * @param privateKey
+	 *            the {@link PrivateKey} object to transform
+	 * @return the {@link KeyModel} object from the given {@link PrivateKey} object
+	 */
 	public static KeyModel toKeyModel(PrivateKey privateKey)
 	{
 		return KeyModel.builder().encoded(privateKey.getEncoded()).keyType(KeyType.PRIVATE_KEY)
 			.algorithm(privateKey.getAlgorithm()).build();
 	}
 
+	/**
+	 * Transforms the given {@link PublicKey} object to a {@link KeyModel} object
+	 * 
+	 * @param publicKey
+	 *            the {@link PublicKey} object to transform
+	 * @return the {@link KeyModel} object from the given {@link PublicKey} object
+	 */
 	public static KeyModel toKeyModel(PublicKey publicKey)
 	{
 		return KeyModel.builder().encoded(publicKey.getEncoded()).keyType(KeyType.PUBLIC_KEY)
 			.algorithm(publicKey.getAlgorithm()).build();
 	}
 
-	public static KeyModel toKeyModel(X509Certificate certificate)
-		throws CertificateEncodingException
+	/**
+	 * Transforms the given {@link Certificate} object to a {@link KeyModel} object
+	 * 
+	 * @param certificate
+	 *            the {@link Certificate} object to transform
+	 * @return the {@link KeyModel} object from the given {@link Certificate} object
+	 */
+	public static KeyModel toKeyModel(Certificate certificate) throws CertificateEncodingException
 	{
 		return KeyModel.builder().encoded(CertificateExtensions.getEncoded(certificate))
 			.keyType(KeyType.CERTIFICATE).build();

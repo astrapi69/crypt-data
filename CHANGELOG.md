@@ -1,8 +1,13 @@
 ## Change log
 ----------------------
 
-Version 8.2-SNAPSHOT
+Version 8.2
 -------------
+
+ADDED:
+
+- new extension class for transform key objects to KeyModel object and back
+- new method in class PrivateKeyReader for read private keys from a given KeyModel object
 
 Version 8.1
 -------------

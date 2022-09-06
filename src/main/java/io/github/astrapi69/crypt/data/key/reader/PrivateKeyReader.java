@@ -37,17 +37,17 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
-import io.github.astrapi69.crypt.api.key.KeyType;
-import io.github.astrapi69.crypt.data.model.KeyModel;
 import lombok.extern.java.Log;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.util.io.pem.PemObject;
 
-import io.github.astrapi69.crypt.data.algorithm.CryptoAlgorithm;
 import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeyFileFormat;
 import io.github.astrapi69.crypt.api.key.KeyStringEntry;
+import io.github.astrapi69.crypt.api.key.KeyType;
+import io.github.astrapi69.crypt.data.algorithm.CryptoAlgorithm;
+import io.github.astrapi69.crypt.data.model.KeyModel;
 
 /**
  * The class {@link PrivateKeyReader} is a utility class for reading private keys in *.der or *.pem
@@ -367,8 +367,7 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Reads the given byte array with the given algorithm and returns the {@link PrivateKey}
-	 * object.
+	 * Reads the given {@link KeyModel} object and returns the {@link PrivateKey} object.
 	 *
 	 * @param keyModel
 	 *            the info model for create the private key
@@ -382,8 +381,9 @@ public final class PrivateKeyReader
 		throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		Objects.requireNonNull(keyModel);
-		if(!keyModel.getKeyType().equals(KeyType.PRIVATE_KEY)) {
-			throw new RuntimeException("Given KeyModel:" + keyModel.toString() + "\n is not a private key");
+		if (!keyModel.getKeyType().equals(KeyType.PRIVATE_KEY))
+		{
+			throw new RuntimeException("Given KeyModel:" + keyModel + "\n is not a private key");
 		}
 		return readPrivateKey(keyModel.getEncoded(), keyModel.getAlgorithm());
 	}
