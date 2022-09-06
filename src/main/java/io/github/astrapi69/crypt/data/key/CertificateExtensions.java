@@ -26,6 +26,7 @@ package io.github.astrapi69.crypt.data.key;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
@@ -40,8 +41,8 @@ import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x500.style.IETFUtils;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 
-import io.github.astrapi69.crypt.data.hex.HexExtensions;
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypt.data.hex.HexExtensions;
 
 /**
  * The class {@link CertificateExtensions} provides extension methods for {@link X509Certificate}
@@ -57,16 +58,15 @@ public final class CertificateExtensions
 	}
 
 	/**
-	 * Transforms the given {@link X509Certificate} object to a hexadecimal {@link String} object
+	 * Transforms the given {@link Certificate} object to a hexadecimal {@link String} object
 	 *
 	 * @param certificate
 	 *            the certificate
-	 * @return the hexadecimal {@link String} object from the given {@link X509Certificate} object
+	 * @return the hexadecimal {@link String} object from the given {@link Certificate} object
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs
 	 */
-	public static String toHex(final X509Certificate certificate)
-		throws CertificateEncodingException
+	public static String toHex(final Certificate certificate) throws CertificateEncodingException
 	{
 		String base64 = KeyExtensions.toBase64(certificate.getEncoded());
 		byte[] decoded = KeyExtensions.decodeBase64(base64);
@@ -74,31 +74,30 @@ public final class CertificateExtensions
 	}
 
 	/**
-	 * Get the {@link X509Certificate} in its primary encoding format
+	 * Get the {@link Certificate} in its primary encoding format
 	 *
 	 * @param certificate
 	 *            the certificate
-	 * @return the {@link X509Certificate} in its primary encoding format
+	 * @return the {@link Certificate} in its primary encoding format
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs
 	 */
-	public static byte[] getEncoded(final X509Certificate certificate)
+	public static byte[] getEncoded(final Certificate certificate)
 		throws CertificateEncodingException
 	{
 		return certificate.getEncoded();
 	}
 
 	/**
-	 * Transforms the given {@link X509Certificate} object to a base64 {@link String} object
+	 * Transforms the given {@link Certificate} object to a base64 {@link String} object
 	 *
 	 * @param certificate
 	 *            the certificate
-	 * @return the base64 {@link String} object from the given {@link X509Certificate} object
+	 * @return the base64 {@link String} object from the given {@link Certificate} object
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs
 	 */
-	public static String toBase64(final X509Certificate certificate)
-		throws CertificateEncodingException
+	public static String toBase64(final Certificate certificate) throws CertificateEncodingException
 	{
 		return KeyExtensions.toBase64(getEncoded(certificate));
 	}
