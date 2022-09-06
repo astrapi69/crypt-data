@@ -138,6 +138,8 @@ public class KeyModelExtensions
 	 * @param certificate
 	 *            the {@link Certificate} object to transform
 	 * @return the {@link KeyModel} object from the given {@link Certificate} object
+	 * @throws CertificateEncodingException
+	 *             is thrown if an encoding error occurs
 	 */
 	public static KeyModel toKeyModel(Certificate certificate) throws CertificateEncodingException
 	{
