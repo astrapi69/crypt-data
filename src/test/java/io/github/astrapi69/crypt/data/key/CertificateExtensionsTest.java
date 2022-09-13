@@ -28,14 +28,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
+import java.security.cert.Certificate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
 import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.bouncycastle.asn1.x509.Extensions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -75,7 +78,17 @@ public class CertificateExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link CertificateExtensions#toHex(X509Certificate)}
+	 * Test method for {@link CertificateExtensions#getExtensions(Certificate)}
+	 */
+	@Test
+	public void testGetExtensions() throws CertificateEncodingException, IOException
+	{
+		Extensions extensions = CertificateExtensions.getExtensions(certificate);
+		// TODO test
+	}
+
+	/**
+	 * Test method for {@link CertificateExtensions#toHex(Certificate)}
 	 *
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.
@@ -92,7 +105,7 @@ public class CertificateExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link CertificateExtensions#toBase64(X509Certificate)}
+	 * Test method for {@link CertificateExtensions#toBase64(Certificate)}
 	 *
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs.

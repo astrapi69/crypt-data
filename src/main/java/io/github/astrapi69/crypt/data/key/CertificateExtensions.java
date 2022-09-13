@@ -24,24 +24,35 @@
  */
 package io.github.astrapi69.crypt.data.key;
 
+import java.io.IOException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.security.auth.x500.X500Principal;
 
 import org.apache.commons.codec.binary.Hex;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x500.style.IETFUtils;
+import org.bouncycastle.asn1.x509.Extensions;
+import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypt.data.certificate.CertificateInfo;
+import io.github.astrapi69.crypt.data.certificate.Valitidy;
 import io.github.astrapi69.crypt.data.hex.HexExtensions;
 
 /**
@@ -86,6 +97,18 @@ public final class CertificateExtensions
 		throws CertificateEncodingException
 	{
 		return certificate.getEncoded();
+	}
+
+	/**
+	 * Get the {@link PublicKey} object from the given {@link Certificate} object
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the {@link PublicKey} object
+	 */
+	public static PublicKey getPublicKey(final Certificate certificate)
+	{
+		return certificate.getPublicKey();
 	}
 
 	/**
@@ -185,6 +208,30 @@ public final class CertificateExtensions
 	}
 
 	/**
+	 * Gets the serial number from the given {@link X509Certificate} object
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the serial number from the given {@link X509Certificate} object
+	 */
+	public static BigInteger getSerialNumber(final X509Certificate certificate)
+	{
+		return certificate.getSerialNumber();
+	}
+
+	/**
+	 * Gets the issued by value of the given {@link X509Certificate}.
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the issued by value of the given {@link X509Certificate}.
+	 */
+	public static String getSubject(final X509Certificate certificate)
+	{
+		return getIssuedBy(certificate);
+	}
+
+	/**
 	 * Gets the issued to value of the given {@link X509Certificate}.
 	 *
 	 * @param certificate
@@ -254,6 +301,19 @@ public final class CertificateExtensions
 	}
 
 	/**
+	 * Gets the valid from of the given {@link X509Certificate}.
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the {@link Date} that represents from when the given {@link X509Certificate} object
+	 *         is valid from.
+	 */
+	public static int getVersion(final X509Certificate certificate)
+	{
+		return certificate.getVersion();
+	}
+
+	/**
 	 * Gets the valid until of the given {@link X509Certificate}.
 	 *
 	 * @param certificate
@@ -265,4 +325,44 @@ public final class CertificateExtensions
 	{
 		return certificate.getNotAfter();
 	}
+
+	/**
+	 * Converts the given {@link X509Certificate} object to an {@link CertificateInfo} object
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the {@link CertificateInfo} object that represents from when the given
+	 *         {@link X509Certificate} object
+	 */
+	public static CertificateInfo toCertificateInfo(final X509Certificate certificate)
+	{
+		return CertificateInfo.builder().issuer(CertificateExtensions.getIssuedTo(certificate))
+			.publicKey(CertificateExtensions.getPublicKey(certificate))
+			.serialNumber(CertificateExtensions.getSerialNumber(certificate))
+			.signatureAlgorithm(CertificateExtensions.getSignatureAlgorithm(certificate))
+			.subject(CertificateExtensions.getSubject(certificate))
+			.valitidy(Valitidy.builder()
+				.notBefore(CertificateExtensions.getValidFrom(certificate).toInstant()
+					.atZone(ZoneId.systemDefault()).toOffsetDateTime().toZonedDateTime())
+				.notAfter(CertificateExtensions.getValidUntil(certificate).toInstant()
+					.atZone(ZoneId.systemDefault()).toOffsetDateTime().toZonedDateTime())
+				.build())
+			.version(CertificateExtensions.getVersion(certificate)).build();
+	}
+
+	/**
+	 * Gets the {@link Extensions} object of the given {@link X509Certificate} object
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the {@link Extensions} object of the given {@link X509Certificate} object
+	 */
+	public static Extensions getExtensions(final Certificate certificate)
+		throws CertificateEncodingException, IOException
+	{
+		X509CertificateHolder bcX509Cert = new X509CertificateHolder(org.bouncycastle.asn1.x509.Certificate
+			.getInstance(ASN1Primitive.fromByteArray(certificate.getEncoded())));
+		return bcX509Cert.getExtensions();
+	}
+
 }
