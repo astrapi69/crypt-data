@@ -26,11 +26,7 @@ package io.github.astrapi69.crypt.data.certificate;
 
 import java.math.BigInteger;
 import java.security.PublicKey;
-import java.security.cert.X509Certificate;
-import java.time.ZoneId;
 import java.util.Map;
-
-import io.github.astrapi69.crypt.data.key.CertificateExtensions;
 
 public class CertificateInfo
 {

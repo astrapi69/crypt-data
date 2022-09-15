@@ -360,8 +360,9 @@ public final class CertificateExtensions
 	public static Extensions getExtensions(final Certificate certificate)
 		throws CertificateEncodingException, IOException
 	{
-		X509CertificateHolder bcX509Cert = new X509CertificateHolder(org.bouncycastle.asn1.x509.Certificate
-			.getInstance(ASN1Primitive.fromByteArray(certificate.getEncoded())));
+		X509CertificateHolder bcX509Cert = new X509CertificateHolder(
+			org.bouncycastle.asn1.x509.Certificate
+				.getInstance(ASN1Primitive.fromByteArray(certificate.getEncoded())));
 		return bcX509Cert.getExtensions();
 	}
 
