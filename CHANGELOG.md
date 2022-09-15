@@ -4,6 +4,16 @@
 Version 8.3-SNAPSHOT
 -------------
 
+ADDED:
+
+- new bean class for hold information of a certificate extension
+
+CHANGED:
+
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.11.0
+- update of dependency file-worker to new version to 11.2
+- update of test dependency jobj-core to new version 7
+
 Version 8.2
 -------------
 
