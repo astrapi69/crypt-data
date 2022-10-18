@@ -26,6 +26,7 @@ package io.github.astrapi69.crypt.data.factory;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -40,6 +41,8 @@ import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 import io.github.astrapi69.crypt.api.key.KeySize;
+import org.bouncycastle.jce.ECNamedCurveTable;
+import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 
 /**
  * The factory class {@link KeyPairFactory} holds methods for creating {@link KeyPair} objects.
@@ -235,6 +238,37 @@ public final class KeyPairFactory
 		final KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm);
 		generator.initialize(keySize, secureRandom);
 		return generator;
+	}
+
+	public static KeyPairGenerator newKeyPairGenerator(String eCNamedCurveParameterSpecName,
+			final String algorithm, final String provider)
+			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+		return newKeyPairGenerator(ECNamedCurveTable.getParameterSpec(eCNamedCurveParameterSpecName), algorithm, provider);
+	}
+
+	public static KeyPairGenerator newKeyPairGenerator(ECNamedCurveParameterSpec namedCurveParameterSpec,
+			final String algorithm, final String provider)
+			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+		final KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm, provider);
+		generator.initialize(namedCurveParameterSpec);
+		return generator;
+	}
+
+	public static KeyPair generateECKeys() {
+		try {
+			ECNamedCurveParameterSpec parameterSpec = ECNamedCurveTable.getParameterSpec("brainpoolp256r1");
+			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(
+					"ECDH", "BC");
+
+			keyPairGenerator.initialize(parameterSpec);
+			KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+			return keyPair;
+		} catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException
+				 | NoSuchProviderException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }
