@@ -356,6 +356,10 @@ public final class CertificateExtensions
 	 * @param certificate
 	 *            the certificate
 	 * @return the {@link Extensions} object of the given {@link X509Certificate} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws CertificateEncodingException
+	 *             is thrown if an encoding error occurs.
 	 */
 	public static Extensions getExtensions(final Certificate certificate)
 		throws CertificateEncodingException, IOException
