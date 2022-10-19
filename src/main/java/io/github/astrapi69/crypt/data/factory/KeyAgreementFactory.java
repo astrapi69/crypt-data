@@ -13,11 +13,11 @@ public class KeyAgreementFactory {
 	public static SecretKey newSharedSecret(
 			PrivateKey privateKey,
 			PublicKey publicKey,
-			String algorithm,
+			String keyAgreementAlgorithm,
 			String secretKeyAlgorithm,
 			String provider) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException {
 
-		KeyAgreement keyAgreement = KeyAgreement.getInstance(algorithm, provider);
+		KeyAgreement keyAgreement = KeyAgreement.getInstance(keyAgreementAlgorithm, provider);
 		keyAgreement.init(privateKey);
 		keyAgreement.doPhase(publicKey, true);
 
