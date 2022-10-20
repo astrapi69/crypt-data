@@ -241,31 +241,39 @@ public final class KeyPairFactory
 	}
 
 	public static KeyPairGenerator newKeyPairGenerator(String eCNamedCurveParameterSpecName,
-			final String algorithm, final String provider)
-			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
-		return newKeyPairGenerator(ECNamedCurveTable.getParameterSpec(eCNamedCurveParameterSpecName), algorithm, provider);
+		final String algorithm, final String provider)
+		throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException
+	{
+		return newKeyPairGenerator(
+			ECNamedCurveTable.getParameterSpec(eCNamedCurveParameterSpecName), algorithm, provider);
 	}
 
-	public static KeyPairGenerator newKeyPairGenerator(ECNamedCurveParameterSpec namedCurveParameterSpec,
-			final String algorithm, final String provider)
-			throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+	public static KeyPairGenerator newKeyPairGenerator(
+		ECNamedCurveParameterSpec namedCurveParameterSpec, final String algorithm,
+		final String provider)
+		throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException
+	{
 		final KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm, provider);
 		generator.initialize(namedCurveParameterSpec);
 		return generator;
 	}
 
-	public static KeyPair generateECKeys() {
-		try {
-			ECNamedCurveParameterSpec parameterSpec = ECNamedCurveTable.getParameterSpec("brainpoolp256r1");
-			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(
-					"ECDH", "BC");
+	public static KeyPair generateECKeys()
+	{
+		try
+		{
+			ECNamedCurveParameterSpec parameterSpec = ECNamedCurveTable
+				.getParameterSpec("brainpoolp256r1");
+			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDH", "BC");
 
 			keyPairGenerator.initialize(parameterSpec);
 			KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
 			return keyPair;
-		} catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException
-				 | NoSuchProviderException e) {
+		}
+		catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException
+			| NoSuchProviderException e)
+		{
 			e.printStackTrace();
 			return null;
 		}
