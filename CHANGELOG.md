@@ -10,9 +10,25 @@ ADDED:
 
 CHANGED:
 
-- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.11.0
-- update of dependency file-worker to new version to 11.2
-- update of test dependency jobj-core to new version 7
+- update gradle to new version 8.2-rc-2
+- update of lombok dependency version to 1.18.28
+- update of gradle-plugin dependency 'com.github.ben-manes.versions.gradle.plugin' to new version 0.47.0
+- update of gradle-plugin dependency 'org.ajoberstar.grgit:grgit-gradle' to new version 5.2.0
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.19.0
+- update of crypt-api dependency version to 8.4
+- update of dependency commons-io dependency version to 1.16.0
+- update of dependency commons-codec dependency version to 2.13.0
+- update of dependency guava version to new version 32.0.1-jre
+- update of dependency file-worker to new version to 11.6
+- update of test dependency silly-strings to new version 8.2
+- update of test dependency silly-io to new version 2.2
+- update of dependency silly-collection to new version to 21
+- update of test dependency jobj-core to new version 7.1
+- update of test dependency time-machine to new version to 2.5
+- update of test dependency randomizer to new version 9
+- update of test dependency checksum-up to new version 2.2
+- update of test dependency test-object to new version 7.2
+- update of test dependency junit-jupiter-* to new version 5.10.0-M1
 
 Version 8.2
 -------------
@@ -174,7 +190,7 @@ ADDED:
 - new factory method in CryptModel with generic key argument
 - new delegator methods for PublicKey in PublicKeyExtensions
 - new delegator methods for PrivateKey in PrivateKeyExtensions
-- new method that can get the private key from an password encrypted byte array
+- new method that can get the private key from a password encrypted byte array
 - new factory methods in CipherFactory for create a PBE Cipher object
 
 CHANGED:
