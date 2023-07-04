@@ -32,18 +32,84 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+/**
+ * The factory class {@link KeyAgreementFactory} holds methods for creating new shared
+ * {@link SecretKey} objects and {@link KeyAgreement} objects
+ */
 public class KeyAgreementFactory
 {
 
+	/**
+	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @param publicKey
+	 *            the public key
+	 * @param keyAgreementAlgorithm
+	 *            the key agreement algorithm
+	 * @param secretKeyAlgorithm
+	 *            the secret key algorithm
+	 * @param provider
+	 *            the provider
+	 * @param lastPhase
+	 *            the last phase flag which indicates whether this is the last phase of the key
+	 *            agreement that will be created
+	 * @return the new created shared {@link SecretKey} object from the given arguments
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
+	 *             available from the specified provider
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 */
 	public static SecretKey newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
-		String keyAgreementAlgorithm, String secretKeyAlgorithm, String provider)
+		String keyAgreementAlgorithm, String secretKeyAlgorithm, String provider, boolean lastPhase)
 		throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException
 	{
-
-		KeyAgreement keyAgreement = KeyAgreement.getInstance(keyAgreementAlgorithm, provider);
-		keyAgreement.init(privateKey);
-		keyAgreement.doPhase(publicKey, true);
+		KeyAgreement keyAgreement = newKeyAgreement(privateKey, publicKey, keyAgreementAlgorithm,
+			provider, lastPhase);
 
 		return keyAgreement.generateSecret(secretKeyAlgorithm);
+	}
+
+
+	/**
+	 * Factory method for creating a new {@link KeyAgreement} object from the given arguments
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @param publicKey
+	 *            the public key
+	 * @param keyAgreementAlgorithm
+	 *            the key agreement algorithm
+	 * @param provider
+	 *            the provider
+	 * @param lastPhase
+	 *            the last phase flag which indicates whether this is the last phase of the key
+	 *            agreement that will be created
+	 * @return the new created shared {@link KeyAgreement} object from the given arguments
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
+	 *             available from the specified provider
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 */
+	public static KeyAgreement newKeyAgreement(PrivateKey privateKey, PublicKey publicKey,
+		String keyAgreementAlgorithm, String provider, boolean lastPhase)
+		throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException
+	{
+		KeyAgreement keyAgreement = provider != null
+			? KeyAgreement.getInstance(keyAgreementAlgorithm, provider)
+			: KeyAgreement.getInstance(keyAgreementAlgorithm);
+		keyAgreement.init(privateKey);
+		keyAgreement.doPhase(publicKey, lastPhase);
+
+		return keyAgreement;
 	}
 }

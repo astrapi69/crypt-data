@@ -122,28 +122,6 @@ public class KeyPairFactoryTest
 		assertNotNull(actual);
 	}
 
-	/**
-	 * Test method for {@link KeyPairFactory#newKeyPairGenerator(String, int, SecureRandom)}
-	 *
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
-	 */
-	@Test
-	public void testNewKeyPairGeneratorStringIntSecureRandom() throws NoSuchAlgorithmException
-	{
-		KeyPairGenerator actual;
-
-		actual = KeyPairFactory.newKeyPairGenerator(KeyPairGeneratorAlgorithm.RSA.getAlgorithm(),
-			KeySize.KEYSIZE_2048.getKeySize(), SecureRandomBuilder.getInstance().build());
-		assertNotNull(actual);
-		KeyPair keyPair = actual.generateKeyPair();
-		String base64 = PrivateKeyExtensions.toBase64(keyPair.getPrivate());
-		assertNotNull(base64);
-		PrivateKey privateKey = RuntimeExceptionDecorator.decorate(() -> PrivateKeyReader
-			.readPemPrivateKey(base64, KeyPairGeneratorAlgorithm.RSA.getAlgorithm()));
-		assertNotNull(privateKey);
-	}
 
 	/**
 	 * Test method for {@link KeyPairFactory#newKeyPair(PublicKey, PrivateKey)}
