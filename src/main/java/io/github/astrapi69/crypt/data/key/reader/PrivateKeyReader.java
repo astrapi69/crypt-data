@@ -37,8 +37,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
-import lombok.extern.java.Log;
-
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.util.io.pem.PemObject;
 
@@ -48,6 +46,7 @@ import io.github.astrapi69.crypt.api.key.KeyStringEntry;
 import io.github.astrapi69.crypt.api.key.KeyType;
 import io.github.astrapi69.crypt.data.algorithm.CryptoAlgorithm;
 import io.github.astrapi69.crypt.data.model.KeyModel;
+import lombok.extern.java.Log;
 
 /**
  * The class {@link PrivateKeyReader} is a utility class for reading private keys in *.der or *.pem

@@ -24,23 +24,18 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
-import org.junit.jupiter.api.Test;
+import static javax.xml.bind.DatatypeConverter.printHexBinary;
 
-import javax.crypto.KeyAgreement;
-import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
-import static javax.xml.bind.DatatypeConverter.printHexBinary;
-import static org.junit.jupiter.api.Assertions.*;
+import javax.crypto.KeyAgreement;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * The unit test class for the class {@link KeyAgreementFactory}

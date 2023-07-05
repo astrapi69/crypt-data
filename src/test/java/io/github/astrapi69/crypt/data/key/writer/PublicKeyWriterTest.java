@@ -44,10 +44,10 @@ import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
+import io.github.astrapi69.crypt.api.algorithm.MdAlgorithm;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
-import io.github.astrapi69.crypt.api.algorithm.MdAlgorithm;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 

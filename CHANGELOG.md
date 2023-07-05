@@ -16,6 +16,7 @@ CHANGED:
 - update of gradle-plugin dependency 'com.github.ben-manes.versions.gradle.plugin' to new version 0.47.0
 - update of gradle-plugin dependency 'org.ajoberstar.grgit:grgit-gradle' to new version 5.2.0
 - update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.19.0
+- replaced obsolete package.html files with new package-info.java files
 - update of crypt-api dependency version to 8.4
 - update of dependency commons-io dependency version to 1.16.0
 - update of dependency commons-codec dependency version to 2.13.0
@@ -29,7 +30,8 @@ CHANGED:
 - update of test dependency randomizer to new version 9
 - update of test dependency checksum-up to new version 2.2
 - update of test dependency test-object to new version 7.2
-- update of test dependency junit-jupiter-* to new version 5.10.0-M1**
+- update of test dependency junit-jupiter-* to new version 5.10.0-M1
+- update of test dependency 'com.github.meanbeanlib:meanbean' to new version 3.0.0-M9
 
 Version 8.2
 -------------

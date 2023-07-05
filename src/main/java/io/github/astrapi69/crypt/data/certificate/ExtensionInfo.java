@@ -24,11 +24,12 @@
  */
 package io.github.astrapi69.crypt.data.certificate;
 
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.x509.Extension;
+
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExtensionInfo
@@ -36,18 +37,6 @@ public class ExtensionInfo
 	private ASN1ObjectIdentifier extensionId;
 	private boolean critical;
 	private ASN1OctetString value;
-
-	public static Extension toExtension(ExtensionInfo extensionInfo)
-	{
-		return new Extension(extensionInfo.getExtensionId(), extensionInfo.isCritical(),
-			extensionInfo.getValue());
-	}
-
-	public static ExtensionInfo toExtensionInfo(Extension extension)
-	{
-		return ExtensionInfo.builder().extensionId(extension.getExtnId())
-			.critical(extension.isCritical()).value(extension.getExtnValue()).build();
-	}
 
 	public ExtensionInfo(ASN1ObjectIdentifier extensionId, boolean critical, ASN1OctetString value)
 	{
@@ -67,6 +56,18 @@ public class ExtensionInfo
 		this.value = b.value;
 	}
 
+	public static Extension toExtension(ExtensionInfo extensionInfo)
+	{
+		return new Extension(extensionInfo.getExtensionId(), extensionInfo.isCritical(),
+			extensionInfo.getValue());
+	}
+
+	public static ExtensionInfo toExtensionInfo(Extension extension)
+	{
+		return ExtensionInfo.builder().extensionId(extension.getExtnId())
+			.critical(extension.isCritical()).value(extension.getExtnValue()).build();
+	}
+
 	public static ExtensionInfoBuilder<?, ?> builder()
 	{
 		return new ExtensionInfoBuilderImpl();
@@ -77,24 +78,24 @@ public class ExtensionInfo
 		return this.extensionId;
 	}
 
-	public boolean isCritical()
-	{
-		return this.critical;
-	}
-
-	public ASN1OctetString getValue()
-	{
-		return this.value;
-	}
-
 	public void setExtensionId(ASN1ObjectIdentifier extensionId)
 	{
 		this.extensionId = extensionId;
 	}
 
+	public boolean isCritical()
+	{
+		return this.critical;
+	}
+
 	public void setCritical(boolean critical)
 	{
 		this.critical = critical;
+	}
+
+	public ASN1OctetString getValue()
+	{
+		return this.value;
 	}
 
 	public void setValue(ASN1OctetString value)

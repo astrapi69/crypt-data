@@ -24,14 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
-import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
-import io.github.astrapi69.crypt.api.key.KeySize;
-import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
-import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
-import io.github.astrapi69.random.SecureRandomBuilder;
-import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
-import org.junit.jupiter.api.Test;
-import org.meanbean.test.BeanTester;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -39,7 +32,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
+
+import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypt.api.key.KeySize;
+import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
+import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
+import io.github.astrapi69.random.SecureRandomBuilder;
+import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
  * The unit test class for the class {@link KeyPairGeneratorFactory}

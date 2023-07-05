@@ -24,11 +24,11 @@
  */
 package io.github.astrapi69.crypt.data.algorithm;
 
+import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
-import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 
 /**
  * The class {@link CryptoAlgorithm} provides factory method for create an algorithm from string for
