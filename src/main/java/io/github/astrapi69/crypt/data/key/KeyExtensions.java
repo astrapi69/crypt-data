@@ -24,12 +24,17 @@
  */
 package io.github.astrapi69.crypt.data.key;
 
+import java.security.Key;
+
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.binary.Base64;
 
+import io.github.astrapi69.crypt.data.hex.HexExtensions;
+import lombok.NonNull;
+
 /**
- * The class {@link PublicKeyExtensions}
+ * The class {@link KeyExtensions}
  */
 public class KeyExtensions
 {
@@ -76,4 +81,39 @@ public class KeyExtensions
 		return Base64.decodeBase64(base64);
 	}
 
+	/**
+	 * Gets the standard algorithm name from the given {@link Key} object
+	 *
+	 * @param key
+	 *            the {@link Key} object
+	 * @return the name of the algorithm from the given {@link Key} object
+	 */
+	public String getAlgorithm(@NonNull final Key key)
+	{
+		return key.getAlgorithm();
+	}
+
+	/**
+	 * Gets the byte array from the given {@link Key} object
+	 *
+	 * @param key
+	 *            the {@link Key} object
+	 * @return the byte array from the given {@link Key} object
+	 */
+	public byte[] getEncoded(@NonNull final Key key)
+	{
+		return key.getEncoded();
+	}
+
+	/**
+	 * Gets the format from the given {@link Key} object
+	 *
+	 * @param key
+	 *            the {@link Key} object
+	 * @return the format from the given {@link Key} object
+	 */
+	public String getFormat(@NonNull final Key key)
+	{
+		return key.getFormat();
+	}
 }

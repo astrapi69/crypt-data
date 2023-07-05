@@ -89,6 +89,32 @@ public final class CipherFactory
 	}
 
 	/**
+	 * Factory method for creating a new {@link Cipher} from the given parameters
+	 *
+	 * @param operationMode
+	 *            the operation mode
+	 * @param key
+	 *            the key
+	 * @param algorithm
+	 *            the algorithm
+	 * @return the new {@link Cipher}
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws NoSuchPaddingException
+	 *             is thrown if instantiation of the cypher object fails.
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cypher object fails.
+	 */
+	public static Cipher newCipher(final int operationMode, final SecretKey key,
+		final String algorithm)
+		throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
+	{
+		final Cipher cipher = newCipher(algorithm);
+		cipher.init(operationMode, key);
+		return cipher;
+	}
+
+	/**
 	 * Factory method for creating a new {@link Cipher} from the given parameters.
 	 *
 	 * @param operationMode
