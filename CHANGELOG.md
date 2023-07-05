@@ -20,7 +20,7 @@ CHANGED:
 - update of crypt-api dependency version to 8.4
 - update of dependency commons-io dependency version to 1.16.0
 - update of dependency commons-codec dependency version to 2.13.0
-- update of dependency guava version to new version 32.0.1-jre
+- update of dependency guava version to new version 32.1.1-jre
 - update of dependency file-worker to new version to 11.6
 - update of dependency silly-strings to new version 8.2
 - update of dependency silly-io to new version 2.2
