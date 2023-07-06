@@ -75,36 +75,6 @@ public class SecretKeyFactoryExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link SecretKeyFactoryExtensions#newSecretKeySpec(byte[], String)}
-	 */
-	@Test
-	public void testNewSecretKeySpecByteArrayString() throws Exception
-	{
-		String algorithm;
-		String key;
-		SecretKeySpec secretKeySpec;
-
-		algorithm = AesAlgorithm.AES.getAlgorithm();
-		key = "1234567890123456";
-		secretKeySpec = SecretKeyFactoryExtensions.newSecretKeySpec(key.getBytes(), algorithm);
-		assertNotNull(secretKeySpec);
-	}
-
-	/**
-	 * Test method for {@link SecretKeyFactoryExtensions#newSecretKeySpec(String, int)}
-	 */
-	@Test
-	public void testNewSecretKeySpecStringInt() throws Exception
-	{
-		String algorithm;
-		SecretKeySpec secretKeySpec;
-
-		algorithm = AesAlgorithm.AES.getAlgorithm();
-		secretKeySpec = SecretKeyFactoryExtensions.newSecretKeySpec(algorithm, 128);
-		assertNotNull(secretKeySpec);
-	}
-
-	/**
 	 * Test method for {@link SecretKeyFactoryExtensions} with {@link BeanTester}
 	 */
 	@Test

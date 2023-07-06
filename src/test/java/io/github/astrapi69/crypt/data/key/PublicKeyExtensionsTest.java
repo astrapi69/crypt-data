@@ -232,7 +232,7 @@ public class PublicKeyExtensionsTest
 		publicKey = PublicKeyReader.readPemPublicKey(publicKeyPemFile);
 
 		actual = PublicKeyExtensions.toPemFormat(publicKey);
-		expected = ReadFileExtensions.readFromFile(publicKeyPemFile);
+		expected = ReadFileExtensions.fromFile(publicKeyPemFile);
 		assertEquals(actual, expected);
 	}
 

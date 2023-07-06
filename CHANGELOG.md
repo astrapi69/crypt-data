@@ -6,6 +6,7 @@ Version 8.3-SNAPSHOT
 
 ADDED:
 
+- new module-info.java file that turns this library to a module
 - new bean class for hold information of a certificate extension
 - new factory class for create KeyPairGenerator objects
 - new extension class ProviderExtensions for provide security provider information from the current jdk

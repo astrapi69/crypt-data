@@ -41,7 +41,7 @@ public class KeyAgreementFactory
 {
 
 	/**
-	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments
+	 * Factory method for creating a new shared secret byte array from the given arguments
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -49,8 +49,6 @@ public class KeyAgreementFactory
 	 *            the public key
 	 * @param keyAgreementAlgorithm
 	 *            the key agreement algorithm
-	 * @param secretKeyAlgorithm
-	 *            the secret key algorithm
 	 * @param provider
 	 *            the provider
 	 * @param lastPhase
@@ -66,14 +64,14 @@ public class KeyAgreementFactory
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list
 	 */
-	public static SecretKey newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
-		String keyAgreementAlgorithm, String secretKeyAlgorithm, String provider, boolean lastPhase)
+	public static byte[] newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
+		String keyAgreementAlgorithm, String provider, boolean lastPhase)
 		throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException
 	{
 		KeyAgreement keyAgreement = newKeyAgreement(privateKey, publicKey, keyAgreementAlgorithm,
 			provider, lastPhase);
 
-		return keyAgreement.generateSecret(secretKeyAlgorithm);
+		return keyAgreement.generateSecret();
 	}
 
 

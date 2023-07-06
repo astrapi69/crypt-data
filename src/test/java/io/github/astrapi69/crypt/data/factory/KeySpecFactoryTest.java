@@ -28,9 +28,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.security.spec.KeySpec;
 
+import javax.crypto.spec.SecretKeySpec;
+
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
+import io.github.astrapi69.crypt.api.algorithm.AesAlgorithm;
 import io.github.astrapi69.crypt.api.compound.CompoundAlgorithm;
 
 /**
@@ -69,6 +72,36 @@ public class KeySpecFactoryTest
 		actual = KeySpecFactory.newPBEKeySpec(null, CompoundAlgorithm.SALT,
 			CompoundAlgorithm.ITERATIONCOUNT);
 		assertNotNull(actual);
+	}
+
+	/**
+	 * Test method for {@link KeySpecFactory#newSecretKeySpec(byte[], String)}
+	 */
+	@Test
+	public void testNewSecretKeySpecByteArrayString() throws Exception
+	{
+		String algorithm;
+		String key;
+		SecretKeySpec secretKeySpec;
+
+		algorithm = AesAlgorithm.AES.getAlgorithm();
+		key = "1234567890123456";
+		secretKeySpec = KeySpecFactory.newSecretKeySpec(key.getBytes(), algorithm);
+		assertNotNull(secretKeySpec);
+	}
+
+	/**
+	 * Test method for {@link KeySpecFactory#newSecretKeySpec(String, int)}
+	 */
+	@Test
+	public void testNewSecretKeySpecStringInt() throws Exception
+	{
+		String algorithm;
+		SecretKeySpec secretKeySpec;
+
+		algorithm = AesAlgorithm.AES.getAlgorithm();
+		secretKeySpec = KeySpecFactory.newSecretKeySpec(algorithm, 128);
+		assertNotNull(secretKeySpec);
 	}
 
 	/**

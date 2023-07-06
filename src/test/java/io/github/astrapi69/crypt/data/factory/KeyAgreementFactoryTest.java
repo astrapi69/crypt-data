@@ -25,6 +25,9 @@
 package io.github.astrapi69.crypt.data.factory;
 
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -36,6 +39,7 @@ import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.KeyAgreement;
 
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
 
 /**
  * The unit test class for the class {@link KeyAgreementFactory}
@@ -45,62 +49,80 @@ class KeyAgreementFactoryTest
 
 	/**
 	 * Test method for
-	 * {@link KeyAgreementFactory#newSharedSecret(PrivateKey, PublicKey, String, String, String, boolean)}
+	 * {@link KeyAgreementFactory#newKeyAgreement(PrivateKey, PublicKey, String, String, boolean)}
 	 */
 	@Test
-	void newSharedSecret() throws Exception
+	void newKeyAgreement() throws Exception
 	{
-		// 1. The initiator(Alice in our case) generates a key pair(public and private) and sends
-		// the public key, along with the algorithm specification, to the other(Bob in our case)
-		// party.
-		KeyPairGenerator kpg;
+		KeyPairGenerator keyPairGenerator;
 		String algorithm = "EC";
 		int keySize = 256;
-		kpg = KeyPairGeneratorFactory.newKeyPairGenerator(algorithm);
-		kpg.initialize(keySize);
+		keyPairGenerator = KeyPairGeneratorFactory.newKeyPairGenerator(algorithm);
+		keyPairGenerator.initialize(keySize);
 
-		KeyPair aliceKeyPair = kpg.generateKeyPair();
-		byte[] alicePk = aliceKeyPair.getPublic().getEncoded();
+		KeyPair aliceKeyPair = keyPairGenerator.generateKeyPair();
 
-		// Display public key from Alice
-		System.out.format("Alice Public Key: %s%n", printHexBinary(alicePk));
-
-		// 2. The other(Bob in our case) party generates its own key pair(public and private) using
-		// the algorithm specification and sends the public key to the initiator(Alice in our case).
-
-		kpg = KeyPairGeneratorFactory.newKeyPairGenerator(algorithm);
-		kpg.initialize(keySize);
-		KeyPair bobKeyPair = kpg.generateKeyPair();
+		keyPairGenerator = KeyPairGeneratorFactory.newKeyPairGenerator(algorithm);
+		keyPairGenerator.initialize(keySize);
+		KeyPair bobKeyPair = keyPairGenerator.generateKeyPair();
 
 		byte[] bobPk = bobKeyPair.getPublic().getEncoded();
-		// Display public key from Bob
-		System.out.format("Bob Public Key: %s%n", printHexBinary(bobPk));
 
 		KeyFactory keyFactory = KeyFactory.getInstance("EC");
 		X509EncodedKeySpec bobPkSpec = new X509EncodedKeySpec(bobPk);
 		PublicKey bobPublicKey = keyFactory.generatePublic(bobPkSpec);
-		// 3. The initiator(Alice in our case) generates the secret key using its private key and
-		// the other(Bob in our case) party's public key.
+
 		// Create key agreement
+		KeyAgreement aliceKeyAgreement = KeyAgreementFactory
+			.newKeyAgreement(aliceKeyPair.getPrivate(), bobPublicKey, "ECDH", null, true);
+
+		assertNotNull(aliceKeyAgreement);
+	}
+
+	/**
+	 * Test method for
+	 * {@link KeyAgreementFactory#newSharedSecret(PrivateKey, PublicKey, String, String, boolean)}
+	 */
+	@Test
+	void newSharedSecret() throws Exception
+	{
+		KeyPairGenerator keyPairGenerator;
+		String algorithm = "EC";
+		int keySize = 256;
+		keyPairGenerator = KeyPairGeneratorFactory.newKeyPairGenerator(algorithm);
+		keyPairGenerator.initialize(keySize);
+
+		KeyPair aliceKeyPair = keyPairGenerator.generateKeyPair();
+
+		keyPairGenerator = KeyPairGeneratorFactory.newKeyPairGenerator(algorithm);
+		keyPairGenerator.initialize(keySize);
+		KeyPair bobKeyPair = keyPairGenerator.generateKeyPair();
+
+		byte[] bobPk = bobKeyPair.getPublic().getEncoded();
+
+		KeyFactory keyFactory = KeyFactory.getInstance("EC");
+		X509EncodedKeySpec bobPkSpec = new X509EncodedKeySpec(bobPk);
+		PublicKey bobPublicKey = keyFactory.generatePublic(bobPkSpec);
+
 		KeyAgreement aliceKeyAgreement = KeyAgreement.getInstance("ECDH");
 		aliceKeyAgreement.init(aliceKeyPair.getPrivate());
 		aliceKeyAgreement.doPhase(bobPublicKey, true);
 
-		// Read shared secret from Alice
-		byte[] aliceSharedSecret = aliceKeyAgreement.generateSecret();
-		System.out.format("Alice Shared secret: %s%n", printHexBinary(aliceSharedSecret));
+		byte[] expected = aliceKeyAgreement.generateSecret();
 
-		// 4. The other party also generates the secret key using its private key and the
-		// initiator's public key. Diffie-Hellamn algorithm ensures that both parties generate the
-		// same secret key.
-		// Create key agreement for Bob
-		KeyAgreement bobKeyAgreement = KeyAgreement.getInstance("ECDH");
-		bobKeyAgreement.init(bobKeyPair.getPrivate());
-		bobKeyAgreement.doPhase(aliceKeyPair.getPublic(), true);
+		byte[] actual = KeyAgreementFactory.newSharedSecret(aliceKeyPair.getPrivate(), bobPublicKey,
+			"ECDH", null, true);
+		assertNotNull(actual);
+		assertArrayEquals(actual, expected);
+	}
 
-		// Read shared secret from Bob
-		byte[] bobSharedSecret = aliceKeyAgreement.generateSecret();
-		System.out.format("Bob Shared secret: %s%n", printHexBinary(bobSharedSecret));
-
+	/**
+	 * Test method for {@link KeyAgreementFactory} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(KeyAgreementFactory.class);
 	}
 }

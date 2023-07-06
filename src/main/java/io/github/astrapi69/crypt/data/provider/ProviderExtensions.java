@@ -72,7 +72,7 @@ public final class ProviderExtensions
 		for (int i = 0; i < providers.length; i++)
 		{
 			String name = providers[i].getName();
-			double version = providers[i].getVersion();
+			String version = providers[i].getVersionStr();
 			providerNames[i] = name + " " + version;
 		}
 		return providerNames;
