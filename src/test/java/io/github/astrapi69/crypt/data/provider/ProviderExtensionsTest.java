@@ -24,15 +24,11 @@
  */
 package io.github.astrapi69.crypt.data.provider;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.security.Provider;
-import java.security.cert.Certificate;
 
 import org.junit.jupiter.api.Test;
-
-import io.github.astrapi69.crypt.data.key.CertificateExtensions;
-import io.github.astrapi69.crypt.data.model.CryptModel;
 
 /**
  * The unit test class for the class {@link ProviderExtensions}

@@ -24,9 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
-import static javax.xml.bind.DatatypeConverter.printHexBinary;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.security.KeyFactory;

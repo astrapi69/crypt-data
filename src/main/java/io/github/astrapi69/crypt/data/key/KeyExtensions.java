@@ -30,7 +30,6 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.binary.Base64;
 
-import io.github.astrapi69.crypt.data.hex.HexExtensions;
 import lombok.NonNull;
 
 /**
