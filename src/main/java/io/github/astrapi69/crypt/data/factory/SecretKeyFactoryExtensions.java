@@ -25,6 +25,7 @@
 package io.github.astrapi69.crypt.data.factory;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.KeyGenerator;
@@ -32,6 +33,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+
+import lombok.NonNull;
 
 /**
  * The factory class {@link SecretKeyFactoryExtensions} holds methods for creating
@@ -75,7 +78,7 @@ public final class SecretKeyFactoryExtensions
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails.
 	 */
-	public static SecretKeyFactory newSecretKeyFactory(final String algorithm)
+	public static SecretKeyFactory newSecretKeyFactory(final @NonNull String algorithm)
 		throws NoSuchAlgorithmException
 	{
 		final SecretKeyFactory factory = SecretKeyFactory.getInstance(algorithm);
@@ -83,42 +86,26 @@ public final class SecretKeyFactoryExtensions
 	}
 
 	/**
-	 * Factory method for creating a new {@link SecretKeySpec} from the given algorithm and the
-	 * given secret key as byte array.
+	 * Factory method for creating a new {@link SecretKeyFactory} from the given algorithm.
 	 *
 	 * @param algorithm
 	 *            the algorithm
-	 * @param secretKey
-	 *            the secret key
-	 * @return the new {@link SecretKeySpec} from the given algorithm and the given secret key.
+	 * @param provider
+	 *            the provider
+	 * @return the new {@link SecretKeyFactory} from the given algorithm.
 	 * @throws NoSuchAlgorithmException
-	 *             the no such algorithm exception
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
 	 */
-	public static SecretKeySpec newSecretKeySpec(final byte[] secretKey, final String algorithm)
-		throws NoSuchAlgorithmException
+	public static SecretKeyFactory newSecretKeyFactory(final @NonNull String algorithm,
+		final String provider) throws NoSuchAlgorithmException, NoSuchProviderException
 	{
-		final SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey, algorithm);
-		return secretKeySpec;
-	}
-
-	/**
-	 * Factory method for creating a new {@link SecretKeySpec} from the given algorithm and the
-	 * given key length.
-	 *
-	 * @param algorithm
-	 *            the algorithm
-	 * @param keyLength
-	 *            the key length
-	 * @return the new {@link SecretKeySpec} from the given algorithm and the given key length.
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
-	 */
-	public static SecretKeySpec newSecretKeySpec(final String algorithm, final int keyLength)
-		throws NoSuchAlgorithmException
-	{
-		final SecretKey secretKey = newSecretKey(algorithm, keyLength);
-		final byte[] secretKeyEncoded = secretKey.getEncoded();
-		return newSecretKeySpec(secretKeyEncoded, algorithm);
+		final SecretKeyFactory factory = provider == null || provider.isEmpty()
+			? newSecretKeyFactory(algorithm)
+			: SecretKeyFactory.getInstance(algorithm, provider);
+		return factory;
 	}
 
 	/**
@@ -139,23 +126,5 @@ public final class SecretKeyFactoryExtensions
 		final KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm);
 		keyGenerator.init(keyLength);
 		return keyGenerator.generateKey();
-	}
-
-	/**
-	 * Factory method for creating a new symmetric {@link SecretKey} from the given algorithm and
-	 * the given key length.
-	 *
-	 * @param decryptedKey
-	 *            the symmetric key as byte array
-	 * @param algorithm
-	 *            the algorithm
-	 * @return the new {@link SecretKey} from the given algorithm and the given key length.
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
-	 */
-	public static SecretKey newSecretKey(byte[] decryptedKey, final String algorithm)
-		throws NoSuchAlgorithmException
-	{
-		return new SecretKeySpec(decryptedKey, 0, decryptedKey.length, algorithm);
 	}
 }

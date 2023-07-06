@@ -24,7 +24,6 @@
  */
 package io.github.astrapi69.crypt.data.certificate;
 
-
 import java.math.BigInteger;
 import java.security.PublicKey;
 import java.util.Map;

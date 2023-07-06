@@ -29,12 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.SecureRandom;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 
@@ -42,15 +40,12 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
-import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
-import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
-import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeySize;
+import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
+import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.file.search.PathFinder;
-import io.github.astrapi69.random.SecureRandomBuilder;
-import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
  * The unit test class for the class {@link KeyPairFactory}
@@ -122,28 +117,6 @@ public class KeyPairFactoryTest
 		assertNotNull(actual);
 	}
 
-	/**
-	 * Test method for {@link KeyPairFactory#newKeyPairGenerator(String, int, SecureRandom)}
-	 *
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
-	 */
-	@Test
-	public void testNewKeyPairGeneratorStringIntSecureRandom() throws NoSuchAlgorithmException
-	{
-		KeyPairGenerator actual;
-
-		actual = KeyPairFactory.newKeyPairGenerator(KeyPairGeneratorAlgorithm.RSA.getAlgorithm(),
-			KeySize.KEYSIZE_2048.getKeySize(), SecureRandomBuilder.getInstance().build());
-		assertNotNull(actual);
-		KeyPair keyPair = actual.generateKeyPair();
-		String base64 = PrivateKeyExtensions.toBase64(keyPair.getPrivate());
-		assertNotNull(base64);
-		PrivateKey privateKey = RuntimeExceptionDecorator.decorate(() -> PrivateKeyReader
-			.readPemPrivateKey(base64, KeyPairGeneratorAlgorithm.RSA.getAlgorithm()));
-		assertNotNull(privateKey);
-	}
 
 	/**
 	 * Test method for {@link KeyPairFactory#newKeyPair(PublicKey, PrivateKey)}

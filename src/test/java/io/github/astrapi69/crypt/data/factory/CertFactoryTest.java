@@ -44,6 +44,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -54,14 +55,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
-import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
-import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
-import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
-import io.github.astrapi69.crypt.data.key.writer.CertificateWriter;
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.algorithm.KeystoreType;
 import io.github.astrapi69.crypt.api.algorithm.UnionWord;
+import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
+import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
+import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
+import io.github.astrapi69.crypt.data.key.writer.CertificateWriter;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.lang.ClassExtensions;
@@ -137,6 +138,8 @@ public class CertFactoryTest
 		signatureAlgorithm = "SHA1withRSA";
 		actual = CertFactory.newEndEntityX509CertificateV3(keyPair, issuer, serial, notBefore,
 			notAfter, subject, signatureAlgorithm, caCert);
+		Set<String> nonCriticalExtensionOIDs = actual.getNonCriticalExtensionOIDs();
+		Set<String> criticalExtensionOIDs = actual.getCriticalExtensionOIDs();
 		assertNotNull(actual);
 	}
 

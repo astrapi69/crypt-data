@@ -26,20 +26,23 @@ package io.github.astrapi69.crypt.data.factory;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
+import org.bouncycastle.jce.ECNamedCurveTable;
+import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
+
+import io.github.astrapi69.crypt.api.algorithm.Algorithm;
+import io.github.astrapi69.crypt.api.key.KeySize;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
-import io.github.astrapi69.crypt.api.algorithm.Algorithm;
-import io.github.astrapi69.crypt.api.key.KeySize;
 
 /**
  * The factory class {@link KeyPairFactory} holds methods for creating {@link KeyPair} objects.
@@ -178,63 +181,30 @@ public final class KeyPairFactory
 	public static KeyPair newKeyPair(final String algorithm, final int keySize)
 		throws NoSuchAlgorithmException, NoSuchProviderException
 	{
-		final KeyPairGenerator generator = newKeyPairGenerator(algorithm, keySize);
+		final KeyPairGenerator generator = KeyPairGeneratorFactory.newKeyPairGenerator(algorithm,
+			keySize);
 		return generator.generateKeyPair();
 	}
 
-	/**
-	 * Factory method for creating a new {@link KeyPairGenerator} from the given parameters.
-	 *
-	 * @param algorithm
-	 *            the algorithm
-	 * @param keySize
-	 *            the key size
-	 * @return the new {@link KeyPairGenerator} from the given parameters
-	 *
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
-	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
-	 */
-	public static KeyPairGenerator newKeyPairGenerator(final String algorithm, final int keySize)
-		throws NoSuchAlgorithmException, NoSuchProviderException
+	public static KeyPair generateECKeys()
 	{
-		KeyPairGenerator generator;
-		if ("EC".equals(algorithm))
+		try
 		{
-			generator = KeyPairGenerator.getInstance(algorithm, "BC");
-		}
-		else
-		{
-			generator = KeyPairGenerator.getInstance(algorithm);
-			generator.initialize(keySize);
-		}
-		return generator;
-	}
+			ECNamedCurveParameterSpec parameterSpec = ECNamedCurveTable
+				.getParameterSpec("brainpoolp256r1");
+			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDH", "BC");
 
-	/**
-	 * Factory method for creating a new {@link KeyPairGenerator} from the given parameters.
-	 *
-	 * @param algorithm
-	 *            the algorithm
-	 * @param keySize
-	 *            the key size
-	 * @param secureRandom
-	 *            the secure random
-	 * @return the new {@link KeyPairGenerator} from the given parameters
-	 *
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
-	 */
-	public static KeyPairGenerator newKeyPairGenerator(final String algorithm, final int keySize,
-		final SecureRandom secureRandom) throws NoSuchAlgorithmException
-	{
-		final KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm);
-		generator.initialize(keySize, secureRandom);
-		return generator;
+			keyPairGenerator.initialize(parameterSpec);
+			KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+			return keyPair;
+		}
+		catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException
+			| NoSuchProviderException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

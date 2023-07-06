@@ -37,8 +37,6 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 
-import lombok.NonNull;
-
 import org.bouncycastle.openssl.PEMDecryptorProvider;
 import org.bouncycastle.openssl.PEMEncryptedKeyPair;
 import org.bouncycastle.openssl.PEMKeyPair;
@@ -53,6 +51,7 @@ import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.PemType;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
+import lombok.NonNull;
 
 /**
  * The class {@link PemObjectReader} is a utility class for reading {@link PemObject} from a file.

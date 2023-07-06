@@ -24,13 +24,13 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
+import io.github.astrapi69.crypt.api.key.KeyType;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import io.github.astrapi69.crypt.api.key.KeyType;
 
 @Data
 @RequiredArgsConstructor

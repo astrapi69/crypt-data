@@ -31,12 +31,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
-import io.github.astrapi69.crypt.api.algorithm.AesAlgorithm;
 import io.github.astrapi69.crypt.api.algorithm.SunJCEAlgorithm;
 import io.github.astrapi69.crypt.api.compound.CompoundAlgorithm;
 
@@ -72,36 +70,6 @@ public class SecretKeyFactoryExtensionsTest
 		algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
 		secretKeyFactory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm);
 		assertNotNull(secretKeyFactory);
-	}
-
-	/**
-	 * Test method for {@link SecretKeyFactoryExtensions#newSecretKeySpec(byte[], String)}
-	 */
-	@Test
-	public void testNewSecretKeySpecByteArrayString() throws Exception
-	{
-		String algorithm;
-		String key;
-		SecretKeySpec secretKeySpec;
-
-		algorithm = AesAlgorithm.AES.getAlgorithm();
-		key = "1234567890123456";
-		secretKeySpec = SecretKeyFactoryExtensions.newSecretKeySpec(key.getBytes(), algorithm);
-		assertNotNull(secretKeySpec);
-	}
-
-	/**
-	 * Test method for {@link SecretKeyFactoryExtensions#newSecretKeySpec(String, int)}
-	 */
-	@Test
-	public void testNewSecretKeySpecStringInt() throws Exception
-	{
-		String algorithm;
-		SecretKeySpec secretKeySpec;
-
-		algorithm = AesAlgorithm.AES.getAlgorithm();
-		secretKeySpec = SecretKeyFactoryExtensions.newSecretKeySpec(algorithm, 128);
-		assertNotNull(secretKeySpec);
 	}
 
 	/**

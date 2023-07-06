@@ -41,8 +41,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
-import io.github.astrapi69.crypt.data.model.CryptModel;
 import io.github.astrapi69.crypt.api.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypt.data.model.CryptModel;
 
 /**
  * The factory class {@link CipherFactory} holds methods for creating {@link Cipher} objects.
@@ -86,6 +86,32 @@ public final class CipherFactory
 		final AlgorithmParameterSpec paramSpec = AlgorithmParameterSpecFactory
 			.newPBEParameterSpec(model.getSalt(), model.getIterationCount());
 		return newCipher(model.getOperationMode(), key, paramSpec, key.getAlgorithm());
+	}
+
+	/**
+	 * Factory method for creating a new {@link Cipher} from the given parameters
+	 *
+	 * @param operationMode
+	 *            the operation mode
+	 * @param key
+	 *            the key
+	 * @param algorithm
+	 *            the algorithm
+	 * @return the new {@link Cipher}
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws NoSuchPaddingException
+	 *             is thrown if instantiation of the cypher object fails.
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cypher object fails.
+	 */
+	public static Cipher newCipher(final int operationMode, final SecretKey key,
+		final String algorithm)
+		throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
+	{
+		final Cipher cipher = newCipher(algorithm);
+		cipher.init(operationMode, key);
+		return cipher;
 	}
 
 	/**

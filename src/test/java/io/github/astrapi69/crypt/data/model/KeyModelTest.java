@@ -41,10 +41,10 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.github.astrapi69.crypt.api.key.KeyType;
 import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
-import io.github.astrapi69.crypt.api.key.KeyType;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.file.search.PathFinder;
 

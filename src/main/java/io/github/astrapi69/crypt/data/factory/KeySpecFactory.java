@@ -24,9 +24,15 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.spec.KeySpec;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import io.github.astrapi69.crypt.api.compound.CompoundAlgorithm;
 
@@ -76,6 +82,86 @@ public final class KeySpecFactory
 				iterationCount);
 		}
 		return new PBEKeySpec(privateKey.toCharArray(), salt, iterationCount);
+	}
+
+	/**
+	 * Factory method for creating a new {@link SecretKeySpec} from the given algorithm and the
+	 * given secret key as byte array
+	 *
+	 * @param algorithm
+	 *            the algorithm
+	 * @param secretKey
+	 *            the secret key
+	 * @return the new {@link SecretKeySpec} from the given algorithm and the given secret key
+	 */
+	public static SecretKeySpec newSecretKeySpec(final byte[] secretKey, final String algorithm)
+	{
+		final SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey, algorithm);
+		return secretKeySpec;
+	}
+
+	/**
+	 * Factory method for creating a new {@link DESKeySpec} from the given secret key as byte array
+	 *
+	 * @param secretKey
+	 *            the secret key
+	 * @return the new {@link DESKeySpec} from the given secret key as byte array
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the {@link DESKeySpec} object fails
+	 */
+	public static DESKeySpec newDESKeySpec(final byte[] secretKey) throws InvalidKeyException
+	{
+		return new DESKeySpec(secretKey);
+	}
+
+	/**
+	 * Factory method for creating a new {@link DESedeKeySpec} from the given secret key as byte
+	 * array
+	 *
+	 * @param secretKey
+	 *            the secret key
+	 * @return the new {@link DESedeKeySpec} from the given secret key as byte array
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the {@link DESKeySpec} object fails
+	 */
+	public static DESedeKeySpec newDESedeKeySpec(final byte[] secretKey) throws InvalidKeyException
+	{
+		return new DESedeKeySpec(secretKey);
+	}
+
+	/**
+	 * Factory method for creating a new {@link SecretKeySpec} from the given algorithm and the
+	 * given key length.
+	 *
+	 * @param algorithm
+	 *            the algorithm
+	 * @param keyLength
+	 *            the key length
+	 * @return the new {@link SecretKeySpec} from the given algorithm and the given key length.
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 */
+	public static SecretKeySpec newSecretKeySpec(final String algorithm, final int keyLength)
+		throws NoSuchAlgorithmException
+	{
+		final SecretKey secretKey = SecretKeyFactoryExtensions.newSecretKey(algorithm, keyLength);
+		final byte[] secretKeyEncoded = secretKey.getEncoded();
+		return newSecretKeySpec(secretKeyEncoded, algorithm);
+	}
+
+	/**
+	 * Factory method for creating a new symmetric {@link SecretKey} from the given algorithm and
+	 * the given key length.
+	 *
+	 * @param decryptedKey
+	 *            the symmetric key as byte array
+	 * @param algorithm
+	 *            the algorithm
+	 * @return the new {@link SecretKey} from the given algorithm and the given key length
+	 */
+	public static SecretKey newSecretKey(byte[] decryptedKey, final String algorithm)
+	{
+		return new SecretKeySpec(decryptedKey, 0, decryptedKey.length, algorithm);
 	}
 
 }

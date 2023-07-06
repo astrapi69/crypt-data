@@ -1,6 +1,40 @@
 ## Change log
 ----------------------
 
+Version 8.3
+-------------
+
+ADDED:
+
+- new module-info.java file that turns this library to a module
+- new bean class for hold information of a certificate extension
+- new factory class for create KeyPairGenerator objects
+- new extension class ProviderExtensions for provide security provider information from the current jdk
+
+CHANGED:
+
+- update gradle to new version 8.2
+- update of lombok dependency version to 1.18.28
+- update of gradle-plugin dependency 'com.github.ben-manes.versions.gradle.plugin' to new version 0.47.0
+- update of gradle-plugin dependency 'org.ajoberstar.grgit:grgit-gradle' to new version 5.2.0
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.19.0
+- replaced obsolete package.html files with new package-info.java files
+- update of crypt-api dependency version to 8.4
+- update of dependency commons-io dependency version to 1.16.0
+- update of dependency commons-codec dependency version to 2.13.0
+- update of dependency guava version to new version 32.1.1-jre
+- update of dependency file-worker to new version to 11.6
+- update of dependency silly-strings to new version 8.2
+- update of dependency silly-io to new version 2.2
+- update of dependency silly-collection to new version to 21
+- update of test dependency jobj-core to new version 7.1
+- update of test dependency time-machine to new version to 2.5
+- update of test dependency randomizer to new version 9
+- update of test dependency checksum-up to new version 2.2
+- update of test dependency test-object to new version 7.2
+- update of test dependency junit-jupiter-* to new version 5.10.0-M1
+- update of test dependency 'com.github.meanbeanlib:meanbean' to new version 3.0.0-M9
+
 Version 8.2
 -------------
 
@@ -161,7 +195,7 @@ ADDED:
 - new factory method in CryptModel with generic key argument
 - new delegator methods for PublicKey in PublicKeyExtensions
 - new delegator methods for PrivateKey in PrivateKeyExtensions
-- new method that can get the private key from an password encrypted byte array
+- new method that can get the private key from a password encrypted byte array
 - new factory methods in CipherFactory for create a PBE Cipher object
 
 CHANGED:

@@ -46,9 +46,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
+import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.data.key.reader.EncryptedPrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
-import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
