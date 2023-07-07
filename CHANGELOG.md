@@ -9,6 +9,9 @@ ADDED:
 - new factory methods for generate shared secret
 - new dependency 'org.junit.platform:junit-platform-launcher' for the next upgrade from gradle version
 
+CHANGED:
+
+- update of crypt-api dependency version to 8.5
 
 Version 8.3
 -------------
