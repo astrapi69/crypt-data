@@ -4,6 +4,10 @@
 Version 8.4-SNAPSHOT
 -------------
 
+ADDED:
+
+- new factory methods for generate shared secret
+- new dependency 'org.junit.platform:junit-platform-launcher' for the next upgrade from gradle version
 
 
 Version 8.3
