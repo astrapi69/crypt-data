@@ -41,6 +41,39 @@ public class KeyAgreementFactory
 {
 
 	/**
+	 *
+	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @param publicKey
+	 *            the public key
+	 * @param keyAgreementAlgorithm
+	 *            the key agreement algorithm
+	 * @param secretKeyAlgorithm
+	 *            the secret key algorithm
+	 * @param provider
+	 *            the provider
+	 * @return the new created shared {@link SecretKey} object from the given arguments
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
+	 *             available from the specified provider
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 */
+	public static SecretKey newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
+		String keyAgreementAlgorithm, String secretKeyAlgorithm, String provider)
+		throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException
+	{
+		KeyAgreement keyAgreement = newKeyAgreement(privateKey, publicKey, keyAgreementAlgorithm,
+			provider, true);
+		return keyAgreement.generateSecret(secretKeyAlgorithm);
+	}
+
+	/**
 	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments
 	 *
 	 * @param privateKey

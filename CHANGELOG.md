@@ -11,7 +11,9 @@ ADDED:
 
 CHANGED:
 
+- update gradle to new version 8.2.1
 - update of crypt-api dependency version to 8.5
+- update of test dependency junit-jupiter-* to new version 5.10.0-RC1
 
 Version 8.3
 -------------
