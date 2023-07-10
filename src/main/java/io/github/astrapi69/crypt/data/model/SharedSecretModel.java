@@ -43,7 +43,7 @@ public class SharedSecretModel
 {
 	PrivateKey privateKey;
 	PublicKey publicKey;
-	String algorithm;
+	String keyAgreementAlgorithm;
 	String secretKeyAlgorithm;
 	String provider;
 	String cipherTransformation;
