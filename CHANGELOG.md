@@ -1,6 +1,20 @@
 ## Change log
 ----------------------
 
+Version 8.4
+-------------
+
+ADDED:
+
+- new factory methods for generate shared secret
+- new dependency 'org.junit.platform:junit-platform-launcher' for the next upgrade from gradle version
+
+CHANGED:
+
+- update gradle to new version 8.2.1
+- update of crypt-api dependency version to 8.5
+- update of test dependency junit-jupiter-* to new version 5.10.0-RC1
+
 Version 8.3
 -------------
 
