@@ -127,4 +127,29 @@ public final class SecretKeyFactoryExtensions
 		keyGenerator.init(keyLength);
 		return keyGenerator.generateKey();
 	}
+
+
+	/**
+	 * Factory method for creating a new {@link SecretKey} object from the given shared secret key
+	 * as byte array and the given algorithm for the secret key
+	 *
+	 * @param sharedSecret
+	 *            the shared secret key as byte array
+	 * @param secretKeyAlgorithm
+	 *            the algorithm for the {@link SecretKey} object creation
+	 * @return the new {@link SecretKey} from the given algorithm and the given key length
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails
+	 */
+	public static SecretKey newSecretKey(byte[] sharedSecret, String secretKeyAlgorithm)
+		throws NoSuchAlgorithmException, InvalidKeySpecException
+	{
+		SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(secretKeyAlgorithm);
+		SecretKeySpec secretKeySpec = KeySpecFactory.newSecretKeySpec(sharedSecret,
+			secretKeyAlgorithm);
+		SecretKey secretKey = secretKeyFactory.generateSecret(secretKeySpec);
+		return secretKey;
+	}
 }

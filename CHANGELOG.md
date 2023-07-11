@@ -4,6 +4,9 @@
 Version 8.5-SNAPSHOT
 -------------
 
+ADDED:
+
+- new factory method in factory extension class SecretKeyFactoryExtensions for create a SecretKey object
 
 Version 8.4
 -------------

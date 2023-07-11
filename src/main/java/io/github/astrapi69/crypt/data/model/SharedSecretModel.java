@@ -46,6 +46,6 @@ public class SharedSecretModel
 	String keyAgreementAlgorithm;
 	String secretKeyAlgorithm;
 	String provider;
-	String cipherTransformation;
+	String cipherAlgorithm;
 	byte[] iv;
 }
