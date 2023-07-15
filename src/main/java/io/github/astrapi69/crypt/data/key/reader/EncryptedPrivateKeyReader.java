@@ -55,7 +55,7 @@ import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.bouncycastle.openssl.jcajce.JcePEMDecryptorProviderBuilder;
 
-import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.factory.CipherFactory;
 import io.github.astrapi69.crypt.data.factory.KeySpecFactory;

@@ -38,7 +38,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
-import io.github.astrapi69.crypt.api.algorithm.KeystoreType;
+import io.github.astrapi69.crypt.api.type.KeystoreType;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**

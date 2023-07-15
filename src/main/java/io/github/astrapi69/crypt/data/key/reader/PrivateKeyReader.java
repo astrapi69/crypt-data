@@ -40,7 +40,7 @@ import java.util.logging.Level;
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.util.io.pem.PemObject;
 
-import io.github.astrapi69.crypt.api.algorithm.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeyFileFormat;
 import io.github.astrapi69.crypt.api.key.KeyStringEntry;
 import io.github.astrapi69.crypt.api.key.KeyType;
