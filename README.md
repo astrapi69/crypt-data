@@ -31,13 +31,13 @@ project `build.gradle` if you want to import the core functionality of crypt-dat
 define version in file gradle.properties
 
 ```
-cryptDataVersion=8.4
+cryptDataVersion=8.5
 ```
 
 or in build.gradle ext area
 
 ```
-    cryptDataVersion = '8.4'
+    cryptDataVersion = '8.5'
 }
 ```
 
@@ -60,7 +60,7 @@ Add the dependency to your dependencies:
     <properties>
             ...
         <!-- CRYPT-DATA version -->
-        <crypt-data.version>8.4</crypt-data.version>
+        <crypt-data.version>8.5</crypt-data.version>
             ...
     </properties>
             ...

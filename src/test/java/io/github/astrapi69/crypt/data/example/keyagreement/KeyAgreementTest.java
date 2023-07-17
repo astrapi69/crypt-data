@@ -41,25 +41,38 @@ import javax.crypto.spec.DESKeySpec;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.crypt.data.factory.KeyPairGeneratorFactory;
+import io.github.astrapi69.crypt.data.factory.SecretKeyFactoryExtensions;
 
 /**
  * The unit test for an example for KeyAgreement communication
  */
 public class KeyAgreementTest
 {
+
 	/**
 	 * Test method for KeyAgreement communication
 	 */
 	@Test
 	void newSharedSecret() throws Exception
 	{
+		String cipherAlgorithm;
+		String secretKeyAlgorithm;
+		String keyAgreementAlgorithm;
+		String keyFactoryAlgorithm;
+		String keyPairGeneratorAlgorithm;
+		KeyPairGenerator keyPairGenerator;
+		int keySize;
+
 		// 1. The initiator(Alice in our case) generates a key pair(public and private) and sends
 		// the public key, along with the algorithm specification, to the other(Bob in our case)
 		// party.
-		KeyPairGenerator keyPairGenerator;
-		String algorithm = "EC";
-		int keySize = 256;
-		keyPairGenerator = KeyPairGeneratorFactory.newKeyPairGenerator(algorithm);
+		keyPairGeneratorAlgorithm = "EC";
+		keyFactoryAlgorithm = keyPairGeneratorAlgorithm;
+		secretKeyAlgorithm = "DES";
+		keyAgreementAlgorithm = "ECDH";
+		cipherAlgorithm = "DES/ECB/PKCS5Padding";
+		keySize = 256;
+		keyPairGenerator = KeyPairGeneratorFactory.newKeyPairGenerator(keyPairGeneratorAlgorithm);
 		keyPairGenerator.initialize(keySize);
 
 		KeyPair aliceKeyPair = keyPairGenerator.generateKeyPair();
@@ -71,7 +84,7 @@ public class KeyAgreementTest
 		// 2. The other(Bob in our case) party generates its own key pair(public and private) using
 		// the algorithm specification and sends the public key to the initiator(Alice in our case).
 
-		keyPairGenerator = KeyPairGeneratorFactory.newKeyPairGenerator(algorithm);
+		keyPairGenerator = KeyPairGeneratorFactory.newKeyPairGenerator(keyPairGeneratorAlgorithm);
 		keyPairGenerator.initialize(keySize);
 		KeyPair bobKeyPair = keyPairGenerator.generateKeyPair();
 
@@ -79,13 +92,13 @@ public class KeyAgreementTest
 		// Display public key from Bob
 		System.out.format("Bob Public Key: %s%n", printHexBinary(bobPk));
 
-		KeyFactory keyFactory = KeyFactory.getInstance("EC");
+		KeyFactory keyFactory = KeyFactory.getInstance(keyFactoryAlgorithm);
 		X509EncodedKeySpec bobPkSpec = new X509EncodedKeySpec(bobPk);
 		PublicKey bobPublicKey = keyFactory.generatePublic(bobPkSpec);
 		// 3. The initiator(Alice in our case) generates the secret key using its private key and
 		// the other(Bob in our case) party's public key.
 		// Create key agreement
-		KeyAgreement aliceKeyAgreement = KeyAgreement.getInstance("ECDH");
+		KeyAgreement aliceKeyAgreement = KeyAgreement.getInstance(keyAgreementAlgorithm);
 		aliceKeyAgreement.init(aliceKeyPair.getPrivate());
 		aliceKeyAgreement.doPhase(bobPublicKey, true);
 
@@ -97,7 +110,7 @@ public class KeyAgreementTest
 		// initiator's public key. Diffie-Hellamn algorithm ensures that both parties generate the
 		// same secret key.
 		// Create key agreement for Bob
-		KeyAgreement bobKeyAgreement = KeyAgreement.getInstance("ECDH");
+		KeyAgreement bobKeyAgreement = KeyAgreement.getInstance(keyAgreementAlgorithm);
 		bobKeyAgreement.init(bobKeyPair.getPrivate());
 		bobKeyAgreement.doPhase(aliceKeyPair.getPublic(), true);
 
@@ -106,22 +119,21 @@ public class KeyAgreementTest
 		System.out.format("Bob Shared secret: %s%n", printHexBinary(bobSharedSecret));
 
 		// 5. generate key from Alice shared secret
-		SecretKeyFactory aliceSecretKeyFactory = SecretKeyFactory.getInstance("DES");
-		DESKeySpec aliceKeySpec = new DESKeySpec(aliceSharedSecret);
-		SecretKey aliceSecretKey = aliceSecretKeyFactory.generateSecret(aliceKeySpec);
+		SecretKey aliceSecretKey = SecretKeyFactoryExtensions.newSecretKey(aliceSharedSecret,
+			secretKeyAlgorithm);
 
-		Cipher aliceCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+		Cipher aliceCipher = Cipher.getInstance(cipherAlgorithm);
 		aliceCipher.init(Cipher.ENCRYPT_MODE, aliceSecretKey);
 		byte[] encryptedByteArray = aliceCipher
 			.doFinal("Free your mind and get the best out of you".getBytes());
 
 		// Step 6: generate key from Bob shared secret
-		SecretKeyFactory bobSecretKeyFactory = SecretKeyFactory.getInstance("DES");
+		SecretKeyFactory bobSecretKeyFactory = SecretKeyFactory.getInstance(secretKeyAlgorithm);
 		DESKeySpec bobKeySpec = new DESKeySpec(bobSharedSecret);
 		SecretKey bobSecretKey = bobSecretKeyFactory.generateSecret(bobKeySpec);
 
 		// Step 8: Bob receives the encrypted text and decrypts it
-		Cipher bobCipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+		Cipher bobCipher = Cipher.getInstance(cipherAlgorithm);
 		bobCipher.init(Cipher.DECRYPT_MODE, bobSecretKey);
 		byte[] plaintext = bobCipher.doFinal(encryptedByteArray);
 		String text = new String(plaintext);

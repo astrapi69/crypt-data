@@ -1,6 +1,17 @@
 ## Change log
 ----------------------
 
+Version 8.5
+-------------
+
+ADDED:
+
+- new factory method in factory extension class SecretKeyFactoryExtensions for create a SecretKey object
+
+CHANGED:
+
+- update of crypt-api dependency version to 8.6
+
 Version 8.4
 -------------
 
