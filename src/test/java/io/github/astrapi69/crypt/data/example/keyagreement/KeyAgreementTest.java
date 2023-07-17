@@ -26,14 +26,10 @@ package io.github.astrapi69.crypt.data.example.keyagreement;
 
 import static javax.xml.bind.DatatypeConverter.printHexBinary;
 
-import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
@@ -41,12 +37,10 @@ import javax.crypto.KeyAgreement;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.crypt.data.factory.KeyPairGeneratorFactory;
-import io.github.astrapi69.crypt.data.factory.KeySpecFactory;
 import io.github.astrapi69.crypt.data.factory.SecretKeyFactoryExtensions;
 
 /**
@@ -54,6 +48,7 @@ import io.github.astrapi69.crypt.data.factory.SecretKeyFactoryExtensions;
  */
 public class KeyAgreementTest
 {
+
 	/**
 	 * Test method for KeyAgreement communication
 	 */
@@ -143,16 +138,5 @@ public class KeyAgreementTest
 		byte[] plaintext = bobCipher.doFinal(encryptedByteArray);
 		String text = new String(plaintext);
 		System.out.println("Bob reads the message of Alice:\n" + text);
-	}
-
-
-	public static SecretKey newSecretKey(byte[] sharedSecret, String secretKeyAlgorithm)
-		throws NoSuchAlgorithmException, InvalidKeySpecException
-	{
-		SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(secretKeyAlgorithm);
-		SecretKeySpec secretKeySpec = KeySpecFactory.newSecretKeySpec(sharedSecret,
-			secretKeyAlgorithm);
-		SecretKey secretKey = secretKeyFactory.generateSecret(secretKeySpec);
-		return secretKey;
 	}
 }

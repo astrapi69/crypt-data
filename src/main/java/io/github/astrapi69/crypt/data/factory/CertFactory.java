@@ -39,8 +39,6 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Date;
 
-import javax.security.auth.x500.X500Principal;
-
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.Extension;
@@ -59,9 +57,8 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
  * The factory class {@link CertFactory} holds methods for creating {@link Certificate} objects and
- * sub classes like {@link X509Certificate}.
- *
- * Note: a very good entry point for creating yourself certificate you can follow this <a href=
+ * subclasses like {@link X509Certificate}. Note: a very good entry point for creating yourself
+ * certificate you can follow this <a href=
  * "http://www.bouncycastle.org/wiki/display/JA1/X.509+Public+Key+Certificate+and+Certification+Request+Generation">link</a>
  */
 public final class CertFactory
@@ -213,8 +210,6 @@ public final class CertFactory
 		final String issuer, final String signatureAlgorithm, final Date start, final Date end)
 		throws CertificateException, IllegalStateException, OperatorCreationException
 	{
-		final X500Principal subjectPrincipal = new X500Principal(subject);
-		final X500Principal issuerPrincipal = new X500Principal(issuer);
 		X509v3CertificateBuilder certBuilder = CertificateBuilderFactory
 			.newX509v3CertificateBuilder(new X500Name(issuer), serialNumber, start, end,
 				new X500Name(subject), publicKey);
@@ -228,7 +223,6 @@ public final class CertFactory
 	 * Factory method for creating a new {@link X509Certificate} from the given certificate type and
 	 * certificate data as byte array.
 	 *
-	 *
 	 * @param type
 	 *            the certificate type
 	 * @param certificateData
@@ -236,22 +230,19 @@ public final class CertFactory
 	 * @return the new {@link X509Certificate}
 	 * @throws CertificateException
 	 *             is thrown if no Provider supports a CertificateFactorySpi implementation for the
-	 *             given certificate type.
+	 *             given certificate type
 	 */
 	public static X509Certificate newX509Certificate(final String type,
 		final byte[] certificateData) throws CertificateException
 	{
 		final CertificateFactory cf = CertificateFactory.getInstance(type);
 		final InputStream inputStream = new ByteArrayInputStream(certificateData);
-		final X509Certificate certificate = (X509Certificate)cf.generateCertificate(inputStream);
-		return certificate;
+		return (X509Certificate)cf.generateCertificate(inputStream);
 	}
 
 	/**
 	 * Factory method for creating a new {@link X509Certificate} object of the first version of
-	 * X.509 from the given parameters.
-	 *
-	 * SecurityProvider is Bouncy Castle.
+	 * X.509 from the given parameters. SecurityProvider is Bouncy Castle.
 	 *
 	 * @param keyPair
 	 *            the key pair
@@ -283,9 +274,8 @@ public final class CertFactory
 			notBefore, notAfter, subject, keyPair.getPublic());
 		ContentSigner signer = new JcaContentSignerBuilder(signatureAlgorithm)
 			.setProvider(SecurityProvider.BC.name()).build(keyPair.getPrivate());
-		X509Certificate x509Certificate = new JcaX509CertificateConverter()
-			.setProvider(SecurityProvider.BC.name()).getCertificate(certBuilder.build(signer));
-		return x509Certificate;
+		return new JcaX509CertificateConverter().setProvider(SecurityProvider.BC.name())
+			.getCertificate(certBuilder.build(signer));
 	}
 
 	/**
