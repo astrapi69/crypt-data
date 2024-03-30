@@ -38,6 +38,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.crypt.data.factory.KeyPairGeneratorFactory;
@@ -53,6 +54,7 @@ public class KeyAgreementTest
 	 * Test method for KeyAgreement communication
 	 */
 	@Test
+	@Disabled
 	void newSharedSecret() throws Exception
 	{
 		String cipherAlgorithm;

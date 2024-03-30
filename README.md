@@ -25,19 +25,21 @@ Utility library to provide data beans, writers and readers for encryption and de
 
 ## gradle dependency
 
+Replace the variable ${latestVersion} with the current latest version: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/crypt-data/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/crypt-data)
+
 You can first define the version in the ext section and add than the following gradle dependency to your
 project `build.gradle` if you want to import the core functionality of crypt-data:
 
 define version in file gradle.properties
 
 ```
-cryptDataVersion=8.5
+cryptDataVersion=${latestVersion}
 ```
 
 or in build.gradle ext area
 
 ```
-    cryptDataVersion = '8.5'
+    cryptDataVersion = '${latestVersion}'
 }
 ```
 
@@ -60,7 +62,7 @@ Add the dependency to your dependencies:
     <properties>
             ...
         <!-- CRYPT-DATA version -->
-        <crypt-data.version>8.5</crypt-data.version>
+        <crypt-data.version>${latestVersion}</crypt-data.version>
             ...
     </properties>
             ...
