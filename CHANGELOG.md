@@ -18,7 +18,7 @@ CHANGED:
 - update of crypt-api dependency to the new major version 9
 - update of dependency commons-codec dependency version to 1.16.1
 - update of dependency commons-lang3 dependency version to 3.14.0
-- update of dependency commons-codec dependency version to 2.16.0
+- update of dependency commons-io dependency version to 2.16.0
 - update of dependency guava version to new version 33.1.0-jre
 - update of test dependency jobj-core to new version 8.2
 - update of test dependency checksum-up to new version 3
