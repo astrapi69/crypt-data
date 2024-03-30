@@ -1,8 +1,26 @@
 ## Change log
 ----------------------
 
-Version 8.6-SNAPSHOT
+Version 9-SNAPSHOT
 -------------
+
+CHANGED:
+
+- update gradle to new version 8.7
+- update of lombok dependency version to 1.18.32
+- update of gradle-plugin dependency 'com.github.ben-manes.versions.gradle.plugin' to new version 0.51.0
+- update of gradle-plugin dependency 'org.ajoberstar.grgit:grgit-gradle' to new version 5.2.2
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.25.0
+- update of crypt-api dependency to the new major version 9
+- update of dependency commons-codec dependency version to 1.16.1
+- update of dependency commons-lang3 dependency version to 3.14.0
+- update of dependency commons-codec dependency version to 2.16.0
+- update of dependency guava version to new version 33.1.0-jre
+- update of test dependency jobj-core to new version 8.2
+- update of test dependency checksum-up to new version 3
+- update of test dependency junit-jupiter-* to new version 5.10.2
+- update of test dependency junit-platform-launcher to new version 1.10.2
+- update javadoc parameters from privateKey to password in the factory classes
 
 Version 8.5
 -------------

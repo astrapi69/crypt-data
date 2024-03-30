@@ -63,25 +63,26 @@ public final class KeySpecFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link PBEKeySpec} from the given private key.
+	 * Factory method for creating a new {@link PBEKeySpec} from the given password, salt and the
+	 * iteration count
 	 *
-	 * @param privateKey
-	 *            the private key
+	 * @param password
+	 *            the password
 	 * @param salt
 	 *            the salt
 	 * @param iterationCount
 	 *            the iteration count
-	 * @return the new {@link PBEKeySpec} from the given private key.
+	 * @return the new {@link PBEKeySpec} from the given password, salt and the iteration count
 	 */
-	public static KeySpec newPBEKeySpec(final String privateKey, final byte[] salt,
+	public static KeySpec newPBEKeySpec(final String password, final byte[] salt,
 		final int iterationCount)
 	{
-		if (privateKey == null)
+		if (password == null)
 		{
 			return new PBEKeySpec(CompoundAlgorithm.PRIVATE_KEY.toCharArray(), salt,
 				iterationCount);
 		}
-		return new PBEKeySpec(privateKey.toCharArray(), salt, iterationCount);
+		return new PBEKeySpec(password.toCharArray(), salt, iterationCount);
 	}
 
 	/**

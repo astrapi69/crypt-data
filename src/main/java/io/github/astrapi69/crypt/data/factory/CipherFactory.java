@@ -191,8 +191,8 @@ public final class CipherFactory
 	/**
 	 * Factory method for creating a new {@link Cipher} from the given parameters.
 	 *
-	 * @param privateKey
-	 *            the private key
+	 * @param password
+	 *            the password
 	 * @param algorithm
 	 *            the algorithm
 	 * @param salt
@@ -213,15 +213,13 @@ public final class CipherFactory
 	 *             is thrown if initialization of the cypher object fails.
 	 * @throws InvalidAlgorithmParameterException
 	 *             is thrown if initialization of the cypher object fails.
-	 * @throws UnsupportedEncodingException
-	 *             is thrown if the named charset is not supported.
 	 */
-	public static Cipher newCipher(final String privateKey, final String algorithm,
-		final byte[] salt, final int iterationCount, final int operationMode)
+	public static Cipher newCipher(final String password, final String algorithm, final byte[] salt,
+		final int iterationCount, final int operationMode)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
-		InvalidKeyException, InvalidAlgorithmParameterException, UnsupportedEncodingException
+		InvalidKeyException, InvalidAlgorithmParameterException
 	{
-		final KeySpec keySpec = KeySpecFactory.newPBEKeySpec(privateKey, salt, iterationCount);
+		final KeySpec keySpec = KeySpecFactory.newPBEKeySpec(password, salt, iterationCount);
 		final SecretKeyFactory factory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm);
 		final SecretKey key = factory.generateSecret(keySpec);
 		final AlgorithmParameterSpec paramSpec = AlgorithmParameterSpecFactory
