@@ -32,6 +32,7 @@ import java.util.Objects;
 
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 
+import io.github.astrapi69.file.write.StoreFileExtensions;
 import io.github.astrapi69.file.write.WriteFileExtensions;
 
 /**
@@ -63,7 +64,7 @@ public final class KeyWriter
 		pemWriter.close();
 		String pemFormat = stringWriter.toString();
 		pemFormat = pemFormat.replaceAll("\\r\\n", "\\\n");
-		WriteFileExtensions.string2File(file, pemFormat);
+		StoreFileExtensions.toFile(file, pemFormat);
 	}
 
 }
