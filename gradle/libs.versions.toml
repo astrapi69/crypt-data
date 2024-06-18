@@ -1,0 +1,76 @@
+[versions]
+bcpkix-jdk15on-version = "1.70"
+checksum-up-version = "3"
+commons-codec-version = "1.16.1"
+commons-io-version = "2.16.0"
+commons-lang3-version = "3.14.0"
+crypt-api-version = "9"
+file-worker-version = "17.1"
+gradle-plugin-grgit-version = "5.2.2"
+gradle-plugin-license-version = "0.16.1"
+gradle-plugin-lombok-version = "8.6"
+gradle-plugin-spotless-version = "7.0.0.BETA1"
+gradle-plugin-version-catalog-update-version = "0.8.4"
+gradle-plugin-versions-version = "0.51.0"
+guava-version = "33.1.0-jre"
+jaxb-api-version = "2.4.0-b180830.0359"
+jobj-contract-verifier-version = "4"
+jobj-core-version = "8.2"
+jsr305-version = "3.0.2"
+junit-jupiter-api-version = "5.10.2"
+junit-jupiter-version = "5.10.2"
+junit-platform-launcher-version = "1.10.2"
+lombok-version = "1.18.32"
+meanbean-version = "3.0.0-M9"
+random-beans-version = "3.9.0"
+randomizer-version = "10.2"
+silly-collection-version = "27"
+silly-io-version = "3"
+silly-strings-version = "9"
+test-object-version = "8.2"
+throwable-version = "2.3"
+time-machine-version = "3"
+vintage-time-version = "6"
+
+[libraries]
+bcpkix-jdk15on = { module = "org.bouncycastle:bcpkix-jdk15on", version.ref = "bcpkix-jdk15on-version" }
+checksum-up = { module = "io.github.astrapi69:checksum-up", version.ref = "checksum-up-version" }
+commons-codec = { module = "commons-codec:commons-codec", version.ref = "commons-codec-version" }
+commons-io = { module = "commons-io:commons-io", version.ref = "commons-io-version" }
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3-version" }
+crypt-api = { module = "io.github.astrapi69:crypt-api", version.ref = "crypt-api-version" }
+file-worker = { module = "io.github.astrapi69:file-worker", version.ref = "file-worker-version" }
+guava = { module = "com.google.guava:guava", version.ref = "guava-version" }
+jaxb-api = { module = "javax.xml.bind:jaxb-api", version.ref = "jaxb-api-version" }
+jobj-contract-verifier = { module = "io.github.astrapi69:jobj-contract-verifier", version.ref = "jobj-contract-verifier-version" }
+jobj-core = { module = "io.github.astrapi69:jobj-core", version.ref = "jobj-core-version" }
+jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305-version" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter-version" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter-api-version" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform-launcher-version" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok-version" }
+meanbean = { module = "com.github.meanbeanlib:meanbean", version.ref = "meanbean-version" }
+random-beans = { module = "io.github.benas:random-beans", version.ref = "random-beans-version" }
+randomizer = { module = "io.github.astrapi69:randomizer", version.ref = "randomizer-version" }
+silly-collection = { module = "io.github.astrapi69:silly-collection", version.ref = "silly-collection-version" }
+silly-io = { module = "io.github.astrapi69:silly-io", version.ref = "silly-io-version" }
+silly-strings = { module = "io.github.astrapi69:silly-strings", version.ref = "silly-strings-version" }
+test-object = { module = "io.github.astrapi69:test-object", version.ref = "test-object-version" }
+throwable = { module = "io.github.astrapi69:throwable", version.ref = "throwable-version" }
+time-machine = { module = "io.github.astrapi69:time-machine", version.ref = "time-machine-version" }
+vintage-time = { module = "io.github.astrapi69:vintage-time", version.ref = "vintage-time-version" }
+
+[bundles]
+unit-testing = [
+    "junit-jupiter",
+    "meanbean",
+    "test-object",
+]
+
+[plugins]
+gradle-versions-plugin = { id = "com.github.ben-manes.versions", version.ref = "gradle-plugin-versions-version" }
+grgit-gradle = { id = "org.ajoberstar.grgit", version.ref = "gradle-plugin-grgit-version" }
+license-gradle-plugin = { id = "com.github.hierynomus.license", version.ref = "gradle-plugin-license-version" }
+lombok-plugin = { id = "io.freefair.lombok", version.ref = "gradle-plugin-lombok-version" }
+spotless-plugin-gradle = { id = "com.diffplug.spotless", version.ref = "gradle-plugin-spotless-version" }
+version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "gradle-plugin-version-catalog-update-version" }
