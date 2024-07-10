@@ -48,6 +48,7 @@ import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v1CertificateBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
@@ -322,6 +323,54 @@ public final class CertFactory
 			.setProvider(SecurityProvider.BC.name()).build(keyPair.getPrivate());
 		return new JcaX509CertificateConverter().setProvider(SecurityProvider.BC.name())
 			.getCertificate(certBuilder.build(signer));
+	}
+
+
+	/**
+	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
+	 * X.509 from the given parameters that can be used as an end entity certificate.
+	 *
+	 * @param keyPair
+	 *            the key pair
+	 * @param issuer
+	 *            X500Name representing the issuer of this certificate.
+	 * @param daysToBeValid
+	 *            How many days this certificate will be valid
+	 * @param subject
+	 *            X500Name representing the subject of this certificate.
+	 * @param signatureAlgorithm
+	 *            the signature algorithm i.e 'SHA256withRSA'
+	 * @param extensions
+	 *            the extensions
+	 * @return the {@link X509Certificate} object
+	 *
+	 * @throws OperatorCreationException
+	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 * @throws CertificateException
+	 *             if the conversion is unable to be made
+	 */
+	public static X509Certificate newX509CertificateV3(KeyPair keyPair, X500Name issuer,
+		int daysToBeValid, X500Name subject, String signatureAlgorithm, Extension... extensions)
+		throws OperatorCreationException, CertificateException
+	{
+		long now = System.currentTimeMillis();
+		Date startDate = new Date(now);
+		Date endDate = new Date(now + daysToBeValid * 86400000L);
+
+		BigInteger certSerialNumber = new BigInteger(Long.toString(now)); // unique serial number
+
+		ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgorithm)
+			.build(keyPair.getPrivate());
+
+		JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(issuer,
+			certSerialNumber, startDate, endDate, subject, keyPair.getPublic());
+		if (extensions != null && 0 < extensions.length)
+		{
+			Arrays.stream(extensions)
+				.forEach(RuntimeExceptionDecorator.decorate(certBuilder::addExtension));
+		}
+		return new JcaX509CertificateConverter().setProvider("BC")
+			.getCertificate(certBuilder.build(contentSigner));
 	}
 
 }

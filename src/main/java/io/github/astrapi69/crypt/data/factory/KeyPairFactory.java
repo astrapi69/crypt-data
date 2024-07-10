@@ -186,25 +186,62 @@ public final class KeyPairFactory
 		return generator.generateKeyPair();
 	}
 
-	public static KeyPair generateECKeys()
+	/**
+	 * Factory method for creating a new {@link KeyPair} from the given parameters.
+	 *
+	 * @param namedCurveParameterSpec
+	 *            the name of the ecliptic curve requested
+	 * @param algorithm
+	 *            the algorithm
+	 * @param provider
+	 *            the provider
+	 * @return the new {@link KeyPair} from the given parameters
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
+	 *             specified algorithm
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails
+	 */
+	public static KeyPair newKeyPair(ECNamedCurveParameterSpec namedCurveParameterSpec,
+		final String algorithm, final String provider)
+		throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException
 	{
-		try
-		{
-			ECNamedCurveParameterSpec parameterSpec = ECNamedCurveTable
-				.getParameterSpec("brainpoolp256r1");
-			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("ECDH", "BC");
+		final KeyPairGenerator generator = KeyPairGeneratorFactory
+			.newKeyPairGenerator(namedCurveParameterSpec, algorithm, provider);
+		return generator.generateKeyPair();
+	}
 
-			keyPairGenerator.initialize(parameterSpec);
-			KeyPair keyPair = keyPairGenerator.generateKeyPair();
-
-			return keyPair;
-		}
-		catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException
-			| NoSuchProviderException e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+	/**
+	 * Factory method for creating a new {@link KeyPair} from the given parameters.
+	 *
+	 * @param eCNamedCurveParameterSpecName
+	 *            the name of the ecliptic curve requested
+	 * @param algorithm
+	 *            the algorithm
+	 * @param provider
+	 *            the provider
+	 * @return the new {@link KeyPair} from the given parameters
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
+	 *             specified algorithm
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails
+	 */
+	public static KeyPair newKeyPair(String eCNamedCurveParameterSpecName, final String algorithm,
+		final String provider)
+		throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException
+	{
+		final KeyPairGenerator generator = KeyPairGeneratorFactory
+			.newKeyPairGenerator(eCNamedCurveParameterSpecName, algorithm, provider);
+		return generator.generateKeyPair();
 	}
 
 }
