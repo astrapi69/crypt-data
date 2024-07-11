@@ -24,30 +24,56 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
-import io.github.astrapi69.crypt.api.key.KeyType;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Data class representing key information.
- * 
- * @deprecated use instead the class {@link io.github.astrapi69.crypt.data.model.KeyInfo}. Note will
- *             be removed in next minor version
+ * Data class representing shared secret information used in cryptographic operations.
  */
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class KeyModel
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class SharedSecretInfo
 {
-	@NonNull
-	KeyType keyType;
-	@NonNull
-	byte[] encoded;
-	@NonNull
-	String algorithm;
+
+	/**
+	 * Information about the private key.
+	 */
+	KeyInfo privateKeyInfo;
+
+	/**
+	 * Information about the public key.
+	 */
+	KeyInfo publicKeyInfo;
+
+	/**
+	 * The algorithm used for key agreement.
+	 */
+	String keyAgreementAlgorithm;
+
+	/**
+	 * The algorithm used for the secret key.
+	 */
+	String secretKeyAlgorithm;
+
+	/**
+	 * The provider for the cryptographic algorithms.
+	 */
+	String provider;
+
+	/**
+	 * The algorithm used for encryption and decryption.
+	 */
+	String cipherAlgorithm;
+
+	/**
+	 * The initialization vector for the cipher algorithm.
+	 */
+	byte[] iv;
 }

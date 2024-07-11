@@ -12,6 +12,8 @@ ADDED:
 - new factory methods for create new KeyPair objects
 - new data object class KeyPairInfo for create new KeyPair objects
 - new data object class KeyStoreInfo for create new KeyStore objects
+- new data object class DistinguishedNameInfo for create new DistinguishedName String objects
+- new data object class ExtensionInfo for create new Extension objects
 
 CHANGED:
 

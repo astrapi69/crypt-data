@@ -43,6 +43,7 @@ import io.github.astrapi69.crypt.api.key.KeySize;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
+import io.github.astrapi69.crypt.data.model.KeyPairInfo;
 
 /**
  * The factory class {@link KeyPairFactory} holds methods for creating {@link KeyPair} objects.
@@ -244,4 +245,41 @@ public final class KeyPairFactory
 		return generator.generateKeyPair();
 	}
 
+
+	/**
+	 * Factory method to create a new {@link KeyPair} object from the given {@link KeyPairInfo}
+	 * object.
+	 *
+	 * @param keyPairInfo
+	 *            the name of the ecliptic curve requested
+	 * @return the new {@link KeyPair} from the given parameters
+	 *
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
+	 *             specified algorithm
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 */
+	public static KeyPair newKeyPair(KeyPairInfo keyPairInfo)
+		throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException
+	{
+		KeyPair keyPair;
+		if (keyPairInfo.getECNamedCurveParameterSpecName() != null
+			&& keyPairInfo.getProvider() != null)
+		{
+			keyPair = KeyPairFactory.newKeyPair(keyPairInfo.getECNamedCurveParameterSpecName(),
+				keyPairInfo.getAlgorithm(), keyPairInfo.getProvider());
+			return keyPair;
+		}
+		if (keyPairInfo.getECNamedCurveParameterSpecName() != null)
+		{
+			keyPair = KeyPairFactory.newKeyPair(keyPairInfo.getECNamedCurveParameterSpecName(),
+				keyPairInfo.getAlgorithm(), "BC");
+			return keyPair;
+		}
+		return KeyPairFactory.newKeyPair(keyPairInfo.getAlgorithm(), keyPairInfo.getKeySize());
+	}
 }

@@ -35,6 +35,9 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
+import io.github.astrapi69.crypt.data.model.KeyStoreInfo;
+import io.github.astrapi69.file.create.FileInfo;
+
 /**
  * The factory class {@link KeyStoreFactory} holds methods for creating {@link KeyStore} objects.
  */
@@ -200,6 +203,31 @@ public final class KeyStoreFactory
 		return createNewKeyStore
 			? newKeyStore(keystoreFile, type, password)
 			: loadKeyStore(keystoreFile, type, password);
+	}
+
+	/**
+	 * Factory method for create a new empty {@link KeyStore} object from the given
+	 * {@link KeyStoreInfo} object
+	 *
+	 * @param keyStoreInfo
+	 *            the {@link KeyStoreInfo} object
+	 * @return the new {@link KeyStore} object
+	 * @throws KeyStoreException
+	 *             is thrown if there is an error accessing the key store
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 * @throws CertificateException
+	 *             is thrown if there is an error with an certificate
+	 * @throws FileNotFoundException
+	 *             is thrown if the keystore file not found
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static KeyStore newKeyStore(final KeyStoreInfo keyStoreInfo)
+		throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException
+	{
+		return newKeyStore(FileInfo.toFile(keyStoreInfo.getFileInfo()), keyStoreInfo.getType(),
+			keyStoreInfo.getKeystorePassword());
 	}
 
 }

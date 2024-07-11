@@ -24,7 +24,9 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
-import io.github.astrapi69.crypt.api.key.KeyType;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
@@ -33,21 +35,34 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Data class representing key information.
- * 
- * @deprecated use instead the class {@link io.github.astrapi69.crypt.data.model.KeyInfo}. Note will
- *             be removed in next minor version
+ * Data class representing the validity period with start and end times.
  */
 @Data
 @RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class KeyModel
+public class Validity
 {
+	/**
+	 * The end time of the validity period.
+	 */
 	@NonNull
-	KeyType keyType;
+	private ZonedDateTime notAfter;
+
+	/**
+	 * The start time of the validity period.
+	 */
 	@NonNull
-	byte[] encoded;
-	@NonNull
-	String algorithm;
+	private ZonedDateTime notBefore;
+
+	/**
+	 * Calculates the number of days between the notBefore and notAfter dates.
+	 *
+	 * @return the number of days between notBefore and notAfter.
+	 */
+	public long getValidityInDays()
+	{
+		return ChronoUnit.DAYS.between(notBefore, notAfter);
+	}
+
 }

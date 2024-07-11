@@ -24,7 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
-import io.github.astrapi69.crypt.api.key.KeyType;
+import io.github.astrapi69.crypt.api.key.PemType;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
@@ -33,21 +33,30 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Data class representing key information.
- * 
- * @deprecated use instead the class {@link io.github.astrapi69.crypt.data.model.KeyInfo}. Note will
- *             be removed in next minor version
+ * Data class representing a PEM-encoded key information.
  */
 @Data
 @RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class KeyModel
+public class PemKeyInfo
 {
+
+	/**
+	 * The type of the PEM key.
+	 */
 	@NonNull
-	KeyType keyType;
+	String keyType;
+
+	/**
+	 * The PEM-encoded key.
+	 */
 	@NonNull
-	byte[] encoded;
+	String pemEncoded;
+
+	/**
+	 * The algorithm used for the key.
+	 */
 	@NonNull
 	String algorithm;
 }

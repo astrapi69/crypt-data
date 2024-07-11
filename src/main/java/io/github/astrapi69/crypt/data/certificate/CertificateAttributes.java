@@ -24,6 +24,12 @@
  */
 package io.github.astrapi69.crypt.data.certificate;
 
+/**
+ * @deprecated use instead the class
+ *             {@link io.github.astrapi69.crypt.data.model.DistinguishedNameInfo}. Note will be
+ *             removed in next minor version
+ */
+@Deprecated
 public class CertificateAttributes
 {
 	private String commonName;
