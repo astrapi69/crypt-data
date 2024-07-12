@@ -41,11 +41,7 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 /**
  * The class {@link KeyModelExtensions} provides algorithms for transform a given {@link KeyModel}
  * object to the appropriate key objects and given keys to the appropriate {@link KeyModel} object
- * 
- * @deprecated use instead the class {@link KeyInfoExtensions}. Note will be removed in next minor
- *             version
  */
-@Deprecated
 public class KeyModelExtensions
 {
 
