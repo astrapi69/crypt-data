@@ -33,8 +33,12 @@ import java.io.OutputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
+import io.github.astrapi69.crypt.data.key.KeyInfoExtensions;
+import io.github.astrapi69.crypt.data.model.KeyInfo;
 import io.github.astrapi69.crypt.data.model.KeyStoreInfo;
 import io.github.astrapi69.file.create.FileInfo;
 
@@ -229,6 +233,49 @@ public final class KeyStoreFactory
 	{
 		return newKeyStore(FileInfo.toFile(keyStoreInfo.getFileInfo()), keyStoreInfo.getType(),
 			keyStoreInfo.getKeystorePassword());
+	}
+
+	/**
+	 * Creates a new keystore for SSL, saves the provided private key and certificate in it, and
+	 * stores it in a file.
+	 *
+	 * @param keyStoreInfo
+	 *            the information about the keystore, including file info and keystore password
+	 * @param privateKeyModel
+	 *            the model containing the private key information
+	 * @param certificateModel
+	 *            the model containing the certificate information
+	 * @param certificateAlias
+	 *            the alias under which the certificate and key will be stored
+	 * @param keyPassword
+	 *            the password for protecting the key
+	 * @throws CertificateException
+	 *             if an error occurs while handling the certificate
+	 * @throws KeyStoreException
+	 *             if an error occurs while handling the keystore
+	 * @throws NoSuchAlgorithmException
+	 *             if the algorithm for recovering the key cannot be found
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static void newKeystoreAndSaveForSsl(KeyStoreInfo keyStoreInfo, KeyInfo privateKeyModel,
+		KeyInfo certificateModel, String certificateAlias, char[] keyPassword)
+		throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException
+	{
+		// Convert KeyModel to actual Key and Certificate objects
+		PrivateKey privateKey = KeyInfoExtensions.toPrivateKey(privateKeyModel);
+		X509Certificate certificate = KeyInfoExtensions.toX509Certificate(certificateModel);
+
+		// Initialize a KeyStore and store the key pair and certificate
+		KeyStore keyStore = KeyStoreInfo.toKeyStore(keyStoreInfo);
+
+		keyStore.setKeyEntry(certificateAlias, privateKey, keyPassword,
+			new java.security.cert.Certificate[] { certificate });
+		File keystoreFile = FileInfo.toFile(keyStoreInfo.getFileInfo());
+		try (FileOutputStream fos = new FileOutputStream(keystoreFile))
+		{
+			keyStore.store(fos, keyStoreInfo.getKeystorePassword());
+		}
 	}
 
 }

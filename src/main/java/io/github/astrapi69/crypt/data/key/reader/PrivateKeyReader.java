@@ -46,7 +46,6 @@ import io.github.astrapi69.crypt.api.key.KeyStringEntry;
 import io.github.astrapi69.crypt.api.key.KeyType;
 import io.github.astrapi69.crypt.data.algorithm.CryptoAlgorithm;
 import io.github.astrapi69.crypt.data.model.KeyInfo;
-import io.github.astrapi69.crypt.data.model.KeyModel;
 import lombok.extern.java.Log;
 
 /**
