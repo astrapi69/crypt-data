@@ -1,0 +1,3 @@
+eCNamedCurveParameterSpecName,algorithm,provider,keySize
+secp256r1,EC,SunEC,256
+,RSA,SunRsaSign,2048

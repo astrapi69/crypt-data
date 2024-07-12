@@ -26,6 +26,7 @@ package io.github.astrapi69.crypt.data.model;
 
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -43,6 +44,7 @@ public class X509CertificateV3Info
 	/**
 	 * The base information from X.509 V1 certificate.
 	 */
+	@NonNull
 	X509CertificateV1Info certificateV1Info;
 
 	/**

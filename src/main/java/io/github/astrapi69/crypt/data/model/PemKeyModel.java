@@ -34,11 +34,7 @@ import lombok.experimental.SuperBuilder;
 
 /**
  * Data class representing a PEM-encoded key model.
- * 
- * @deprecated use instead the class {@link io.github.astrapi69.crypt.data.model.PemKeyInfo}. Note
- *             will be removed in next minor version
  */
-@Deprecated
 @Data
 @RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)

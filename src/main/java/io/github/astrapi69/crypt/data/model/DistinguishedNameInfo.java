@@ -27,8 +27,11 @@ package io.github.astrapi69.crypt.data.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bouncycastle.asn1.x500.X500Name;
+
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -81,6 +84,29 @@ public class DistinguishedNameInfo
 	public String toRepresentableString()
 	{
 		return DistinguishedNameInfo.toRepresentableString(this);
+	}
+
+	/**
+	 * Converts this {@link DistinguishedNameInfo} object to a {@link X500Name} object
+	 *
+	 * @return the corresponding {@link X500Name} object of this {@link DistinguishedNameInfo}
+	 *         object
+	 */
+	public X500Name toX500Name()
+	{
+		return new X500Name(toRepresentableString());
+	}
+
+	/**
+	 * Converts the {@link DistinguishedNameInfo} object to a representable string.
+	 *
+	 * @param distinguishedNameInfo
+	 *            the {@link DistinguishedNameInfo} object to convert.
+	 * @return the corresponding string representation.
+	 */
+	public static X500Name toX500Name(@NonNull DistinguishedNameInfo distinguishedNameInfo)
+	{
+		return distinguishedNameInfo.toX500Name();
 	}
 
 	/**

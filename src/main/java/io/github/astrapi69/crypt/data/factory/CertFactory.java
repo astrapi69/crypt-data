@@ -412,7 +412,7 @@ public final class CertFactory
 	{
 
 		X509CertificateV1Info v1Info = certificateInfo.getCertificateV1Info();
-		KeyPair keyPair = KeyPairInfo.newKeyPair(v1Info.getKeyPairInfo());
+		KeyPair keyPair = KeyPairInfo.toKeyPair(v1Info.getKeyPairInfo());
 
 		DistinguishedNameInfo issuer = v1Info.getIssuer();
 		DistinguishedNameInfo subject = v1Info.getSubject();
@@ -469,7 +469,7 @@ public final class CertFactory
 		NoSuchAlgorithmException, NoSuchProviderException
 	{
 
-		KeyPair keyPair = KeyPairInfo.newKeyPair(certificateInfo.getKeyPairInfo());
+		KeyPair keyPair = KeyPairInfo.toKeyPair(certificateInfo.getKeyPairInfo());
 		X500Name issuer = new X500Name(certificateInfo.getIssuer().toRepresentableString());
 		BigInteger serial = certificateInfo.getSerial();
 

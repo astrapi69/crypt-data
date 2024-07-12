@@ -30,6 +30,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
 import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
+import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
@@ -85,9 +86,24 @@ public class KeyPairInfo
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list
 	 */
-	public static KeyPair newKeyPair(KeyPairInfo keyPairInfo)
+	public static KeyPair toKeyPair(@NonNull KeyPairInfo keyPairInfo)
 		throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException
 	{
 		return KeyPairFactory.newKeyPair(keyPairInfo);
+	}
+
+	/**
+	 * Factory method to create a new {@link KeyPairInfo} object from the given {@link KeyPair}
+	 * object.
+	 *
+	 * @param keyPair
+	 *            the {@link KeyPair} object containing the key pair details.
+	 * @return the newly created {@link KeyPair} object.
+	 */
+	public static KeyPairInfo toKeyPairInfo(@NonNull KeyPair keyPair)
+	{
+		return KeyPairInfo.builder()
+			.keySize(PrivateKeyExtensions.getKeyLength(keyPair.getPrivate()))
+			.algorithm(keyPair.getPrivate().getAlgorithm()).build();
 	}
 }

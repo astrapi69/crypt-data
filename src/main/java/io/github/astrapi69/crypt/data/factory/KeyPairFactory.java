@@ -43,6 +43,7 @@ import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypt.data.model.KeyPairInfo;
+import lombok.NonNull;
 
 /**
  * The factory class {@link KeyPairFactory} holds methods for creating {@link KeyPair} objects.
@@ -74,6 +75,48 @@ public final class KeyPairFactory
 		throws NoSuchAlgorithmException, NoSuchProviderException
 	{
 		return newKeyPair(algorithm.getAlgorithm(), keySize);
+	}
+
+	/**
+	 * Factory method for creating a new {@link KeyPair} from the given algorithm and default key
+	 * size 2048
+	 *
+	 * @param algorithm
+	 *            the algorithm
+	 * @return the new {@link KeyPair} from the given salt and iteration count
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
+	 *             specified algorithm
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 */
+	public static KeyPair newKeyPair(final String algorithm)
+		throws NoSuchAlgorithmException, NoSuchProviderException
+	{
+		return newKeyPair(algorithm, KeySize.KEYSIZE_2048.getKeySize());
+	}
+
+	/**
+	 * Factory method for creating a new {@link KeyPair} from the given algorithm and default key
+	 * size 2048
+	 *
+	 * @param algorithm
+	 *            the algorithm
+	 * @return the new {@link KeyPair} from the given salt and iteration count
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
+	 *             specified algorithm
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 */
+	public static KeyPair newKeyPair(final Algorithm algorithm)
+		throws NoSuchAlgorithmException, NoSuchProviderException
+	{
+		return newKeyPair(algorithm.getAlgorithm(), KeySize.KEYSIZE_2048.getKeySize());
 	}
 
 	/**
@@ -262,7 +305,7 @@ public final class KeyPairFactory
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list
 	 */
-	public static KeyPair newKeyPair(KeyPairInfo keyPairInfo)
+	public static KeyPair newKeyPair(@NonNull KeyPairInfo keyPairInfo)
 		throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException
 	{
 		KeyPair keyPair;

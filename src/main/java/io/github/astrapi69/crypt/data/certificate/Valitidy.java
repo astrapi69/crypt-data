@@ -28,7 +28,11 @@ import java.time.ZonedDateTime;
 
 /**
  * Use only ZoneId.of("UTC") for the values
+ * 
+ * @deprecated use instead the class {@link io.github.astrapi69.crypt.data.model.Validity}. Note
+ *             will be removed in next minor version
  **/
+@Deprecated
 public class Valitidy
 {
 	private ZonedDateTime notAfter;
