@@ -57,7 +57,12 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
-import io.github.astrapi69.crypt.data.model.*;
+import io.github.astrapi69.crypt.data.model.DistinguishedNameInfo;
+import io.github.astrapi69.crypt.data.model.ExtensionInfo;
+import io.github.astrapi69.crypt.data.model.KeyPairInfo;
+import io.github.astrapi69.crypt.data.model.Validity;
+import io.github.astrapi69.crypt.data.model.X509CertificateV1Info;
+import io.github.astrapi69.crypt.data.model.X509CertificateV3Info;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**

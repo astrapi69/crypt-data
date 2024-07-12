@@ -27,7 +27,11 @@ package io.github.astrapi69.crypt.data.model;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigInteger;
-import java.security.*;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
@@ -38,7 +42,7 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
 import io.github.astrapi69.crypt.api.key.KeyType;
-import io.github.astrapi69.crypt.data.factory.CertFactory;
+import io.github.astrapi69.crypt.data.key.KeyExtensions;
 import io.github.astrapi69.crypt.data.key.KeyInfoExtensions;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.create.FileInfo;
@@ -81,6 +85,9 @@ public class KeystoreCreator
 		// Generate Certificate
 		X509Certificate certificate = generateCertificate(
 			DistinguishedNameInfo.toRepresentableString(dnInfo), keyPair, 365, "SHA256withRSA");
+
+		String base64 = KeyExtensions.toBase64(certificate.getEncoded());
+		System.out.println(base64);
 
 		// Convert KeyPair and Certificate to KeyModel
 		KeyInfo privateKeyModel = KeyInfo.builder().keyType(KeyType.PRIVATE_KEY.getDisplayValue())

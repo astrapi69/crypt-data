@@ -33,22 +33,49 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * The class {@link X509CertificateV1Info} represents the information for an X.509 V1 certificate.
+ */
 @Data
 @RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class X509CertificateV1Info
 {
+
+	/**
+	 * The key pair information associated with the certificate.
+	 */
 	@NonNull
 	KeyPairInfo keyPairInfo;
+
+	/**
+	 * The distinguished name information of the issuer.
+	 */
 	@NonNull
 	DistinguishedNameInfo issuer;
+
+	/**
+	 * The serial number of the certificate.
+	 */
 	@NonNull
 	BigInteger serial;
+
+	/**
+	 * The validity period of the certificate.
+	 */
 	@NonNull
 	Validity validity;
+
+	/**
+	 * The distinguished name information of the subject.
+	 */
 	@NonNull
 	DistinguishedNameInfo subject;
+
+	/**
+	 * The signature algorithm used to sign the certificate.
+	 */
 	@NonNull
 	String signatureAlgorithm;
 }

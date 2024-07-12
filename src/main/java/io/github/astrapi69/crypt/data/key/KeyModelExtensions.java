@@ -45,6 +45,7 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
  * @deprecated use instead the class {@link KeyInfoExtensions}. Note will be removed in next minor
  *             version
  */
+@Deprecated
 public class KeyModelExtensions
 {
 

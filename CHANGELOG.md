@@ -14,6 +14,7 @@ ADDED:
 - new data object class KeyStoreInfo for create new KeyStore objects
 - new data object class DistinguishedNameInfo for create new DistinguishedName String objects
 - new data object class ExtensionInfo for create new Extension objects
+- new test dependency junit-jupiter-param in version 5.11.0-M2
 
 CHANGED:
 

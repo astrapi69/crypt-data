@@ -45,6 +45,7 @@ import io.github.astrapi69.crypt.api.key.KeyFileFormat;
 import io.github.astrapi69.crypt.api.key.KeyStringEntry;
 import io.github.astrapi69.crypt.api.key.KeyType;
 import io.github.astrapi69.crypt.data.algorithm.CryptoAlgorithm;
+import io.github.astrapi69.crypt.data.model.KeyInfo;
 import io.github.astrapi69.crypt.data.model.KeyModel;
 import lombok.extern.java.Log;
 
@@ -366,9 +367,9 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Reads the given {@link KeyModel} object and returns the {@link PrivateKey} object.
+	 * Reads the given {@link KeyInfo} object and returns the {@link PrivateKey} object.
 	 *
-	 * @param keyModel
+	 * @param keyInfo
 	 *            the info model for create the private key
 	 * @return the {@link PrivateKey} object
 	 * @throws NoSuchAlgorithmException
@@ -376,15 +377,16 @@ public final class PrivateKeyReader
 	 * @throws InvalidKeySpecException
 	 *             is thrown if generation of the SecretKey object fails.
 	 */
-	public static PrivateKey readPrivateKey(KeyModel keyModel)
+	public static PrivateKey readPrivateKey(KeyInfo keyInfo)
 		throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
-		Objects.requireNonNull(keyModel);
-		if (!keyModel.getKeyType().equals(KeyType.PRIVATE_KEY))
+		Objects.requireNonNull(keyInfo);
+		KeyType keyType = KeyType.toKeyType(keyInfo.getKeyType());
+		if (!keyType.equals(KeyType.PRIVATE_KEY))
 		{
-			throw new RuntimeException("Given KeyModel:" + keyModel + "\n is not a private key");
+			throw new RuntimeException("Given KeyModel:" + keyInfo + "\n is not a private key");
 		}
-		return readPrivateKey(keyModel.getEncoded(), keyModel.getAlgorithm());
+		return readPrivateKey(keyInfo.getEncoded(), keyInfo.getAlgorithm());
 	}
 
 	/**
@@ -454,7 +456,7 @@ public final class PrivateKeyReader
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
 			log.log(Level.WARNING,
-				"Given private key file is not stored in 'DiffieHellman' algorithm");
+				"Given private key file is not stored in 'DiffieHellman' algorithm", e);
 		}
 		try
 		{
@@ -465,7 +467,7 @@ public final class PrivateKeyReader
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
-			log.log(Level.WARNING, "Given private key file is not stored in 'DSA' algorithm");
+			log.log(Level.WARNING, "Given private key file is not stored in 'DSA' algorithm", e);
 		}
 		try
 		{
@@ -476,7 +478,7 @@ public final class PrivateKeyReader
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
-			log.log(Level.WARNING, "Given private key file is not stored in 'EC' algorithm");
+			log.log(Level.WARNING, "Given private key file is not stored in 'EC' algorithm", e);
 		}
 		try
 		{
@@ -487,8 +489,8 @@ public final class PrivateKeyReader
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
-			log.log(Level.WARNING,
-				"Given private key file is not stored in 'RSASSA-PSS' algorithm");
+			log.log(Level.WARNING, "Given private key file is not stored in 'RSASSA-PSS' algorithm",
+				e);
 		}
 		try
 		{
@@ -499,7 +501,7 @@ public final class PrivateKeyReader
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
-			e.printStackTrace();
+			log.log(Level.WARNING, "Given private key file is stored in an 'RSA' algorithm", e);
 		}
 		return optionalPrivateKey;
 	}

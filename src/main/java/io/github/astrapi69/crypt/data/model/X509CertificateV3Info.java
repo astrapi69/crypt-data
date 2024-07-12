@@ -24,21 +24,29 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
-import java.math.BigInteger;
-
 import lombok.AccessLevel;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * The class {@link X509CertificateV3Info} represents the information for an X.509 V3 certificate.
+ */
 @Data
 @RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class X509CertificateV3Info
 {
+
+	/**
+	 * The base information from X.509 V1 certificate.
+	 */
 	X509CertificateV1Info certificateV1Info;
+
+	/**
+	 * The extensions added in X.509 V3 certificate.
+	 */
 	ExtensionInfo[] extensions;
 }

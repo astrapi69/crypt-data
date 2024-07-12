@@ -24,7 +24,6 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
-import io.github.astrapi69.crypt.api.key.PemType;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;

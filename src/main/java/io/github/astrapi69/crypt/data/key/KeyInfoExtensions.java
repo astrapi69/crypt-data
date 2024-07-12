@@ -145,9 +145,10 @@ public class KeyInfoExtensions
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs
 	 */
-	public static KeyInfo toKeyInfo(Certificate certificate) throws CertificateEncodingException
+	public static KeyInfo toKeyInfo(X509Certificate certificate) throws CertificateEncodingException
 	{
-		return KeyInfo.builder().encoded(CertificateExtensions.getEncoded(certificate))
+		byte[] encoded = CertificateExtensions.getEncoded(certificate);
+		return KeyInfo.builder().encoded(encoded).algorithm(certificate.getSigAlgName())
 			.keyType(KeyType.CERTIFICATE.getDisplayValue()).build();
 	}
 

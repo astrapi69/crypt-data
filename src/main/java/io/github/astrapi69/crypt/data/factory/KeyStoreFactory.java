@@ -196,6 +196,7 @@ public final class KeyStoreFactory
 	 *             <br>
 	 *             Note: will be removed in the next minor version
 	 */
+	@Deprecated
 	public static KeyStore newKeyStore(final String type, final String password,
 		final File keystoreFile, final boolean createNewKeyStore)
 		throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException

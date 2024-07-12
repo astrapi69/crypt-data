@@ -161,7 +161,6 @@ public class PrivateKeyReaderTest
 		assertEquals(algorithm, "RSASSA-PSS");
 	}
 
-
 	/**
 	 * Test method for {@link PrivateKeyReader#getKeyFormat(File)}
 	 */

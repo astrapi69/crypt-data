@@ -33,7 +33,6 @@ import java.util.Objects;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 
 import io.github.astrapi69.file.write.StoreFileExtensions;
-import io.github.astrapi69.file.write.WriteFileExtensions;
 
 /**
  * The class {@link KeyWriter} is a utility class for write security keys in files.

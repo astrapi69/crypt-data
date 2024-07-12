@@ -38,16 +38,28 @@ import lombok.experimental.SuperBuilder;
  * @deprecated use instead the class {@link io.github.astrapi69.crypt.data.model.KeyInfo}. Note will
  *             be removed in next minor version
  */
+@Deprecated
 @Data
 @RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class KeyModel
 {
+	/**
+	 * The type of the key.
+	 */
 	@NonNull
 	KeyType keyType;
+
+	/**
+	 * The encoded key.
+	 */
 	@NonNull
 	byte[] encoded;
+
+	/**
+	 * The algorithm of the key.
+	 */
 	@NonNull
 	String algorithm;
 }
