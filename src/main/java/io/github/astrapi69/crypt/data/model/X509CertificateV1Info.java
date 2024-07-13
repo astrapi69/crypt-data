@@ -44,12 +44,6 @@ public class X509CertificateV1Info
 {
 
 	/**
-	 * The key pair information associated with the certificate.
-	 */
-	@NonNull
-	KeyPairInfo keyPairInfo;
-
-	/**
 	 * The distinguished name information of the issuer.
 	 */
 	@NonNull

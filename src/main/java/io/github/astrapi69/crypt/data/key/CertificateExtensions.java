@@ -49,9 +49,9 @@ import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
-import io.github.astrapi69.crypt.data.certificate.CertificateInfo;
-import io.github.astrapi69.crypt.data.certificate.Valitidy;
+import io.github.astrapi69.crypt.data.certificate.CertificateModel;
 import io.github.astrapi69.crypt.data.hex.HexExtensions;
+import io.github.astrapi69.crypt.data.model.Validity;
 
 /**
  * The class {@link CertificateExtensions} provides extension methods for {@link X509Certificate}
@@ -325,21 +325,21 @@ public final class CertificateExtensions
 	}
 
 	/**
-	 * Converts the given {@link X509Certificate} object to an {@link CertificateInfo} object
+	 * Converts the given {@link X509Certificate} object to an {@link CertificateModel} object
 	 *
 	 * @param certificate
 	 *            the certificate
-	 * @return the {@link CertificateInfo} object that represents from when the given
+	 * @return the {@link CertificateModel} object that represents from when the given
 	 *         {@link X509Certificate} object
 	 */
-	public static CertificateInfo toCertificateInfo(final X509Certificate certificate)
+	public static CertificateModel toCertificateModel(final X509Certificate certificate)
 	{
-		return CertificateInfo.builder().issuer(CertificateExtensions.getIssuedTo(certificate))
+		return CertificateModel.builder().issuer(CertificateExtensions.getIssuedTo(certificate))
 			.publicKey(CertificateExtensions.getPublicKey(certificate))
 			.serialNumber(CertificateExtensions.getSerialNumber(certificate))
 			.signatureAlgorithm(CertificateExtensions.getSignatureAlgorithm(certificate))
 			.subject(CertificateExtensions.getSubject(certificate))
-			.valitidy(Valitidy.builder()
+			.validity(Validity.builder()
 				.notBefore(CertificateExtensions.getValidFrom(certificate).toInstant()
 					.atZone(ZoneId.systemDefault()).toOffsetDateTime().toZonedDateTime())
 				.notAfter(CertificateExtensions.getValidUntil(certificate).toInstant()

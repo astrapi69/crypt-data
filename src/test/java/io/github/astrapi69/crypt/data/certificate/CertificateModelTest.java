@@ -36,7 +36,7 @@ import io.github.astrapi69.crypt.data.key.CertificateExtensions;
 import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
 import io.github.astrapi69.file.search.PathFinder;
 
-public class CertificateInfoTest
+public class CertificateModelTest
 {
 
 	/** The certificate for tests. */
@@ -63,7 +63,7 @@ public class CertificateInfoTest
 	@Test
 	public void loadCert()
 	{
-		CertificateInfo actual = CertificateExtensions.toCertificateInfo(certificate);
+		CertificateModel actual = CertificateExtensions.toCertificateModel(certificate);
 		assertNotNull(actual);
 	}
 }

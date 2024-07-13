@@ -4,6 +4,17 @@
 Version 9.2-SNAPSHOT
 -------------
 
+ADDED:
+
+- new factory method with KeyPair object and the corresponding X509CertificateV3Info in CertFactory
+
+CHANGED:
+
+- remove of misleading field keyPairInfo in data class X509CertificateV1Info
+- renamed obsolete class ExtensionInfo to ExtensionModel
+- renamed class CertificateInfo to CertificateModel
+- deleted deprecated and misspelled class Valitidy
+
 Version 9.1
 -------------
 
