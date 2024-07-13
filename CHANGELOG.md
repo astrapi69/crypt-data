@@ -1,6 +1,38 @@
 ## Change log
 ----------------------
 
+Version 9.1
+-------------
+
+ADDED:
+
+- new maven repository for dependency jobj-contract-verifier
+- new libs.versions.toml file for new automatic catalog versions update
+- new factory methods for create new X509Certificate objects
+- new factory methods for create new KeyPair objects
+- new data object class KeyPairInfo for create new KeyPair objects
+- new data object class KeyStoreInfo for create new KeyStore objects
+- new data object class DistinguishedNameInfo for create new DistinguishedName String objects
+- new data object class ExtensionInfo for create new Extension objects
+- new test dependency junit-jupiter-param in version 5.11.0-M2
+
+CHANGED:
+
+- update gradle to new version 8.9
+- update of lombok dependency version to 1.18.34
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 7.0.0.BETA1
+- update of dependency commons-codec dependency version to 1.17.0
+- update of dependency commons-io dependency version to 2.16.1
+- update of dependency file-worker to new version to 17.3
+- update of dependency guava version to new version 33.2.1-jre
+- update of dependency silly-collection to new version to 27.1
+- update of dependency silly-io to new version 3.1
+- update of dependency silly-strings to new version 9.1
+- update of dependency throwable to new version 3
+- update of test dependency jobj-contract-verifier to new version 5.1
+- update of test dependency junit-jupiter to new version 5.11.0-M2
+- update of test dependency junit-platform-launcher to new version 1.11.0-M2
+
 Version 9
 -------------
 
@@ -14,7 +46,7 @@ CHANGED:
 - update of crypt-api dependency to the new major version 9
 - update of dependency commons-codec dependency version to 1.16.1
 - update of dependency commons-lang3 dependency version to 3.14.0
-- update of dependency commons-codec dependency version to 2.16.0
+- update of dependency commons-io dependency version to 2.16.0
 - update of dependency guava version to new version 33.1.0-jre
 - update of test dependency jobj-core to new version 8.2
 - update of test dependency checksum-up to new version 3

@@ -32,7 +32,8 @@ module crypt.data
 	requires silly.strings;
 	requires file.worker;
 	requires java.xml.bind;
-	requires throwable;
+	requires io.github.astrapisixtynine.throwable;
+	requires org.checkerframework.checker.qual;
 
 	exports io.github.astrapi69.crypt.data.algorithm;
 	exports io.github.astrapi69.crypt.data.blockchain;

@@ -32,16 +32,30 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * Data class representing key information.
+ */
 @Data
 @RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class KeyModel
 {
+	/**
+	 * The type of the key.
+	 */
 	@NonNull
 	KeyType keyType;
+
+	/**
+	 * The encoded key.
+	 */
 	@NonNull
 	byte[] encoded;
+
+	/**
+	 * The algorithm of the key.
+	 */
 	@NonNull
 	String algorithm;
 }

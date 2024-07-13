@@ -57,7 +57,7 @@ public final class KeySpecFactory
 	{
 		if (privateKey == null)
 		{
-			return new PBEKeySpec(CompoundAlgorithm.PRIVATE_KEY.toCharArray());
+			return new PBEKeySpec(CompoundAlgorithm.PASSWORD.toCharArray());
 		}
 		return new PBEKeySpec(privateKey.toCharArray());
 	}
@@ -79,8 +79,7 @@ public final class KeySpecFactory
 	{
 		if (password == null)
 		{
-			return new PBEKeySpec(CompoundAlgorithm.PRIVATE_KEY.toCharArray(), salt,
-				iterationCount);
+			return new PBEKeySpec(CompoundAlgorithm.PASSWORD.toCharArray(), salt, iterationCount);
 		}
 		return new PBEKeySpec(password.toCharArray(), salt, iterationCount);
 	}

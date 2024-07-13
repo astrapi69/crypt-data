@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -36,7 +37,10 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 
+import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -54,6 +58,18 @@ public class KeyPairFactoryTest
 {
 
 	/**
+	 * Sets up method will be invoked before every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if any error occurs on the execution
+	 */
+	@BeforeEach
+	protected void setUp() throws Exception
+	{
+		Security.addProvider(new BouncyCastleProvider());
+	}
+
+	/**
 	 * Test method for {@link KeyPairFactory#newKeyPair(Algorithm, KeySize)}
 	 * 
 	 * @throws NoSuchAlgorithmException
@@ -68,7 +84,6 @@ public class KeyPairFactoryTest
 	{
 		KeyPair actual;
 
-		Security.addProvider(new BouncyCastleProvider());
 		actual = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.DIFFIE_HELLMAN,
 			KeySize.KEYSIZE_2048);
 		assertNotNull(actual);
@@ -155,6 +170,59 @@ public class KeyPairFactoryTest
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(KeyPairFactory.class);
+	}
+
+	/**
+	 * Test method for {@link KeyPairFactory#newKeyPair(ECNamedCurveParameterSpec, String, String)}
+	 *
+	 * @throws Exception
+	 *             the exception
+	 */
+	@Test
+	public void testNewKeyPairWithECNamedCurveParameterSpec()
+		throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException
+	{
+		// the name of the curve
+		KeyPair keyPair;
+		String eCurveNameAlgorithm;
+		final String algorithm;
+		final String provider;
+		ECNamedCurveParameterSpec parameterSpec;
+
+		algorithm = "ECDH";
+		provider = "BC";
+		eCurveNameAlgorithm = "brainpoolp256r1";
+
+		parameterSpec = ECNamedCurveTable.getParameterSpec(eCurveNameAlgorithm);
+
+		keyPair = KeyPairFactory.newKeyPair(parameterSpec, algorithm, provider);
+		assertNotNull(keyPair);
+	}
+
+	/**
+	 * Test method for {@link KeyPairFactory#newKeyPair(ECNamedCurveParameterSpec, String, String)}
+	 *
+	 * @throws Exception
+	 *             the exception
+	 */
+	@Test
+	public void testNewKeyPairWithECNamedCurveParameterSpecAsString()
+		throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException
+	{
+
+		KeyPair keyPair;
+		// the name of the curve
+		String eCurveNameAlgorithm;
+		final String algorithm;
+		final String provider;
+
+
+		eCurveNameAlgorithm = "brainpoolp256r1";
+		algorithm = "ECDH";
+		provider = "BC";
+
+		keyPair = KeyPairFactory.newKeyPair(eCurveNameAlgorithm, algorithm, provider);
+		assertNotNull(keyPair);
 	}
 
 }

@@ -31,6 +31,11 @@ import org.bouncycastle.asn1.x509.Extension;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
+/**
+ * @deprecated use instead the class {@link io.github.astrapi69.crypt.data.model.ExtensionInfo}.
+ *             Note will be removed in next minor version
+ */
+@Deprecated
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExtensionInfo
 {

@@ -32,16 +32,31 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * Data class representing a PEM-encoded key model.
+ */
 @Data
 @RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PemKeyModel
 {
+
+	/**
+	 * The type of the PEM key.
+	 */
 	@NonNull
 	PemType keyType;
+
+	/**
+	 * The PEM-encoded key.
+	 */
 	@NonNull
 	String pemEncoded;
+
+	/**
+	 * The algorithm used for the key.
+	 */
 	@NonNull
 	String algorithm;
 }

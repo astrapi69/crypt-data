@@ -43,6 +43,7 @@ public class ExtensionInfoTest
 {
 
 	@Test
+	@SuppressWarnings(value = { "deprecation" })
 	public void newExtensionTest() throws IOException, NoSuchAlgorithmException
 	{
 		ExtensionInfo actual;

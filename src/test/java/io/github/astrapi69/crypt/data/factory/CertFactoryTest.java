@@ -200,6 +200,64 @@ public class CertFactoryTest
 		assertNotNull(actual);
 	}
 
+
+	/**
+	 * Test method for
+	 * {@link CertFactory#newIntermediateX509CertificateV3(KeyPair, X500Name, BigInteger, Date, Date, X500Name, String, X509Certificate)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws CertificateException
+	 *             if the conversion is unable to be made
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
+	 *             available from the specified provider.
+	 * @throws OperatorCreationException
+	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 */
+	@Test
+	public void testNewX509CertificateV3() throws IOException, CertificateException,
+		NoSuchAlgorithmException, OperatorCreationException, NoSuchProviderException
+	{
+		X509Certificate actual;
+		X509Certificate caCert;
+		String type;
+		byte[] certificateData;
+		File pemDir;
+		File certificatePemFile;
+		String base64EncodedCertificate;
+		KeyPair keyPair;
+		X500Name issuer;
+		BigInteger serial;
+		Date notBefore;
+		Date notAfter;
+		X500Name subject;
+		String signatureAlgorithm;
+
+		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
+		certificatePemFile = new File(pemDir, "certificate.pem");
+		base64EncodedCertificate = CertificateReader.readPemFileAsBase64(certificatePemFile);
+		certificateData = new Base64().decode(base64EncodedCertificate);
+		type = "X.509";
+		caCert = CertFactory.newX509Certificate(type, certificateData);
+
+		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, 2048);
+		issuer = new X500Name("CN=Issuer of this certificate");
+		serial = BigInteger.ONE;
+		notBefore = Date.from(
+			LocalDate.of(2017, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+		notAfter = Date.from(
+			LocalDate.of(2027, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+		subject = new X500Name("CN=Subject of this certificate");
+		signatureAlgorithm = "SHA1withRSA";
+		actual = CertFactory.newIntermediateX509CertificateV3(keyPair, issuer, serial, notBefore,
+			notAfter, subject, signatureAlgorithm, caCert);
+		assertNotNull(actual);
+	}
+
 	/**
 	 * Test method for
 	 * {@link CertFactory#newX509Certificate(PublicKey, PrivateKey, BigInteger, String, String, String, Date, Date)}
