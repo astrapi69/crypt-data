@@ -32,6 +32,7 @@ public class CertificateAttributesTest
 {
 
 	@Test
+	@SuppressWarnings(value = { "deprecation" })
 	public void testToRepresentableString()
 	{
 		String actual;

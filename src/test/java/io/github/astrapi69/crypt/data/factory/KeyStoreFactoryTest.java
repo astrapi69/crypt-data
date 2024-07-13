@@ -220,12 +220,12 @@ public class KeyStoreFactoryTest
 		publickeyDerDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
 		keystoreJksFile = new File(publickeyDerDir, "keystore.jks");
 
-		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
-			keystoreJksFile, true);
+		keystore = KeyStoreFactory.newKeyStore(keystoreJksFile, KeystoreType.JKS.name(),
+			"foobar-secret-pw");
 		assertNotNull(keystore);
 
-		keystore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), "foobar-secret-pw",
-			keystoreJksFile, false);
+		keystore = KeyStoreFactory.loadKeyStore(keystoreJksFile, KeystoreType.JKS.name(),
+			"foobar-secret-pw");
 		assertNotNull(keystore);
 
 		keystore = KeyStoreFactory.loadKeyStore(keystoreJksFile, KeystoreType.JKS.name(),

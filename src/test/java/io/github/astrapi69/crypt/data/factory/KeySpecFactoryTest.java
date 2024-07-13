@@ -50,7 +50,7 @@ public class KeySpecFactoryTest
 	{
 		KeySpec actual;
 
-		actual = KeySpecFactory.newPBEKeySpec(CompoundAlgorithm.PRIVATE_KEY);
+		actual = KeySpecFactory.newPBEKeySpec(CompoundAlgorithm.PASSWORD);
 		assertNotNull(actual);
 
 		actual = KeySpecFactory.newPBEKeySpec(null);
@@ -65,7 +65,7 @@ public class KeySpecFactoryTest
 	{
 		KeySpec actual;
 
-		actual = KeySpecFactory.newPBEKeySpec(CompoundAlgorithm.PRIVATE_KEY, CompoundAlgorithm.SALT,
+		actual = KeySpecFactory.newPBEKeySpec(CompoundAlgorithm.PASSWORD, CompoundAlgorithm.SALT,
 			CompoundAlgorithm.ITERATIONCOUNT);
 		assertNotNull(actual);
 

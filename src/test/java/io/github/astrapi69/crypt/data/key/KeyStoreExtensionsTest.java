@@ -88,8 +88,8 @@ public class KeyStoreExtensionsTest
 
 		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
 		keystoreFile = new File(derDir, "keystore.jks");
-		KeyStore keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password,
-			keystoreFile, true);
+		KeyStore keyStore = KeyStoreFactory.newKeyStore(keystoreFile, KeystoreType.JKS.name(),
+			password);
 		assertNotNull(keyStore);
 		assertFalse(keyStore.containsAlias(alias));
 		keyStore.setCertificateEntry(alias, certificate);
@@ -125,8 +125,7 @@ public class KeyStoreExtensionsTest
 		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_2048);
 		privateKey = keyPair.getPrivate();
 
-		keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password, keystoreFile,
-			false);
+		keyStore = KeyStoreFactory.loadKeyStore(keystoreFile, KeystoreType.JKS.name(), password);
 
 		certificate = TestObjectFactory.newCertificateForTests(privateKey);
 
@@ -135,8 +134,7 @@ public class KeyStoreExtensionsTest
 		KeyStoreExtensions.addAndStoreCertificate(keyStore, keystoreFile, password, alias,
 			certificate);
 		// load again keystore from file
-		keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password, keystoreFile,
-			false);
+		keyStore = KeyStoreFactory.loadKeyStore(keystoreFile, KeystoreType.JKS.name(), password);
 		actual = keyStore.getCertificate(alias);
 		assertNotNull(actual);
 		expected = certificate;
@@ -161,8 +159,7 @@ public class KeyStoreExtensionsTest
 		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_2048);
 		expected = keyPair.getPrivate();
 
-		keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password, keystoreFile,
-			false);
+		keyStore = KeyStoreFactory.loadKeyStore(keystoreFile, KeystoreType.JKS.name(), password);
 
 		certificate = TestObjectFactory.newCertificateForTests(expected);
 		certificateChain = ArrayFactory.newArray(certificate);
@@ -172,8 +169,7 @@ public class KeyStoreExtensionsTest
 		KeyStoreExtensions.addAndStorePrivateKey(keyStore, keystoreFile, alias, expected,
 			password.toCharArray(), certificateChain);
 		// load again keystore from file
-		keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password, keystoreFile,
-			false);
+		keyStore = KeyStoreFactory.loadKeyStore(keystoreFile, KeystoreType.JKS.name(), password);
 
 		actual = (PrivateKey)keyStore.getKey(alias, password.toCharArray());
 		assertNotNull(actual);
@@ -205,8 +201,7 @@ public class KeyStoreExtensionsTest
 		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_2048);
 		privateKey = keyPair.getPrivate();
 
-		keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password, keystoreFile,
-			false);
+		keyStore = KeyStoreFactory.loadKeyStore(keystoreFile, KeystoreType.JKS.name(), password);
 
 		certificate = TestObjectFactory.newCertificateForTests(privateKey);
 
@@ -238,8 +233,7 @@ public class KeyStoreExtensionsTest
 		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_2048);
 		expected = keyPair.getPrivate();
 
-		keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password, keystoreFile,
-			false);
+		keyStore = KeyStoreFactory.loadKeyStore(keystoreFile, KeystoreType.JKS.name(), password);
 
 		certificate = TestObjectFactory.newCertificateForTests(expected);
 		certificateChain = ArrayFactory.newArray(certificate);
@@ -272,8 +266,7 @@ public class KeyStoreExtensionsTest
 
 		KeyStoreExtensions.deleteAlias(keystoreFile, alias, password);
 
-		keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password, keystoreFile,
-			false);
+		keyStore = KeyStoreFactory.loadKeyStore(keystoreFile, KeystoreType.JKS.name(), password);
 		containsAlias = keyStore.containsAlias(alias);
 
 		assertFalse(containsAlias);
@@ -296,8 +289,7 @@ public class KeyStoreExtensionsTest
 		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_2048);
 		privateKey = keyPair.getPrivate();
 
-		keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password, keystoreFile,
-			false);
+		keyStore = KeyStoreFactory.loadKeyStore(keystoreFile, KeystoreType.JKS.name(), password);
 
 		certificate = TestObjectFactory.newCertificateForTests(privateKey);
 
@@ -328,8 +320,7 @@ public class KeyStoreExtensionsTest
 		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_2048);
 		expected = keyPair.getPrivate();
 
-		keyStore = KeyStoreFactory.newKeyStore(KeystoreType.JKS.name(), password, keystoreFile,
-			false);
+		keyStore = KeyStoreFactory.loadKeyStore(keystoreFile, KeystoreType.JKS.name(), password);
 
 		certificate = TestObjectFactory.newCertificateForTests(expected);
 		certificateChain = ArrayFactory.newArray(certificate);

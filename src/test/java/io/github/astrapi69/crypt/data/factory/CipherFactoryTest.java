@@ -106,8 +106,8 @@ public class CipherFactoryTest
 		Cipher cipher;
 
 		algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
-		keySpec = KeySpecFactory.newPBEKeySpec(CompoundAlgorithm.PRIVATE_KEY,
-			CompoundAlgorithm.SALT, CompoundAlgorithm.ITERATIONCOUNT);
+		keySpec = KeySpecFactory.newPBEKeySpec(CompoundAlgorithm.PASSWORD, CompoundAlgorithm.SALT,
+			CompoundAlgorithm.ITERATIONCOUNT);
 		factory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm);
 		key = factory.generateSecret(keySpec);
 
@@ -159,7 +159,7 @@ public class CipherFactoryTest
 
 		algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
 		operationMode = Cipher.ENCRYPT_MODE;
-		cipher = CipherFactory.newCipher(CompoundAlgorithm.PRIVATE_KEY, algorithm,
+		cipher = CipherFactory.newCipher(CompoundAlgorithm.PASSWORD, algorithm,
 			CompoundAlgorithm.SALT, CompoundAlgorithm.ITERATIONCOUNT, operationMode);
 		assertNotNull(cipher);
 	}
