@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 9.1-SNAPSHOT
+Version 9.1
 -------------
 
 ADDED:
@@ -18,7 +18,7 @@ ADDED:
 
 CHANGED:
 
-- update gradle to new version 8.8
+- update gradle to new version 8.9
 - update of lombok dependency version to 1.18.34
 - update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 7.0.0.BETA1
 - update of dependency commons-codec dependency version to 1.17.0
