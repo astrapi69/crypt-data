@@ -37,39 +37,39 @@ import lombok.experimental.FieldDefaults;
  */
 @Deprecated
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ExtensionInfo
+public class ExtensionModel
 {
 	private ASN1ObjectIdentifier extensionId;
 	private boolean critical;
 	private ASN1OctetString value;
 
-	public ExtensionInfo(ASN1ObjectIdentifier extensionId, boolean critical, ASN1OctetString value)
+	public ExtensionModel(ASN1ObjectIdentifier extensionId, boolean critical, ASN1OctetString value)
 	{
 		this.extensionId = extensionId;
 		this.critical = critical;
 		this.value = value;
 	}
 
-	public ExtensionInfo()
+	public ExtensionModel()
 	{
 	}
 
-	protected ExtensionInfo(ExtensionInfoBuilder<?, ?> b)
+	protected ExtensionModel(ExtensionInfoBuilder<?, ?> b)
 	{
 		this.extensionId = b.extensionId;
 		this.critical = b.critical;
 		this.value = b.value;
 	}
 
-	public static Extension toExtension(ExtensionInfo extensionInfo)
+	public static Extension toExtension(ExtensionModel extensionModel)
 	{
-		return new Extension(extensionInfo.getExtensionId(), extensionInfo.isCritical(),
-			extensionInfo.getValue());
+		return new Extension(extensionModel.getExtensionId(), extensionModel.isCritical(),
+			extensionModel.getValue());
 	}
 
-	public static ExtensionInfo toExtensionInfo(Extension extension)
+	public static ExtensionModel toExtensionInfo(Extension extension)
 	{
-		return ExtensionInfo.builder().extensionId(extension.getExtnId())
+		return ExtensionModel.builder().extensionId(extension.getExtnId())
 			.critical(extension.isCritical()).value(extension.getExtnValue()).build();
 	}
 
@@ -112,9 +112,9 @@ public class ExtensionInfo
 	{
 		if (o == this)
 			return true;
-		if (!(o instanceof ExtensionInfo))
+		if (!(o instanceof ExtensionModel))
 			return false;
-		final ExtensionInfo other = (ExtensionInfo)o;
+		final ExtensionModel other = (ExtensionModel)o;
 		if (!other.canEqual((Object)this))
 			return false;
 		final Object this$extensionId = this.getExtensionId();
@@ -134,7 +134,7 @@ public class ExtensionInfo
 
 	protected boolean canEqual(final Object other)
 	{
-		return other instanceof ExtensionInfo;
+		return other instanceof ExtensionModel;
 	}
 
 	public int hashCode()
@@ -160,13 +160,13 @@ public class ExtensionInfo
 		return new ExtensionInfoBuilderImpl().$fillValuesFrom(this);
 	}
 
-	public static abstract class ExtensionInfoBuilder<C extends ExtensionInfo, B extends ExtensionInfoBuilder<C, B>>
+	public static abstract class ExtensionInfoBuilder<C extends ExtensionModel, B extends ExtensionInfoBuilder<C, B>>
 	{
 		private ASN1ObjectIdentifier extensionId;
 		private boolean critical;
 		private ASN1OctetString value;
 
-		private static void $fillValuesFromInstanceIntoBuilder(ExtensionInfo instance,
+		private static void $fillValuesFromInstanceIntoBuilder(ExtensionModel instance,
 			ExtensionInfoBuilder<?, ?> b)
 		{
 			b.extensionId(instance.extensionId);
@@ -211,7 +211,7 @@ public class ExtensionInfo
 
 	private static final class ExtensionInfoBuilderImpl
 		extends
-			ExtensionInfoBuilder<ExtensionInfo, ExtensionInfoBuilderImpl>
+			ExtensionInfoBuilder<ExtensionModel, ExtensionInfoBuilderImpl>
 	{
 		private ExtensionInfoBuilderImpl()
 		{
@@ -222,9 +222,9 @@ public class ExtensionInfo
 			return this;
 		}
 
-		public ExtensionInfo build()
+		public ExtensionModel build()
 		{
-			return new ExtensionInfo(this);
+			return new ExtensionModel(this);
 		}
 	}
 }

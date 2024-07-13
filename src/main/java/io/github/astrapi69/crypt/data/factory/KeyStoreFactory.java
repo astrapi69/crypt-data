@@ -82,6 +82,31 @@ public final class KeyStoreFactory
 	}
 
 	/**
+	 * Factory method for create a new {@link KeyStore} object from the given {@link KeyStoreInfo}
+	 * object loaded from an existing {@link KeyStore} object
+	 *
+	 * @param keyStoreInfo
+	 *            the {@link KeyStoreInfo} object
+	 * @return the new {@link KeyStore} object
+	 * @throws KeyStoreException
+	 *             is thrown if there is an error accessing the key store
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 * @throws CertificateException
+	 *             is thrown if there is an error with an certificate
+	 * @throws FileNotFoundException
+	 *             is thrown if the keystore file not found
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static KeyStore loadKeyStore(final KeyStoreInfo keyStoreInfo)
+		throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException
+	{
+		return loadKeyStore(FileInfo.toFile(keyStoreInfo.getFileInfo()), keyStoreInfo.getType(),
+			keyStoreInfo.getKeystorePassword());
+	}
+
+	/**
 	 * Factory method for create a new {@link KeyStore} object loaded from an existing
 	 * {@link KeyStore} object from the given file
 	 *

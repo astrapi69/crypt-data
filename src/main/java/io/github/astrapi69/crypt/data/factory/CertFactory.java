@@ -28,10 +28,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
@@ -59,7 +57,6 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.model.DistinguishedNameInfo;
 import io.github.astrapi69.crypt.data.model.ExtensionInfo;
-import io.github.astrapi69.crypt.data.model.KeyPairInfo;
 import io.github.astrapi69.crypt.data.model.Validity;
 import io.github.astrapi69.crypt.data.model.X509CertificateV1Info;
 import io.github.astrapi69.crypt.data.model.X509CertificateV3Info;
@@ -334,7 +331,6 @@ public final class CertFactory
 			.getCertificate(certBuilder.build(signer));
 	}
 
-
 	/**
 	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
 	 * X.509 from the given parameters that can be used as an end entity certificate.
@@ -395,24 +391,14 @@ public final class CertFactory
 	 *             is thrown if a security error occur on creation of {@link ContentSigner}
 	 * @throws CertificateException
 	 *             if the conversion is unable to be made
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
-	 *             available from the specified provider
-	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
 	 * @throws CertIOException
 	 *             if there is an issue with the new extension value
-	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cypher object fails
 	 */
-	public static X509Certificate newX509CertificateV3(X509CertificateV3Info certificateInfo)
-		throws OperatorCreationException, CertificateException, NoSuchAlgorithmException,
-		NoSuchProviderException, CertIOException, InvalidAlgorithmParameterException
+	public static X509Certificate newX509CertificateV3(KeyPair keyPair,
+		X509CertificateV3Info certificateInfo)
+		throws OperatorCreationException, CertificateException, CertIOException
 	{
-
 		X509CertificateV1Info v1Info = certificateInfo.getCertificateV1Info();
-		KeyPair keyPair = KeyPairInfo.toKeyPair(v1Info.getKeyPairInfo());
 
 		DistinguishedNameInfo issuer = v1Info.getIssuer();
 		DistinguishedNameInfo subject = v1Info.getSubject();
@@ -455,21 +441,11 @@ public final class CertFactory
 	 *             is thrown if a security error occur on creation of {@link ContentSigner}
 	 * @throws CertificateException
 	 *             if the conversion is unable to be made
-	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cypher object fails
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
-	 *             available from the specified provider
-	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
 	 */
-	public static X509Certificate newX509CertificateV1(X509CertificateV1Info certificateInfo)
-		throws OperatorCreationException, CertificateException, InvalidAlgorithmParameterException,
-		NoSuchAlgorithmException, NoSuchProviderException
+	public static X509Certificate newX509CertificateV1(KeyPair keyPair,
+		X509CertificateV1Info certificateInfo)
+		throws OperatorCreationException, CertificateException
 	{
-
-		KeyPair keyPair = KeyPairInfo.toKeyPair(certificateInfo.getKeyPairInfo());
 		X500Name issuer = new X500Name(certificateInfo.getIssuer().toRepresentableString());
 		BigInteger serial = certificateInfo.getSerial();
 

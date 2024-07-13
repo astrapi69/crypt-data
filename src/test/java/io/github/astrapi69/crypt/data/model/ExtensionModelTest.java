@@ -54,7 +54,7 @@ import org.junit.jupiter.params.provider.MethodSource;
  * <li>1.3.6.1.5.5.7.3.2: TLS Web Client Authentication.</li>
  * </ul>
  */
-public class ExtensionInfoTest
+public class ExtensionModelTest
 {
 
 	/**

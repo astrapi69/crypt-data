@@ -39,58 +39,58 @@ import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.junit.jupiter.api.Test;
 
-public class ExtensionInfoTest
+public class ExtensionModelTest
 {
 
 	@Test
 	@SuppressWarnings(value = { "deprecation" })
 	public void newExtensionTest() throws IOException, NoSuchAlgorithmException
 	{
-		ExtensionInfo actual;
-		ExtensionInfo expected;
+		ExtensionModel actual;
+		ExtensionModel expected;
 		DEROctetString value;
 		Extension extension;
 		// new test extension...
 		value = new DEROctetString(
 			new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyEncipherment).toASN1Primitive()
 				.getEncoded());
-		actual = ExtensionInfo.builder().extensionId(Extension.keyUsage).critical(true).value(value)
-			.build();
+		actual = ExtensionModel.builder().extensionId(Extension.keyUsage).critical(true)
+			.value(value).build();
 
-		extension = ExtensionInfo.toExtension(actual);
+		extension = ExtensionModel.toExtension(actual);
 
-		expected = ExtensionInfo.toExtensionInfo(extension);
+		expected = ExtensionModel.toExtensionInfo(extension);
 		assertEquals(actual, expected);
 		// new test extension...
 		BasicConstraints basicConstraints = new BasicConstraints(false);
 		value = new DEROctetString(basicConstraints.toASN1Primitive().getEncoded());
-		actual = ExtensionInfo.builder().extensionId(Extension.basicConstraints).critical(true)
+		actual = ExtensionModel.builder().extensionId(Extension.basicConstraints).critical(true)
 			.value(value).build();
 
-		extension = ExtensionInfo.toExtension(actual);
+		extension = ExtensionModel.toExtension(actual);
 
-		expected = ExtensionInfo.toExtensionInfo(extension);
+		expected = ExtensionModel.toExtensionInfo(extension);
 		assertEquals(actual, expected);
 		// new test extension...
 		value = new DEROctetString(
 			new ExtendedKeyUsage(KeyPurposeId.id_kp_serverAuth).toASN1Primitive().getEncoded());
-		actual = ExtensionInfo.builder().extensionId(Extension.extendedKeyUsage).critical(true)
+		actual = ExtensionModel.builder().extensionId(Extension.extendedKeyUsage).critical(true)
 			.value(value).build();
 
-		extension = ExtensionInfo.toExtension(actual);
+		extension = ExtensionModel.toExtension(actual);
 
-		expected = ExtensionInfo.toExtensionInfo(extension);
+		expected = ExtensionModel.toExtensionInfo(extension);
 		assertEquals(actual, expected);
 		// new test extension...
 		value = new DEROctetString(
 			new GeneralNames(new GeneralName(GeneralName.rfc822Name, "test@test.test"))
 				.toASN1Primitive().getEncoded());
-		actual = ExtensionInfo.builder().extensionId(Extension.subjectAlternativeName)
+		actual = ExtensionModel.builder().extensionId(Extension.subjectAlternativeName)
 			.critical(false).value(value).build();
 
-		extension = ExtensionInfo.toExtension(actual);
+		extension = ExtensionModel.toExtension(actual);
 
-		expected = ExtensionInfo.toExtensionInfo(extension);
+		expected = ExtensionModel.toExtensionInfo(extension);
 		assertEquals(actual, expected);
 		////// create or get certificate and public key for create extensions...
 		// JcaX509ExtensionUtils extensionUtils = new JcaX509ExtensionUtils();

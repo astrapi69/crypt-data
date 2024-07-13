@@ -107,8 +107,7 @@ public class KeyStoreFactoryTest
 			.extensionId("1.3.6.1.5.5.7.3.2").critical(false).value("foo bar").build());
 
 		X509CertificateV1Info x509CertificateV1Info = X509CertificateV1Info.builder()
-			.keyPairInfo(keyPairInfo).issuer(distinguishedNameInfo)
-			.serial(new BigInteger(160, new SecureRandom()))
+			.issuer(distinguishedNameInfo).serial(new BigInteger(160, new SecureRandom()))
 			.validity(Validity.builder().notBefore(ZonedDateTime.parse("2023-12-01T00:00:00Z"))
 				.notAfter(ZonedDateTime.parse("2025-01-01T00:00:00Z")).build())
 			.subject(distinguishedNameInfo).signatureAlgorithm("SHA256withRSA").build();
@@ -116,7 +115,7 @@ public class KeyStoreFactoryTest
 		X509CertificateV3Info x509CertificateV3Info = X509CertificateV3Info.builder()
 			.certificateV1Info(x509CertificateV1Info).extensions(extensionInfos).build();
 
-		certificate = CertFactory.newX509CertificateV3(x509CertificateV3Info);
+		certificate = CertFactory.newX509CertificateV3(keyPair, x509CertificateV3Info);
 	}
 
 
@@ -133,10 +132,6 @@ public class KeyStoreFactoryTest
 		KeyInfo privateKeyModel = KeyInfo.builder().keyType(KeyType.PRIVATE_KEY.getDisplayValue())
 			.encoded(keyPair.getPrivate().getEncoded())
 			.algorithm(keyPair.getPrivate().getAlgorithm()).build();
-
-		KeyInfo publicKeyModel = KeyInfo.builder().keyType(KeyType.PUBLIC_KEY.getDisplayValue())
-			.encoded(keyPair.getPublic().getEncoded()).algorithm(keyPair.getPublic().getAlgorithm())
-			.build();
 
 		KeyInfo certificateModel = KeyInfo.builder().keyType(KeyType.CERTIFICATE.getDisplayValue())
 			.encoded(certificate.getEncoded()).algorithm(certificate.getSigAlgName()).build();
@@ -195,7 +190,8 @@ public class KeyStoreFactoryTest
 	}
 
 	/**
-	 * Test method for {@link KeyStoreFactory#newKeyStore(String, String, File, boolean)}
+	 * Test method for {@link KeyStoreFactory#newKeyStore(File, String, String)} and
+	 * {@link KeyStoreFactory#loadKeyStore(File, String, String)}
 	 *
 	 * @throws NoSuchAlgorithmException
 	 *             if the algorithm used to check the integrity of the keystore cannot be found
@@ -259,6 +255,37 @@ public class KeyStoreFactoryTest
 
 		keystore = KeyStoreFactory.loadKeyStore(keystoreJksFile, KeystoreType.JKS.name(),
 			"keystore-pw");
+		assertNotNull(keystore);
+	}
+
+
+	/**
+	 * Test method for {@link KeyStoreFactory#loadKeyStore(File, String, String)}
+	 *
+	 * @throws KeyStoreException
+	 *             is thrown if there is an error accessing the key store
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 * @throws CertificateException
+	 *             is thrown if there is an error with an certificate
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testLoadKeyStoreWithKeyStoreInfo()
+		throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException
+	{
+		File jksDir;
+		File keystoreJksFile;
+		KeyStore keystore;
+		KeyStoreInfo keyStoreInfo;
+
+		jksDir = new File(PathFinder.getSrcTestResourcesDir(), "jks");
+		keystoreJksFile = new File(jksDir, "keystore.jks");
+		keyStoreInfo = KeyStoreInfo.builder().fileInfo(FileInfo.toFileInfo(keystoreJksFile))
+			.type(KeystoreType.JKS.name()).keystorePassword("keystore-pw".toCharArray()).build();
+
+		keystore = KeyStoreFactory.loadKeyStore(keyStoreInfo);
 		assertNotNull(keystore);
 	}
 

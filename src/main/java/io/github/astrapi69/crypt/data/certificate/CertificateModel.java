@@ -28,42 +28,44 @@ import java.math.BigInteger;
 import java.security.PublicKey;
 import java.util.Map;
 
-public class CertificateInfo
+import io.github.astrapi69.crypt.data.model.Validity;
+
+public class CertificateModel
 {
 	private String issuer;
 	private PublicKey publicKey;
 	private BigInteger serialNumber;
 	private String signatureAlgorithm;
 	private String subject;
-	private Valitidy valitidy;
+	private Validity validity;
 	private int version;
 	private Map<String, String> x509v3Extensions;
 
-	public CertificateInfo()
+	public CertificateModel()
 	{
 	}
 
-	protected CertificateInfo(CertificateInfoBuilder<?, ?> b)
+	protected CertificateModel(CertificateInfoBuilder<?, ?> b)
 	{
 		this.version = b.version;
 		this.serialNumber = b.serialNumber;
 		this.issuer = b.issuer;
 		this.subject = b.subject;
-		this.valitidy = b.valitidy;
+		this.validity = b.validity;
 		this.publicKey = b.publicKey;
 		this.signatureAlgorithm = b.signatureAlgorithm;
 		this.x509v3Extensions = b.x509v3Extensions;
 	}
 
-	public CertificateInfo(int version, BigInteger serialNumber, String issuer, String subject,
-		Valitidy valitidy, PublicKey publicKey, String signatureAlgorithm,
+	public CertificateModel(int version, BigInteger serialNumber, String issuer, String subject,
+		Validity validity, PublicKey publicKey, String signatureAlgorithm,
 		Map<String, String> x509v3Extensions)
 	{
 		this.version = version;
 		this.serialNumber = serialNumber;
 		this.issuer = issuer;
 		this.subject = subject;
-		this.valitidy = valitidy;
+		this.validity = validity;
 		this.publicKey = publicKey;
 		this.signatureAlgorithm = signatureAlgorithm;
 		this.x509v3Extensions = x509v3Extensions;
@@ -76,7 +78,7 @@ public class CertificateInfo
 
 	protected boolean canEqual(final Object other)
 	{
-		return other instanceof CertificateInfo;
+		return other instanceof CertificateModel;
 	}
 
 	@Override
@@ -84,9 +86,9 @@ public class CertificateInfo
 	{
 		if (o == this)
 			return true;
-		if (!(o instanceof CertificateInfo))
+		if (!(o instanceof CertificateModel))
 			return false;
-		final CertificateInfo other = (CertificateInfo)o;
+		final CertificateModel other = (CertificateModel)o;
 		if (!other.canEqual(this))
 			return false;
 		if (this.getVersion() != other.getVersion())
@@ -105,8 +107,8 @@ public class CertificateInfo
 		final Object other$subject = other.getSubject();
 		if (this$subject == null ? other$subject != null : !this$subject.equals(other$subject))
 			return false;
-		final Object this$valitidy = this.getValitidy();
-		final Object other$valitidy = other.getValitidy();
+		final Object this$valitidy = this.getValidity();
+		final Object other$valitidy = other.getValidity();
 		if (this$valitidy == null ? other$valitidy != null : !this$valitidy.equals(other$valitidy))
 			return false;
 		final Object this$publicKey = this.getPublicKey();
@@ -178,14 +180,14 @@ public class CertificateInfo
 		this.subject = subject;
 	}
 
-	public Valitidy getValitidy()
+	public Validity getValidity()
 	{
-		return this.valitidy;
+		return this.validity;
 	}
 
-	public void setValitidy(Valitidy valitidy)
+	public void setValidity(Validity validity)
 	{
-		this.valitidy = valitidy;
+		this.validity = validity;
 	}
 
 	public int getVersion()
@@ -220,7 +222,7 @@ public class CertificateInfo
 		result = result * PRIME + ($issuer == null ? 43 : $issuer.hashCode());
 		final Object $subject = this.getSubject();
 		result = result * PRIME + ($subject == null ? 43 : $subject.hashCode());
-		final Object $valitidy = this.getValitidy();
+		final Object $valitidy = this.getValidity();
 		result = result * PRIME + ($valitidy == null ? 43 : $valitidy.hashCode());
 		final Object $publicKey = this.getPublicKey();
 		result = result * PRIME + ($publicKey == null ? 43 : $publicKey.hashCode());
@@ -242,30 +244,30 @@ public class CertificateInfo
 	{
 		return "CertificateInfo(version=" + this.getVersion() + ", serialNumber="
 			+ this.getSerialNumber() + ", issuer=" + this.getIssuer() + ", subject="
-			+ this.getSubject() + ", valitidy=" + this.getValitidy() + ", publicKey="
+			+ this.getSubject() + ", valitidy=" + this.getValidity() + ", publicKey="
 			+ this.getPublicKey() + ", signatureAlgorithm=" + this.getSignatureAlgorithm()
 			+ ", x509v3Extensions=" + this.getX509v3Extensions() + ")";
 	}
 
-	public static abstract class CertificateInfoBuilder<C extends CertificateInfo, B extends CertificateInfo.CertificateInfoBuilder<C, B>>
+	public static abstract class CertificateInfoBuilder<C extends CertificateModel, B extends CertificateModel.CertificateInfoBuilder<C, B>>
 	{
 		private String issuer;
 		private PublicKey publicKey;
 		private BigInteger serialNumber;
 		private String signatureAlgorithm;
 		private String subject;
-		private Valitidy valitidy;
+		private Validity validity;
 		private int version;
 		private Map<String, String> x509v3Extensions;
 
-		private static void $fillValuesFromInstanceIntoBuilder(CertificateInfo instance,
-			CertificateInfo.CertificateInfoBuilder<?, ?> b)
+		private static void $fillValuesFromInstanceIntoBuilder(CertificateModel instance,
+			CertificateModel.CertificateInfoBuilder<?, ?> b)
 		{
 			b.version(instance.version);
 			b.serialNumber(instance.serialNumber);
 			b.issuer(instance.issuer);
 			b.subject(instance.subject);
-			b.valitidy(instance.valitidy);
+			b.validity(instance.validity);
 			b.publicKey(instance.publicKey);
 			b.signatureAlgorithm(instance.signatureAlgorithm);
 			b.x509v3Extensions(instance.x509v3Extensions);
@@ -316,14 +318,14 @@ public class CertificateInfo
 		{
 			return "CertificateInfo.CertificateInfoBuilder(version=" + this.version
 				+ ", serialNumber=" + this.serialNumber + ", issuer=" + this.issuer + ", subject="
-				+ this.subject + ", valitidy=" + this.valitidy + ", publicKey=" + this.publicKey
+				+ this.subject + ", valitidy=" + this.validity + ", publicKey=" + this.publicKey
 				+ ", signatureAlgorithm=" + this.signatureAlgorithm + ", x509v3Extensions="
 				+ this.x509v3Extensions + ")";
 		}
 
-		public B valitidy(Valitidy valitidy)
+		public B validity(Validity validity)
 		{
-			this.valitidy = valitidy;
+			this.validity = validity;
 			return self();
 		}
 
@@ -342,20 +344,20 @@ public class CertificateInfo
 
 	private static final class CertificateInfoBuilderImpl
 		extends
-			CertificateInfoBuilder<CertificateInfo, CertificateInfoBuilderImpl>
+			CertificateInfoBuilder<CertificateModel, CertificateInfoBuilderImpl>
 	{
 		private CertificateInfoBuilderImpl()
 		{
 		}
 
 		@Override
-		public CertificateInfo build()
+		public CertificateModel build()
 		{
-			return new CertificateInfo(this);
+			return new CertificateModel(this);
 		}
 
 		@Override
-		protected CertificateInfo.CertificateInfoBuilderImpl self()
+		protected CertificateModel.CertificateInfoBuilderImpl self()
 		{
 			return this;
 		}
