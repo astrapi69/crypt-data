@@ -6,7 +6,7 @@ Version 9.3-SNAPSHOT
 
 CHANGED:
 
-- update of dependency crypt-api  to the new minor version 9.1
+- update of dependency crypt-api  to the new minor version 9.2
 - update of dependency commons-codec to the new patch version 1.17.1
 
 Version 9.2

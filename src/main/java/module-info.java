@@ -20,7 +20,6 @@
  */
 module crypt.data
 {
-	requires crypt.api;
 	requires lombok;
 	requires silly.collection;
 	requires com.google.common;
@@ -32,6 +31,7 @@ module crypt.data
 	requires silly.strings;
 	requires file.worker;
 	requires java.xml.bind;
+	requires io.github.astrapisixtynine.crypt.api;
 	requires io.github.astrapisixtynine.throwable;
 	requires org.checkerframework.checker.qual;
 
