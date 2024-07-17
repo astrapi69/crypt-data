@@ -35,7 +35,7 @@ import javax.crypto.Cipher;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.crypt.api.algorithm.SunJCEAlgorithm;
-import io.github.astrapi69.crypt.api.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.random.object.RandomStringFactory;
 

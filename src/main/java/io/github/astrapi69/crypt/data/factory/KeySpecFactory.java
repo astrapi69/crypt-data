@@ -34,7 +34,7 @@ import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import io.github.astrapi69.crypt.api.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
 
 /**
  * The factory class {@link KeySpecFactory} holds methods for creating {@link KeySpec} objects.
