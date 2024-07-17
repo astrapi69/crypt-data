@@ -29,25 +29,48 @@ import io.github.astrapi69.crypt.api.blockchain.ITransaction;
 import io.github.astrapi69.crypt.data.hash.HashExtensions;
 
 /**
- * The class {@link Transaction}
+ * The class {@link Transaction} represents a transaction in a blockchain. It includes details such
+ * as the sender's hash, a digital signature, the transaction text, a timestamp, and a hash
+ * generated from these values.
  */
 public class Transaction implements ITransaction
 {
 
+	/**
+	 * The hash of the transaction, generated from the text, sender hash, signature, and timestamp.
+	 */
 	private byte[] hash;
 
+	/** The hash of the sender. */
 	private byte[] senderHash;
 
+	/** The digital signature of the transaction. */
 	private byte[] signature;
 
+	/** The text or message of the transaction. */
 	private String text;
 
+	/** The timestamp when the transaction was created. */
 	private long timestamp;
 
+	/**
+	 * Instantiates a new {@link Transaction} with no parameters.
+	 */
 	public Transaction()
 	{
 	}
 
+	/**
+	 * Instantiates a new {@link Transaction} with the specified text, sender hash, and signature.
+	 * The hash is automatically generated using the SHA-256 algorithm.
+	 *
+	 * @param text
+	 *            the text or message of the transaction
+	 * @param senderHash
+	 *            the hash of the sender
+	 * @param signature
+	 *            the digital signature of the transaction
+	 */
 	public Transaction(String text, byte[] senderHash, byte[] signature)
 	{
 		this.text = text;
@@ -58,11 +81,21 @@ public class Transaction implements ITransaction
 			HashAlgorithm.SHA256);
 	}
 
+	/**
+	 * Checks if the other object is an instance of {@link Transaction}.
+	 *
+	 * @param other
+	 *            the other object to check
+	 * @return true if the other object is an instance of {@link Transaction}, false otherwise
+	 */
 	protected boolean canEqual(final Object other)
 	{
 		return other instanceof Transaction;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -86,72 +119,108 @@ public class Transaction implements ITransaction
 		return this.getTimestamp() == other.getTimestamp();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public byte[] getHash()
 	{
 		return this.hash;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setHash(byte[] hash)
 	{
 		this.hash = hash;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public byte[] getSenderHash()
 	{
 		return this.senderHash;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setSenderHash(byte[] senderHash)
 	{
 		this.senderHash = senderHash;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public byte[] getSignableData()
 	{
 		return text.getBytes();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public byte[] getSignature()
 	{
 		return this.signature;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setSignature(byte[] signature)
 	{
 		this.signature = signature;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getText()
 	{
 		return this.text;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setText(String text)
 	{
 		this.text = text;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public long getTimestamp()
 	{
 		return this.timestamp;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setTimestamp(long timestamp)
 	{
 		this.timestamp = timestamp;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int hashCode()
 	{

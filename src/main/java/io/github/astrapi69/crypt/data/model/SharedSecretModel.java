@@ -47,7 +47,6 @@ import lombok.experimental.SuperBuilder;
  * <li>{@link SuperBuilder} generates a builder pattern for creating instances of this class.</li>
  * <li>{@link FieldDefaults} sets the default access level for fields to private.</li>
  * </ul>
- * </p>
  */
 @Data
 @NoArgsConstructor

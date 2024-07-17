@@ -39,12 +39,16 @@ public class CharacterObfuscationRules extends ObfuscationBiMapRules<Character, 
 	 * @param obfuscationRules
 	 *            the obfuscation rules
 	 */
-
 	public CharacterObfuscationRules(BiMap<Character, Character> obfuscationRules)
 	{
 		super(obfuscationRules);
 	}
 
+	/**
+	 * Rules builder character obfuscation rules builder.
+	 *
+	 * @return the character obfuscation rules builder
+	 */
 	public static CharacterObfuscationRulesBuilder rulesBuilder()
 	{
 		return new CharacterObfuscationRulesBuilder();
@@ -82,19 +86,37 @@ public class CharacterObfuscationRules extends ObfuscationBiMapRules<Character, 
 		return "CharacterObfuscationRules(super=" + super.toString() + ")";
 	}
 
+	/**
+	 * The type Character obfuscation rules builder.
+	 */
 	public static class CharacterObfuscationRulesBuilder
 	{
 		private BiMap<Character, Character> obfuscationRules;
 
+		/**
+		 * Instantiates a new Character obfuscation rules builder.
+		 */
 		CharacterObfuscationRulesBuilder()
 		{
 		}
 
+		/**
+		 * Build character obfuscation rules.
+		 *
+		 * @return the character obfuscation rules
+		 */
 		public CharacterObfuscationRules build()
 		{
 			return new CharacterObfuscationRules(obfuscationRules);
 		}
 
+		/**
+		 * Obfuscation rules character obfuscation rules . character obfuscation rules builder.
+		 *
+		 * @param obfuscationRules
+		 *            the obfuscation rules
+		 * @return the character obfuscation rules . character obfuscation rules builder
+		 */
 		public CharacterObfuscationRules.CharacterObfuscationRulesBuilder obfuscationRules(
 			BiMap<Character, Character> obfuscationRules)
 		{

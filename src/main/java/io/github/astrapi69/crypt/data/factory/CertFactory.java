@@ -383,6 +383,8 @@ public final class CertFactory
 	 * X.509 from the given {@link X509CertificateV3Info} that can be used as an end entity
 	 * certificate.
 	 *
+	 * @param keyPair
+	 *            the key pair
 	 * @param certificateInfo
 	 *            the certificate information
 	 * @return the {@link X509Certificate} object
@@ -433,6 +435,8 @@ public final class CertFactory
 	 * Factory method for creating a new {@link X509Certificate} object of the first version of
 	 * X.509 from the given {@link X509CertificateV1Info} object. SecurityProvider is Bouncy Castle.
 	 *
+	 * @param keyPair
+	 *            the key pair
 	 * @param certificateInfo
 	 *            the certificate information
 	 * @return the new {@link X509Certificate} object

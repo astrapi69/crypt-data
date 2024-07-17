@@ -31,17 +31,37 @@ import io.github.astrapi69.crypt.api.obfuscation.rule.Operation;
 
 /**
  * The class {@link CharacterObfuscationOperationRule} builds a complex rule for obfuscating a
- * single character.
+ * single character. It extends the {@link ObfuscationOperationRule} to provide specific rules for
+ * character obfuscation.
  */
 public class CharacterObfuscationOperationRule
 	extends
 		ObfuscationOperationRule<Character, Character>
 {
 
+	/**
+	 * Instantiates a new {@link CharacterObfuscationOperationRule} with no parameters.
+	 */
 	public CharacterObfuscationOperationRule()
 	{
 	}
 
+	/**
+	 * Instantiates a new {@link CharacterObfuscationOperationRule} with the specified parameters.
+	 *
+	 * @param character
+	 *            the character to be obfuscated
+	 * @param indexes
+	 *            the set of indexes to apply the obfuscation
+	 * @param inverted
+	 *            if true, inverts the obfuscation rule
+	 * @param operatedCharacter
+	 *            the optional character that results from the operation
+	 * @param operation
+	 *            the operation to be applied for obfuscation
+	 * @param replaceWith
+	 *            the character to replace with after the operation
+	 */
 	public CharacterObfuscationOperationRule(Character character, Set<Integer> indexes,
 		boolean inverted, Optional<Character> operatedCharacter, Operation operation,
 		Character replaceWith)
@@ -53,12 +73,23 @@ public class CharacterObfuscationOperationRule
 		}
 	}
 
+	/**
+	 * Checks if the other object is an instance of {@link CharacterObfuscationOperationRule}.
+	 *
+	 * @param other
+	 *            the other object to check
+	 * @return true if the other object is an instance of {@link CharacterObfuscationOperationRule},
+	 *         false otherwise
+	 */
 	@Override
 	protected boolean canEqual(final Object other)
 	{
 		return other instanceof CharacterObfuscationOperationRule;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -72,6 +103,9 @@ public class CharacterObfuscationOperationRule
 		return super.equals(o);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int hashCode()
 	{
@@ -79,6 +113,9 @@ public class CharacterObfuscationOperationRule
 		return result;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString()
 	{

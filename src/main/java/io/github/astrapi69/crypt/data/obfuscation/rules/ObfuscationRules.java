@@ -33,6 +33,11 @@ import io.github.astrapi69.crypt.data.obfuscation.rule.ObfuscationRule;
 /**
  * The class {@link ObfuscationRules} holds a list of obfuscation rules that will be processed with
  * an Obfusactor implementation.
+ *
+ * @param <C>
+ *            the type parameter
+ * @param <RW>
+ *            the type parameter
  */
 public class ObfuscationRules<C, RW>
 {
@@ -40,20 +45,45 @@ public class ObfuscationRules<C, RW>
 	/** The obfuscation rules. */
 	private List<ObfuscationRule<C, RW>> rules;
 
+	/**
+	 * Instantiates a new Obfuscation rules.
+	 */
 	public ObfuscationRules()
 	{
 	}
 
+	/**
+	 * Instantiates a new Obfuscation rules.
+	 *
+	 * @param rules
+	 *            the rules
+	 */
 	public ObfuscationRules(List<ObfuscationRule<C, RW>> rules)
 	{
 		this.rules = rules;
 	}
 
+	/**
+	 * Builder obfuscation rules builder.
+	 *
+	 * @param <C>
+	 *            the type parameter
+	 * @param <RW>
+	 *            the type parameter
+	 * @return the obfuscation rules builder
+	 */
 	public static <C, RW> ObfuscationRulesBuilder<C, RW> builder()
 	{
 		return new ObfuscationRulesBuilder<C, RW>();
 	}
 
+	/**
+	 * Can equal boolean.
+	 *
+	 * @param other
+	 *            the other
+	 * @return the boolean
+	 */
 	protected boolean canEqual(final Object other)
 	{
 		return other instanceof ObfuscationRules;
@@ -74,11 +104,22 @@ public class ObfuscationRules<C, RW>
 		return this$rules == null ? other$rules == null : this$rules.equals(other$rules);
 	}
 
+	/**
+	 * Gets rules.
+	 *
+	 * @return the rules
+	 */
 	public List<ObfuscationRule<C, RW>> getRules()
 	{
 		return this.rules;
 	}
 
+	/**
+	 * Sets rules.
+	 *
+	 * @param rules
+	 *            the rules
+	 */
 	public void setRules(List<ObfuscationRule<C, RW>> rules)
 	{
 		this.rules = rules;
@@ -94,6 +135,11 @@ public class ObfuscationRules<C, RW>
 		return result;
 	}
 
+	/**
+	 * To builder obfuscation rules builder.
+	 *
+	 * @return the obfuscation rules builder
+	 */
 	public ObfuscationRulesBuilder<C, RW> toBuilder()
 	{
 		return new ObfuscationRulesBuilder<C, RW>()
@@ -106,14 +152,30 @@ public class ObfuscationRules<C, RW>
 		return "ObfuscationRules(rules=" + this.getRules() + ")";
 	}
 
+	/**
+	 * The type Obfuscation rules builder.
+	 *
+	 * @param <C>
+	 *            the type parameter
+	 * @param <RW>
+	 *            the type parameter
+	 */
 	public static class ObfuscationRulesBuilder<C, RW>
 	{
 		private ArrayList<ObfuscationRule<C, RW>> rules;
 
+		/**
+		 * Instantiates a new Obfuscation rules builder.
+		 */
 		ObfuscationRulesBuilder()
 		{
 		}
 
+		/**
+		 * Build obfuscation rules.
+		 *
+		 * @return the obfuscation rules
+		 */
 		public ObfuscationRules<C, RW> build()
 		{
 			List<ObfuscationRule<C, RW>> rules;
@@ -133,6 +195,11 @@ public class ObfuscationRules<C, RW>
 			return new ObfuscationRules<C, RW>(rules);
 		}
 
+		/**
+		 * Clear rules obfuscation rules . obfuscation rules builder.
+		 *
+		 * @return the obfuscation rules . obfuscation rules builder
+		 */
 		public ObfuscationRules.ObfuscationRulesBuilder<C, RW> clearRules()
 		{
 			if (this.rules != null)
@@ -140,6 +207,13 @@ public class ObfuscationRules<C, RW>
 			return this;
 		}
 
+		/**
+		 * Rule obfuscation rules . obfuscation rules builder.
+		 *
+		 * @param rule
+		 *            the rule
+		 * @return the obfuscation rules . obfuscation rules builder
+		 */
 		public ObfuscationRules.ObfuscationRulesBuilder<C, RW> rule(ObfuscationRule<C, RW> rule)
 		{
 			if (this.rules == null)
@@ -148,6 +222,13 @@ public class ObfuscationRules<C, RW>
 			return this;
 		}
 
+		/**
+		 * Rules obfuscation rules . obfuscation rules builder.
+		 *
+		 * @param rules
+		 *            the rules
+		 * @return the obfuscation rules . obfuscation rules builder
+		 */
 		public ObfuscationRules.ObfuscationRulesBuilder<C, RW> rules(
 			Collection<? extends ObfuscationRule<C, RW>> rules)
 		{

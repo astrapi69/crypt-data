@@ -31,6 +31,11 @@ import com.google.common.collect.BiMap;
 /**
  * The class {@link ObfuscationBiMapRules} decorates a {@link BiMap} that defines rules for encrypt
  * and decrypt given strings.
+ *
+ * @param <K>
+ *            the type parameter
+ * @param <V>
+ *            the type parameter
  */
 public class ObfuscationBiMapRules<K, V>
 {
@@ -52,11 +57,27 @@ public class ObfuscationBiMapRules<K, V>
 		this.obfuscationRules = obfuscationRules;
 	}
 
+	/**
+	 * Builder obfuscation bi map rules builder.
+	 *
+	 * @param <K>
+	 *            the type parameter
+	 * @param <V>
+	 *            the type parameter
+	 * @return the obfuscation bi map rules builder
+	 */
 	public static <K, V> ObfuscationBiMapRulesBuilder<K, V> builder()
 	{
 		return new ObfuscationBiMapRulesBuilder<K, V>();
 	}
 
+	/**
+	 * Can equal boolean.
+	 *
+	 * @param other
+	 *            the other
+	 * @return the boolean
+	 */
 	protected boolean canEqual(final Object other)
 	{
 		return other instanceof ObfuscationBiMapRules;
@@ -79,6 +100,11 @@ public class ObfuscationBiMapRules<K, V>
 			: this$obfuscationRules.equals(other$obfuscationRules);
 	}
 
+	/**
+	 * Gets obfuscation rules.
+	 *
+	 * @return the obfuscation rules
+	 */
 	public BiMap<K, V> getObfuscationRules()
 	{
 		return this.obfuscationRules;
@@ -100,19 +126,42 @@ public class ObfuscationBiMapRules<K, V>
 		return "ObfuscationBiMapRules(obfuscationRules=" + this.getObfuscationRules() + ")";
 	}
 
+	/**
+	 * The type Obfuscation bi map rules builder.
+	 *
+	 * @param <K>
+	 *            the type parameter
+	 * @param <V>
+	 *            the type parameter
+	 */
 	public static class ObfuscationBiMapRulesBuilder<K, V>
 	{
 		private BiMap<K, V> obfuscationRules;
 
+		/**
+		 * Instantiates a new Obfuscation bi map rules builder.
+		 */
 		ObfuscationBiMapRulesBuilder()
 		{
 		}
 
+		/**
+		 * Build obfuscation bi map rules.
+		 *
+		 * @return the obfuscation bi map rules
+		 */
 		public ObfuscationBiMapRules<K, V> build()
 		{
 			return new ObfuscationBiMapRules<K, V>(obfuscationRules);
 		}
 
+		/**
+		 * Obfuscation rules obfuscation bi map rules . obfuscation bi map rules builder.
+		 *
+		 * @param obfuscationRules
+		 *            the obfuscation rules
+		 * @return the obfuscation bi map rules . obfuscation bi map rules builder
+		 */
 		public ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder<K, V> obfuscationRules(
 			BiMap<K, V> obfuscationRules)
 		{

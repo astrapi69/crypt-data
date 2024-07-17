@@ -27,6 +27,14 @@ package io.github.astrapi69.crypt.data.obfuscation.rule;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * The type Obfuscation rule.
+ *
+ * @param <C>
+ *            the type parameter
+ * @param <RW>
+ *            the type parameter
+ */
 public class ObfuscationRule<C, RW> implements Serializable
 {
 	/** The Constant serialVersionUID. */
@@ -36,10 +44,21 @@ public class ObfuscationRule<C, RW> implements Serializable
 	/** The character(s) that will be replaced with. */
 	private RW replaceWith;
 
+	/**
+	 * Instantiates a new Obfuscation rule.
+	 */
 	public ObfuscationRule()
 	{
 	}
 
+	/**
+	 * Instantiates a new Obfuscation rule.
+	 *
+	 * @param character
+	 *            the character
+	 * @param replaceWith
+	 *            the replace with
+	 */
 	public ObfuscationRule(C character, RW replaceWith)
 	{
 		Objects.requireNonNull(character);
@@ -48,11 +67,27 @@ public class ObfuscationRule<C, RW> implements Serializable
 		this.replaceWith = replaceWith;
 	}
 
+	/**
+	 * Builder obfuscation rule builder.
+	 *
+	 * @param <C>
+	 *            the type parameter
+	 * @param <RW>
+	 *            the type parameter
+	 * @return the obfuscation rule builder
+	 */
 	public static <C, RW> ObfuscationRuleBuilder<C, RW> builder()
 	{
 		return new ObfuscationRuleBuilder<C, RW>();
 	}
 
+	/**
+	 * Can equal boolean.
+	 *
+	 * @param other
+	 *            the other
+	 * @return the boolean
+	 */
 	protected boolean canEqual(final Object other)
 	{
 		return other instanceof ObfuscationRule;
@@ -81,22 +116,44 @@ public class ObfuscationRule<C, RW> implements Serializable
 			: this$replaceWith.equals(other$replaceWith);
 	}
 
+	/**
+	 * Gets character.
+	 *
+	 * @return the character
+	 */
 	public C getCharacter()
 	{
 		return this.character;
 	}
 
+	/**
+	 * Sets character.
+	 *
+	 * @param character
+	 *            the character
+	 */
 	public void setCharacter(C character)
 	{
 		Objects.requireNonNull(character);
 		this.character = character;
 	}
 
+	/**
+	 * Gets replace with.
+	 *
+	 * @return the replace with
+	 */
 	public RW getReplaceWith()
 	{
 		return this.replaceWith;
 	}
 
+	/**
+	 * Sets replace with.
+	 *
+	 * @param replaceWith
+	 *            the replace with
+	 */
 	public void setReplaceWith(RW replaceWith)
 	{
 		Objects.requireNonNull(replaceWith);
@@ -115,6 +172,11 @@ public class ObfuscationRule<C, RW> implements Serializable
 		return result;
 	}
 
+	/**
+	 * To builder obfuscation rule builder.
+	 *
+	 * @return the obfuscation rule builder
+	 */
 	public ObfuscationRuleBuilder<C, RW> toBuilder()
 	{
 		return new ObfuscationRuleBuilder<C, RW>().character(this.character)
@@ -128,20 +190,43 @@ public class ObfuscationRule<C, RW> implements Serializable
 			+ this.getReplaceWith() + ")";
 	}
 
+	/**
+	 * The type Obfuscation rule builder.
+	 *
+	 * @param <C>
+	 *            the type parameter
+	 * @param <RW>
+	 *            the type parameter
+	 */
 	public static class ObfuscationRuleBuilder<C, RW>
 	{
 		private C character;
 		private RW replaceWith;
 
+		/**
+		 * Instantiates a new Obfuscation rule builder.
+		 */
 		ObfuscationRuleBuilder()
 		{
 		}
 
+		/**
+		 * Build obfuscation rule.
+		 *
+		 * @return the obfuscation rule
+		 */
 		public ObfuscationRule<C, RW> build()
 		{
 			return new ObfuscationRule<C, RW>(character, replaceWith);
 		}
 
+		/**
+		 * Character obfuscation rule . obfuscation rule builder.
+		 *
+		 * @param character
+		 *            the character
+		 * @return the obfuscation rule . obfuscation rule builder
+		 */
 		public ObfuscationRule.ObfuscationRuleBuilder<C, RW> character(C character)
 		{
 			Objects.requireNonNull(character);
@@ -149,6 +234,13 @@ public class ObfuscationRule<C, RW> implements Serializable
 			return this;
 		}
 
+		/**
+		 * Replace with obfuscation rule . obfuscation rule builder.
+		 *
+		 * @param replaceWith
+		 *            the replace with
+		 * @return the obfuscation rule . obfuscation rule builder
+		 */
 		public ObfuscationRule.ObfuscationRuleBuilder<C, RW> replaceWith(RW replaceWith)
 		{
 			Objects.requireNonNull(replaceWith);

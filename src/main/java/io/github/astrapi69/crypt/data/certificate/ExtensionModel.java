@@ -32,6 +32,8 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
 /**
+ * The type Extension model.
+ *
  * @deprecated use instead the class {@link io.github.astrapi69.crypt.data.model.ExtensionInfo}.
  *             Note will be removed in next minor version
  */
@@ -43,6 +45,16 @@ public class ExtensionModel
 	private boolean critical;
 	private ASN1OctetString value;
 
+	/**
+	 * Instantiates a new Extension model.
+	 *
+	 * @param extensionId
+	 *            the extension id
+	 * @param critical
+	 *            the critical
+	 * @param value
+	 *            the value
+	 */
 	public ExtensionModel(ASN1ObjectIdentifier extensionId, boolean critical, ASN1OctetString value)
 	{
 		this.extensionId = extensionId;
@@ -50,10 +62,19 @@ public class ExtensionModel
 		this.value = value;
 	}
 
+	/**
+	 * Instantiates a new Extension model.
+	 */
 	public ExtensionModel()
 	{
 	}
 
+	/**
+	 * Instantiates a new Extension model.
+	 *
+	 * @param b
+	 *            the b
+	 */
 	protected ExtensionModel(ExtensionInfoBuilder<?, ?> b)
 	{
 		this.extensionId = b.extensionId;
@@ -61,48 +82,100 @@ public class ExtensionModel
 		this.value = b.value;
 	}
 
+	/**
+	 * To extension extension.
+	 *
+	 * @param extensionModel
+	 *            the extension model
+	 * @return the extension
+	 */
 	public static Extension toExtension(ExtensionModel extensionModel)
 	{
 		return new Extension(extensionModel.getExtensionId(), extensionModel.isCritical(),
 			extensionModel.getValue());
 	}
 
+	/**
+	 * To extension info extension model.
+	 *
+	 * @param extension
+	 *            the extension
+	 * @return the extension model
+	 */
 	public static ExtensionModel toExtensionInfo(Extension extension)
 	{
 		return ExtensionModel.builder().extensionId(extension.getExtnId())
 			.critical(extension.isCritical()).value(extension.getExtnValue()).build();
 	}
 
+	/**
+	 * Builder extension info builder.
+	 *
+	 * @return the extension info builder
+	 */
 	public static ExtensionInfoBuilder<?, ?> builder()
 	{
 		return new ExtensionInfoBuilderImpl();
 	}
 
+	/**
+	 * Gets extension id.
+	 *
+	 * @return the extension id
+	 */
 	public ASN1ObjectIdentifier getExtensionId()
 	{
 		return this.extensionId;
 	}
 
+	/**
+	 * Sets extension id.
+	 *
+	 * @param extensionId
+	 *            the extension id
+	 */
 	public void setExtensionId(ASN1ObjectIdentifier extensionId)
 	{
 		this.extensionId = extensionId;
 	}
 
+	/**
+	 * Is critical boolean.
+	 *
+	 * @return the boolean
+	 */
 	public boolean isCritical()
 	{
 		return this.critical;
 	}
 
+	/**
+	 * Sets critical.
+	 *
+	 * @param critical
+	 *            the critical
+	 */
 	public void setCritical(boolean critical)
 	{
 		this.critical = critical;
 	}
 
+	/**
+	 * Gets value.
+	 *
+	 * @return the value
+	 */
 	public ASN1OctetString getValue()
 	{
 		return this.value;
 	}
 
+	/**
+	 * Sets value.
+	 *
+	 * @param value
+	 *            the value
+	 */
 	public void setValue(ASN1OctetString value)
 	{
 		this.value = value;
@@ -132,6 +205,13 @@ public class ExtensionModel
 		return true;
 	}
 
+	/**
+	 * Can equal boolean.
+	 *
+	 * @param other
+	 *            the other
+	 * @return the boolean
+	 */
 	protected boolean canEqual(final Object other)
 	{
 		return other instanceof ExtensionModel;
@@ -155,11 +235,24 @@ public class ExtensionModel
 			+ this.isCritical() + ", value=" + this.getValue() + ")";
 	}
 
+	/**
+	 * To builder extension info builder.
+	 *
+	 * @return the extension info builder
+	 */
 	public ExtensionInfoBuilder<?, ?> toBuilder()
 	{
 		return new ExtensionInfoBuilderImpl().$fillValuesFrom(this);
 	}
 
+	/**
+	 * The type Extension info builder.
+	 *
+	 * @param <C>
+	 *            the type parameter
+	 * @param <B>
+	 *            the type parameter
+	 */
 	public static abstract class ExtensionInfoBuilder<C extends ExtensionModel, B extends ExtensionInfoBuilder<C, B>>
 	{
 		private ASN1ObjectIdentifier extensionId;
@@ -174,32 +267,70 @@ public class ExtensionModel
 			b.value(instance.value);
 		}
 
+		/**
+		 * Extension id b.
+		 *
+		 * @param extensionId
+		 *            the extension id
+		 * @return the b
+		 */
 		public B extensionId(ASN1ObjectIdentifier extensionId)
 		{
 			this.extensionId = extensionId;
 			return self();
 		}
 
+		/**
+		 * Critical b.
+		 *
+		 * @param critical
+		 *            the critical
+		 * @return the b
+		 */
 		public B critical(boolean critical)
 		{
 			this.critical = critical;
 			return self();
 		}
 
+		/**
+		 * Value b.
+		 *
+		 * @param value
+		 *            the value
+		 * @return the b
+		 */
 		public B value(ASN1OctetString value)
 		{
 			this.value = value;
 			return self();
 		}
 
+		/**
+		 * Fill values from b.
+		 *
+		 * @param instance
+		 *            the instance
+		 * @return the b
+		 */
 		protected B $fillValuesFrom(C instance)
 		{
 			ExtensionInfoBuilder.$fillValuesFromInstanceIntoBuilder(instance, this);
 			return self();
 		}
 
+		/**
+		 * Self b.
+		 *
+		 * @return the b
+		 */
 		protected abstract B self();
 
+		/**
+		 * Build c.
+		 *
+		 * @return the c
+		 */
 		public abstract C build();
 
 		public String toString()
