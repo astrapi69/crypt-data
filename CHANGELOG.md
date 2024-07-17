@@ -6,6 +6,7 @@ Version 9.3
 
 CHANGED:
 
+- rename of module from crypt.data to io.github.astrapisixtynine.crypt.data
 - update of dependency crypt-api  to the new minor version 9.2
 - update of dependency commons-codec to the new patch version 1.17.1
 
