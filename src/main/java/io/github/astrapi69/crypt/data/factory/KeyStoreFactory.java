@@ -276,6 +276,7 @@ public final class KeyStoreFactory
 	 *            the alias under which the certificate and key will be stored
 	 * @param keyPassword
 	 *            the password for protecting the key
+	 * @return the new {@link KeyStore} object
 	 * @throws CertificateException
 	 *             if an error occurs while handling the certificate
 	 * @throws KeyStoreException
@@ -311,6 +312,7 @@ public final class KeyStoreFactory
 	 *            the alias under which the certificate and key will be stored
 	 * @param keyPassword
 	 *            the password for protecting the key
+	 * @return the new {@link KeyStore} object
 	 * @throws CertificateException
 	 *             if an error occurs while handling the certificate
 	 * @throws KeyStoreException

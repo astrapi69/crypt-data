@@ -51,8 +51,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
-import io.github.astrapi69.crypt.api.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypt.data.factory.AlgorithmParameterSpecFactory;
 import io.github.astrapi69.crypt.data.factory.SecretKeyFactoryExtensions;
 

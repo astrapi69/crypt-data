@@ -34,29 +34,56 @@ import io.github.astrapi69.crypt.api.blockchain.ITransaction;
 import io.github.astrapi69.crypt.data.hash.HashExtensions;
 
 /**
- * The class {@link Block}
+ * The class {@link Block} represents a block in a blockchain. It contains the current block's hash,
+ * the previous block's hash, the Merkle root of the transactions, a timestamp, a list of
+ * transactions, a data field, and the number of attempts (tries) to find a valid hash.
  */
 public class Block implements IBlock
 {
 
+	/**
+	 * The hash of the block, generated from the previous block hash, Merkle root, tries, and
+	 * timestamp.
+	 */
 	private byte[] hash;
 
+	/** The Merkle root of the block's transactions. */
 	private byte[] merkleRoot;
 
+	/** The hash of the previous block in the blockchain. */
 	private byte[] previousBlockHash;
 
+	/** The timestamp when the block was created. */
 	private long timestamp;
 
+	/** The list of transactions included in the block. */
 	private List<ITransaction> transactions;
 
+	/** The number of attempts to find a valid hash. */
 	private long tries;
 
+	/** The data field for additional information in the block. */
 	private String data;
 
+	/**
+	 * Instantiates a new {@link Block} with no parameters.
+	 */
 	public Block()
 	{
 	}
 
+	/**
+	 * Instantiates a new {@link Block} with the specified previous block hash, list of
+	 * transactions, and tries. The Merkle root and hash are automatically generated using the
+	 * SHA-256 algorithm.
+	 *
+	 * @param previousBlockHash
+	 *            the hash of the previous block
+	 * @param transactions
+	 *            the list of transactions included in the block
+	 * @param tries
+	 *            the number of attempts to find a valid hash
+	 */
 	public Block(byte[] previousBlockHash, List<ITransaction> transactions, long tries)
 	{
 		this.previousBlockHash = previousBlockHash;
@@ -71,12 +98,21 @@ public class Block implements IBlock
 			HashAlgorithm.SHA256);
 	}
 
+	/**
+	 * Checks if the other object is an instance of {@link Block}.
+	 *
+	 * @param other
+	 *            the other object to check
+	 * @return true if the other object is an instance of {@link Block}, false otherwise
+	 */
 	protected boolean canEqual(final Object other)
 	{
 		return other instanceof Block;
 	}
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -104,18 +140,27 @@ public class Block implements IBlock
 		return this.getTries() == other.getTries();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public byte[] getHash()
 	{
 		return this.hash;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setHash(byte[] hash)
 	{
 		this.hash = hash;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int getLeadingZerosCount()
 	{
@@ -129,78 +174,117 @@ public class Block implements IBlock
 		return getHash().length;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public byte[] getMerkleRoot()
 	{
 		return this.merkleRoot;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setMerkleRoot(byte[] merkleRoot)
 	{
 		this.merkleRoot = merkleRoot;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public byte[] getPreviousBlockHash()
 	{
 		return this.previousBlockHash;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setPreviousBlockHash(byte[] previousBlockHash)
 	{
 		this.previousBlockHash = previousBlockHash;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public long getTimestamp()
 	{
 		return this.timestamp;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setTimestamp(long timestamp)
 	{
 		this.timestamp = timestamp;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<ITransaction> getTransactions()
 	{
 		return this.transactions;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setTransactions(List<ITransaction> transactions)
 	{
 		this.transactions = transactions;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public long getTries()
 	{
 		return this.tries;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setTries(long tries)
 	{
 		this.tries = tries;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getData()
 	{
 		return this.data;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setData(String data)
 	{
 		this.data = data;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int hashCode()
 	{

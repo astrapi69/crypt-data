@@ -35,13 +35,18 @@ import io.github.astrapi69.crypt.api.obfuscation.rule.Operation;
 /**
  * The class {@link ObfuscationOperationRule} builds a complex rule for obfuscating a single
  * character.
+ *
+ * @param <C>
+ *            the type of character to be obfuscated
+ * @param <RW>
+ *            the type of character(s) that will replace the original character
  */
 public class ObfuscationOperationRule<C, RW> implements Serializable
 {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
-	/** The character. */
+	/** The character to be obfuscated. */
 	private C character;
 	/** The index where this rule will execute. */
 	private Set<Integer> indexes = SetFactory.newHashSet();
@@ -54,10 +59,29 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 	/** The character(s) that will be replaced with. */
 	private RW replaceWith;
 
+	/**
+	 * Instantiates a new {@link ObfuscationOperationRule} with no parameters.
+	 */
 	public ObfuscationOperationRule()
 	{
 	}
 
+	/**
+	 * Instantiates a new {@link ObfuscationOperationRule} with the specified parameters.
+	 *
+	 * @param character
+	 *            the character to be obfuscated
+	 * @param indexes
+	 *            the set of indexes to apply the obfuscation
+	 * @param inverted
+	 *            if true, inverts the obfuscation rule
+	 * @param operatedCharacter
+	 *            the optional character that results from the operation
+	 * @param operation
+	 *            the operation to be applied for obfuscation
+	 * @param replaceWith
+	 *            the character to replace with after the operation
+	 */
 	public ObfuscationOperationRule(C character, Set<Integer> indexes, boolean inverted,
 		Optional<C> operatedCharacter, Operation operation, RW replaceWith)
 	{
@@ -71,16 +95,36 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 		this.replaceWith = replaceWith;
 	}
 
+	/**
+	 * Creates a new builder for {@link ObfuscationOperationRule}.
+	 *
+	 * @param <C>
+	 *            the type of character to be obfuscated
+	 * @param <RW>
+	 *            the type of character(s) that will replace the original character
+	 * @return a new builder for {@link ObfuscationOperationRule}
+	 */
 	public static <C, RW> ObfuscationOperationRuleBuilder<C, RW> builder()
 	{
 		return new ObfuscationOperationRuleBuilder<C, RW>();
 	}
 
+	/**
+	 * Checks if the other object is an instance of {@link ObfuscationOperationRule}.
+	 *
+	 * @param other
+	 *            the other object to check
+	 * @return true if the other object is an instance of {@link ObfuscationOperationRule}, false
+	 *         otherwise
+	 */
 	protected boolean canEqual(final Object other)
 	{
 		return other instanceof ObfuscationOperationRule;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -122,56 +166,114 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 			: this$replaceWith.equals(other$replaceWith);
 	}
 
+	/**
+	 * Gets the character to be obfuscated.
+	 *
+	 * @return the character to be obfuscated
+	 */
 	public C getCharacter()
 	{
 		return this.character;
 	}
 
+	/**
+	 * Sets the character to be obfuscated.
+	 *
+	 * @param character
+	 *            the new character to be obfuscated
+	 */
 	public void setCharacter(C character)
 	{
 		this.character = character;
 	}
 
+	/**
+	 * Gets the indexes where this rule will execute.
+	 *
+	 * @return the indexes where this rule will execute
+	 */
 	public Set<Integer> getIndexes()
 	{
 		return this.indexes;
 	}
 
+	/**
+	 * Sets the indexes where this rule will execute.
+	 *
+	 * @param indexes
+	 *            the new indexes where this rule will execute
+	 */
 	public void setIndexes(Set<Integer> indexes)
 	{
 		this.indexes = indexes;
 	}
 
+	/**
+	 * Gets the optional character that results from the operation.
+	 *
+	 * @return the optional character that results from the operation
+	 */
 	public Optional<C> getOperatedCharacter()
 	{
 		return this.operatedCharacter;
 	}
 
+	/**
+	 * Sets the optional character that results from the operation.
+	 *
+	 * @param operatedCharacter
+	 *            the new optional character that results from the operation
+	 */
 	public void setOperatedCharacter(Optional<C> operatedCharacter)
 	{
 		this.operatedCharacter = operatedCharacter;
 	}
 
+	/**
+	 * Gets the operation to be applied for obfuscation.
+	 *
+	 * @return the operation to be applied for obfuscation
+	 */
 	public Operation getOperation()
 	{
 		return this.operation;
 	}
 
+	/**
+	 * Sets the operation to be applied for obfuscation.
+	 *
+	 * @param operation
+	 *            the new operation to be applied for obfuscation
+	 */
 	public void setOperation(Operation operation)
 	{
 		this.operation = operation;
 	}
 
+	/**
+	 * Gets the character(s) that will be replaced with.
+	 *
+	 * @return the character(s) that will be replaced with
+	 */
 	public RW getReplaceWith()
 	{
 		return this.replaceWith;
 	}
 
+	/**
+	 * Sets the character(s) that will be replaced with.
+	 *
+	 * @param replaceWith
+	 *            the new character(s) that will be replaced with
+	 */
 	public void setReplaceWith(RW replaceWith)
 	{
 		this.replaceWith = replaceWith;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int hashCode()
 	{
@@ -191,16 +293,32 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 		return result;
 	}
 
+	/**
+	 * Checks if the character is inverted with replaceWith.
+	 *
+	 * @return true if the character is inverted with replaceWith, false otherwise
+	 */
 	public boolean isInverted()
 	{
 		return this.inverted;
 	}
 
+	/**
+	 * Sets if the character is inverted with replaceWith.
+	 *
+	 * @param inverted
+	 *            the new inverted status
+	 */
 	public void setInverted(boolean inverted)
 	{
 		this.inverted = inverted;
 	}
 
+	/**
+	 * Creates a builder from the current {@link ObfuscationOperationRule}.
+	 *
+	 * @return a builder with the current {@link ObfuscationOperationRule}'s values
+	 */
 	public ObfuscationOperationRuleBuilder<C, RW> toBuilder()
 	{
 		return new ObfuscationOperationRuleBuilder<C, RW>().character(this.character)
@@ -208,6 +326,9 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 			.operation(this.operation).replaceWith(this.replaceWith);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String toString()
 	{
@@ -217,6 +338,14 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 			+ this.getReplaceWith() + ")";
 	}
 
+	/**
+	 * The builder class for {@link ObfuscationOperationRule}.
+	 *
+	 * @param <C>
+	 *            the type of character to be obfuscated
+	 * @param <RW>
+	 *            the type of character(s) that will replace the original character
+	 */
 	public static class ObfuscationOperationRuleBuilder<C, RW>
 	{
 		private C character;
@@ -226,16 +355,31 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 		private Operation operation;
 		private RW replaceWith;
 
+		/**
+		 * Instantiates a new {@link ObfuscationOperationRuleBuilder} with no parameters.
+		 */
 		ObfuscationOperationRuleBuilder()
 		{
 		}
 
+		/**
+		 * Builds the {@link ObfuscationOperationRule}.
+		 *
+		 * @return the built {@link ObfuscationOperationRule}
+		 */
 		public ObfuscationOperationRule<C, RW> build()
 		{
 			return new ObfuscationOperationRule<C, RW>(character, indexes, inverted,
 				operatedCharacter, operation, replaceWith);
 		}
 
+		/**
+		 * Sets the character to be obfuscated.
+		 *
+		 * @param character
+		 *            the new character to be obfuscated
+		 * @return the builder instance
+		 */
 		public ObfuscationOperationRule.ObfuscationOperationRuleBuilder<C, RW> character(
 			C character)
 		{
@@ -244,6 +388,13 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 			return this;
 		}
 
+		/**
+		 * Sets the indexes where this rule will execute.
+		 *
+		 * @param indexes
+		 *            the new indexes where this rule will execute
+		 * @return the builder instance
+		 */
 		public ObfuscationOperationRule.ObfuscationOperationRuleBuilder<C, RW> indexes(
 			Set<Integer> indexes)
 		{
@@ -251,6 +402,13 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 			return this;
 		}
 
+		/**
+		 * Sets if the character is inverted with replaceWith.
+		 *
+		 * @param inverted
+		 *            the new inverted status
+		 * @return the builder instance
+		 */
 		public ObfuscationOperationRule.ObfuscationOperationRuleBuilder<C, RW> inverted(
 			boolean inverted)
 		{
@@ -258,6 +416,13 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 			return this;
 		}
 
+		/**
+		 * Sets the optional character that results from the operation.
+		 *
+		 * @param operatedCharacter
+		 *            the new optional character that results from the operation
+		 * @return the builder instance
+		 */
 		public ObfuscationOperationRule.ObfuscationOperationRuleBuilder<C, RW> operatedCharacter(
 			Optional<C> operatedCharacter)
 		{
@@ -265,6 +430,13 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 			return this;
 		}
 
+		/**
+		 * Sets the operation to be applied for obfuscation.
+		 *
+		 * @param operation
+		 *            the new operation to be applied for obfuscation
+		 * @return the builder instance
+		 */
 		public ObfuscationOperationRule.ObfuscationOperationRuleBuilder<C, RW> operation(
 			Operation operation)
 		{
@@ -272,6 +444,13 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 			return this;
 		}
 
+		/**
+		 * Sets the character(s) that will be replaced with.
+		 *
+		 * @param replaceWith
+		 *            the new character(s) that will be replaced with
+		 * @return the builder instance
+		 */
 		public ObfuscationOperationRule.ObfuscationOperationRuleBuilder<C, RW> replaceWith(
 			RW replaceWith)
 		{
@@ -280,6 +459,9 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 			return this;
 		}
 
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public String toString()
 		{

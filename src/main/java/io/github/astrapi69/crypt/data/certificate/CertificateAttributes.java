@@ -25,6 +25,8 @@
 package io.github.astrapi69.crypt.data.certificate;
 
 /**
+ * The type Certificate attributes.
+ *
  * @deprecated use instead the class
  *             {@link io.github.astrapi69.crypt.data.model.DistinguishedNameInfo}. Note will be
  *             removed in next minor version
@@ -39,10 +41,19 @@ public class CertificateAttributes
 	private String organisationUnit;
 	private String state;
 
+	/**
+	 * Instantiates a new Certificate attributes.
+	 */
 	public CertificateAttributes()
 	{
 	}
 
+	/**
+	 * Instantiates a new Certificate attributes.
+	 *
+	 * @param b
+	 *            the b
+	 */
 	protected CertificateAttributes(CertificateAttributesBuilder<?, ?> b)
 	{
 		this.commonName = b.commonName;
@@ -53,6 +64,22 @@ public class CertificateAttributes
 		this.location = b.location;
 	}
 
+	/**
+	 * Instantiates a new Certificate attributes.
+	 *
+	 * @param commonName
+	 *            the common name
+	 * @param organisation
+	 *            the organisation
+	 * @param organisationUnit
+	 *            the organisation unit
+	 * @param countryCode
+	 *            the country code
+	 * @param state
+	 *            the state
+	 * @param location
+	 *            the location
+	 */
 	public CertificateAttributes(String commonName, String organisation, String organisationUnit,
 		String countryCode, String state, String location)
 	{
@@ -64,11 +91,23 @@ public class CertificateAttributes
 		this.location = location;
 	}
 
+	/**
+	 * Builder certificate attributes builder.
+	 *
+	 * @return the certificate attributes builder
+	 */
 	public static CertificateAttributesBuilder<?, ?> builder()
 	{
 		return new CertificateAttributesBuilderImpl();
 	}
 
+	/**
+	 * Can equal boolean.
+	 *
+	 * @param other
+	 *            the other
+	 * @return the boolean
+	 */
 	protected boolean canEqual(final Object other)
 	{
 		return other instanceof CertificateAttributes;
@@ -119,61 +158,127 @@ public class CertificateAttributes
 			: this$location.equals(other$location);
 	}
 
+	/**
+	 * Gets common name.
+	 *
+	 * @return the common name
+	 */
 	public String getCommonName()
 	{
 		return this.commonName;
 	}
 
+	/**
+	 * Sets common name.
+	 *
+	 * @param commonName
+	 *            the common name
+	 */
 	public void setCommonName(String commonName)
 	{
 		this.commonName = commonName;
 	}
 
+	/**
+	 * Gets country code.
+	 *
+	 * @return the country code
+	 */
 	public String getCountryCode()
 	{
 		return this.countryCode;
 	}
 
+	/**
+	 * Sets country code.
+	 *
+	 * @param countryCode
+	 *            the country code
+	 */
 	public void setCountryCode(String countryCode)
 	{
 		this.countryCode = countryCode;
 	}
 
+	/**
+	 * Gets location.
+	 *
+	 * @return the location
+	 */
 	public String getLocation()
 	{
 		return this.location;
 	}
 
+	/**
+	 * Sets location.
+	 *
+	 * @param location
+	 *            the location
+	 */
 	public void setLocation(String location)
 	{
 		this.location = location;
 	}
 
+	/**
+	 * Gets organisation.
+	 *
+	 * @return the organisation
+	 */
 	public String getOrganisation()
 	{
 		return this.organisation;
 	}
 
+	/**
+	 * Sets organisation.
+	 *
+	 * @param organisation
+	 *            the organisation
+	 */
 	public void setOrganisation(String organisation)
 	{
 		this.organisation = organisation;
 	}
 
+	/**
+	 * Gets organisation unit.
+	 *
+	 * @return the organisation unit
+	 */
 	public String getOrganisationUnit()
 	{
 		return this.organisationUnit;
 	}
 
+	/**
+	 * Sets organisation unit.
+	 *
+	 * @param organisationUnit
+	 *            the organisation unit
+	 */
 	public void setOrganisationUnit(String organisationUnit)
 	{
 		this.organisationUnit = organisationUnit;
 	}
 
+	/**
+	 * Gets state.
+	 *
+	 * @return the state
+	 */
 	public String getState()
 	{
 		return this.state;
 	}
 
+	/**
+	 * Sets state.
+	 *
+	 * @param state
+	 *            the state
+	 */
 	public void setState(String state)
 	{
 		this.state = state;
@@ -210,11 +315,21 @@ public class CertificateAttributes
 		return false;
 	}
 
+	/**
+	 * To builder certificate attributes builder.
+	 *
+	 * @return the certificate attributes builder
+	 */
 	public CertificateAttributesBuilder<?, ?> toBuilder()
 	{
 		return new CertificateAttributesBuilderImpl().$fillValuesFrom(this);
 	}
 
+	/**
+	 * To representable string string.
+	 *
+	 * @return the string
+	 */
 	public String toRepresentableString()
 	{
 		StringBuilder stringBuilder = new StringBuilder();
@@ -259,6 +374,14 @@ public class CertificateAttributes
 			+ ", location=" + this.getLocation() + ")";
 	}
 
+	/**
+	 * The type Certificate attributes builder.
+	 *
+	 * @param <C>
+	 *            the type parameter
+	 * @param <B>
+	 *            the type parameter
+	 */
 	public static abstract class CertificateAttributesBuilder<C extends CertificateAttributes, B extends CertificateAttributes.CertificateAttributesBuilder<C, B>>
 	{
 		private String commonName;
@@ -279,46 +402,105 @@ public class CertificateAttributes
 			b.location(instance.location);
 		}
 
+		/**
+		 * Fill values from b.
+		 *
+		 * @param instance
+		 *            the instance
+		 * @return the b
+		 */
 		protected B $fillValuesFrom(C instance)
 		{
 			CertificateAttributesBuilder.$fillValuesFromInstanceIntoBuilder(instance, this);
 			return self();
 		}
 
+		/**
+		 * Build c.
+		 *
+		 * @return the c
+		 */
 		public abstract C build();
 
+		/**
+		 * Common name b.
+		 *
+		 * @param commonName
+		 *            the common name
+		 * @return the b
+		 */
 		public B commonName(String commonName)
 		{
 			this.commonName = commonName;
 			return self();
 		}
 
+		/**
+		 * Country code b.
+		 *
+		 * @param countryCode
+		 *            the country code
+		 * @return the b
+		 */
 		public B countryCode(String countryCode)
 		{
 			this.countryCode = countryCode;
 			return self();
 		}
 
+		/**
+		 * Location b.
+		 *
+		 * @param location
+		 *            the location
+		 * @return the b
+		 */
 		public B location(String location)
 		{
 			this.location = location;
 			return self();
 		}
 
+		/**
+		 * Organisation b.
+		 *
+		 * @param organisation
+		 *            the organisation
+		 * @return the b
+		 */
 		public B organisation(String organisation)
 		{
 			this.organisation = organisation;
 			return self();
 		}
 
+		/**
+		 * Organisation unit b.
+		 *
+		 * @param organisationUnit
+		 *            the organisation unit
+		 * @return the b
+		 */
 		public B organisationUnit(String organisationUnit)
 		{
 			this.organisationUnit = organisationUnit;
 			return self();
 		}
 
+		/**
+		 * Self b.
+		 *
+		 * @return the b
+		 */
 		protected abstract B self();
 
+		/**
+		 * State b.
+		 *
+		 * @param state
+		 *            the state
+		 * @return the b
+		 */
 		public B state(String state)
 		{
 			this.state = state;

@@ -18,9 +18,8 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-module crypt.data
+module io.github.astrapisixtynine.crypt.data
 {
-	requires crypt.api;
 	requires lombok;
 	requires silly.collection;
 	requires com.google.common;
@@ -32,6 +31,7 @@ module crypt.data
 	requires silly.strings;
 	requires file.worker;
 	requires java.xml.bind;
+	requires io.github.astrapisixtynine.crypt.api;
 	requires io.github.astrapisixtynine.throwable;
 	requires org.checkerframework.checker.qual;
 
