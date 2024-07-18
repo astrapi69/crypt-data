@@ -4,6 +4,10 @@
 Version 9.4-SNAPSHOT
 -------------
 
+ADDED:
+
+- new conversion class for data classes SharedSecretInfo and SharedSecretModel
+- new factory methods with SharedSecretInfo and SharedSecretModel
 
 Version 9.3
 -------------
