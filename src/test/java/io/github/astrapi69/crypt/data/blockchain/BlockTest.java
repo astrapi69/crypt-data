@@ -94,10 +94,7 @@ public class BlockTest
 	 * {@link Block#toString()}
 	 */
 	@Test
-	@Disabled
 	public void testEqualsHashcodeAndToStringWithClass()
-		throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException,
-		InstantiationException, ClassNotFoundException, InvocationTargetException, IOException
 	{
 		boolean expected;
 		boolean actual;
@@ -112,7 +109,6 @@ public class BlockTest
 	 * Test method for {@link Block} with {@link BeanTester}
 	 */
 	@Test
-	@Disabled
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
