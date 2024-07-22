@@ -46,6 +46,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
@@ -121,6 +123,12 @@ public class PrivateKeyExtensionsTest
 		privateKeyDerFile = new File(derDir, "private.der");
 	}
 
+	/**
+	 * Test method for {@link PrivateKeyExtensions#getAlgorithm(byte[])} for RSA algorithm.
+	 *
+	 * @throws Exception
+	 *             if an error occurs
+	 */
 	@Test
 	public void testGetAlgorithm_RSA() throws Exception
 	{
@@ -133,43 +141,49 @@ public class PrivateKeyExtensionsTest
 		assertEquals("RSA", algorithm);
 	}
 
+	/**
+	 * Test method for {@link PrivateKeyExtensions#getAlgorithm(byte[])} for DSA algorithm.
+	 *
+	 * @throws Exception
+	 *             if an error occurs
+	 */
 	@Test
 	public void testGetAlgorithm_DSA() throws Exception
 	{
 		// Create a dummy DSA private key
-		ASN1ObjectIdentifier dsaOID = new ASN1ObjectIdentifier("1.2.840.10040.4.1");
-		AlgorithmIdentifier algorithmIdentifier = new AlgorithmIdentifier(dsaOID);
-		PrivateKeyInfo privateKeyInfo = new PrivateKeyInfo(algorithmIdentifier, dsaOID);
-
-		byte[] privateKeyBytes = privateKeyInfo.getEncoded();
+		byte[] privateKeyBytes = createDummyPrivateKeyBytes("1.2.840.10040.4.1");
 		String algorithm = PrivateKeyExtensions.getAlgorithm(privateKeyBytes);
 
 		assertEquals("DSA", algorithm);
 	}
 
+	/**
+	 * Test method for {@link PrivateKeyExtensions#getAlgorithm(byte[])} for EC algorithm.
+	 *
+	 * @throws Exception
+	 *             if an error occurs
+	 */
 	@Test
 	public void testGetAlgorithm_EC() throws Exception
 	{
 		// Create a dummy EC private key
-		ASN1ObjectIdentifier ecOID = new ASN1ObjectIdentifier("1.2.840.10045.2.1");
-		AlgorithmIdentifier algorithmIdentifier = new AlgorithmIdentifier(ecOID);
-		PrivateKeyInfo privateKeyInfo = new PrivateKeyInfo(algorithmIdentifier, ecOID);
-
-		byte[] privateKeyBytes = privateKeyInfo.getEncoded();
+		byte[] privateKeyBytes = createDummyPrivateKeyBytes("1.2.840.10045.2.1");
 		String algorithm = PrivateKeyExtensions.getAlgorithm(privateKeyBytes);
 
 		assertEquals("EC", algorithm);
 	}
 
+	/**
+	 * Test method for {@link PrivateKeyExtensions#getAlgorithm(byte[])} for unknown algorithm.
+	 *
+	 * @throws Exception
+	 *             if an error occurs
+	 */
 	@Test
 	public void testGetAlgorithm_Unknown() throws Exception
 	{
 		// Create a dummy key with an unknown OID
-		ASN1ObjectIdentifier unknownOID = new ASN1ObjectIdentifier("1.2.3.4.5.6.7.8.9");
-		AlgorithmIdentifier algorithmIdentifier = new AlgorithmIdentifier(unknownOID);
-		PrivateKeyInfo privateKeyInfo = new PrivateKeyInfo(algorithmIdentifier, unknownOID);
-
-		byte[] privateKeyBytes = privateKeyInfo.getEncoded();
+		byte[] privateKeyBytes = createDummyPrivateKeyBytes("1.2.3.4.5.6.7.8.9");
 		String algorithm = PrivateKeyExtensions.getAlgorithm(privateKeyBytes);
 
 		assertEquals("Unknown", algorithm);
@@ -331,10 +345,10 @@ public class PrivateKeyExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyExtensions#toBase64(PrivateKey)}
+	 * Test method for {@link PrivateKeyExtensions#toBase64Binary(PrivateKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToBase64Binary() throws Exception
@@ -353,7 +367,7 @@ public class PrivateKeyExtensionsTest
 	 * Test method for {@link PrivateKeyExtensions#toHexString(PrivateKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToHexString() throws Exception
@@ -369,10 +383,10 @@ public class PrivateKeyExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyExtensions#toHexString(PrivateKey)}
+	 * Test method for {@link PrivateKeyExtensions#toHexString(PrivateKey, boolean)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToHexStringBoolean() throws Exception
@@ -388,10 +402,10 @@ public class PrivateKeyExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyExtensions#toBase64(PrivateKey)}
+	 * Test method for {@link PrivateKeyExtensions#toPemFormat(PrivateKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToPemFormat() throws Exception
@@ -404,7 +418,6 @@ public class PrivateKeyExtensionsTest
 		actual = PrivateKeyExtensions.toPemFormat(privateKey);
 		expected = PRIVATE_KEY_BASE64_ENCODED;
 		assertEquals(expected, actual);
-
 	}
 
 	/**
@@ -427,8 +440,6 @@ public class PrivateKeyExtensionsTest
 		Security.addProvider(new BouncyCastleProvider());
 		byte[] pkcs1Format;
 		PemObject pemObject;
-		PKCS8EncodedKeySpec keySpec;
-		KeyFactory kf;
 		PrivateKey privateKey1;
 
 		// new scenario...
@@ -437,62 +448,55 @@ public class PrivateKeyExtensionsTest
 		assertNotNull(pkcs1Format);
 
 		pemObject = new PemObject("RSA PUBLIC KEY", pkcs1Format);
-		keySpec = new PKCS8EncodedKeySpec(pemObject.getContent());
-		kf = KeyFactory.getInstance("RSA");
-		privateKey1 = kf.generatePrivate(keySpec);
+		privateKey1 = KeyFactory.getInstance("RSA")
+			.generatePrivate(new PKCS8EncodedKeySpec(pemObject.getContent()));
 		assertEquals(privateKey1, privateKey);
-
 	}
 
 	/**
 	 * Test method for {@link PrivateKeyExtensions} with {@link BeanTester}
 	 */
 	@Test
-	// @Disabled
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(PrivateKeyExtensions.class);
 	}
 
-	@Test
-	public void testGetAlgorithm_DH() throws Exception
+	/**
+	 * Parameterized test method for {@link PrivateKeyExtensions#getAlgorithm(byte[])}
+	 *
+	 * @param oid
+	 *            the algorithm OID
+	 * @param expectedAlgorithm
+	 *            the expected algorithm name
+	 * @throws Exception
+	 *             if an error occurs
+	 */
+	@ParameterizedTest
+	@CsvFileSource(resources = "/algorithm-oids.csv", numLinesToSkip = 1)
+	public void testGetAlgorithmParameterized(String oid, String expectedAlgorithm) throws Exception
 	{
-		// Create a dummy DH private key
-		ASN1ObjectIdentifier dhOID = new ASN1ObjectIdentifier("1.2.840.113549.1.3.1");
-		AlgorithmIdentifier algorithmIdentifier = new AlgorithmIdentifier(dhOID);
-		PrivateKeyInfo privateKeyInfo = new PrivateKeyInfo(algorithmIdentifier, dhOID);
-		byte[] privateKeyBytes = privateKeyInfo.getEncoded();
+		byte[] privateKeyBytes = createDummyPrivateKeyBytes(oid);
 		String algorithm = PrivateKeyExtensions.getAlgorithm(privateKeyBytes);
 
-		assertEquals("DH", algorithm);
+		assertEquals(expectedAlgorithm, algorithm);
 	}
 
-	@Test
-	public void testGetAlgorithm_X509() throws Exception
+	/**
+	 * Creates a dummy private key bytes for a given OID.
+	 *
+	 * @param oid
+	 *            the OID
+	 * @return the dummy private key bytes
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private byte[] createDummyPrivateKeyBytes(String oid) throws IOException
 	{
-		// Create a dummy X.509 private key
-		ASN1ObjectIdentifier x509OID = new ASN1ObjectIdentifier("1.2.840.113549.1.1.5");
-		AlgorithmIdentifier algorithmIdentifier = new AlgorithmIdentifier(x509OID);
-		PrivateKeyInfo privateKeyInfo = new PrivateKeyInfo(algorithmIdentifier, x509OID);
-
-		byte[] privateKeyBytes = privateKeyInfo.getEncoded();
-		String algorithm = PrivateKeyExtensions.getAlgorithm(privateKeyBytes);
-
-		assertEquals("X.509", algorithm);
-	}
-
-	@Test
-	public void testGetAlgorithm_EdDSA() throws Exception
-	{
-		// Create a dummy EdDSA private key
-		ASN1ObjectIdentifier eddsaOID = new ASN1ObjectIdentifier("1.3.101.112");
-		AlgorithmIdentifier algorithmIdentifier = new AlgorithmIdentifier(eddsaOID);
-		PrivateKeyInfo privateKeyInfo = new PrivateKeyInfo(algorithmIdentifier, eddsaOID);
-
-		byte[] privateKeyBytes = privateKeyInfo.getEncoded();
-		String algorithm = PrivateKeyExtensions.getAlgorithm(privateKeyBytes);
-
-		assertEquals("EdDSA", algorithm);
+		ASN1ObjectIdentifier objectIdentifier = new ASN1ObjectIdentifier(oid);
+		AlgorithmIdentifier algorithmIdentifier = new AlgorithmIdentifier(objectIdentifier);
+		PrivateKeyInfo privateKeyInfo = new PrivateKeyInfo(algorithmIdentifier, objectIdentifier);
+		return privateKeyInfo.getEncoded();
 	}
 }
