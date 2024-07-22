@@ -87,9 +87,8 @@ public class CharacterObfuscationOperationRule
 		return other instanceof CharacterObfuscationOperationRule;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -103,9 +102,8 @@ public class CharacterObfuscationOperationRule
 		return super.equals(o);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode()
 	{
@@ -113,9 +111,8 @@ public class CharacterObfuscationOperationRule
 		return result;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public String toString()
 	{

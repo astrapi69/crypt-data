@@ -38,6 +38,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 
 import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.util.io.pem.PemObject;
@@ -54,13 +55,6 @@ import io.github.astrapi69.crypt.data.key.reader.PemObjectReader;
  */
 public final class PrivateKeyExtensions
 {
-
-	private PrivateKeyExtensions()
-	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
-	}
-
 
 	/**
 	 * Transform the given byte array(of private key in PKCS#1 format) to a PEM formatted
@@ -307,4 +301,68 @@ public final class PrivateKeyExtensions
 	}
 
 
+	/**
+	 * Parses the private key bytes to determine the algorithm used.
+	 *
+	 * @param keyBytes
+	 *            the byte array containing the private key
+	 * @return the name of the algorithm, or "Unknown" if the algorithm could not be determined
+	 */
+	public static String getAlgorithm(byte[] keyBytes)
+	{
+		try
+		{
+			// Parse the private key info
+			PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(keyBytes);
+
+			// Get the algorithm identifier
+			ASN1ObjectIdentifier algorithmOID = privateKeyInfo.getPrivateKeyAlgorithm()
+				.getAlgorithm();
+
+			// Map the OID to a known algorithm name
+			return mapOidToAlgorithm(algorithmOID);
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return "Unknown";
+		}
+	}
+
+	/**
+	 * Maps an ASN1ObjectIdentifier to the corresponding algorithm name.
+	 *
+	 * @param oid
+	 *            the ASN1ObjectIdentifier of the algorithm
+	 * @return the name of the algorithm, or "Unknown" if the OID is not recognized
+	 */
+	private static String mapOidToAlgorithm(ASN1ObjectIdentifier oid)
+	{
+		if (oid.equals(new ASN1ObjectIdentifier("1.2.840.113549.1.1.1")))
+		{
+			return "RSA";
+		}
+		else if (oid.equals(new ASN1ObjectIdentifier("1.2.840.10040.4.1")))
+		{
+			return "DSA";
+		}
+		else if (oid.equals(new ASN1ObjectIdentifier("1.2.840.10045.2.1")))
+		{
+			return "EC";
+		}
+		else if (oid.equals(new ASN1ObjectIdentifier("1.2.840.113549.1.3.1")))
+		{
+			return "DH";
+		}
+		else if (oid.equals(new ASN1ObjectIdentifier("1.2.840.113549.1.1.5")))
+		{
+			return "X.509";
+		}
+		else if (oid.equals(new ASN1ObjectIdentifier("1.3.101.112")))
+		{
+			return "EdDSA";
+		}
+		return "Unknown";
+	}
 }

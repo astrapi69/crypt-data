@@ -6,6 +6,7 @@ Version 9.4-SNAPSHOT
 
 ADDED:
 
+- new test dependency jsoup
 - new conversion class for data classes SharedSecretInfo and SharedSecretModel
 - new factory methods with SharedSecretInfo and SharedSecretModel
 

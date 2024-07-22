@@ -141,10 +141,11 @@ public class KeyModelExtensions
 	 * @throws CertificateEncodingException
 	 *             is thrown if an encoding error occurs
 	 */
-	public static KeyModel toKeyModel(Certificate certificate) throws CertificateEncodingException
+	public static KeyModel toKeyModel(X509Certificate certificate)
+		throws CertificateEncodingException
 	{
 		return KeyModel.builder().encoded(CertificateExtensions.getEncoded(certificate))
-			.keyType(KeyType.CERTIFICATE).build();
+			.algorithm(certificate.getSigAlgName()).keyType(KeyType.CERTIFICATE).build();
 	}
 
 }

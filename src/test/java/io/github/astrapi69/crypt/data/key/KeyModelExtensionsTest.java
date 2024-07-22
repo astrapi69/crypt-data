@@ -41,9 +41,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-import io.github.astrapi69.crypt.data.model.KeyInfo;
+import io.github.astrapi69.crypt.api.key.KeyType;
+import io.github.astrapi69.crypt.data.model.KeyModel;
 
-class KeyInfoExtensionsTest
+class KeyModelExtensionsTest
 {
 
 	@BeforeEach
@@ -57,11 +58,11 @@ class KeyInfoExtensionsTest
 	void testToPrivateKey(String keyType, String encoded, String algorithm)
 	{
 		byte[] decoded = Base64.getDecoder().decode(encoded);
-		KeyInfo keyInfo = KeyInfo.builder().keyType(keyType).encoded(decoded).algorithm(algorithm)
-			.build();
+		KeyModel keyModel = KeyModel.builder().keyType(KeyType.toKeyType(keyType)).encoded(decoded)
+			.algorithm(algorithm).build();
 		try
 		{
-			PrivateKey privateKey = KeyInfoExtensions.toPrivateKey(keyInfo);
+			PrivateKey privateKey = KeyModelExtensions.toPrivateKey(keyModel);
 			assertNotNull(privateKey);
 		}
 		catch (Exception e)
@@ -74,10 +75,10 @@ class KeyInfoExtensionsTest
 	@CsvFileSource(resources = "/public_key_data.csv", numLinesToSkip = 1)
 	void testToPublicKey(String keyType, String encoded, String algorithm)
 	{
-		KeyInfo keyInfo = KeyInfo.builder().keyType(keyType)
+		KeyModel keyModel = KeyModel.builder().keyType(KeyType.toKeyType(keyType))
 			.encoded(Base64.getDecoder().decode(encoded)).algorithm(algorithm).build();
 
-		PublicKey result = KeyInfoExtensions.toPublicKey(keyInfo);
+		PublicKey result = KeyModelExtensions.toPublicKey(keyModel);
 		assertNotNull(result);
 	}
 
@@ -85,10 +86,10 @@ class KeyInfoExtensionsTest
 	@CsvFileSource(resources = "/certificate_data.csv", numLinesToSkip = 1)
 	void testToX509Certificate(String keyType, String encoded, String algorithm)
 	{
-		KeyInfo keyInfo = KeyInfo.builder().keyType(keyType)
+		KeyModel keyModel = KeyModel.builder().keyType(KeyType.toKeyType(keyType))
 			.encoded(Base64.getDecoder().decode(encoded)).algorithm(algorithm).build();
 
-		X509Certificate result = KeyInfoExtensions.toX509Certificate(keyInfo);
+		X509Certificate result = KeyModelExtensions.toX509Certificate(keyModel);
 		assertNotNull(result);
 	}
 
@@ -100,9 +101,9 @@ class KeyInfoExtensionsTest
 		when(privateKey.getEncoded()).thenReturn(Base64.getDecoder().decode(encoded));
 		when(privateKey.getAlgorithm()).thenReturn(algorithm);
 
-		KeyInfo result = KeyInfoExtensions.toKeyInfo(privateKey);
+		KeyModel result = KeyModelExtensions.toKeyModel(privateKey);
 		assertNotNull(result);
-		assertEquals(keyType, result.getKeyType());
+		assertEquals(KeyType.toKeyType(keyType), result.getKeyType());
 		assertArrayEquals(Base64.getDecoder().decode(encoded), result.getEncoded());
 		assertEquals(algorithm, result.getAlgorithm());
 	}
@@ -115,9 +116,9 @@ class KeyInfoExtensionsTest
 		when(publicKey.getEncoded()).thenReturn(Base64.getDecoder().decode(encoded));
 		when(publicKey.getAlgorithm()).thenReturn(algorithm);
 
-		KeyInfo result = KeyInfoExtensions.toKeyInfo(publicKey);
+		KeyModel result = KeyModelExtensions.toKeyModel(publicKey);
 		assertNotNull(result);
-		assertEquals(keyType, result.getKeyType());
+		assertEquals(KeyType.toKeyType(keyType), result.getKeyType());
 		assertArrayEquals(Base64.getDecoder().decode(encoded), result.getEncoded());
 		assertEquals(algorithm, result.getAlgorithm());
 	}
@@ -127,13 +128,14 @@ class KeyInfoExtensionsTest
 	void testToKeyInfoCertificate(String keyType, String encoded, String algorithm)
 		throws CertificateEncodingException
 	{
-		KeyInfo keyInfo = KeyInfo.builder().keyType(keyType)
+		KeyModel keyModel = KeyModel.builder().keyType(KeyType.toKeyType(keyType))
 			.encoded(Base64.getDecoder().decode(encoded)).algorithm(algorithm).build();
 
-		X509Certificate certificate = KeyInfoExtensions.toX509Certificate(keyInfo);
-		KeyInfo result = KeyInfoExtensions.toKeyInfo(certificate);
+		X509Certificate certificate = KeyModelExtensions.toX509Certificate(keyModel);
+
+		KeyModel result = KeyModelExtensions.toKeyModel(certificate);
 		assertNotNull(result);
-		assertEquals(keyType, result.getKeyType());
+		assertEquals(KeyType.toKeyType(keyType), result.getKeyType());
 		assertArrayEquals(Base64.getDecoder().decode(encoded), result.getEncoded());
 	}
 }

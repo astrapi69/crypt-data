@@ -122,9 +122,8 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 		return other instanceof ObfuscationOperationRule;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -271,9 +270,8 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 		this.replaceWith = replaceWith;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode()
 	{
@@ -326,9 +324,8 @@ public class ObfuscationOperationRule<C, RW> implements Serializable
 			.operation(this.operation).replaceWith(this.replaceWith);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public String toString()
 	{

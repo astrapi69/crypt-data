@@ -17,6 +17,7 @@ jaxb-api-version = "2.4.0-b180830.0359"
 jobj-contract-verifier-version = "5.1"
 jobj-core-version = "8.2"
 jsr305-version = "3.0.2"
+jsoup-version = "1.18.1"
 junit-jupiter-params-version = "5.11.0-M2"
 junit-jupiter-version = "5.11.0-M2"
 junit-platform-launcher-version = "1.11.0-M2"
@@ -46,6 +47,7 @@ jaxb-api = { module = "javax.xml.bind:jaxb-api", version.ref = "jaxb-api-version
 jobj-contract-verifier = { module = "io.github.astrapi69:jobj-contract-verifier", version.ref = "jobj-contract-verifier-version" }
 jobj-core = { module = "io.github.astrapi69:jobj-core", version.ref = "jobj-core-version" }
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305-version" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup-version" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter-version" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter-params-version" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform-launcher-version" }
@@ -64,6 +66,7 @@ vintage-time = { module = "io.github.astrapi69:vintage-time", version.ref = "vin
 
 [bundles]
 unit-testing = [
+    "jsoup",
     "junit-jupiter",
     "junit-jupiter-params",
     "meanbean",

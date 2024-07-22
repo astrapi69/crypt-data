@@ -110,9 +110,7 @@ public class Block implements IBlock
 		return other instanceof Block;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -140,27 +138,21 @@ public class Block implements IBlock
 		return this.getTries() == other.getTries();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public byte[] getHash()
 	{
 		return this.hash;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setHash(byte[] hash)
 	{
 		this.hash = hash;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public int getLeadingZerosCount()
 	{
@@ -174,117 +166,91 @@ public class Block implements IBlock
 		return getHash().length;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public byte[] getMerkleRoot()
 	{
 		return this.merkleRoot;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setMerkleRoot(byte[] merkleRoot)
 	{
 		this.merkleRoot = merkleRoot;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public byte[] getPreviousBlockHash()
 	{
 		return this.previousBlockHash;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setPreviousBlockHash(byte[] previousBlockHash)
 	{
 		this.previousBlockHash = previousBlockHash;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public long getTimestamp()
 	{
 		return this.timestamp;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setTimestamp(long timestamp)
 	{
 		this.timestamp = timestamp;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public List<ITransaction> getTransactions()
 	{
 		return this.transactions;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setTransactions(List<ITransaction> transactions)
 	{
 		this.transactions = transactions;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public long getTries()
 	{
 		return this.tries;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setTries(long tries)
 	{
 		this.tries = tries;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public String getData()
 	{
 		return this.data;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setData(String data)
 	{
 		this.data = data;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode()
 	{
