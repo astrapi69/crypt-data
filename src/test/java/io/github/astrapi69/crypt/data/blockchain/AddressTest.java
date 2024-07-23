@@ -46,6 +46,7 @@ import io.github.astrapi69.crypt.data.hash.HashExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.file.search.PathFinder;
+import io.github.astrapi69.test.MeanBeanExtensions;
 
 /**
  * The unit test class for the class {@link Address}
@@ -121,8 +122,7 @@ public class AddressTest
 	@Test
 	public void testWithBeanTester()
 	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(Address.class);
+		MeanBeanExtensions.testWithAllTester(Address.class);
 	}
 
 	/**

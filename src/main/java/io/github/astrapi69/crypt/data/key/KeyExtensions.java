@@ -33,9 +33,9 @@ import org.apache.commons.codec.binary.Base64;
 import lombok.NonNull;
 
 /**
- * The class {@link KeyExtensions}
+ * The class {@link KeyExtensions} provides utility methods for key transformations and retrievals.
  */
-public class KeyExtensions
+public final class KeyExtensions
 {
 
 	private KeyExtensions()
@@ -58,8 +58,8 @@ public class KeyExtensions
 	 * Transform the given encoded key as byte array to a base64 binary encoded {@link String} value
 	 *
 	 * @param encodedKey
-	 *            the private key
-	 * @return the new base64 encoded {@link String} value
+	 *            the encoded key
+	 * @return the new base64 binary encoded {@link String} value
 	 */
 	public static String toBase64Binary(final byte[] encodedKey)
 	{
@@ -85,7 +85,7 @@ public class KeyExtensions
 	 *            the {@link Key} object
 	 * @return the name of the algorithm from the given {@link Key} object
 	 */
-	public String getAlgorithm(@NonNull final Key key)
+	public static String getAlgorithm(@NonNull final Key key)
 	{
 		return key.getAlgorithm();
 	}
@@ -97,7 +97,7 @@ public class KeyExtensions
 	 *            the {@link Key} object
 	 * @return the byte array from the given {@link Key} object
 	 */
-	public byte[] getEncoded(@NonNull final Key key)
+	public static byte[] getEncoded(@NonNull final Key key)
 	{
 		return key.getEncoded();
 	}
@@ -109,7 +109,7 @@ public class KeyExtensions
 	 *            the {@link Key} object
 	 * @return the format from the given {@link Key} object
 	 */
-	public String getFormat(@NonNull final Key key)
+	public static String getFormat(@NonNull final Key key)
 	{
 		return key.getFormat();
 	}

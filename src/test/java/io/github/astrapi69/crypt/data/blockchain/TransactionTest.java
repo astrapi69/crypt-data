@@ -34,12 +34,11 @@ import java.security.PublicKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.meanbean.test.EqualsMethodTester;
-import org.meanbean.test.HashCodeMethodTester;
 
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.file.search.PathFinder;
+import io.github.astrapi69.test.MeanBeanExtensions;
 
 /**
  * The unit test class for the class {@link Transaction}.
@@ -108,14 +107,7 @@ public class TransactionTest
 	@Test
 	public void testWithBeanTester()
 	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(Transaction.class);
-
-		EqualsMethodTester equalsMethodTester = new EqualsMethodTester();
-		equalsMethodTester.testEqualsMethod(Transaction.class);
-
-		HashCodeMethodTester hashCodeMethodTester = new HashCodeMethodTester();
-		hashCodeMethodTester.testHashCodeMethod(Transaction.class);
+		MeanBeanExtensions.testWithAllTester(Transaction.class);
 	}
 
 	/**

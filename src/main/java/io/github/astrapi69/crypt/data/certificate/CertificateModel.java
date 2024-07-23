@@ -29,12 +29,17 @@ import java.security.PublicKey;
 import java.util.Map;
 
 import io.github.astrapi69.crypt.data.model.Validity;
+import io.github.astrapi69.crypt.data.model.X509CertificateV3Info;
 
 /**
  * The class {@link CertificateModel} represents a certificate model in a cryptographic system. It
  * contains details about the certificate such as issuer, public key, serial number, signature
  * algorithm, subject, validity period, version, and x509v3 extensions.
+ * 
+ * @deprecated use instead the class {@link X509CertificateV3Info}. Note will be removed in next
+ *             minor version
  */
+@Deprecated
 public class CertificateModel
 {
 	/** The issuer of the certificate. */
