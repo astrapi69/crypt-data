@@ -4,7 +4,9 @@
 Version 9.5-SNAPSHOT
 -------------
 
+CHANGED:
 
+- removed deprecated class references
 
 Version 9.4
 -------------

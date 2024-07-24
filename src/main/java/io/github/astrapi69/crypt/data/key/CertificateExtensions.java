@@ -33,7 +33,6 @@ import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
@@ -51,7 +50,6 @@ import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
-import io.github.astrapi69.crypt.data.certificate.CertificateModel;
 import io.github.astrapi69.crypt.data.hex.HexExtensions;
 import io.github.astrapi69.crypt.data.model.DistinguishedNameInfo;
 import io.github.astrapi69.crypt.data.model.ExtensionInfo;
@@ -324,34 +322,6 @@ public final class CertificateExtensions
 	public static Date getValidUntil(final X509Certificate certificate)
 	{
 		return certificate.getNotAfter();
-	}
-
-	/**
-	 * Converts the given {@link X509Certificate} object to an {@link CertificateModel} object
-	 *
-	 * @param certificate
-	 *            the certificate
-	 * @return the {@link CertificateModel} object that represents from when the given
-	 *         {@link X509Certificate} object
-	 * @deprecated use instead the method <code>toX509CertificateV3Info</code> that returns the new
-	 *             data info object.<br>
-	 *             Note will be removed in the next minor version
-	 */
-	@Deprecated
-	public static CertificateModel toCertificateModel(final X509Certificate certificate)
-	{
-		return CertificateModel.builder().issuer(CertificateExtensions.getIssuedTo(certificate))
-			.publicKey(CertificateExtensions.getPublicKey(certificate))
-			.serialNumber(CertificateExtensions.getSerialNumber(certificate))
-			.signatureAlgorithm(CertificateExtensions.getSignatureAlgorithm(certificate))
-			.subject(CertificateExtensions.getSubject(certificate))
-			.validity(Validity.builder()
-				.notBefore(CertificateExtensions.getValidFrom(certificate).toInstant()
-					.atZone(ZoneId.systemDefault()).toOffsetDateTime().toZonedDateTime())
-				.notAfter(CertificateExtensions.getValidUntil(certificate).toInstant()
-					.atZone(ZoneId.systemDefault()).toOffsetDateTime().toZonedDateTime())
-				.build())
-			.version(CertificateExtensions.getVersion(certificate)).build();
 	}
 
 	/**
