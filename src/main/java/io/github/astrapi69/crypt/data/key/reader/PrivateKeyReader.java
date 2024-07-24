@@ -98,7 +98,7 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Checks if the given {@link File} is password protected.
+	 * Checks if the given {@link File} is password protected
 	 *
 	 * @param file
 	 *            the file that contains the private key

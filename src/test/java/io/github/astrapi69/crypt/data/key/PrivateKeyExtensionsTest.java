@@ -295,7 +295,7 @@ public class PrivateKeyExtensionsTest
 		assertEquals(expected, actual);
 		// new scenario...
 		actual = PrivateKeyExtensions.getKeySize(null);
-		expected = null;
+		expected = KeySize.UNKNOWN;
 		assertEquals(expected, actual);
 		// new scenario...
 		privateKey = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_1024)

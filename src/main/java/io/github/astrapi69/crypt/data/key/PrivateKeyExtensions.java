@@ -36,6 +36,7 @@ import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.logging.Level;
 
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
@@ -49,20 +50,27 @@ import io.github.astrapi69.crypt.api.key.KeySize;
 import io.github.astrapi69.crypt.api.key.PemType;
 import io.github.astrapi69.crypt.data.hex.HexExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PemObjectReader;
+import lombok.extern.java.Log;
 
 /**
- * The class {@link PrivateKeyExtensions}.
+ * The class {@link PrivateKeyExtensions} provides utility methods for working with
+ * {@link PrivateKey} objects
  */
+@Log
 public final class PrivateKeyExtensions
 {
 
+	private PrivateKeyExtensions()
+	{
+	}
+
 	/**
-	 * Transform the given byte array(of private key in PKCS#1 format) to a PEM formatted
-	 * {@link String}.
+	 * Transform the given byte array (of private key in PKCS#1 format) to a PEM formatted
+	 * {@link String}
 	 *
 	 * @param privateKeyPKCS1Formatted
-	 *            the byte array(of private key in PKCS#1 format)
-	 * @return the String in PEM-Format
+	 *            the byte array (of private key in PKCS#1 format)
+	 * @return the String in PEM format
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
@@ -75,20 +83,19 @@ public final class PrivateKeyExtensions
 		PemWriter pemWriter = new PemWriter(stringWriter);
 		pemWriter.writeObject(pemObject);
 		pemWriter.close();
-		String string = stringWriter.toString();
-		return string;
+		return stringWriter.toString();
 	}
 
 	/**
-	 * Generate the corresponding {@link PublicKey} object from the given {@link PrivateKey} object.
+	 * Generate the corresponding {@link PublicKey} object from the given {@link PrivateKey} object
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the corresponding {@link PublicKey} object or null if generation failed.
+	 * @return the corresponding {@link PublicKey} object or null if generation failed
 	 * @throws NoSuchAlgorithmException
-	 *             the no such algorithm exception
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             the invalid key spec exception
+	 *             is thrown if generation of the SecretKey object fails
 	 */
 	public static PublicKey generatePublicKey(final PrivateKey privateKey)
 		throws NoSuchAlgorithmException, InvalidKeySpecException
@@ -101,14 +108,13 @@ public final class PrivateKeyExtensions
 
 			final KeyFactory keyFactory = KeyFactory
 				.getInstance(KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
-			final PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-			return publicKey;
+			return keyFactory.generatePublic(publicKeySpec);
 		}
 		return null;
 	}
 
 	/**
-	 * Gets the key length of the given {@link PrivateKey}.
+	 * Gets the key length of the given {@link PrivateKey}
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -125,11 +131,11 @@ public final class PrivateKeyExtensions
 		{
 			length = ((RSAPrivateKey)privateKey).getModulus().bitLength();
 		}
-		if (privateKey instanceof DSAPrivateKey)
+		else if (privateKey instanceof DSAPrivateKey)
 		{
 			length = ((DSAPrivateKey)privateKey).getParams().getQ().bitLength();
 		}
-		if (privateKey instanceof ECPrivateKey)
+		else if (privateKey instanceof ECPrivateKey)
 		{
 			length = ((ECPrivateKey)privateKey).getParams().getCurve().getField().getFieldSize();
 		}
@@ -137,11 +143,11 @@ public final class PrivateKeyExtensions
 	}
 
 	/**
-	 * Gets the {@link KeySize} of the given {@link PrivateKey} or null if not found.
+	 * Gets the {@link KeySize} of the given {@link PrivateKey} or null if not found
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the {@link KeySize} of the given {@link PrivateKey} or null if not found.
+	 * @return the {@link KeySize} of the given {@link PrivateKey} or null if not found
 	 */
 	public static KeySize getKeySize(final PrivateKey privateKey)
 	{
@@ -150,27 +156,35 @@ public final class PrivateKeyExtensions
 		{
 			return KeySize.KEYSIZE_1024;
 		}
-		if (length == 2048)
+		else if (length == 2048)
 		{
 			return KeySize.KEYSIZE_2048;
 		}
-		if (length == 4096)
+		else if (length == 4096)
 		{
 			return KeySize.KEYSIZE_4096;
 		}
-		if (length == 8192)
+		else if (length == 8192)
 		{
 			return KeySize.KEYSIZE_8192;
 		}
-		return null;
+		else if (length == 16384)
+		{
+			return KeySize.KEYSIZE_16384;
+		}
+		else if (length == 32768)
+		{
+			return KeySize.KEYSIZE_32768;
+		}
+		return KeySize.UNKNOWN;
 	}
 
 	/**
-	 * Transform the given {@link PrivateKey} to a base64 encoded {@link String} value.
+	 * Transform the given {@link PrivateKey} to a base64 encoded {@link String} value
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the new base64 encoded {@link String} value.
+	 * @return the new base64 encoded {@link String} value
 	 */
 	public static String toBase64(final PrivateKey privateKey)
 	{
@@ -178,11 +192,11 @@ public final class PrivateKeyExtensions
 	}
 
 	/**
-	 * Transform the given {@link PrivateKey} to a base64 encoded {@link String} value.
+	 * Transform the given {@link PrivateKey} to a base64 encoded {@link String} value
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the new base64 encoded {@link String} value.
+	 * @return the new base64 encoded {@link String} value
 	 */
 	public static String toBase64Binary(final PrivateKey privateKey)
 	{
@@ -190,11 +204,11 @@ public final class PrivateKeyExtensions
 	}
 
 	/**
-	 * Transform the given {@link PrivateKey} to a hexadecimal {@link String} value.
+	 * Transform the given {@link PrivateKey} to a hexadecimal {@link String} value
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the new hexadecimal {@link String} value.
+	 * @return the new hexadecimal {@link String} value
 	 */
 	public static String toHexString(final PrivateKey privateKey)
 	{
@@ -202,13 +216,13 @@ public final class PrivateKeyExtensions
 	}
 
 	/**
-	 * Transform the given {@link PrivateKey} to a hexadecimal {@link String} value.
+	 * Transform the given {@link PrivateKey} to a hexadecimal {@link String} value
 	 *
 	 * @param privateKey
 	 *            the private key
 	 * @param lowerCase
-	 *            the flag if the result shell be transform in lower case. If true the result is
-	 * @return the new hexadecimal {@link String} value.
+	 *            the flag if the result shall be transformed in lower case
+	 * @return the new hexadecimal {@link String} value
 	 */
 	public static String toHexString(final PrivateKey privateKey, final boolean lowerCase)
 	{
@@ -217,13 +231,13 @@ public final class PrivateKeyExtensions
 
 	/**
 	 * Transform the given private key that is in PKCS1 format and returns a {@link String} object
-	 * in pem format.
+	 * in pem format
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the {@link String} object in pem format generated from the given private key.
+	 * @return the {@link String} object in pem format generated from the given private key
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static String toPemFormat(final PrivateKey privateKey) throws IOException
 	{
@@ -232,7 +246,7 @@ public final class PrivateKeyExtensions
 			return PemObjectReader.toPemFormat(
 				new PemObject(PemType.EC_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
 		}
-		if (privateKey instanceof DSAPrivateKey)
+		else if (privateKey instanceof DSAPrivateKey)
 		{
 			return PemObjectReader.toPemFormat(
 				new PemObject(PemType.DSA_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
@@ -242,7 +256,7 @@ public final class PrivateKeyExtensions
 	}
 
 	/**
-	 * Transform the given private key to PKCS#1 format and returns it as an byte array
+	 * Transform the given private key to PKCS#1 format and returns it as a byte array
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -256,8 +270,7 @@ public final class PrivateKeyExtensions
 		final PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(encoded);
 		final ASN1Encodable asn1Encodable = privateKeyInfo.parsePrivateKey();
 		final ASN1Primitive asn1Primitive = asn1Encodable.toASN1Primitive();
-		final byte[] privateKeyPKCS1Formatted = asn1Primitive.getEncoded();
-		return privateKeyPKCS1Formatted;
+		return asn1Primitive.getEncoded();
 	}
 
 	/**
@@ -273,13 +286,13 @@ public final class PrivateKeyExtensions
 	}
 
 	/**
-	 * Get the name of the primary encoding format from the given {@link PrivateKey} or null it does
-	 * not support encoding
+	 * Get the name of the primary encoding format from the given {@link PrivateKey} or null if it
+	 * does not support encoding
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the name of the primary encoding format from the given {@link PrivateKey} or null it
-	 *         does not support encoding
+	 * @return the name of the primary encoding format from the given {@link PrivateKey} or null if
+	 *         it does not support encoding
 	 */
 	public static String getFormat(final PrivateKey privateKey)
 	{
@@ -292,7 +305,7 @@ public final class PrivateKeyExtensions
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the {@link PrivateKey} in its primary encoding format, or null if this key does not *
+	 * @return the {@link PrivateKey} in its primary encoding format, or null if this key does not
 	 *         support encoding
 	 */
 	public static byte[] getEncoded(final PrivateKey privateKey)
@@ -300,9 +313,8 @@ public final class PrivateKeyExtensions
 		return privateKey.getEncoded();
 	}
 
-
 	/**
-	 * Parses the private key bytes to determine the algorithm used.
+	 * Parses the private key bytes to determine the algorithm used
 	 *
 	 * @param keyBytes
 	 *            the byte array containing the private key
@@ -312,26 +324,20 @@ public final class PrivateKeyExtensions
 	{
 		try
 		{
-			// Parse the private key info
 			PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(keyBytes);
-
-			// Get the algorithm identifier
 			ASN1ObjectIdentifier algorithmOID = privateKeyInfo.getPrivateKeyAlgorithm()
 				.getAlgorithm();
-
-			// Map the OID to a known algorithm name
 			return mapOidToAlgorithm(algorithmOID);
-
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			log.log(Level.WARNING, "Algorithm from given key bytes can not be resolved", e);
 			return "Unknown";
 		}
 	}
 
 	/**
-	 * Maps an ASN1ObjectIdentifier to the corresponding algorithm name.
+	 * Maps an ASN1ObjectIdentifier to the corresponding algorithm name
 	 *
 	 * @param oid
 	 *            the ASN1ObjectIdentifier of the algorithm

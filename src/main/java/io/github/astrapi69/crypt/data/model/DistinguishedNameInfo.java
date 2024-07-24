@@ -25,7 +25,9 @@
 package io.github.astrapi69.crypt.data.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bouncycastle.asn1.x500.X500Name;
 
@@ -75,6 +77,31 @@ public class DistinguishedNameInfo
 	 * The state.
 	 */
 	private String state;
+
+	/**
+	 * Converts a representable string to a {@link DistinguishedNameInfo} object.
+	 *
+	 * @param representableString
+	 *            the string to convert.
+	 * @return the corresponding {@link DistinguishedNameInfo} object.
+	 */
+	public static DistinguishedNameInfo toDistinguishedNameInfo(String representableString)
+	{
+		Map<String, String> map = new HashMap<>();
+		String[] parts = representableString.split(", ");
+		for (String part : parts)
+		{
+			String[] keyValue = part.split("=");
+			if (keyValue.length == 2)
+			{
+				map.put(keyValue[0], keyValue[1]);
+			}
+		}
+
+		return DistinguishedNameInfo.builder().countryCode(map.get("C")).state(map.get("ST"))
+			.location(map.get("L")).organisation(map.get("O")).organisationUnit(map.get("OU"))
+			.commonName(map.get("CN")).build();
+	}
 
 	/**
 	 * Converts this {@link DistinguishedNameInfo} object to a representable string

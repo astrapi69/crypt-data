@@ -27,9 +27,6 @@ package io.github.astrapi69.crypt.data.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
 import javax.crypto.Cipher;
 
 import org.junit.jupiter.api.Test;
@@ -73,13 +70,9 @@ public class CryptModelTest
 	 */
 	@Test
 	public void testEqualsHashcodeAndToStringWithClass()
-		throws NoSuchMethodException, IllegalAccessException, InstantiationException,
-		NoSuchFieldException, ClassNotFoundException, InvocationTargetException, IOException
 	{
 		boolean expected;
 		boolean actual;
-
-
 		CryptModel<Cipher, String, String> cryptModel;
 
 		cryptModel = CryptModel.<Cipher, String, String> builder()

@@ -24,6 +24,8 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
+import static io.github.astrapi69.crypt.data.factory.KeySpecFactory.newSecretKeySpec;
+
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -32,7 +34,6 @@ import java.security.PublicKey;
 
 import javax.crypto.KeyAgreement;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 import io.github.astrapi69.crypt.data.key.SharedSecretExtensions;
 import io.github.astrapi69.crypt.data.model.SharedSecretInfo;
@@ -65,7 +66,7 @@ public class KeyAgreementFactory
 			sharedSecretModel.getPublicKey(), sharedSecretModel.getKeyAgreementAlgorithm(),
 			sharedSecretModel.getProvider(), true);
 		byte[] sharedSecret = keyAgreement.generateSecret();
-		return new SecretKeySpec(sharedSecret, 0, 16, sharedSecretModel.getKeyAgreementAlgorithm());
+		return toSecretKey(sharedSecret, sharedSecretModel.getKeyAgreementAlgorithm());
 	}
 
 	/**
@@ -119,7 +120,7 @@ public class KeyAgreementFactory
 		KeyAgreement keyAgreement = newKeyAgreement(privateKey, publicKey, keyAgreementAlgorithm,
 			provider, true);
 		byte[] sharedSecret = keyAgreement.generateSecret();
-		return new SecretKeySpec(sharedSecret, 0, 16, secretKeyAlgorithm);
+		return toSecretKey(sharedSecret, secretKeyAlgorithm);
 	}
 
 	/**
@@ -154,7 +155,22 @@ public class KeyAgreementFactory
 		KeyAgreement keyAgreement = newKeyAgreement(privateKey, publicKey, keyAgreementAlgorithm,
 			provider, lastPhase);
 		byte[] sharedSecret = keyAgreement.generateSecret();
-		return new SecretKeySpec(sharedSecret, 0, 16, secretKeyAlgorithm);
+		return toSecretKey(sharedSecret, secretKeyAlgorithm);
+	}
+
+	/**
+	 * Creates a {@link SecretKey} object from the given byte array that is generated from a
+	 * {@link KeyAgreement} object and the given algorithm
+	 *
+	 * @param sharedSecret
+	 *            the byte array that is generated from a {@link KeyAgreement} object
+	 * @param secretKeyAlgorithm
+	 *            the algorithm for generating the {@link SecretKey} object
+	 * @return the newly created shared {@link SecretKey} object from the given arguments
+	 */
+	public static SecretKey toSecretKey(byte[] sharedSecret, String secretKeyAlgorithm)
+	{
+		return newSecretKeySpec(sharedSecret, 0, 16, secretKeyAlgorithm);
 	}
 
 	/**
