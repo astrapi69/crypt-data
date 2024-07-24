@@ -3,8 +3,8 @@ bcpkix-jdk15on-version = "1.70"
 checksum-up-version = "3"
 commons-codec-version = "1.17.1"
 commons-io-version = "2.16.1"
-commons-lang3-version = "3.14.0"
-crypt-api-version = "9.2"
+commons-lang3-version = "3.15.0"
+crypt-api-version = "9.3"
 file-worker-version = "17.3"
 gradle-plugin-grgit-version = "5.2.2"
 gradle-plugin-license-version = "0.16.1"
@@ -14,8 +14,9 @@ gradle-plugin-version-catalog-update-version = "0.8.4"
 gradle-plugin-versions-version = "0.51.0"
 guava-version = "33.2.1-jre"
 jaxb-api-version = "2.4.0-b180830.0359"
-jobj-contract-verifier-version = "5.1"
+jobj-contract-verifier-version = "5.2"
 jobj-core-version = "8.2"
+jsoup-version = "1.18.1"
 jsr305-version = "3.0.2"
 junit-jupiter-params-version = "5.11.0-M2"
 junit-jupiter-version = "5.11.0-M2"
@@ -45,6 +46,7 @@ guava = { module = "com.google.guava:guava", version.ref = "guava-version" }
 jaxb-api = { module = "javax.xml.bind:jaxb-api", version.ref = "jaxb-api-version" }
 jobj-contract-verifier = { module = "io.github.astrapi69:jobj-contract-verifier", version.ref = "jobj-contract-verifier-version" }
 jobj-core = { module = "io.github.astrapi69:jobj-core", version.ref = "jobj-core-version" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup-version" }
 jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305-version" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter-version" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter-params-version" }
@@ -64,6 +66,7 @@ vintage-time = { module = "io.github.astrapi69:vintage-time", version.ref = "vin
 
 [bundles]
 unit-testing = [
+    "jsoup",
     "junit-jupiter",
     "junit-jupiter-params",
     "meanbean",

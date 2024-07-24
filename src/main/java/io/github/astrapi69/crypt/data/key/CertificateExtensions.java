@@ -29,10 +29,12 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 import javax.security.auth.x500.X500Principal;
@@ -51,7 +53,11 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 import io.github.astrapi69.crypt.data.certificate.CertificateModel;
 import io.github.astrapi69.crypt.data.hex.HexExtensions;
+import io.github.astrapi69.crypt.data.model.DistinguishedNameInfo;
+import io.github.astrapi69.crypt.data.model.ExtensionInfo;
 import io.github.astrapi69.crypt.data.model.Validity;
+import io.github.astrapi69.crypt.data.model.X509CertificateV1Info;
+import io.github.astrapi69.crypt.data.model.X509CertificateV3Info;
 
 /**
  * The class {@link CertificateExtensions} provides extension methods for {@link X509Certificate}
@@ -159,8 +165,7 @@ public final class CertificateExtensions
 		final MessageDigest messageDigest = MessageDigest.getInstance(hashAlgorithm.getAlgorithm());
 		messageDigest.update(derEncoded);
 		final byte[] digest = messageDigest.digest();
-		final String fingerprint = HexExtensions.toHexString(digest);
-		return fingerprint;
+		return HexExtensions.toHexString(digest);
 	}
 
 	/**
@@ -185,8 +190,7 @@ public final class CertificateExtensions
 		if (rdns != null && 0 < rdns.length)
 		{
 			final RDN rdn = rdns[0];
-			final String firstValue = IETFUtils.valueToString(rdn.getFirst().getValue());
-			return firstValue;
+			return IETFUtils.valueToString(rdn.getFirst().getValue());
 		}
 		return "";
 	}
@@ -201,8 +205,7 @@ public final class CertificateExtensions
 	public static String getIssuedBy(final X509Certificate certificate)
 	{
 		final X500Principal issuedByPrincipal = certificate.getSubjectX500Principal();
-		final String issuedBy = issuedByPrincipal.getName();
-		return issuedBy;
+		return issuedByPrincipal.getName();
 	}
 
 	/**
@@ -239,8 +242,7 @@ public final class CertificateExtensions
 	public static String getIssuedTo(final X509Certificate certificate)
 	{
 		final X500Principal issuedToPrincipal = certificate.getIssuerX500Principal();
-		final String issuedTo = issuedToPrincipal.getName();
-		return issuedTo;
+		return issuedToPrincipal.getName();
 	}
 
 	/**
@@ -331,7 +333,11 @@ public final class CertificateExtensions
 	 *            the certificate
 	 * @return the {@link CertificateModel} object that represents from when the given
 	 *         {@link X509Certificate} object
+	 * @deprecated use instead the method <code>toX509CertificateV3Info</code> that returns the new
+	 *             data info object.<br>
+	 *             Note will be removed in the next minor version
 	 */
+	@Deprecated
 	public static CertificateModel toCertificateModel(final X509Certificate certificate)
 	{
 		return CertificateModel.builder().issuer(CertificateExtensions.getIssuedTo(certificate))
@@ -346,6 +352,33 @@ public final class CertificateExtensions
 					.atZone(ZoneId.systemDefault()).toOffsetDateTime().toZonedDateTime())
 				.build())
 			.version(CertificateExtensions.getVersion(certificate)).build();
+	}
+
+	/**
+	 * Converts the given {@link X509Certificate} object to an {@link X509CertificateV3Info} object
+	 *
+	 * @param certificate
+	 *            the certificate
+	 * @return the {@link X509CertificateV3Info} object that represents from when the given
+	 *         {@link X509Certificate} object
+	 */
+	public static X509CertificateV3Info toX509CertificateV3Info(final X509Certificate certificate)
+	{
+		X509CertificateV1Info x509CertificateV1Info = X509CertificateV1Info.builder()
+			.issuer(DistinguishedNameInfo
+				.toDistinguishedNameInfo(CertificateExtensions.getIssuedTo(certificate)))
+			.serial(new BigInteger(160, new SecureRandom()))
+			.validity(Validity.builder().notBefore(ZonedDateTime.parse("2023-12-01T00:00:00Z"))
+				.notAfter(ZonedDateTime.parse("2025-01-01T00:00:00Z")).build())
+			.subject(DistinguishedNameInfo
+				.toDistinguishedNameInfo(CertificateExtensions.getSubject(certificate)))
+			.signatureAlgorithm("SHA256withRSA").build();
+
+		X509CertificateV3Info x509CertificateV3Info = X509CertificateV3Info.builder()
+			.certificateV1Info(x509CertificateV1Info)
+			.extensions(ExtensionInfo.extractToExtensionInfoArray(certificate)).build();
+
+		return x509CertificateV3Info;
 	}
 
 	/**

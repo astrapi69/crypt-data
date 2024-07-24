@@ -37,12 +37,17 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.Base64;
 
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
@@ -116,6 +121,72 @@ public class PrivateKeyExtensionsTest
 
 		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
 		privateKeyDerFile = new File(derDir, "private.der");
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyExtensions#getAlgorithm(byte[])} for RSA algorithm.
+	 *
+	 * @throws Exception
+	 *             if an error occurs
+	 */
+	@Test
+	public void testGetAlgorithm_RSA() throws Exception
+	{
+		// Base64 encoded PKCS#8 format RSA private key for testing purposes
+		String base64PrivateKey = BASE64_ENCODED; // Truncated for brevity
+
+		byte[] privateKeyBytes = Base64.getDecoder().decode(base64PrivateKey);
+		String algorithm = PrivateKeyExtensions.getAlgorithm(privateKeyBytes);
+
+		assertEquals("RSA", algorithm);
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyExtensions#getAlgorithm(byte[])} for DSA algorithm.
+	 *
+	 * @throws Exception
+	 *             if an error occurs
+	 */
+	@Test
+	public void testGetAlgorithm_DSA() throws Exception
+	{
+		// Create a dummy DSA private key
+		byte[] privateKeyBytes = createDummyPrivateKeyBytes("1.2.840.10040.4.1");
+		String algorithm = PrivateKeyExtensions.getAlgorithm(privateKeyBytes);
+
+		assertEquals("DSA", algorithm);
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyExtensions#getAlgorithm(byte[])} for EC algorithm.
+	 *
+	 * @throws Exception
+	 *             if an error occurs
+	 */
+	@Test
+	public void testGetAlgorithm_EC() throws Exception
+	{
+		// Create a dummy EC private key
+		byte[] privateKeyBytes = createDummyPrivateKeyBytes("1.2.840.10045.2.1");
+		String algorithm = PrivateKeyExtensions.getAlgorithm(privateKeyBytes);
+
+		assertEquals("EC", algorithm);
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyExtensions#getAlgorithm(byte[])} for unknown algorithm.
+	 *
+	 * @throws Exception
+	 *             if an error occurs
+	 */
+	@Test
+	public void testGetAlgorithm_Unknown() throws Exception
+	{
+		// Create a dummy key with an unknown OID
+		byte[] privateKeyBytes = createDummyPrivateKeyBytes("1.2.3.4.5.6.7.8.9");
+		String algorithm = PrivateKeyExtensions.getAlgorithm(privateKeyBytes);
+
+		assertEquals("Unknown", algorithm);
 	}
 
 	/**
@@ -224,7 +295,7 @@ public class PrivateKeyExtensionsTest
 		assertEquals(expected, actual);
 		// new scenario...
 		actual = PrivateKeyExtensions.getKeySize(null);
-		expected = null;
+		expected = KeySize.UNKNOWN;
 		assertEquals(expected, actual);
 		// new scenario...
 		privateKey = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_1024)
@@ -274,10 +345,10 @@ public class PrivateKeyExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyExtensions#toBase64(PrivateKey)}
+	 * Test method for {@link PrivateKeyExtensions#toBase64Binary(PrivateKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToBase64Binary() throws Exception
@@ -296,7 +367,7 @@ public class PrivateKeyExtensionsTest
 	 * Test method for {@link PrivateKeyExtensions#toHexString(PrivateKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToHexString() throws Exception
@@ -312,10 +383,10 @@ public class PrivateKeyExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyExtensions#toHexString(PrivateKey)}
+	 * Test method for {@link PrivateKeyExtensions#toHexString(PrivateKey, boolean)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToHexStringBoolean() throws Exception
@@ -331,10 +402,10 @@ public class PrivateKeyExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyExtensions#toBase64(PrivateKey)}
+	 * Test method for {@link PrivateKeyExtensions#toPemFormat(PrivateKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToPemFormat() throws Exception
@@ -347,7 +418,6 @@ public class PrivateKeyExtensionsTest
 		actual = PrivateKeyExtensions.toPemFormat(privateKey);
 		expected = PRIVATE_KEY_BASE64_ENCODED;
 		assertEquals(expected, actual);
-
 	}
 
 	/**
@@ -370,8 +440,6 @@ public class PrivateKeyExtensionsTest
 		Security.addProvider(new BouncyCastleProvider());
 		byte[] pkcs1Format;
 		PemObject pemObject;
-		PKCS8EncodedKeySpec keySpec;
-		KeyFactory kf;
 		PrivateKey privateKey1;
 
 		// new scenario...
@@ -380,22 +448,55 @@ public class PrivateKeyExtensionsTest
 		assertNotNull(pkcs1Format);
 
 		pemObject = new PemObject("RSA PUBLIC KEY", pkcs1Format);
-		keySpec = new PKCS8EncodedKeySpec(pemObject.getContent());
-		kf = KeyFactory.getInstance("RSA");
-		privateKey1 = kf.generatePrivate(keySpec);
+		privateKey1 = KeyFactory.getInstance("RSA")
+			.generatePrivate(new PKCS8EncodedKeySpec(pemObject.getContent()));
 		assertEquals(privateKey1, privateKey);
-
 	}
 
 	/**
 	 * Test method for {@link PrivateKeyExtensions} with {@link BeanTester}
 	 */
 	@Test
-	@Disabled
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(PrivateKeyExtensions.class);
 	}
 
+	/**
+	 * Parameterized test method for {@link PrivateKeyExtensions#getAlgorithm(byte[])}
+	 *
+	 * @param oid
+	 *            the algorithm OID
+	 * @param expectedAlgorithm
+	 *            the expected algorithm name
+	 * @throws Exception
+	 *             if an error occurs
+	 */
+	@ParameterizedTest
+	@CsvFileSource(resources = "/algorithm-oids.csv", numLinesToSkip = 1)
+	public void testGetAlgorithmParameterized(String oid, String expectedAlgorithm) throws Exception
+	{
+		byte[] privateKeyBytes = createDummyPrivateKeyBytes(oid);
+		String algorithm = PrivateKeyExtensions.getAlgorithm(privateKeyBytes);
+
+		assertEquals(expectedAlgorithm, algorithm);
+	}
+
+	/**
+	 * Creates a dummy private key bytes for a given OID.
+	 *
+	 * @param oid
+	 *            the OID
+	 * @return the dummy private key bytes
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private byte[] createDummyPrivateKeyBytes(String oid) throws IOException
+	{
+		ASN1ObjectIdentifier objectIdentifier = new ASN1ObjectIdentifier(oid);
+		AlgorithmIdentifier algorithmIdentifier = new AlgorithmIdentifier(objectIdentifier);
+		PrivateKeyInfo privateKeyInfo = new PrivateKeyInfo(algorithmIdentifier, objectIdentifier);
+		return privateKeyInfo.getEncoded();
+	}
 }

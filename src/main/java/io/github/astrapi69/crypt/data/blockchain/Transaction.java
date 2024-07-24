@@ -93,9 +93,8 @@ public class Transaction implements ITransaction
 		return other instanceof Transaction;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -119,108 +118,84 @@ public class Transaction implements ITransaction
 		return this.getTimestamp() == other.getTimestamp();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public byte[] getHash()
 	{
 		return this.hash;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setHash(byte[] hash)
 	{
 		this.hash = hash;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public byte[] getSenderHash()
 	{
 		return this.senderHash;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setSenderHash(byte[] senderHash)
 	{
 		this.senderHash = senderHash;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public byte[] getSignableData()
 	{
 		return text.getBytes();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public byte[] getSignature()
 	{
 		return this.signature;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setSignature(byte[] signature)
 	{
 		this.signature = signature;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public String getText()
 	{
 		return this.text;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setText(String text)
 	{
 		this.text = text;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public long getTimestamp()
 	{
 		return this.timestamp;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public void setTimestamp(long timestamp)
 	{
 		this.timestamp = timestamp;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode()
 	{

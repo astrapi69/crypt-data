@@ -22,26 +22,33 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.crypt.data.obfuscation.rule;
+package io.github.astrapi69.crypt.data.model;
 
-import java.util.Comparator;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 /**
- * The class {@link ObfuscationOperationRuleComparator} can compare {@link ObfuscationOperationRule}
- * objects
+ * Data class representing algorithm information
  */
-public class ObfuscationOperationRuleComparator
-	implements
-		Comparator<ObfuscationOperationRule<Character, Character>>
+@Data
+@RequiredArgsConstructor
+@SuperBuilder(toBuilder = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class AlgorithmInfo
 {
 
+	/** The array with the class names where the algorithm is used */
+	String[] classNames;
 
-	/** {@inheritDoc} */
-	@Override
-	public int compare(ObfuscationOperationRule<Character, Character> o1,
-		ObfuscationOperationRule<Character, Character> o2)
-	{
-		return o1.getCharacter().compareTo(o2.getCharacter());
-	}
+	/** The algorithm name */
+	String name;
 
+	/** The category name */
+	String category;
+
+	/** The description of the algorithm. */
+	String description;
 }

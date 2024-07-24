@@ -101,6 +101,27 @@ public final class KeySpecFactory
 	}
 
 	/**
+	 * Factory method for creating a new {@link SecretKeySpec} from the given algorithm and the
+	 * given secret key as byte array
+	 *
+	 * @param algorithm
+	 *            the algorithm
+	 * @param offset
+	 *            the offset in <code>key</code> where the key material starts.
+	 * @param len
+	 *            the length of the key material.
+	 * @param secretKey
+	 *            the secret key
+	 * @return the new {@link SecretKeySpec} from the given algorithm and the given secret key
+	 */
+	public static SecretKeySpec newSecretKeySpec(final byte[] secretKey, int offset, int len,
+		final String algorithm)
+	{
+		final SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey, offset, len, algorithm);
+		return secretKeySpec;
+	}
+
+	/**
 	 * Factory method for creating a new {@link DESKeySpec} from the given secret key as byte array
 	 *
 	 * @param secretKey

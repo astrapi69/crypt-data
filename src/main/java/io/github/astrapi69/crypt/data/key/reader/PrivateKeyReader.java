@@ -56,7 +56,6 @@ import lombok.extern.java.Log;
 public final class PrivateKeyReader
 {
 
-
 	private PrivateKeyReader()
 	{
 	}
@@ -67,7 +66,6 @@ public final class PrivateKeyReader
 	 * @param file
 	 *            the file
 	 * @return true, if the given {@link File} is in pem format otherwise false
-	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -105,7 +103,6 @@ public final class PrivateKeyReader
 	 * @param file
 	 *            the file that contains the private key
 	 * @return true, if the given {@link File} is password protected otherwise false
-	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -142,8 +139,7 @@ public final class PrivateKeyReader
 	 *
 	 * @param file
 	 *            the file to check
-	 * @return true, if the given {@link File}(is a valid private key file otherwise false
-	 *
+	 * @return true, if the given {@link File} is a valid private key file otherwise false
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -213,7 +209,6 @@ public final class PrivateKeyReader
 	 * @param file
 	 *            the file( in *.pem format) that contains the private key
 	 * @return the {@link PrivateKey} object
-	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws NoSuchAlgorithmException
@@ -239,7 +234,6 @@ public final class PrivateKeyReader
 	 * @param algorithm
 	 *            the algorithm
 	 * @return the {@link PrivateKey} object
-	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws NoSuchAlgorithmException
@@ -266,7 +260,6 @@ public final class PrivateKeyReader
 	 * @param algorithm
 	 *            the algorithm
 	 * @return the {@link PrivateKey} object
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails.
 	 * @throws InvalidKeySpecException
@@ -292,7 +285,6 @@ public final class PrivateKeyReader
 	 * @param algorithm
 	 *            the algorithm
 	 * @return the {@link PrivateKey} object
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails.
 	 * @throws InvalidKeySpecException
@@ -315,7 +307,6 @@ public final class PrivateKeyReader
 	 * @param privateKeyAsString
 	 *            the private key as string( in *.pem format)
 	 * @return the {@link PrivateKey} object
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails.
 	 * @throws InvalidKeySpecException
@@ -395,7 +386,6 @@ public final class PrivateKeyReader
 	 * @param file
 	 *            the file that contains the private key
 	 * @return the {@link PrivateKey} object
-	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws NoSuchAlgorithmException
@@ -417,7 +407,7 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Gets an {@link Optional} with the private key from the given file. If it does not match the
+	 * Gets an {@link Optional} with the private key from the given file. If it does not match, the
 	 * optional is empty.
 	 *
 	 * @param privateKeyFile
@@ -433,7 +423,7 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Gets an {@link Optional} with the private key from the given file. If it does not match the
+	 * Gets an {@link Optional} with the private key from the given file. If it does not match, the
 	 * optional is empty.
 	 *
 	 * @param privateKeyBytes
@@ -529,8 +519,8 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Constructs from the given root, parent directory and file name the file and reads the private
-	 * key.
+	 * Constructs from the given root, parent directory, and file name the file and reads the
+	 * private key.
 	 *
 	 * @param root
 	 *            the root directory of the parent directory
@@ -554,5 +544,4 @@ public final class PrivateKeyReader
 	{
 		return PrivateKeyReader.readPrivateKey(new File(new File(root, directory), fileName));
 	}
-
 }

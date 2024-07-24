@@ -79,9 +79,8 @@ public class Address implements IAddress
 		return other instanceof Address;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -101,63 +100,56 @@ public class Address implements IAddress
 		return java.util.Arrays.equals(this.getPublicKey(), other.getPublicKey());
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public byte[] getHash()
 	{
 		return this.hash;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public void setHash(byte[] hash)
 	{
 		this.hash = hash;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public String getName()
 	{
 		return this.name;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public byte[] getPublicKey()
 	{
 		return this.publicKey;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public void setPublicKey(byte[] publicKey)
 	{
 		this.publicKey = publicKey;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode()
 	{

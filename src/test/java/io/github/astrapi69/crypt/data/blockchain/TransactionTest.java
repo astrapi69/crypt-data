@@ -24,25 +24,24 @@
  */
 package io.github.astrapi69.crypt.data.blockchain;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.security.PublicKey;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.file.search.PathFinder;
+import io.github.astrapi69.test.MeanBeanExtensions;
 
 /**
- * The unit test class for the class {@link Transaction}
+ * The unit test class for the class {@link Transaction}.
  */
 public class TransactionTest
 {
@@ -55,7 +54,6 @@ public class TransactionTest
 	@BeforeEach
 	public void setUp() throws Exception
 	{
-
 		File publickeyPemDir;
 		File publickeyPemFile;
 		PublicKey publicKey;
@@ -68,7 +66,7 @@ public class TransactionTest
 	}
 
 	/**
-	 * Test method for {@link Transaction} constructors
+	 * Test method for {@link Transaction} constructors.
 	 */
 	@Test
 	public final void testConstructors()
@@ -82,17 +80,17 @@ public class TransactionTest
 		text = "transaction-name";
 		object = new Transaction(text, address.getHash(), fixedSignature);
 		assertNotNull(object.getSignableData());
+		assertArrayEquals(object.getSenderHash(), address.getHash());
+		assertArrayEquals(object.getSignature(), fixedSignature);
+		assertEquals(object.getText(), text);
 	}
 
 	/**
 	 * Test method for {@link Transaction#equals(Object)} , {@link Transaction#hashCode()} and
-	 * {@link Transaction#toString()}
+	 * {@link Transaction#toString()}.
 	 */
 	@Test
-	@Disabled
 	public void testEqualsHashcodeAndToStringWithClass()
-		throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException,
-		InstantiationException, ClassNotFoundException, InvocationTargetException, IOException
 	{
 		boolean expected;
 		boolean actual;
@@ -103,16 +101,35 @@ public class TransactionTest
 		assertEquals(expected, actual);
 	}
 
-
 	/**
-	 * Test method for {@link Transaction} with {@link BeanTester}
+	 * Test method for {@link Transaction} with {@link BeanTester}.
 	 */
 	@Test
-	@Disabled
 	public void testWithBeanTester()
 	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(Transaction.class);
+		MeanBeanExtensions.testWithAllTester(Transaction.class);
 	}
 
+	/**
+	 * Test method for testing {@link Transaction} setters and getters.
+	 */
+	@Test
+	public void testSettersAndGetters()
+	{
+		Transaction transaction = new Transaction();
+		String text = "test-text";
+		byte[] senderHash = "sender-hash".getBytes();
+		byte[] signature = "signature".getBytes();
+		long timestamp = System.currentTimeMillis();
+
+		transaction.setText(text);
+		transaction.setSenderHash(senderHash);
+		transaction.setSignature(signature);
+		transaction.setTimestamp(timestamp);
+
+		assertEquals(text, transaction.getText());
+		assertArrayEquals(senderHash, transaction.getSenderHash());
+		assertArrayEquals(signature, transaction.getSignature());
+		assertEquals(timestamp, transaction.getTimestamp());
+	}
 }

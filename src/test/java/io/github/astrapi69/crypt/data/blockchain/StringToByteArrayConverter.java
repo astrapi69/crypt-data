@@ -22,26 +22,28 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.crypt.data.obfuscation.rule;
+package io.github.astrapi69.crypt.data.blockchain;
 
-import java.util.Comparator;
+import org.junit.jupiter.params.converter.ArgumentConversionException;
+import org.junit.jupiter.params.converter.SimpleArgumentConverter;
 
-/**
- * The class {@link ObfuscationOperationRuleComparator} can compare {@link ObfuscationOperationRule}
- * objects
- */
-public class ObfuscationOperationRuleComparator
-	implements
-		Comparator<ObfuscationOperationRule<Character, Character>>
+public class StringToByteArrayConverter extends SimpleArgumentConverter
 {
-
-
-	/** {@inheritDoc} */
 	@Override
-	public int compare(ObfuscationOperationRule<Character, Character> o1,
-		ObfuscationOperationRule<Character, Character> o2)
+	protected Object convert(Object source, Class<?> targetType) throws ArgumentConversionException
 	{
-		return o1.getCharacter().compareTo(o2.getCharacter());
+		if (source == null)
+		{
+			throw new ArgumentConversionException("source is null");
+		}
+		if (!(source instanceof String))
+		{
+			throw new ArgumentConversionException("source is not a string");
+		}
+		if (!targetType.equals(byte[].class))
+		{
+			throw new ArgumentConversionException("target type is not byte[]");
+		}
+		return ((String)source).getBytes();
 	}
-
 }

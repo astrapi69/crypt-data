@@ -24,6 +24,8 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
+import static io.github.astrapi69.crypt.data.factory.KeySpecFactory.newSecretKeySpec;
+
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -33,16 +35,63 @@ import java.security.PublicKey;
 import javax.crypto.KeyAgreement;
 import javax.crypto.SecretKey;
 
+import io.github.astrapi69.crypt.data.key.SharedSecretExtensions;
+import io.github.astrapi69.crypt.data.model.SharedSecretInfo;
+import io.github.astrapi69.crypt.data.model.SharedSecretModel;
+
 /**
  * The factory class {@link KeyAgreementFactory} holds methods for creating new shared
- * {@link SecretKey} objects and {@link KeyAgreement} objects
+ * {@link SecretKey} objects and {@link KeyAgreement} objects.
  */
 public class KeyAgreementFactory
 {
 
 	/**
+	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments.
 	 *
-	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments
+	 * @param sharedSecretModel
+	 *            the {@link SharedSecretModel} object
+	 * @return the new created shared {@link SecretKey} object from the given arguments
+	 * @throws InvalidKeyException
+	 *             if the private key is invalid
+	 * @throws NoSuchAlgorithmException
+	 *             if the key agreement algorithm is not available
+	 * @throws NoSuchProviderException
+	 *             if the provider is not registered
+	 */
+	public static SecretKey newSharedSecret(SharedSecretModel sharedSecretModel)
+		throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException
+	{
+		KeyAgreement keyAgreement = newKeyAgreement(sharedSecretModel.getPrivateKey(),
+			sharedSecretModel.getPublicKey(), sharedSecretModel.getKeyAgreementAlgorithm(),
+			sharedSecretModel.getProvider(), true);
+		byte[] sharedSecret = keyAgreement.generateSecret();
+		return toSecretKey(sharedSecret, sharedSecretModel.getKeyAgreementAlgorithm());
+	}
+
+	/**
+	 * Factory method for creating a new shared {@link SecretKey} object from the given
+	 * {@link SharedSecretInfo}.
+	 *
+	 * @param sharedSecretInfo
+	 *            the {@link SharedSecretInfo} object
+	 * @return the new created shared {@link SecretKey} object from the given arguments
+	 * @throws InvalidKeyException
+	 *             if the private key is invalid
+	 * @throws NoSuchAlgorithmException
+	 *             if the key agreement algorithm is not available
+	 * @throws NoSuchProviderException
+	 *             if the provider is not registered
+	 */
+	public static SecretKey newSharedSecret(SharedSecretInfo sharedSecretInfo)
+		throws NoSuchAlgorithmException, InvalidKeyException, NoSuchProviderException
+	{
+		SharedSecretModel sharedSecretModel = SharedSecretExtensions.toModel(sharedSecretInfo);
+		return newSharedSecret(sharedSecretModel);
+	}
+
+	/**
+	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments.
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -56,13 +105,13 @@ public class KeyAgreementFactory
 	 *            the provider
 	 * @return the new created shared {@link SecretKey} object from the given arguments
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails
+	 *             if the private key is invalid
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
-	 *             available from the specified provider
+	 *             if the key agreement algorithm is not available
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 *             if the provider is not registered For instance:<br>
+	 *             SecretKey secretKey = KeyAgreementFactory.newSharedSecret( privateKey, publicKey,
+	 *             "ECDH", "AES", "SunJCE");
 	 */
 	public static SecretKey newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
 		String keyAgreementAlgorithm, String secretKeyAlgorithm, String provider)
@@ -70,11 +119,12 @@ public class KeyAgreementFactory
 	{
 		KeyAgreement keyAgreement = newKeyAgreement(privateKey, publicKey, keyAgreementAlgorithm,
 			provider, true);
-		return keyAgreement.generateSecret(secretKeyAlgorithm);
+		byte[] sharedSecret = keyAgreement.generateSecret();
+		return toSecretKey(sharedSecret, secretKeyAlgorithm);
 	}
 
 	/**
-	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments
+	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments.
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -87,17 +137,16 @@ public class KeyAgreementFactory
 	 * @param provider
 	 *            the provider
 	 * @param lastPhase
-	 *            the last phase flag which indicates whether this is the last phase of the key
-	 *            agreement that will be created
+	 *            indicates whether this is the last phase of the key agreement
 	 * @return the new created shared {@link SecretKey} object from the given arguments
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails
+	 *             if the private key is invalid
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
-	 *             available from the specified provider
+	 *             if the key agreement algorithm is not available
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 *             if the provider is not registered For instance:<br>
+	 *             SecretKey secretKey = KeyAgreementFactory.newSharedSecret( privateKey, publicKey,
+	 *             "ECDH", "AES", "SunJCE", true);
 	 */
 	public static SecretKey newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
 		String keyAgreementAlgorithm, String secretKeyAlgorithm, String provider, boolean lastPhase)
@@ -105,12 +154,27 @@ public class KeyAgreementFactory
 	{
 		KeyAgreement keyAgreement = newKeyAgreement(privateKey, publicKey, keyAgreementAlgorithm,
 			provider, lastPhase);
-
-		return keyAgreement.generateSecret(secretKeyAlgorithm);
+		byte[] sharedSecret = keyAgreement.generateSecret();
+		return toSecretKey(sharedSecret, secretKeyAlgorithm);
 	}
 
 	/**
-	 * Factory method for creating a new shared secret byte array from the given arguments
+	 * Creates a {@link SecretKey} object from the given byte array that is generated from a
+	 * {@link KeyAgreement} object and the given algorithm
+	 *
+	 * @param sharedSecret
+	 *            the byte array that is generated from a {@link KeyAgreement} object
+	 * @param secretKeyAlgorithm
+	 *            the algorithm for generating the {@link SecretKey} object
+	 * @return the newly created shared {@link SecretKey} object from the given arguments
+	 */
+	public static SecretKey toSecretKey(byte[] sharedSecret, String secretKeyAlgorithm)
+	{
+		return newSecretKeySpec(sharedSecret, 0, 16, secretKeyAlgorithm);
+	}
+
+	/**
+	 * Factory method for creating a new shared secret byte array from the given arguments.
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -121,17 +185,16 @@ public class KeyAgreementFactory
 	 * @param provider
 	 *            the provider
 	 * @param lastPhase
-	 *            the last phase flag which indicates whether this is the last phase of the key
-	 *            agreement that will be created
-	 * @return the new created shared {@link SecretKey} object from the given arguments
+	 *            indicates whether this is the last phase of the key agreement
+	 * @return the new created shared secret byte array from the given arguments
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails
+	 *             if the private key is invalid
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
-	 *             available from the specified provider
+	 *             if the key agreement algorithm is not available
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 *             if the provider is not registered For instance:<br>
+	 *             byte[] sharedSecret = KeyAgreementFactory.newSharedSecret( privateKey, publicKey,
+	 *             "ECDH", "SunJCE", true);
 	 */
 	public static byte[] newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
 		String keyAgreementAlgorithm, String provider, boolean lastPhase)
@@ -139,12 +202,11 @@ public class KeyAgreementFactory
 	{
 		KeyAgreement keyAgreement = newKeyAgreement(privateKey, publicKey, keyAgreementAlgorithm,
 			provider, lastPhase);
-
 		return keyAgreement.generateSecret();
 	}
 
 	/**
-	 * Factory method for creating a new shared secret byte array from the given arguments
+	 * Factory method for creating a new shared secret byte array from the given arguments.
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -154,15 +216,15 @@ public class KeyAgreementFactory
 	 *            the key agreement algorithm
 	 * @param provider
 	 *            the provider
-	 * @return the new created shared {@link SecretKey} object from the given arguments
+	 * @return the new created shared secret byte array from the given arguments
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails
+	 *             if the private key is invalid
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
-	 *             available from the specified provider
+	 *             if the key agreement algorithm is not available
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 *             if the provider is not registered For instance:<br>
+	 *             byte[] sharedSecret = KeyAgreementFactory.newSharedSecret( privateKey, publicKey,
+	 *             "ECDH", "SunJCE");
 	 */
 	public static byte[] newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
 		String keyAgreementAlgorithm, String provider)
@@ -172,7 +234,7 @@ public class KeyAgreementFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyAgreement} object from the given arguments
+	 * Factory method for creating a new {@link KeyAgreement} object from the given arguments.
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -183,17 +245,16 @@ public class KeyAgreementFactory
 	 * @param provider
 	 *            the provider
 	 * @param lastPhase
-	 *            the last phase flag which indicates whether this is the last phase of the key
-	 *            agreement that will be created
-	 * @return the new created shared {@link KeyAgreement} object from the given arguments
+	 *            indicates whether this is the last phase of the key agreement
+	 * @return the new created {@link KeyAgreement} object from the given arguments
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails
+	 *             if the private key is invalid
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
-	 *             available from the specified provider
+	 *             if the key agreement algorithm is not available
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 *             if the provider is not registered For instance:<br>
+	 *             KeyAgreement keyAgreement = KeyAgreementFactory.newKeyAgreement( privateKey,
+	 *             publicKey, "ECDH", "SunJCE", true);
 	 */
 	public static KeyAgreement newKeyAgreement(PrivateKey privateKey, PublicKey publicKey,
 		String keyAgreementAlgorithm, String provider, boolean lastPhase)
@@ -204,7 +265,6 @@ public class KeyAgreementFactory
 			: KeyAgreement.getInstance(keyAgreementAlgorithm);
 		keyAgreement.init(privateKey);
 		keyAgreement.doPhase(publicKey, lastPhase);
-
 		return keyAgreement;
 	}
 }

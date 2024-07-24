@@ -1,6 +1,23 @@
 ## Change log
 ----------------------
 
+Version 9.4
+-------------
+
+ADDED:
+
+- new test dependency jsoup
+- new conversion class SharedSecretExtensions for data classes SharedSecretInfo and SharedSecretModel
+- new factory methods with SharedSecretInfo and SharedSecretModel in class KeyAgreementFactory
+- new resolver method that resolves the algorithm of a given private key byte array in class PrivateKeyExtensions
+
+CHANGED:
+
+- update of dependency crypt-api to the new minor version 9.3
+- update of test dependency jobj-contract-verifier to new version 5.2
+- update of dependency commons-lang3 dependency version to 3.15.0
+- remove of obsolete and unused files
+
 Version 9.3
 -------------
 

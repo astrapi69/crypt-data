@@ -28,8 +28,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+
 class DistinguishedNameInfoTest
 {
+
+	@Test
+	public void testToDistinguishedNameInfo()
+	{
+		String representableString = "C=US, ST=California, L=San Francisco, O=MyOrg, OU=MyUnit, CN=John Doe";
+
+		DistinguishedNameInfo dnInfo = DistinguishedNameInfo
+			.toDistinguishedNameInfo(representableString);
+
+		assertEquals("US", dnInfo.getCountryCode());
+		assertEquals("California", dnInfo.getState());
+		assertEquals("San Francisco", dnInfo.getLocation());
+		assertEquals("MyOrg", dnInfo.getOrganisation());
+		assertEquals("MyUnit", dnInfo.getOrganisationUnit());
+		assertEquals("John Doe", dnInfo.getCommonName());
+	}
+
 	@Test
 	public void testToRepresentableString()
 	{

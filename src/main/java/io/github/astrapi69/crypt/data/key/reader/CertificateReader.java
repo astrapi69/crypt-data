@@ -35,6 +35,8 @@ import java.security.cert.X509Certificate;
 
 import org.apache.commons.codec.binary.Base64;
 
+import io.github.astrapi69.crypt.api.type.CertificateFactoryType;
+
 /**
  * The class {@link CertificateReader} is a utility class for reading certificates.
  */
@@ -64,7 +66,8 @@ public final class CertificateReader
 	 */
 	public static X509Certificate readCertificate(final byte[] decoded) throws CertificateException
 	{
-		final CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+		final CertificateFactory certificateFactory = CertificateFactory
+			.getInstance(CertificateFactoryType.X_509.getType());
 		final InputStream inputStream = new ByteArrayInputStream(decoded);
 		final X509Certificate certificate = (X509Certificate)certificateFactory
 			.generateCertificate(inputStream);
