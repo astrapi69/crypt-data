@@ -49,6 +49,23 @@ and then add the dependency to the dependencies area
 implementation("io.github.astrapi69:crypt-data:$cryptDataVersion")
 ```
 
+# with new libs.versions.toml file
+
+If you use the new libs.versions.toml file for new automatic catalog versions update
+
+```
+[versions]
+crypt-data-version=${latestVersion}
+
+[libraries]
+crypt-data = { module = "io.github.astrapi69:crypt-data", version.ref = "crypt-data-version" }
+```
+then add the dependency to the dependencies area
+
+```
+    implementation libs.crypt.data
+```
+
 ## Maven dependency [![Maven Central](https://img.shields.io/maven-central/v/io.github.astrapi69/crypt-data.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.astrapi69%22%20AND%20a:%22crypt-data%22)
 
 Maven dependency is now on sonatype. Check
