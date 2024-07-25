@@ -39,6 +39,9 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Date;
 
+import io.github.astrapi69.crypt.data.key.KeyInfoExtensions;
+import io.github.astrapi69.crypt.data.model.CertificateV1Info;
+import io.github.astrapi69.crypt.data.model.CertificateV3Info;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.Extension;
@@ -400,6 +403,33 @@ public final class CertFactory
 		X509CertificateV3Info certificateInfo)
 		throws OperatorCreationException, CertificateException, CertIOException
 	{
+		return newX509CertificateV3(keyPair.getPrivate(), keyPair.getPublic(), certificateInfo);
+	}
+
+	/**
+	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
+	 * X.509 from the given {@link X509CertificateV3Info} that can be used as an end entity
+	 * certificate.
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @param publicKey
+	 *            the public key
+	 * @param certificateInfo
+	 *            the certificate information
+	 * @return the {@link X509Certificate} object
+	 *
+	 * @throws OperatorCreationException
+	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 * @throws CertificateException
+	 *             if the conversion is unable to be made
+	 * @throws CertIOException
+	 *             if there is an issue with the new extension value
+	 */
+	public static X509Certificate newX509CertificateV3(final PrivateKey privateKey,
+		final PublicKey publicKey, X509CertificateV3Info certificateInfo)
+		throws OperatorCreationException, CertificateException, CertIOException
+	{
 		X509CertificateV1Info v1Info = certificateInfo.getCertificateV1Info();
 
 		DistinguishedNameInfo issuer = v1Info.getIssuer();
@@ -413,11 +443,11 @@ public final class CertFactory
 		Date endDate = Date.from(validity.getNotAfter().toInstant());
 
 		ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgorithm)
-			.build(keyPair.getPrivate());
+			.build(privateKey);
 
 		JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(
 			new X500Name(issuer.toRepresentableString()), serial, startDate, endDate,
-			new X500Name(subject.toRepresentableString()), keyPair.getPublic());
+			new X500Name(subject.toRepresentableString()), publicKey);
 
 		if (extensions != null && extensions.length > 0)
 		{
@@ -467,6 +497,59 @@ public final class CertFactory
 
 		return new JcaX509CertificateConverter().setProvider("BC")
 			.getCertificate(certBuilder.build(signer));
+	}
+
+	/**
+	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
+	 * X.509 from the given {@link CertificateV3Info} that can be used as an end entity
+	 * certificate.
+	 *
+	 * @param certificateInfo
+	 *            the certificate information
+	 * @return the {@link X509Certificate} object
+	 *
+	 * @throws OperatorCreationException
+	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 * @throws CertificateException
+	 *             if the conversion is unable to be made
+	 * @throws CertIOException
+	 *             if there is an issue with the new extension value
+	 */
+	public static X509Certificate newX509CertificateV3(final CertificateV3Info certificateInfo)
+			throws OperatorCreationException, CertificateException, CertIOException
+	{
+		CertificateV1Info v1Info = certificateInfo.getCertificateV1Info();
+		X509CertificateV1Info certificateV1Info = v1Info.getCertificateV1Info();
+		PrivateKey privateKey = KeyInfoExtensions.toPrivateKey(v1Info.getPrivateKeyInfo());
+		PublicKey publicKey = KeyInfoExtensions.toPublicKey(v1Info.getPublicKeyInfo());
+
+		DistinguishedNameInfo issuer = certificateV1Info.getIssuer();
+		DistinguishedNameInfo subject = certificateV1Info.getSubject();
+		BigInteger serial = certificateV1Info.getSerial();
+		Validity validity = certificateV1Info.getValidity();
+		String signatureAlgorithm = certificateV1Info.getSignatureAlgorithm();
+		ExtensionInfo[] extensions = certificateInfo.getExtensions();
+
+		Date startDate = Date.from(validity.getNotBefore().toInstant());
+		Date endDate = Date.from(validity.getNotAfter().toInstant());
+
+		ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgorithm)
+				.build(privateKey);
+
+		JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(
+				new X500Name(issuer.toRepresentableString()), serial, startDate, endDate,
+				new X500Name(subject.toRepresentableString()), publicKey);
+
+		if (extensions != null && extensions.length > 0)
+		{
+			for (ExtensionInfo extensionInfo : extensions)
+			{
+				certBuilder.addExtension(ExtensionInfo.toExtension(extensionInfo));
+			}
+		}
+
+		return new JcaX509CertificateConverter().setProvider("BC")
+				.getCertificate(certBuilder.build(contentSigner));
 	}
 
 }
