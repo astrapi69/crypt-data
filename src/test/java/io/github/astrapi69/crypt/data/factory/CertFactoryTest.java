@@ -434,7 +434,7 @@ public class CertFactoryTest
 		X500Name subject = new X500Name("CN=Subject of this certificate");
 		String signatureAlgorithm = "InvalidAlgorithm";
 
-		assertThrows(OperatorCreationException.class, () -> {
+		assertThrows(IllegalArgumentException.class, () -> {
 			CertFactory.newX509CertificateV1(keyPair, issuer, serial, notBefore, notAfter, subject,
 				signatureAlgorithm);
 		});
