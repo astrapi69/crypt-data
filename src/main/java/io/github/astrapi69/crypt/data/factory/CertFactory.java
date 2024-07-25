@@ -39,9 +39,6 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Date;
 
-import io.github.astrapi69.crypt.data.key.KeyInfoExtensions;
-import io.github.astrapi69.crypt.data.model.CertificateV1Info;
-import io.github.astrapi69.crypt.data.model.CertificateV3Info;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.Extension;
@@ -58,6 +55,9 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
+import io.github.astrapi69.crypt.data.key.KeyInfoExtensions;
+import io.github.astrapi69.crypt.data.model.CertificateV1Info;
+import io.github.astrapi69.crypt.data.model.CertificateV3Info;
 import io.github.astrapi69.crypt.data.model.DistinguishedNameInfo;
 import io.github.astrapi69.crypt.data.model.ExtensionInfo;
 import io.github.astrapi69.crypt.data.model.Validity;
@@ -501,8 +501,7 @@ public final class CertFactory
 
 	/**
 	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
-	 * X.509 from the given {@link CertificateV3Info} that can be used as an end entity
-	 * certificate.
+	 * X.509 from the given {@link CertificateV3Info} that can be used as an end entity certificate.
 	 *
 	 * @param certificateInfo
 	 *            the certificate information
@@ -516,7 +515,7 @@ public final class CertFactory
 	 *             if there is an issue with the new extension value
 	 */
 	public static X509Certificate newX509CertificateV3(final CertificateV3Info certificateInfo)
-			throws OperatorCreationException, CertificateException, CertIOException
+		throws OperatorCreationException, CertificateException, CertIOException
 	{
 		CertificateV1Info v1Info = certificateInfo.getCertificateV1Info();
 		X509CertificateV1Info certificateV1Info = v1Info.getCertificateV1Info();
@@ -534,11 +533,11 @@ public final class CertFactory
 		Date endDate = Date.from(validity.getNotAfter().toInstant());
 
 		ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgorithm)
-				.build(privateKey);
+			.build(privateKey);
 
 		JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(
-				new X500Name(issuer.toRepresentableString()), serial, startDate, endDate,
-				new X500Name(subject.toRepresentableString()), publicKey);
+			new X500Name(issuer.toRepresentableString()), serial, startDate, endDate,
+			new X500Name(subject.toRepresentableString()), publicKey);
 
 		if (extensions != null && extensions.length > 0)
 		{
@@ -549,7 +548,7 @@ public final class CertFactory
 		}
 
 		return new JcaX509CertificateConverter().setProvider("BC")
-				.getCertificate(certBuilder.build(contentSigner));
+			.getCertificate(certBuilder.build(contentSigner));
 	}
 
 }
