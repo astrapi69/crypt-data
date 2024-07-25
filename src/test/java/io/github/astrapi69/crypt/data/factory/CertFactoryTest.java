@@ -89,14 +89,14 @@ public class CertFactoryTest
 	 * {@link CertFactory#newEndEntityX509CertificateV3(KeyPair, X500Name, BigInteger, Date, Date, X500Name, String, X509Certificate)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws CertificateException
 	 *             if the conversion is unable to be made
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
-	 *             available from the specified provider.
+	 *             available from the specified provider
 	 * @throws OperatorCreationException
-	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 *             is thrown if a security error occurs on creation of {@link ContentSigner}
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list
@@ -148,14 +148,14 @@ public class CertFactoryTest
 	 * {@link CertFactory#newIntermediateX509CertificateV3(KeyPair, X500Name, BigInteger, Date, Date, X500Name, String, X509Certificate)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws CertificateException
 	 *             if the conversion is unable to be made
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
-	 *             available from the specified provider.
+	 *             available from the specified provider
 	 * @throws OperatorCreationException
-	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 *             is thrown if a security error occurs on creation of {@link ContentSigner}
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list
@@ -285,7 +285,6 @@ public class CertFactoryTest
 		File certificateFile;
 		X509Certificate certificate;
 
-
 		privatekeyPemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 		privatekeyPemFile = new File(privatekeyPemDir, "private.pem");
 
@@ -331,10 +330,10 @@ public class CertFactoryTest
 	 * Test method for {@link CertFactory#newX509Certificate(String, byte[])}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws CertificateException
 	 *             is thrown if no Provider supports a CertificateFactorySpi implementation for the
-	 *             given certificate type.
+	 *             given certificate type
 	 */
 	@Test
 	public void testNewX509CertificateStringByteArray() throws IOException, CertificateException
@@ -464,7 +463,6 @@ public class CertFactoryTest
 		assertEquals(cert, certificate);
 
 	}
-
 
 	/**
 	 * Test method for {@link CertFactory} with {@link BeanTester}
