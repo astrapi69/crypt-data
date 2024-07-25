@@ -22,6 +22,7 @@ junit-jupiter-params-version = "5.11.0-M2"
 junit-jupiter-version = "5.11.0-M2"
 junit-platform-launcher-version = "1.11.0-M2"
 lombok-version = "1.18.34"
+meanbean-factories-version = "3"
 meanbean-version = "3.0.0-M9"
 mockito-core-version = "5.12.0"
 random-beans-version = "3.9.0"
@@ -53,6 +54,7 @@ junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", vers
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform-launcher-version" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok-version" }
 meanbean = { module = "com.github.meanbeanlib:meanbean", version.ref = "meanbean-version" }
+meanbean-factories = { module = "io.github.astrapi69:meanbean-factories", version.ref = "meanbean-factories-version" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core-version" }
 random-beans = { module = "io.github.benas:random-beans", version.ref = "random-beans-version" }
 randomizer = { module = "io.github.astrapi69:randomizer", version.ref = "randomizer-version" }
@@ -70,6 +72,7 @@ unit-testing = [
     "junit-jupiter",
     "junit-jupiter-params",
     "meanbean",
+    "meanbean-factories",
     "mockito-core",
     "test-object",
 ]

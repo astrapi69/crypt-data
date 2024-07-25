@@ -4,6 +4,11 @@
 Version 9.5-SNAPSHOT
 -------------
 
+ADDED:
+
+- new test dependency meanbean-factory
+- new factory methods for create new X509Certificate objects
+
 CHANGED:
 
 - removed deprecated class references
