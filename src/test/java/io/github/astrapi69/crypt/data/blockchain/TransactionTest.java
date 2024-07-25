@@ -38,7 +38,7 @@ import org.meanbean.test.BeanTester;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.file.search.PathFinder;
-import io.github.astrapi69.test.MeanBeanExtensions;
+import io.github.astrapi69.meanbean.extension.MeanBeanExtensions;
 
 /**
  * The unit test class for the class {@link Transaction}.
