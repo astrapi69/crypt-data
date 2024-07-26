@@ -220,4 +220,25 @@ public class ExtensionInfoTest
 	{
 		return actual;
 	}
+
+
+	@Test
+	void testTransformToExtensions() throws IOException
+	{
+		ExtensionInfo[] extensionInfos = ExtensionInfoCSVReader
+			.readExtensionInfoFromCSV("src/test/resources/extension_info_data.csv");
+		Extension[] extensions = ExtensionInfo.toExtensions(extensionInfos);
+
+		assertNotNull(extensions);
+		assertEquals(extensionInfos.length, extensions.length);
+
+		for (int i = 0; i < extensionInfos.length; i++)
+		{
+			ExtensionInfo info = extensionInfos[i];
+			Extension ext = extensions[i];
+			assertEquals(info.getExtensionId(), ext.getExtnId().getId());
+			assertEquals(info.isCritical(), ext.isCritical());
+			assertEquals(info.getValue(), new String(ext.getExtnValue().getOctets()));
+		}
+	}
 }

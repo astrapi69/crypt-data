@@ -68,26 +68,26 @@ class DistinguishedNameInfoTest
 		certificateAttributes = DistinguishedNameInfo.builder().countryCode("GR").state("Pieria")
 			.build();
 		actual = DistinguishedNameInfo.toRepresentableString(certificateAttributes);
-		expected = "C=GR, ST=Pieria";
+		expected = "ST=Pieria,C=GR";
 		assertEquals(actual, expected);
 
 		certificateAttributes = DistinguishedNameInfo.builder().countryCode("GR").state("Pieria")
 			.organisation("Alpha Ro Group Ltd").build();
 		actual = DistinguishedNameInfo.toRepresentableString(certificateAttributes);
-		expected = "C=GR, ST=Pieria, O=Alpha Ro Group Ltd";
+		expected = "O=Alpha Ro Group Ltd,ST=Pieria,C=GR";
 		assertEquals(actual, expected);
 
 		certificateAttributes = DistinguishedNameInfo.builder().countryCode("GR").state("Pieria")
 			.organisation("Alpha Ro Group Ltd").organisationUnit("Certificate Authority").build();
 		actual = DistinguishedNameInfo.toRepresentableString(certificateAttributes);
-		expected = "C=GR, ST=Pieria, O=Alpha Ro Group Ltd, OU=Certificate Authority";
+		expected = "OU=Certificate Authority,O=Alpha Ro Group Ltd,ST=Pieria,C=GR";
 		assertEquals(actual, expected);
 
 		certificateAttributes = DistinguishedNameInfo.builder().countryCode("GR").state("Pieria")
 			.organisation("Alpha Ro Group Ltd").organisationUnit("Certificate Authority")
 			.commonName("asterios.raptis@web.de").build();
 		actual = DistinguishedNameInfo.toRepresentableString(certificateAttributes);
-		expected = "C=GR, ST=Pieria, O=Alpha Ro Group Ltd, OU=Certificate Authority, CN=asterios.raptis@web.de";
+		expected = "CN=asterios.raptis@web.de,OU=Certificate Authority,O=Alpha Ro Group Ltd,ST=Pieria,C=GR";
 		assertEquals(actual, expected);
 	}
 

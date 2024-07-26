@@ -81,6 +81,24 @@ public class ExtensionInfo
 	}
 
 	/**
+	 * Transforms an array of {@link ExtensionInfo} objects to an array of {@link Extension} objects
+	 *
+	 * @param extensionInfos
+	 *            the array of {@link ExtensionInfo} objects
+	 * @return an array of {@link Extension} objects
+	 */
+	public static Extension[] toExtensions(final ExtensionInfo[] extensionInfos)
+	{
+		Extension[] extensions = new Extension[extensionInfos.length];
+		int i = 0;
+		for (ExtensionInfo extensionInfo : extensionInfos)
+		{
+			extensions[i++] = ExtensionInfo.toExtension(extensionInfo);
+		}
+		return extensions;
+	}
+
+	/**
 	 * Factory method to create an {@link ExtensionInfo} object from a {@link Extension} object
 	 *
 	 * @param extension

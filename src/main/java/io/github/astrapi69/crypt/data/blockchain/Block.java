@@ -98,18 +98,6 @@ public class Block implements IBlock
 			HashAlgorithm.SHA256);
 	}
 
-	/**
-	 * Checks if the other object is an instance of {@link Block}.
-	 *
-	 * @param other
-	 *            the other object to check
-	 * @return true if the other object is an instance of {@link Block}, false otherwise
-	 */
-	protected boolean canEqual(final Object other)
-	{
-		return other instanceof Block;
-	}
-
 	/** {@inheritDoc} */
 	@Override
 	public boolean equals(final Object o)

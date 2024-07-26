@@ -27,8 +27,16 @@ package io.github.astrapi69.crypt.data.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.DEROctetString;
@@ -119,6 +127,39 @@ public class ExtensionInfoParameterizedTest
 		// Provide test data here, if needed
 		return Stream.of(Arguments.of("1.2.3.4", true, "testValue1"),
 			Arguments.of("1.2.3.5", false, "testValue2"));
+	}
+
+
+	/**
+	 * Reads a CSV file and converts it to an array of {@link ExtensionInfo} objects
+	 *
+	 * @param csvFilePath
+	 *            the path to the CSV file
+	 * @return an array of {@link ExtensionInfo} objects
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static ExtensionInfo[] readExtensionInfoFromCSV(String csvFilePath) throws IOException
+	{
+		try (Reader reader = new FileReader(csvFilePath);
+			CSVParser csvParser = new CSVParser(reader,
+				CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim()))
+		{
+
+			List<ExtensionInfo> extensionInfos = new ArrayList<>();
+			for (CSVRecord csvRecord : csvParser)
+			{
+				String extensionId = csvRecord.get("extensionId");
+				boolean critical = Boolean.parseBoolean(csvRecord.get("critical"));
+				String value = csvRecord.get("value");
+
+				ExtensionInfo extensionInfo = ExtensionInfo.builder().extensionId(extensionId)
+					.critical(critical).value(value).build();
+				extensionInfos.add(extensionInfo);
+			}
+
+			return extensionInfos.toArray(new ExtensionInfo[0]);
+		}
 	}
 
 }
