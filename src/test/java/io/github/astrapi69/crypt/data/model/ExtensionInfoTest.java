@@ -62,10 +62,10 @@ public class ExtensionInfoTest
 	 */
 	@BeforeEach
 	protected void setUp() throws IOException, CertificateException, NoSuchAlgorithmException,
-			NoSuchProviderException, OperatorCreationException
+		NoSuchProviderException, OperatorCreationException
 	{
 		extensionInfo = ExtensionInfo.builder().extensionId("1.2.3.4.5.6.7").critical(true)
-				.value("testValue").build();
+			.value("testValue").build();
 		Security.addProvider(new BouncyCastleProvider());
 
 		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
@@ -80,13 +80,13 @@ public class ExtensionInfoTest
 		issuer = new X500Name("CN=Issuer of this certificate");
 		serial = BigInteger.ONE;
 		notBefore = Date.from(
-				LocalDate.of(2017, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+			LocalDate.of(2017, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 		notAfter = Date.from(
-				LocalDate.of(2027, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+			LocalDate.of(2027, Month.JANUARY, 1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 		subject = new X500Name("CN=Subject of this certificate");
 		signatureAlgorithm = "SHA1withRSA";
 		actual = CertFactory.newEndEntityX509CertificateV3(keyPair, issuer, serial, notBefore,
-				notAfter, subject, signatureAlgorithm, caCert);
+			notAfter, subject, signatureAlgorithm, caCert);
 		Set<String> nonCriticalExtensionOIDs = actual.getNonCriticalExtensionOIDs();
 		Set<String> criticalExtensionOIDs = actual.getCriticalExtensionOIDs();
 	}
@@ -133,7 +133,8 @@ public class ExtensionInfoTest
 		Mockito.when(mockCertificate.getCriticalExtensionOIDs()).thenReturn(criticalOIDs);
 		Mockito.when(mockCertificate.getNonCriticalExtensionOIDs()).thenReturn(nonCriticalOIDs);
 		Mockito.when(mockCertificate.getExtensionValue("1.2.3.4.5.6.8")).thenReturn(criticalValue);
-		Mockito.when(mockCertificate.getExtensionValue("1.2.3.4.5.6.9")).thenReturn(nonCriticalValue);
+		Mockito.when(mockCertificate.getExtensionValue("1.2.3.4.5.6.9"))
+			.thenReturn(nonCriticalValue);
 
 		List<ExtensionInfo> extensionInfos = ExtensionInfo.extractExtensionInfos(mockCertificate);
 		assertNotNull(extensionInfos);
