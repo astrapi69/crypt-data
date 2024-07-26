@@ -1,3 +1,27 @@
+/**
+ * The MIT License
+ *
+ * Copyright (C) 2015 Asterios Raptis
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package io.github.astrapi69.crypt.data.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -124,31 +148,55 @@ public class ExtensionInfoTest
 	{
 		X509Certificate mockCertificate = Mockito.mock(X509Certificate.class);
 
-		Set<String> criticalOIDs = Set.of("1.2.3.4.5.6.8");
-		Set<String> nonCriticalOIDs = Set.of("1.2.3.4.5.6.9");
+		Set<String> criticalOIDs = Set.of("2.5.29.14", "2.5.29.16");
+		Set<String> nonCriticalOIDs = Set.of("2.5.29.15", "2.5.29.17");
 
-		byte[] criticalValue = "criticalValue".getBytes();
-		byte[] nonCriticalValue = "nonCriticalValue".getBytes();
+		byte[] subjectKeyIdentifierValue = "SubjectKeyIdentifierValue".getBytes();
+		byte[] keyUsageValue = "KeyUsageValue".getBytes();
+		byte[] privateKeyUsageValue = "PrivateKeyUsageValue".getBytes();
+		byte[] subjectAlternativeNameValue = "SubjectAlternativeNameValue".getBytes();
 
 		Mockito.when(mockCertificate.getCriticalExtensionOIDs()).thenReturn(criticalOIDs);
 		Mockito.when(mockCertificate.getNonCriticalExtensionOIDs()).thenReturn(nonCriticalOIDs);
-		Mockito.when(mockCertificate.getExtensionValue("1.2.3.4.5.6.8")).thenReturn(criticalValue);
-		Mockito.when(mockCertificate.getExtensionValue("1.2.3.4.5.6.9"))
-			.thenReturn(nonCriticalValue);
+		Mockito.when(mockCertificate.getExtensionValue("2.5.29.14"))
+			.thenReturn(subjectKeyIdentifierValue);
+		Mockito.when(mockCertificate.getExtensionValue("2.5.29.15")).thenReturn(keyUsageValue);
+		Mockito.when(mockCertificate.getExtensionValue("2.5.29.16"))
+			.thenReturn(privateKeyUsageValue);
+		Mockito.when(mockCertificate.getExtensionValue("2.5.29.17"))
+			.thenReturn(subjectAlternativeNameValue);
 
 		List<ExtensionInfo> extensionInfos = ExtensionInfo.extractExtensionInfos(mockCertificate);
 		assertNotNull(extensionInfos);
-		assertEquals(2, extensionInfos.size());
+		assertEquals(4, extensionInfos.size());
 
-		ExtensionInfo criticalExtensionInfo = extensionInfos.get(0);
-		assertEquals("1.2.3.4.5.6.8", criticalExtensionInfo.getExtensionId());
-		assertEquals(true, criticalExtensionInfo.isCritical());
-		assertEquals("criticalValue", criticalExtensionInfo.getValue());
+		ExtensionInfo subjectKeyIdentifierExtension = extensionInfos.stream()
+			.filter(e -> "2.5.29.14".equals(e.getExtensionId())).findFirst().orElse(null);
+		assertNotNull(subjectKeyIdentifierExtension);
+		assertEquals("2.5.29.14", subjectKeyIdentifierExtension.getExtensionId());
+		assertEquals(true, subjectKeyIdentifierExtension.isCritical());
+		assertEquals("SubjectKeyIdentifierValue", subjectKeyIdentifierExtension.getValue());
 
-		ExtensionInfo nonCriticalExtensionInfo = extensionInfos.get(1);
-		assertEquals("1.2.3.4.5.6.9", nonCriticalExtensionInfo.getExtensionId());
-		assertEquals(false, nonCriticalExtensionInfo.isCritical());
-		assertEquals("nonCriticalValue", nonCriticalExtensionInfo.getValue());
+		ExtensionInfo keyUsageExtension = extensionInfos.stream()
+			.filter(e -> "2.5.29.15".equals(e.getExtensionId())).findFirst().orElse(null);
+		assertNotNull(keyUsageExtension);
+		assertEquals("2.5.29.15", keyUsageExtension.getExtensionId());
+		assertEquals(false, keyUsageExtension.isCritical());
+		assertEquals("KeyUsageValue", keyUsageExtension.getValue());
+
+		ExtensionInfo privateKeyUsageExtension = extensionInfos.stream()
+			.filter(e -> "2.5.29.16".equals(e.getExtensionId())).findFirst().orElse(null);
+		assertNotNull(privateKeyUsageExtension);
+		assertEquals("2.5.29.16", privateKeyUsageExtension.getExtensionId());
+		assertEquals(true, privateKeyUsageExtension.isCritical());
+		assertEquals("PrivateKeyUsageValue", privateKeyUsageExtension.getValue());
+
+		ExtensionInfo subjectAlternativeNameExtension = extensionInfos.stream()
+			.filter(e -> "2.5.29.17".equals(e.getExtensionId())).findFirst().orElse(null);
+		assertNotNull(subjectAlternativeNameExtension);
+		assertEquals("2.5.29.17", subjectAlternativeNameExtension.getExtensionId());
+		assertEquals(false, subjectAlternativeNameExtension.isCritical());
+		assertEquals("SubjectAlternativeNameValue", subjectAlternativeNameExtension.getValue());
 	}
 
 	/**

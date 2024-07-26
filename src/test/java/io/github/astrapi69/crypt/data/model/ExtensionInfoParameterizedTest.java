@@ -71,7 +71,7 @@ public class ExtensionInfoParameterizedTest
 	 *            the value of the extension
 	 */
 	@ParameterizedTest
-	@CsvFileSource(resources = "/extension_info.csv", numLinesToSkip = 1)
+	@CsvFileSource(resources = "/extension_info_data.csv", numLinesToSkip = 1)
 	void testFromExtensionParameterized(String extensionId, boolean critical, String value)
 	{
 		Extension extension = new Extension(new ASN1ObjectIdentifier(extensionId), critical,
