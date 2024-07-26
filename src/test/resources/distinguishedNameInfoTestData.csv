@@ -1,0 +1,4 @@
+countryCode;state;location;organisation;organisationUnit;commonName;expected
+GR;Pieria;Katerini;ExampleOrg;ExampleUnit;Jane Doe;CN=Jane Doe,OU=ExampleUnit,O=ExampleOrg,L=Katerini,ST=Pieria,C=GR
+US;California;San Francisco;MyOrg;MyUnit;John Doe;CN=John Doe,OU=MyUnit,O=MyOrg,L=San Francisco,ST=California,C=US
+FR;Ile-de-France;Paris;AnotherOrg;AnotherUnit;John Smith;CN=John Smith,OU=AnotherUnit,O=AnotherOrg,L=Paris,ST=Ile-de-France,C=FR
