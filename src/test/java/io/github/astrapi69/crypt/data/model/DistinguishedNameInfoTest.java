@@ -106,5 +106,9 @@ class DistinguishedNameInfoTest
 
 		X500Name x500Name = dnInfo.toX500Name();
 		assertNotNull(x500Name);
+
+		X500Name x500Name1 = DistinguishedNameInfo.toX500Name(dnInfo);
+		assertNotNull(x500Name1);
+		assertEquals(x500Name1, x500Name);
 	}
 }
