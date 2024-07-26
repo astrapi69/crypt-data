@@ -49,6 +49,7 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
@@ -76,13 +77,27 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 public class CertFactoryTest
 {
 
+	X509Certificate caCert;
+	String type;
+	byte[] certificateData;
+	File pemDir;
+	File certificatePemFile;
+	String base64EncodedCertificate;
+
 	/**
 	 * Sets up method will be invoked before every unit test method in this class
 	 */
 	@BeforeEach
-	protected void setUp()
+	protected void setUp() throws IOException, CertificateException
 	{
 		Security.addProvider(new BouncyCastleProvider());
+
+		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
+		certificatePemFile = new File(pemDir, "certificate.pem");
+		base64EncodedCertificate = CertificateReader.readPemFileAsBase64(certificatePemFile);
+		certificateData = new Base64().decode(base64EncodedCertificate);
+		type = "X.509";
+		caCert = CertFactory.newX509Certificate(type, certificateData);
 	}
 
 	/**
@@ -326,6 +341,36 @@ public class CertFactoryTest
 			subject, signatureAlgorithm);
 		assertNotNull(cert);
 
+	}
+
+	/**
+	 * Test method for
+	 * {@link CertFactory#newX509CertificateV3(KeyPair, X500Name, int, X500Name, String, Extension[])}
+	 *
+	 */
+	@Test
+	public void testNewX509CertificateV3() throws Exception
+	{
+		KeyPair keyPair;
+		X500Name issuer;
+		BigInteger serial;
+		int daysToBeValid;
+		X500Name subject;
+		String signatureAlgorithm;
+		Extension[] extensions;
+		X509Certificate cert;
+
+		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, 2048);
+		issuer = new X500Name("CN=Issuer of this certificate");
+		serial = BigInteger.ONE;
+
+		daysToBeValid = 365;
+
+		subject = new X500Name("CN=Subject of this certificate");
+		signatureAlgorithm = "SHA1withRSA";
+		cert = CertFactory.newX509CertificateV3(keyPair, issuer, daysToBeValid, subject,
+			signatureAlgorithm);
+		assertNotNull(cert);
 	}
 
 	/**

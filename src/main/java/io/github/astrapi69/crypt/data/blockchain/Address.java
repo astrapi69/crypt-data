@@ -24,6 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.blockchain;
 
+
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 import io.github.astrapi69.crypt.api.blockchain.IAddress;
 import io.github.astrapi69.crypt.data.hash.HashExtensions;
@@ -86,10 +87,7 @@ public class Address implements IAddress
 	{
 		if (o == this)
 			return true;
-		if (!(o instanceof Address))
-			return false;
-		final Address other = (Address)o;
-		if (!other.canEqual(this))
+		if (!(o instanceof Address other))
 			return false;
 		if (!java.util.Arrays.equals(this.getHash(), other.getHash()))
 			return false;

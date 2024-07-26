@@ -49,27 +49,28 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExtensionInfo
 {
+
 	/**
-	 * The identifier of the extension.
+	 * The identifier of the extension
 	 */
 	String extensionId;
 
 	/**
-	 * Indicates whether the extension is critical.
+	 * Indicates whether the extension is critical
 	 */
 	boolean critical;
 
 	/**
-	 * The value of the extension.
+	 * The value of the extension
 	 */
 	String value;
 
 	/**
-	 * Converts an {@link ExtensionInfo} object to a {@link Extension} object.
+	 * Converts an {@link ExtensionInfo} object to a {@link Extension} object
 	 *
 	 * @param extensionInfo
-	 *            the {@link ExtensionInfo} object to convert.
-	 * @return the corresponding {@link Extension} object.
+	 *            the {@link ExtensionInfo} object to convert
+	 * @return the corresponding {@link Extension} object
 	 */
 	public static Extension toExtension(final ExtensionInfo extensionInfo)
 	{
@@ -80,11 +81,11 @@ public class ExtensionInfo
 	}
 
 	/**
-	 * Factory method to create an {@link ExtensionInfo} object from a {@link Extension} object.
+	 * Factory method to create an {@link ExtensionInfo} object from a {@link Extension} object
 	 *
 	 * @param extension
-	 *            the {@link Extension} object to convert.
-	 * @return the corresponding {@link ExtensionInfo} object.
+	 *            the {@link Extension} object to convert
+	 * @return the corresponding {@link ExtensionInfo} object
 	 */
 	public static ExtensionInfo fromExtension(final Extension extension)
 	{
@@ -101,8 +102,8 @@ public class ExtensionInfo
 	 * {@link ExtensionInfo} objects
 	 *
 	 * @param certificate
-	 *            the {@link X509Certificate} to extract extensions from.
-	 * @return a list of {@link ExtensionInfo} objects.
+	 *            the {@link X509Certificate} to extract extensions from
+	 * @return a list of {@link ExtensionInfo} objects
 	 */
 	public static List<ExtensionInfo> extractExtensionInfos(X509Certificate certificate)
 	{
@@ -137,11 +138,11 @@ public class ExtensionInfo
 
 	/**
 	 * Extracts extension-infos from an {@link X509Certificate} and returns them as an array of
-	 * {@link ExtensionInfo} objects.
+	 * {@link ExtensionInfo} objects
 	 *
 	 * @param certificate
-	 *            the {@link X509Certificate} to extract extensions from.
-	 * @return an array of {@link ExtensionInfo} objects.
+	 *            the {@link X509Certificate} to extract extensions from
+	 * @return an array of {@link ExtensionInfo} objects
 	 */
 	public static ExtensionInfo[] extractToExtensionInfoArray(X509Certificate certificate)
 	{

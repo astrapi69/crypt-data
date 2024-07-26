@@ -119,8 +119,6 @@ public class Block implements IBlock
 		if (!(o instanceof Block))
 			return false;
 		final Block other = (Block)o;
-		if (!other.canEqual(this))
-			return false;
 		if (!java.util.Arrays.equals(this.getHash(), other.getHash()))
 			return false;
 		if (!java.util.Arrays.equals(this.getMerkleRoot(), other.getMerkleRoot()))

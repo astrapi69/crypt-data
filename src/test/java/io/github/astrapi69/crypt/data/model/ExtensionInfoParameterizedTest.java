@@ -25,6 +25,7 @@
 package io.github.astrapi69.crypt.data.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.stream.Stream;
 
@@ -32,6 +33,7 @@ import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.x509.Extension;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -54,36 +56,36 @@ import org.junit.jupiter.params.provider.MethodSource;
  * <li>1.3.6.1.5.5.7.3.2: TLS Web Client Authentication.</li>
  * </ul>
  */
-public class ExtensionModelTest
+@DisplayName("Parameterized tests for ExtensionInfo")
+public class ExtensionInfoParameterizedTest
 {
 
 	/**
-	 * Test method to verify the conversion from {@link ExtensionInfo} to {@link Extension}.
-	 * 
+	 * Parameterized test for {@link ExtensionInfo#fromExtension(Extension)} using CSV file
+	 *
 	 * @param extensionId
-	 *            The identifier of the extension.
+	 *            the identifier of the extension
 	 * @param critical
-	 *            Indicates whether the extension is critical.
+	 *            indicates whether the extension is critical
 	 * @param value
-	 *            The value of the extension.
+	 *            the value of the extension
 	 */
 	@ParameterizedTest
-	@CsvFileSource(resources = "/extension_info_data.csv", numLinesToSkip = 1)
-	void testToExtension(String extensionId, boolean critical, String value)
+	@CsvFileSource(resources = "/extension_info.csv", numLinesToSkip = 1)
+	void testFromExtensionParameterized(String extensionId, boolean critical, String value)
 	{
-		ExtensionInfo extensionInfo = ExtensionInfo.builder().extensionId(extensionId)
-			.critical(critical).value(value).build();
-
-		Extension extension = ExtensionInfo.toExtension(extensionInfo);
-
-		assertEquals(extensionId, extension.getExtnId().getId());
-		assertEquals(critical, extension.isCritical());
-		assertEquals(value, new String(extension.getExtnValue().getOctets()));
+		Extension extension = new Extension(new ASN1ObjectIdentifier(extensionId), critical,
+			new DEROctetString(value.getBytes()));
+		ExtensionInfo result = ExtensionInfo.fromExtension(extension);
+		assertNotNull(result);
+		assertEquals(extensionId, result.getExtensionId());
+		assertEquals(critical, result.isCritical());
+		assertEquals(value, result.getValue());
 	}
 
 	/**
 	 * Test method to verify the conversion from {@link Extension} to {@link ExtensionInfo}.
-	 * 
+	 *
 	 * @param extensionId
 	 *            The identifier of the extension.
 	 * @param critical
@@ -109,7 +111,7 @@ public class ExtensionModelTest
 
 	/**
 	 * Provide a stream of arguments for parameterized tests.
-	 * 
+	 *
 	 * @return A stream of arguments.
 	 */
 	private static Stream<Arguments> provideExtensionInfoArguments()
@@ -118,4 +120,5 @@ public class ExtensionModelTest
 		return Stream.of(Arguments.of("1.2.3.4", true, "testValue1"),
 			Arguments.of("1.2.3.5", false, "testValue2"));
 	}
+
 }

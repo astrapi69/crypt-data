@@ -100,10 +100,7 @@ public class Transaction implements ITransaction
 	{
 		if (o == this)
 			return true;
-		if (!(o instanceof Transaction))
-			return false;
-		final Transaction other = (Transaction)o;
-		if (!other.canEqual(this))
+		if (!(o instanceof Transaction other))
 			return false;
 		if (!java.util.Arrays.equals(this.getHash(), other.getHash()))
 			return false;
