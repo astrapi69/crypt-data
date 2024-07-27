@@ -1,29 +1,6 @@
-/**
- * The MIT License
- *
- * Copyright (C) 2015 Asterios Raptis
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
 package io.github.astrapi69.crypt.data.factory;
 
+import static javax.crypto.Cipher.ENCRYPT_MODE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.UnsupportedEncodingException;
@@ -41,6 +18,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -48,28 +26,37 @@ import io.github.astrapi69.crypt.api.algorithm.SunJCEAlgorithm;
 import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.model.CryptModel;
+import io.github.astrapi69.meanbean.extension.MeanBeanExtensions;
 
 /**
  * The unit test class for the class {@link CipherFactory}
  */
 public class CipherFactoryTest
 {
+	/**
+	 * Sets up method will be invoked before every unit test method in this class
+	 */
+	@BeforeEach
+	protected void setUp()
+	{
+		Security.addProvider(new BouncyCastleProvider());
+	}
 
 	/**
 	 * Test method for {@link CipherFactory#newCipher(CryptModel)}
 	 *
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails
+	 *             if generation of the SecretKey object fails
 	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cypher object fails
+	 *             if instantiation of the cipher object fails
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cypher object fails
+	 *             if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cypher object fails
+	 *             if initialization of the cipher object fails
 	 * @throws UnsupportedEncodingException
-	 *             is thrown if the named charset is not supported
+	 *             if the named charset is not supported
 	 */
 	@Test
 	public void testNewCipherCryptModelOfCipherString()
@@ -83,8 +70,7 @@ public class CipherFactoryTest
 		privateKey = "D1D15ED36B887AF1";
 		encryptorModel = CryptModel.<Cipher, String, String> builder().key(privateKey)
 			.algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
-			.iterationCount(CompoundAlgorithm.ITERATIONCOUNT).operationMode(Cipher.ENCRYPT_MODE)
-			.build();
+			.iterationCount(CompoundAlgorithm.ITERATIONCOUNT).operationMode(ENCRYPT_MODE).build();
 
 		actual = CipherFactory.newCipher(encryptorModel);
 		assertNotNull(actual);
@@ -111,7 +97,7 @@ public class CipherFactoryTest
 		factory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm);
 		key = factory.generateSecret(keySpec);
 
-		operationMode = Cipher.ENCRYPT_MODE;
+		operationMode = ENCRYPT_MODE;
 		paramSpec = AlgorithmParameterSpecFactory.newPBEParameterSpec(CompoundAlgorithm.SALT,
 			CompoundAlgorithm.ITERATIONCOUNT);
 		cipher = CipherFactory.newCipher(operationMode, key, paramSpec, algorithm);
@@ -141,11 +127,86 @@ public class CipherFactoryTest
 		String algorithm;
 		Cipher cipher;
 
-		Security.addProvider(new BouncyCastleProvider());
 		algorithm = "AES/CBC/PKCS5Padding";
 		cipher = CipherFactory.newCipher(algorithm, SecurityProvider.BC.name());
 		assertNotNull(cipher);
 	}
+
+	/**
+	 * Test method for {@link CipherFactory#newCipher(int, SecretKey, String)}
+	 */
+	@Test
+	public void testNewCipherIntSecretKeyString() throws Exception
+	{
+		int operationMode;
+		SecretKey key;
+		String algorithm;
+		Cipher cipher;
+
+		operationMode = Cipher.ENCRYPT_MODE;
+		algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
+		key = SecretKeyFactoryExtensions.newSecretKey("secret".toCharArray(), algorithm);
+
+		cipher = CipherFactory.newCipher(operationMode, key, algorithm);
+		assertNotNull(cipher);
+	}
+
+	/**
+	 * Test method for {@link CipherFactory#newPBECipher(String, String, byte[], int, int)}
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             if instantiation of the SecretKeyFactory object fails
+	 * @throws InvalidKeySpecException
+	 *             if generation of the SecretKey object fails
+	 * @throws NoSuchPaddingException
+	 *             if instantiation of the cipher object fails
+	 * @throws InvalidAlgorithmParameterException
+	 *             if initialization of the cipher object fails
+	 * @throws InvalidKeyException
+	 *             if initialization of the cipher object fails
+	 */
+	@Test
+	public void testNewPBECipherWithPrivateKey()
+		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
+		InvalidKeyException, InvalidAlgorithmParameterException
+	{
+		String privateKey = "D1D15ED36B887AF1";
+		String algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
+		byte[] salt = CompoundAlgorithm.SALT;
+		int iterationCount = CompoundAlgorithm.ITERATIONCOUNT;
+		int operationMode = Cipher.ENCRYPT_MODE;
+
+		Cipher cipher = CipherFactory.newPBECipher(privateKey, algorithm, salt, iterationCount,
+			operationMode);
+		assertNotNull(cipher);
+	}
+
+	/**
+	 * Test method for {@link CipherFactory#newPBECipher(char[], int, String)}
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             if instantiation of the SecretKeyFactory object fails
+	 * @throws InvalidKeySpecException
+	 *             if generation of the SecretKey object fails
+	 * @throws NoSuchPaddingException
+	 *             if instantiation of the cipher object fails
+	 * @throws InvalidAlgorithmParameterException
+	 *             if initialization of the cipher object fails
+	 * @throws InvalidKeyException
+	 *             if initialization of the cipher object fails
+	 */
+	@Test
+	public void testNewPBECipher() throws NoSuchAlgorithmException, InvalidKeySpecException,
+		NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException
+	{
+		char[] password = "password".toCharArray();
+		int operationMode = Cipher.ENCRYPT_MODE;
+		String algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
+
+		Cipher cipher = CipherFactory.newPBECipher(password, operationMode, algorithm);
+		assertNotNull(cipher);
+	}
+
 
 	/**
 	 * Test method for {@link CipherFactory#newCipher(String, String, byte[], int, int)}
@@ -158,7 +219,7 @@ public class CipherFactoryTest
 		int operationMode;
 
 		algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
-		operationMode = Cipher.ENCRYPT_MODE;
+		operationMode = ENCRYPT_MODE;
 		cipher = CipherFactory.newCipher(CompoundAlgorithm.PASSWORD, algorithm,
 			CompoundAlgorithm.SALT, CompoundAlgorithm.ITERATIONCOUNT, operationMode);
 		assertNotNull(cipher);
@@ -170,8 +231,7 @@ public class CipherFactoryTest
 	@Test
 	public void testWithBeanTester()
 	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(CipherFactory.class);
+		MeanBeanExtensions.testWithBeanTester(CipherFactory.class);
 	}
 
 }
