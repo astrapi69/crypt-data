@@ -22,37 +22,43 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.crypt.data.factory;
+package io.github.astrapi69.crypt.data.algorithm;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import javax.crypto.SecretKey;
+import java.security.Security;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 /**
- * Parameterized test class for {@link SecretKeyFactoryExtensions}
+ * The class {@code AlgorithmValidatorParameterizedTest} provides parameterized unit tests for the
+ * {@link AlgorithmValidator} class using a CSV file
  */
-public class SecretKeyFactoryExtensionsParameterizedTest
+class AlgorithmValidatorParameterizedTest
 {
 
+	static
+	{
+		// Ensuring that some default algorithms are registered for the tests
+		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+	}
+
 	/**
-	 * Parameterized test method for {@link SecretKeyFactoryExtensions#newSecretKey(char[], String)}
+	 * Parameterized test for the {@link AlgorithmValidator#isValid(String, String)} method using
+	 * data from a CSV file
 	 *
-	 * @param password
-	 *            the password
+	 * @param serviceName
+	 *            the name of the security service
 	 * @param algorithm
-	 *            the algorithm
-	 * @throws Exception
-	 *             if an error occurs during the test
+	 *            the algorithm to be validated
+	 * @param expectedResult
+	 *            the expected validation result
 	 */
 	@ParameterizedTest
-	@CsvFileSource(resources = "/secretKeyTestData.csv", numLinesToSkip = 1)
-	public void testNewSecretKeyParameterized(String password, String algorithm) throws Exception
+	@CsvFileSource(resources = "/algorithm_test_data.csv", numLinesToSkip = 1)
+	void testIsValid(String serviceName, String algorithm, boolean expectedResult)
 	{
-		SecretKey secretKey = SecretKeyFactoryExtensions.newSecretKey(password.toCharArray(),
-			algorithm);
-		assertNotNull(secretKey);
+		assertEquals(expectedResult, AlgorithmValidator.isValid(serviceName, algorithm));
 	}
 }

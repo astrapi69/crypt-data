@@ -22,37 +22,33 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.crypt.data.factory;
+package io.github.astrapi69.crypt.data.algorithm;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.security.Security;
+import java.util.Set;
 
-import javax.crypto.SecretKey;
-
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
+import lombok.NonNull;
 
 /**
- * Parameterized test class for {@link SecretKeyFactoryExtensions}
+ * The class {@code AlgorithmValidator} provides a method to validate if a given algorithm is
+ * supported for a specific service
  */
-public class SecretKeyFactoryExtensionsParameterizedTest
+public class AlgorithmValidator
 {
 
 	/**
-	 * Parameterized test method for {@link SecretKeyFactoryExtensions#newSecretKey(char[], String)}
+	 * Validates if the provided algorithm is supported for the given service name
 	 *
-	 * @param password
-	 *            the password
+	 * @param serviceName
+	 *            the name of the security service
 	 * @param algorithm
-	 *            the algorithm
-	 * @throws Exception
-	 *             if an error occurs during the test
+	 *            the algorithm to be validated
+	 * @return true if the algorithm is supported, false otherwise
 	 */
-	@ParameterizedTest
-	@CsvFileSource(resources = "/secretKeyTestData.csv", numLinesToSkip = 1)
-	public void testNewSecretKeyParameterized(String password, String algorithm) throws Exception
+	public static boolean isValid(final @NonNull String serviceName,
+		final @NonNull String algorithm)
 	{
-		SecretKey secretKey = SecretKeyFactoryExtensions.newSecretKey(password.toCharArray(),
-			algorithm);
-		assertNotNull(secretKey);
+		Set<String> algorithms = Security.getAlgorithms(serviceName);
+		return algorithms.contains(algorithm);
 	}
 }

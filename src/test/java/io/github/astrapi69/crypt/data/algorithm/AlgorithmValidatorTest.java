@@ -22,37 +22,53 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.crypt.data.factory;
+package io.github.astrapi69.crypt.data.algorithm;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-import javax.crypto.SecretKey;
+import java.security.Security;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
- * Parameterized test class for {@link SecretKeyFactoryExtensions}
+ * The class {@code AlgorithmValidatorTest} provides unit tests for the {@link AlgorithmValidator}
+ * class
  */
-public class SecretKeyFactoryExtensionsParameterizedTest
+class AlgorithmValidatorTest
 {
 
-	/**
-	 * Parameterized test method for {@link SecretKeyFactoryExtensions#newSecretKey(char[], String)}
-	 *
-	 * @param password
-	 *            the password
-	 * @param algorithm
-	 *            the algorithm
-	 * @throws Exception
-	 *             if an error occurs during the test
-	 */
-	@ParameterizedTest
-	@CsvFileSource(resources = "/secretKeyTestData.csv", numLinesToSkip = 1)
-	public void testNewSecretKeyParameterized(String password, String algorithm) throws Exception
+	@BeforeAll
+	static void setUp()
 	{
-		SecretKey secretKey = SecretKeyFactoryExtensions.newSecretKey(password.toCharArray(),
-			algorithm);
-		assertNotNull(secretKey);
+		// Ensuring that some default algorithms are registered for the tests
+		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+	}
+
+	/**
+	 * Test for a valid algorithm
+	 */
+	@Test
+	void testIsValid()
+	{
+		assertTrue(AlgorithmValidator.isValid("Cipher", "AES"));
+	}
+
+	/**
+	 * Test for an invalid algorithm
+	 */
+	@Test
+	void testIsInvalid()
+	{
+		assertFalse(AlgorithmValidator.isValid("Cipher", "InvalidAlgorithm"));
+	}
+
+	/**
+	 * Test for an invalid service name
+	 */
+	@Test
+	void testInvalidService()
+	{
+		assertFalse(AlgorithmValidator.isValid("InvalidService", "AES"));
 	}
 }

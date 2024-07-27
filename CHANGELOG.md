@@ -6,6 +6,7 @@ Version 9.5-SNAPSHOT
 
 ADDED:
 
+- new validator class AlgorithmValidator for validate a service name with a given algorithm
 - new test dependency commons-csv
 - new test dependency meanbean-factory
 - new factory methods for create new X509Certificate objects
