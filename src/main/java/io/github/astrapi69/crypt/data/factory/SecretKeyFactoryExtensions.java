@@ -38,7 +38,7 @@ import lombok.NonNull;
 
 /**
  * The factory class {@link SecretKeyFactoryExtensions} holds methods for creating
- * {@link SecretKeySpec} objects.
+ * {@link SecretKeySpec} objects
  */
 public final class SecretKeyFactoryExtensions
 {
@@ -48,17 +48,17 @@ public final class SecretKeyFactoryExtensions
 	}
 
 	/**
-	 * Factory method for creating a new {@link SecretKey} from the given password and algorithm.
+	 * Factory method for creating a new {@link SecretKey} from the given password and algorithm
 	 *
 	 * @param password
 	 *            the password
 	 * @param algorithm
 	 *            the algorithm
-	 * @return the new {@link SecretKey} from the given password and algorithm.
+	 * @return the new {@link SecretKey} from the given password and algorithm
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             if generation of the SecretKey object fails
 	 */
 	public static SecretKey newSecretKey(final char[] password, final String algorithm)
 		throws NoSuchAlgorithmException, InvalidKeySpecException
@@ -70,13 +70,13 @@ public final class SecretKeyFactoryExtensions
 	}
 
 	/**
-	 * Factory method for creating a new {@link SecretKeyFactory} from the given algorithm.
+	 * Factory method for creating a new {@link SecretKeyFactory} from the given algorithm
 	 *
 	 * @param algorithm
 	 *            the algorithm
-	 * @return the new {@link SecretKeyFactory} from the given algorithm.
+	 * @return the new {@link SecretKeyFactory} from the given algorithm
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             if instantiation of the SecretKeyFactory object fails
 	 */
 	public static SecretKeyFactory newSecretKeyFactory(final @NonNull String algorithm)
 		throws NoSuchAlgorithmException
@@ -86,18 +86,17 @@ public final class SecretKeyFactoryExtensions
 	}
 
 	/**
-	 * Factory method for creating a new {@link SecretKeyFactory} from the given algorithm.
+	 * Factory method for creating a new {@link SecretKeyFactory} from the given algorithm
 	 *
 	 * @param algorithm
 	 *            the algorithm
 	 * @param provider
 	 *            the provider
-	 * @return the new {@link SecretKeyFactory} from the given algorithm.
+	 * @return the new {@link SecretKeyFactory} from the given algorithm
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 *             if the specified provider is not registered in the security provider list
 	 */
 	public static SecretKeyFactory newSecretKeyFactory(final @NonNull String algorithm,
 		final String provider) throws NoSuchAlgorithmException, NoSuchProviderException
@@ -110,15 +109,15 @@ public final class SecretKeyFactoryExtensions
 
 	/**
 	 * Factory method for creating a new symmetric {@link SecretKey} from the given algorithm and
-	 * the given key length.
+	 * the given key length
 	 *
 	 * @param algorithm
 	 *            the algorithm
 	 * @param keyLength
 	 *            the key length
-	 * @return the new {@link SecretKey} from the given algorithm and the given key length.
+	 * @return the new {@link SecretKey} from the given algorithm and the given key length
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             if instantiation of the SecretKeyFactory object fails
 	 */
 	public static SecretKey newSecretKey(final String algorithm, final int keyLength)
 		throws NoSuchAlgorithmException
@@ -127,7 +126,6 @@ public final class SecretKeyFactoryExtensions
 		keyGenerator.init(keyLength);
 		return keyGenerator.generateKey();
 	}
-
 
 	/**
 	 * Factory method for creating a new {@link SecretKey} object from the given shared secret key
@@ -139,9 +137,9 @@ public final class SecretKeyFactoryExtensions
 	 *            the algorithm for the {@link SecretKey} object creation
 	 * @return the new {@link SecretKey} from the given algorithm and the given key length
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails
+	 *             if generation of the SecretKey object fails
 	 */
 	public static SecretKey newSecretKey(byte[] sharedSecret, String secretKeyAlgorithm)
 		throws NoSuchAlgorithmException, InvalidKeySpecException
