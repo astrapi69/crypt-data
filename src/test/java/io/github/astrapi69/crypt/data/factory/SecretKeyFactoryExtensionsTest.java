@@ -25,14 +25,15 @@
 package io.github.astrapi69.crypt.data.factory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import javax.crypto.SecretKey;
+import java.security.NoSuchProviderException;
+
 import javax.crypto.SecretKeyFactory;
 
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
-import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.crypt.api.algorithm.SunJCEAlgorithm;
 import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
 
@@ -49,11 +50,11 @@ public class SecretKeyFactoryExtensionsTest
 	public void testNewSecretKey() throws Exception
 	{
 		String algorithm;
-		SecretKey secretKey;
+		SecretKeyFactory secretKeyFactory;
 
 		algorithm = SunJCEAlgorithm.PBEWithMD5AndDES.getAlgorithm();
-		secretKey = SecretKeyFactoryExtensions.newSecretKey("secret".toCharArray(), algorithm);
-		assertNotNull(secretKey);
+		secretKeyFactory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm);
+		assertNotNull(secretKeyFactory);
 	}
 
 	/**
@@ -71,29 +72,32 @@ public class SecretKeyFactoryExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link SecretKeyFactoryExtensions#newSecretKey(String, int)}
+	 * Test method for {@link SecretKeyFactoryExtensions#newSecretKeyFactory(String, String)}
 	 */
 	@Test
-	public void testNewSecretKeyWithKeyLength() throws Exception
+	public void testNewSecretKeyFactoryWithProvider() throws Exception
 	{
-		String algorithm = "AES";
-		int keyLength = 256;
-		SecretKey secretKey = SecretKeyFactoryExtensions.newSecretKey(algorithm, keyLength);
-		assertNotNull(secretKey);
-	}
+		String algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
+		String provider = "SunJCE";
+		SecretKeyFactory secretKeyFactory;
 
-	/**
-	 * Test method for {@link SecretKeyFactoryExtensions#newSecretKey(byte[], String)}
-	 */
-	@Test
-	public void testNewSecretKeyWithByteArray() throws Exception
-	{
-		byte[] sharedSecret = ArrayFactory.newByteArray(100, 13, -105, 60, -120, -31, -120, 48, 40,
-			-13, -42, -102, -6, -103, 55, -50, 95, 104, -63, 98, -35, -104, -78, 122, -27, 45, -52,
-			-6, 29, -51, 44, -70);
-		String algorithm = "DES";
-		SecretKey secretKey = SecretKeyFactoryExtensions.newSecretKey(sharedSecret, algorithm);
-		assertNotNull(secretKey);
+		// Test with a valid provider
+		secretKeyFactory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm, provider);
+		assertNotNull(secretKeyFactory);
+
+		// Test with null provider
+		secretKeyFactory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm, null);
+		assertNotNull(secretKeyFactory);
+
+		// Test with empty provider
+		secretKeyFactory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm, "");
+		assertNotNull(secretKeyFactory);
+
+		// Test with invalid provider
+		String invalidProvider = "InvalidProvider";
+		assertThrows(NoSuchProviderException.class, () -> {
+			SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm, invalidProvider);
+		});
 	}
 
 	/**
