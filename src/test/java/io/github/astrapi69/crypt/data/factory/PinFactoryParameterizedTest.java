@@ -24,48 +24,42 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import io.github.astrapi69.collection.list.ListFactory;
-import lombok.NonNull;
 
 /**
- * The factory class {@link PinFactory} holds methods for creating lists of possible pins
+ * The parameterized test class for {@link PinFactory} using CSV file input
  */
-public final class PinFactory
+public class PinFactoryParameterizedTest
 {
-	/**
-	 * Private constructor to prevent instantiation
-	 */
-	private PinFactory()
-	{
-	}
 
 	/**
-	 * Creates a new list of pins formatted from the provided local dates and date patterns
+	 * Parameterized test method for {@link PinFactory#newPins(List, List)}
 	 *
-	 * @param localDates
-	 *            the list of local dates to be formatted
-	 * @param datePatterns
-	 *            the list of date patterns to apply
-	 * @return a sorted list of formatted date strings
+	 * @param localDatesStr
+	 *            the local dates as a comma-separated string
+	 * @param datePatternsStr
+	 *            the date patterns as a comma-separated string
+	 * @param expectedSize
+	 *            the expected size of the generated pin list
 	 */
-	public static List<String> newPins(@NonNull List<LocalDate> localDates,
-		@NonNull List<String> datePatterns)
+	@ParameterizedTest
+	@CsvFileSource(resources = "/pin_factory_test_data.csv", numLinesToSkip = 1)
+	public void testNewPinsWithCsv(String localDatesStr, String datePatternsStr, int expectedSize)
 	{
-		List<String> result = ListFactory.newArrayList();
-
-		for (LocalDate localDate : localDates)
-		{
-			for (String datePattern : datePatterns)
-			{
-				result.add(localDate.format(DateTimeFormatter.ofPattern(datePattern)));
-			}
-		}
-		result.sort(Comparator.naturalOrder());
-		return result;
+		List<LocalDate> localDates = Stream.of(localDatesStr.split(",")).map(LocalDate::parse)
+			.collect(Collectors.toList());
+		List<String> datePatterns = ListFactory.newArrayList(datePatternsStr.split(","));
+		List<String> pins = PinFactory.newPins(localDates, datePatterns);
+		assertEquals(pins.size(), expectedSize);
 	}
 }
