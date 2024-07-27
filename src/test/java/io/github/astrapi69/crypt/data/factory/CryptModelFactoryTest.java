@@ -41,6 +41,7 @@ import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypt.data.model.CryptModel;
 import io.github.astrapi69.file.search.PathFinder;
+import io.github.astrapi69.meanbean.extension.MeanBeanExtensions;
 
 /**
  * The unit test class for the class {@link CryptModelFactory}
@@ -103,8 +104,7 @@ public class CryptModelFactoryTest
 
 		key = "D1D15ED36B887AF1";
 		algorithm = SunJCEAlgorithm.PBEWithMD5AndDES;
-		cryptModel = CryptModel.<Cipher, String, String> builder().key(key).algorithm(algorithm)
-			.build();
+		cryptModel = CryptModelFactory.newCryptModel(algorithm, key);
 		assertNotNull(cryptModel);
 	}
 
@@ -114,7 +114,7 @@ public class CryptModelFactoryTest
 	@Test
 	public void testWithBeanTester()
 	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(CryptModelFactory.class);
+		MeanBeanExtensions.testWithBeanTester(CryptModelFactory.class);
 	}
+
 }
