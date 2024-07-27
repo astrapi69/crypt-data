@@ -50,7 +50,6 @@ import io.github.astrapi69.crypt.api.algorithm.SunJCEAlgorithm;
 import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.model.CryptModel;
-import io.github.astrapi69.meanbean.extension.MeanBeanExtensions;
 
 /**
  * The unit test class for the class {@link CipherFactory}
@@ -255,7 +254,8 @@ public class CipherFactoryTest
 	@Test
 	public void testWithBeanTester()
 	{
-		MeanBeanExtensions.testWithBeanTester(CipherFactory.class);
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(CipherFactory.class);
 	}
 
 }

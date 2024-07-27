@@ -24,30 +24,22 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 
-import javax.crypto.KeyAgreement;
 import javax.crypto.SecretKey;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.key.KeyType;
 import io.github.astrapi69.crypt.data.model.KeyInfo;
@@ -55,11 +47,10 @@ import io.github.astrapi69.crypt.data.model.SharedSecretInfo;
 import io.github.astrapi69.crypt.data.model.SharedSecretModel;
 
 /**
- * The unit test class for the class {@link KeyAgreementFactory}.
+ * The parameterized unit test class for the class {@link KeyAgreementFactory}
  */
-class KeyAgreementFactoryTest
+public class KeyAgreementFactoryParameterizedTest
 {
-
 	private static KeyPair aliceKeyPair;
 	private static KeyPair bobKeyPair;
 	private static PublicKey bobPublicKey;
@@ -86,7 +77,6 @@ class KeyAgreementFactoryTest
 		privateKey = keyPair.getPrivate();
 		publicKey = keyPair.getPublic();
 	}
-
 
 	@ParameterizedTest
 	@CsvFileSource(resources = "/test-data.csv", numLinesToSkip = 1)
@@ -127,143 +117,6 @@ class KeyAgreementFactoryTest
 
 		assertNotNull(secretKey);
 		assertEquals(keyAgreementAlgorithm, secretKey.getAlgorithm());
-	}
-
-	/**
-	 * Test method for
-	 * {@link KeyAgreementFactory#newKeyAgreement(PrivateKey, PublicKey, String, String, boolean)}.
-	 */
-	@Test
-	void newKeyAgreement() throws Exception
-	{
-		// Create key agreement
-		KeyAgreement aliceKeyAgreement = KeyAgreementFactory
-			.newKeyAgreement(aliceKeyPair.getPrivate(), bobPublicKey, "ECDH", null, true);
-
-		assertNotNull(aliceKeyAgreement);
-	}
-
-	/**
-	 * Test method for
-	 * {@link KeyAgreementFactory#newSharedSecret(PrivateKey, PublicKey, String, String, boolean)}.
-	 */
-	@Test
-	void newSharedSecret() throws Exception
-	{
-		KeyAgreement aliceKeyAgreement = KeyAgreement.getInstance("ECDH");
-		aliceKeyAgreement.init(aliceKeyPair.getPrivate());
-		aliceKeyAgreement.doPhase(bobPublicKey, true);
-
-		byte[] expected = aliceKeyAgreement.generateSecret();
-
-		byte[] actual = KeyAgreementFactory.newSharedSecret(aliceKeyPair.getPrivate(), bobPublicKey,
-			"ECDH", null, true);
-		assertNotNull(actual);
-		assertArrayEquals(expected, actual);
-	}
-
-	/**
-	 * Test method for
-	 * {@link KeyAgreementFactory#newSharedSecret(PrivateKey, PublicKey, String, String, boolean)}.
-	 */
-	@Test
-	void newSharedSecretWithSecretKeyAlgorithm() throws Exception
-	{
-		SecretKey secretKey = KeyAgreementFactory.newSharedSecret(aliceKeyPair.getPrivate(),
-			bobPublicKey, "ECDH", "AES", null, true);
-
-		assertNotNull(secretKey);
-	}
-
-	/**
-	 * Test method for
-	 * {@link KeyAgreementFactory#newSharedSecret(PrivateKey, PublicKey, String, String)}.
-	 */
-	@Test
-	void newSharedSecretWithProvider() throws Exception
-	{
-		SecretKey secretKey = KeyAgreementFactory.newSharedSecret(aliceKeyPair.getPrivate(),
-			bobPublicKey, "ECDH", "AES", null);
-
-		assertNotNull(secretKey);
-	}
-
-	/**
-	 * Test method for
-	 * {@link KeyAgreementFactory#newSharedSecret(PrivateKey, PublicKey, String, String, boolean)}
-	 * with invalid key.
-	 */
-	@Test
-	void newSharedSecretInvalidKey() throws Exception
-	{
-		assertThrows(InvalidKeyException.class, () -> {
-			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-			keyPairGenerator.initialize(2048);
-			KeyPair invalidKeyPair = keyPairGenerator.generateKeyPair();
-
-			KeyAgreementFactory.newSharedSecret(invalidKeyPair.getPrivate(), bobPublicKey, "ECDH",
-				"AES", null, true);
-		});
-	}
-
-	/**
-	 * Test method for
-	 * {@link KeyAgreementFactory#newKeyAgreement(PrivateKey, PublicKey, String, String, boolean)}
-	 * with no such algorithm.
-	 */
-	@Test
-	void newKeyAgreementNoSuchAlgorithm() throws Exception
-	{
-		assertThrows(NoSuchAlgorithmException.class, () -> {
-			KeyAgreementFactory.newKeyAgreement(aliceKeyPair.getPrivate(), bobPublicKey, "INVALID",
-				null, true);
-		});
-	}
-
-	/**
-	 * Test method for
-	 * {@link KeyAgreementFactory#newSharedSecret(PrivateKey, PublicKey, String, String, boolean)}
-	 * with no such provider.
-	 */
-	@Test
-	void newSharedSecretNoSuchProvider() throws Exception
-	{
-		assertThrows(NoSuchProviderException.class, () -> {
-			KeyAgreementFactory.newSharedSecret(aliceKeyPair.getPrivate(), bobPublicKey, "ECDH",
-				"AES", "INVALID", true);
-		});
-	}
-
-	/**
-	 * Test method for {@link KeyAgreementFactory} with {@link BeanTester}.
-	 */
-	@Test
-	public void testWithBeanTester()
-	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(KeyAgreementFactory.class);
-	}
-
-
-	/**
-	 * Test method for
-	 * {@link KeyAgreementFactory#newSharedSecret(PrivateKey, PublicKey, String, String)}
-	 */
-	@Test
-	@DisplayName("Test newSharedSecret with provider")
-	void testNewSharedSecretWithProvider() throws Exception
-	{
-		byte[] sharedSecret = KeyAgreementFactory.newSharedSecret(aliceKeyPair.getPrivate(),
-			bobPublicKey, "ECDH", null);
-
-		assertNotNull(sharedSecret);
-
-		KeyAgreement keyAgreement = KeyAgreement.getInstance("ECDH");
-		keyAgreement.init(aliceKeyPair.getPrivate());
-		keyAgreement.doPhase(bobPublicKey, true);
-		byte[] expectedSecret = keyAgreement.generateSecret();
-
-		assertArrayEquals(expectedSecret, sharedSecret);
 	}
 
 }
