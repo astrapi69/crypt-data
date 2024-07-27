@@ -201,44 +201,6 @@ public final class KeyStoreFactory
 	}
 
 	/**
-	 * Factory method for creating a new empty {@link KeyStore} object and saving it to the given
-	 * file with the given parameters or loading an existing {@link KeyStore} object from the given
-	 * file
-	 *
-	 * @param type
-	 *            the type of the keystore
-	 * @param password
-	 *            the password of the keystore
-	 * @param keystoreFile
-	 *            the keystore file
-	 * @param createNewKeyStore
-	 *            if the {@linkplain KeyStore} should be newly created
-	 * @return the loaded {@link KeyStore} object
-	 * @throws KeyStoreException
-	 *             if there is an error accessing the key store
-	 * @throws NoSuchAlgorithmException
-	 *             if instantiation of the SecretKeyFactory object fails
-	 * @throws CertificateException
-	 *             if there is an error with a certificate
-	 * @throws FileNotFoundException
-	 *             if the keystore file not found
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 * @deprecated use instead the method <code>loadKeyStore</code> or <code>loadKeyStore</code>
-	 *             <br>
-	 *             Note: will be removed in the next minor version
-	 */
-	@Deprecated
-	public static KeyStore newKeyStore(final String type, final String password,
-		final File keystoreFile, final boolean createNewKeyStore)
-		throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException
-	{
-		return createNewKeyStore
-			? newKeyStore(keystoreFile, type, password)
-			: loadKeyStore(keystoreFile, type, password);
-	}
-
-	/**
 	 * Factory method for creating a new empty {@link KeyStore} object from the given
 	 * {@link KeyStoreInfo} object
 	 *

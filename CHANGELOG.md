@@ -13,6 +13,7 @@ ADDED:
 CHANGED:
 
 - removed deprecated class references
+- removed deprecated method references
 
 Version 9.4
 -------------
