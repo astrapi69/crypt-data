@@ -24,41 +24,73 @@
  */
 package io.github.astrapi69.crypt.data.algorithm;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.Security;
+import java.util.Set;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
- * The class {@code AlgorithmValidatorParameterizedTest} provides parameterized unit tests for the
- * {@link AlgorithmValidator} class using a CSV file
+ * The class {@code AlgorithmExtensionsTest} provides unit tests for the {@link AlgorithmExtensions}
+ * class
  */
-class AlgorithmValidatorParameterizedTest
+class AlgorithmExtensionsTest
 {
-
-	static
+	@BeforeAll
+	static void setUp()
 	{
 		// Ensuring that some default algorithms are registered for the tests
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 	}
 
 	/**
-	 * Parameterized test for the {@link AlgorithmValidator#isValid(String, String)} method using
-	 * data from a CSV file
-	 *
-	 * @param serviceName
-	 *            the name of the security service
-	 * @param algorithm
-	 *            the algorithm to be validated
-	 * @param expectedResult
-	 *            the expected validation result
+	 * Test for a valid algorithm
 	 */
-	@ParameterizedTest
-	@CsvFileSource(resources = "/algorithm_test_data.csv", numLinesToSkip = 1)
-	void testIsValid(String serviceName, String algorithm, boolean expectedResult)
+	@Test
+	void testIsValid()
 	{
-		assertEquals(expectedResult, AlgorithmValidator.isValid(serviceName, algorithm));
+		assertTrue(AlgorithmExtensions.isValid("Cipher", "AES"));
+	}
+
+	/**
+	 * Test for an invalid algorithm
+	 */
+	@Test
+	void testIsInvalid()
+	{
+		assertFalse(AlgorithmExtensions.isValid("Cipher", "InvalidAlgorithm"));
+	}
+
+	/**
+	 * Test for an invalid service name
+	 */
+	@Test
+	void testInvalidService()
+	{
+		assertFalse(AlgorithmExtensions.isValid("InvalidService", "AES"));
+	}
+
+	/**
+	 * Test for retrieving algorithms for a valid service
+	 */
+	@Test
+	void testGetAlgorithms()
+	{
+		Set<String> algorithms = AlgorithmExtensions.getAlgorithms("Cipher");
+		assertNotNull(algorithms);
+		assertTrue(algorithms.contains("AES"));
+	}
+
+	/**
+	 * Test for retrieving algorithms for an invalid service
+	 */
+	@Test
+	void testGetAlgorithmsInvalidService()
+	{
+		Set<String> algorithms = AlgorithmExtensions.getAlgorithms("InvalidService");
+		assertNotNull(algorithms);
+		assertTrue(algorithms.isEmpty());
 	}
 }
