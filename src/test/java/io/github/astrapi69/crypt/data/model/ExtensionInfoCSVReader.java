@@ -65,9 +65,10 @@ public class ExtensionInfoCSVReader
 	 */
 	public static ExtensionInfo[] readExtensionInfoFromCSV(String csvFilePath) throws IOException
 	{
+		CSVFormat csvFormat = CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase()
+			.withTrim();
 		try (Reader reader = new FileReader(csvFilePath);
-			CSVParser csvParser = new CSVParser(reader,
-				CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim()))
+			CSVParser csvParser = new CSVParser(reader, csvFormat))
 		{
 
 			List<ExtensionInfo> extensionInfos = new ArrayList<>();
