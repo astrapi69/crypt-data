@@ -10,6 +10,8 @@ ADDED:
 - new method in class AlgorithmExtensions that validates a service name with a given algorithm
 - new method in class AlgorithmExtensions that gets all algorithms from a service name
 - new method in class AlgorithmExtensions that gets all service names from a given Provider
+- new method for get the supported key sizes from KeyPairGenerator
+- new method for get the supported key sizes from KeyGenerator
 - new test dependency commons-csv
 - new test dependency meanbean-factory
 - new factory methods for create new X509Certificate objects

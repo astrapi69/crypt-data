@@ -24,9 +24,12 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
+import java.security.InvalidParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -149,5 +152,43 @@ public final class SecretKeyFactoryExtensions
 			secretKeyAlgorithm);
 		SecretKey secretKey = secretKeyFactory.generateSecret(secretKeySpec);
 		return secretKey;
+	}
+
+	/**
+	 * Retrieves the set of supported key sizes for the specified cryptographic algorithm using a
+	 * {@link KeyGenerator}.
+	 *
+	 * <p>
+	 * This method initializes a {@link KeyGenerator} instance for the given algorithm and attempts
+	 * to initialize it with key sizes from 112 bits to 8192 bits in increments of 64 bits. If the
+	 * initialization succeeds, the key size is considered supported and is added to the set of
+	 * supported key sizes. If the initialization fails with an {@link InvalidParameterException},
+	 * the key size is considered unsupported and is not added to the set.
+	 *
+	 * @param algorithm
+	 *            the name of the cryptographic algorithm (e.g., "AES", "DES")
+	 * @return a set of supported key sizes for the specified algorithm
+	 * @throws NoSuchAlgorithmException
+	 *             if no provider supports a {@link KeyGenerator} for the specified algorithm
+	 */
+	public static Set<Integer> getSupportedKeySizesForKeyGenerator(String algorithm)
+		throws NoSuchAlgorithmException
+	{
+		Set<Integer> supportedKeySizes = new LinkedHashSet<>();
+		KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm);
+		for (int i = 1; i <= 8192; i += 1)
+		{
+			try
+			{
+				keyGenerator.init(i);
+				keyGenerator.generateKey();
+				supportedKeySizes.add(i);
+			}
+			catch (InvalidParameterException e)
+			{
+				// Key size not supported
+			}
+		}
+		return supportedKeySizes;
 	}
 }

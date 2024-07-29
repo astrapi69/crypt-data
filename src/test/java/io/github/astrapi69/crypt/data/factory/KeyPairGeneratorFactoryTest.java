@@ -25,18 +25,21 @@
 package io.github.astrapi69.crypt.data.factory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeySize;
+import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.random.SecureRandomBuilder;
@@ -47,6 +50,32 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
  */
 class KeyPairGeneratorFactoryTest
 {
+
+	@Test
+	public void testGetSupportedKeySizes() throws NoSuchAlgorithmException
+	{
+
+		Set<String> keyGeneratorAlgorithms = AlgorithmExtensions.getAlgorithms("KeyPairGenerator");
+		assertNotNull(keyGeneratorAlgorithms);
+		for (String keyGeneratorAlgorithm : keyGeneratorAlgorithms)
+		{
+			Set<Integer> keySizes = KeyPairGeneratorFactory
+				.getSupportedKeySizes(keyGeneratorAlgorithm);
+			assertNotNull(keySizes);
+		}
+		Set<Integer> rsaKeySizes = KeyPairGeneratorFactory.getSupportedKeySizes("RSA");
+		assertNotNull(rsaKeySizes, "The result should not be null");
+		assertTrue(rsaKeySizes.contains(1024), "RSA should support 1024-bit keys");
+		assertTrue(rsaKeySizes.contains(2048), "RSA should support 2048-bit keys");
+		assertTrue(rsaKeySizes.contains(4096), "RSA should support 4096-bit keys");
+
+		Set<Integer> dsaKeySizes = KeyPairGeneratorFactory.getSupportedKeySizes("DSA");
+		assertNotNull(dsaKeySizes, "The result should not be null");
+		assertTrue(dsaKeySizes.contains(1024), "DSA should support 1024-bit keys");
+		assertTrue(dsaKeySizes.contains(2048), "DSA should support 2048-bit keys");
+		assertTrue(dsaKeySizes.contains(3072), "DSA should support 3072-bit keys");
+
+	}
 
 	/**
 	 * Test method for
