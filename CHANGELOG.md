@@ -6,6 +6,7 @@ Version 9.5-SNAPSHOT
 
 ADDED:
 
+- new extension class KeySizeExtensions
 - new extension class AlgorithmExtensions
 - new method in class AlgorithmExtensions that validates a service name with a given algorithm
 - new method in class AlgorithmExtensions that gets all algorithms from a service name

@@ -39,6 +39,7 @@ import org.apache.commons.csv.CSVRecord;
  */
 public class ExtensionInfoCSVReader
 {
+	public static final String[] HEADERS = { "extensionId", "critical", "value" };
 
 	/**
 	 * Reads the test data from CSV file and converts it to an array of {@link ExtensionInfo}
@@ -65,8 +66,9 @@ public class ExtensionInfoCSVReader
 	 */
 	public static ExtensionInfo[] readExtensionInfoFromCSV(String csvFilePath) throws IOException
 	{
-		CSVFormat csvFormat = CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase()
-			.withTrim();
+		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(HEADERS)
+			.setSkipHeaderRecord(true).build();
+
 		try (Reader reader = new FileReader(csvFilePath);
 			CSVParser csvParser = new CSVParser(reader, csvFormat))
 		{

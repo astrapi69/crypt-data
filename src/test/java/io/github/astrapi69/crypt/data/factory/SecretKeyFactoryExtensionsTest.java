@@ -26,11 +26,8 @@ package io.github.astrapi69.crypt.data.factory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.Set;
 
 import javax.crypto.SecretKeyFactory;
 
@@ -39,38 +36,12 @@ import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.algorithm.SunJCEAlgorithm;
 import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
-import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
 
 /**
  * The unit test class for the class {@link SecretKeyFactoryExtensions}
  */
 public class SecretKeyFactoryExtensionsTest
 {
-
-	@Test
-	public void testGetSupportedKeySizesForKeyGenerator() throws NoSuchAlgorithmException
-	{
-		Set<String> keyGeneratorAlgorithms = AlgorithmExtensions.getAlgorithms("KeyGenerator");
-		assertNotNull(keyGeneratorAlgorithms);
-		for (String keyGeneratorAlgorithm : keyGeneratorAlgorithms)
-		{
-			Set<Integer> supportedKeySizes = SecretKeyFactoryExtensions
-				.getSupportedKeySizesForKeyGenerator(keyGeneratorAlgorithm);
-			assertNotNull(supportedKeySizes);
-		}
-		Set<Integer> aesKeySizes = SecretKeyFactoryExtensions
-			.getSupportedKeySizesForKeyGenerator("AES");
-		assertNotNull(aesKeySizes, "The result should not be null");
-		assertTrue(aesKeySizes.contains(128), "AES should support 128-bit keys");
-		assertTrue(aesKeySizes.contains(192), "AES should support 192-bit keys");
-		assertTrue(aesKeySizes.contains(256), "AES should support 256-bit keys");
-
-		Set<Integer> desKeySizes = SecretKeyFactoryExtensions
-			.getSupportedKeySizesForKeyGenerator("DES");
-		assertNotNull(desKeySizes, "The result should not be null");
-		assertTrue(desKeySizes.contains(56), "DES should support 56-bit keys");
-	}
-
 
 	/**
 	 * Test method for {@link SecretKeyFactoryExtensions#newSecretKey(char[], String)}

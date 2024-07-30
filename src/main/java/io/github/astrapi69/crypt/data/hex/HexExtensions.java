@@ -32,11 +32,11 @@ import org.apache.commons.codec.binary.Hex;
 
 /**
  * The class {@link HexExtensions} provides methods for encode and decode hex encoded byte or char
- * arrays and {@link String} objects.
+ * arrays and {@link String} objects
  */
 public final class HexExtensions
 {
-	/** A char array from the hexadecimal digits. */
+	/** A char array from the hexadecimal digits */
 	private static final char[] HEXADECIMAL_DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
 			'9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
@@ -46,7 +46,7 @@ public final class HexExtensions
 
 	/**
 	 * Transform the given byte array that contains the binary data decoded to a String object. The
-	 * given byte array comes usually from the {@link HexExtensions#decodeHex(char[])} method.
+	 * given byte array comes usually from the {@link HexExtensions#decodeHex(char[])} method
 	 *
 	 * @param data
 	 *            the given byte array that contains the binary data decoded
@@ -59,11 +59,11 @@ public final class HexExtensions
 
 	/**
 	 * Transform the given array of characters representing hexadecimal values into an array of
-	 * bytes.
+	 * bytes
 	 *
 	 * @param data
 	 *            the array of characters
-	 * @return A byte array that contains the binary data decoded from the given char array.
+	 * @return A byte array that contains the binary data decoded from the given char array
 	 *
 	 * @throws DecoderException
 	 *             is thrown if an odd number or illegal of characters is supplied
@@ -91,7 +91,7 @@ public final class HexExtensions
 	}
 
 	/**
-	 * Transform the given array of characters representing hexadecimal values into a String object.
+	 * Transform the given array of characters representing hexadecimal values into a String object
 	 *
 	 * @param data
 	 *            the array of characters
@@ -106,11 +106,11 @@ public final class HexExtensions
 
 	/**
 	 * Transform the given array of bytes into an array of characters representing the hexadecimal
-	 * values of each byte in order.
+	 * values of each byte in order
 	 *
 	 * @param data
 	 *            the byte array
-	 * @return the resulted char array of the transformation.
+	 * @return the resulted char array of the transformation
 	 */
 	public static char[] encodeHex(final byte[] data)
 	{
@@ -119,14 +119,14 @@ public final class HexExtensions
 
 	/**
 	 * Transform the given array of bytes into an array of characters representing the hexadecimal
-	 * values of each byte in order.
+	 * values of each byte in order
 	 *
 	 * @param data
 	 *            the byte array
 	 * @param lowerCase
 	 *            the flag if the result shell be transform in lower case. If true the result is
-	 *            lowercase otherwise uppercase.
-	 * @return the resulted char array of the transformation.
+	 *            lowercase otherwise uppercase
+	 * @return the resulted char array of the transformation
 	 */
 	public static char[] encodeHex(final byte[] data, final boolean lowerCase)
 	{
@@ -135,11 +135,11 @@ public final class HexExtensions
 
 	/**
 	 * Transform the given String into an array of characters representing the hexadecimal values of
-	 * each byte in order.
+	 * each byte in order
 	 *
 	 * @param data
 	 *            the byte array
-	 * @return the resulted char array of the transformation.
+	 * @return the resulted char array of the transformation
 	 */
 	public static char[] encodeHex(final String data)
 	{
@@ -147,7 +147,7 @@ public final class HexExtensions
 	}
 
 	/**
-	 * Transform the given plain {@link String} object into a hexadecimal {@link String} object.
+	 * Transform the given plain {@link String} object into a hexadecimal {@link String} object
 	 *
 	 * @param string
 	 *            the plain {@link String} object
@@ -155,7 +155,7 @@ public final class HexExtensions
 	 *            the optional {@link Charset} to get the bytes from the plain {@link String} object
 	 * @param lowerCase
 	 *            the flag if the result shell be transform in lower case. If true the result is
-	 *            lowercase otherwise uppercase.
+	 *            lowercase otherwise uppercase
 	 * @return the hexadecimal {@link String} object
 	 */
 	public static String encodeHex(final String string, final Charset charset,
@@ -176,11 +176,11 @@ public final class HexExtensions
 	}
 
 	/**
-	 * Transform the given {@code int} to a hexadecimal value.
+	 * Transform the given {@code int} to a hexadecimal value
 	 *
 	 * @param i
 	 *            the integer value to transform
-	 * @return the char as a hexadecimal value.
+	 * @return the char as a hexadecimal value
 	 */
 	public static char toHex(final int i)
 	{
@@ -188,11 +188,11 @@ public final class HexExtensions
 	}
 
 	/**
-	 * Transform the given {@code byte array} to a hexadecimal {@link String} value.
+	 * Transform the given {@code byte array} to a hexadecimal {@link String} value
 	 *
 	 * @param data
 	 *            the byte array
-	 * @return the new hexadecimal {@link String} value.
+	 * @return the new hexadecimal {@link String} value
 	 */
 	public static String toHexString(final byte[] data)
 	{
@@ -200,14 +200,14 @@ public final class HexExtensions
 	}
 
 	/**
-	 * Transform the given {@code byte array} to a hexadecimal {@link String} value.
+	 * Transform the given {@code byte array} to a hexadecimal {@link String} value
 	 *
 	 * @param data
 	 *            the byte array
 	 * @param lowerCase
 	 *            the flag if the result shell be transform in lower case. If true the result is
-	 *            lowercase otherwise uppercase.
-	 * @return the new hexadecimal {@link String} value.
+	 *            lowercase otherwise uppercase
+	 * @return the new hexadecimal {@link String} value
 	 */
 	public static String toHexString(final byte[] data, final boolean lowerCase)
 	{
@@ -215,5 +215,4 @@ public final class HexExtensions
 		sb.append(HexExtensions.encodeHex(data, lowerCase));
 		return sb.toString();
 	}
-
 }

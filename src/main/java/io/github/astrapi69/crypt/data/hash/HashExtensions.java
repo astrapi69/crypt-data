@@ -39,9 +39,7 @@ import com.google.common.primitives.Longs;
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 
 /**
- * The class {@link HashExtensions}.
- *
- * @author Asterios Raptis
+ * The class {@link HashExtensions} provides utility methods for hashing operations
  */
 public final class HashExtensions
 {
@@ -51,7 +49,7 @@ public final class HashExtensions
 	}
 
 	/**
-	 * Gets the hash value of the given queue and the given algorithm.
+	 * Gets the hash value of the given queue and the given algorithm
 	 *
 	 * @see <a href="https://en.wikipedia.org/wiki/Merkle_tree">wikipedia Merkle tree</a>
 	 *
@@ -70,23 +68,24 @@ public final class HashExtensions
 			switch (algorithm)
 			{
 				case SHA1 :
-					hashQueue.add(DigestUtils.sha1(hashValue));
-				case SHA256 :
-					hashQueue.add(DigestUtils.sha256(hashValue));
-				case SHA384 :
-					hashQueue.add(DigestUtils.sha384(hashValue));
-				case SHA512 :
-					hashQueue.add(DigestUtils.sha512(hashValue));
 				case SHA_1 :
 					hashQueue.add(DigestUtils.sha1(hashValue));
+					break;
+				case SHA256 :
 				case SHA_256 :
 					hashQueue.add(DigestUtils.sha256(hashValue));
+					break;
+				case SHA384 :
 				case SHA_384 :
 					hashQueue.add(DigestUtils.sha384(hashValue));
+					break;
+				case SHA512 :
 				case SHA_512 :
 					hashQueue.add(DigestUtils.sha512(hashValue));
+					break;
 				default :
 					hashQueue.add(DigestUtils.sha256(hashValue));
+					break;
 			}
 		}
 		return hashQueue.poll();
@@ -98,7 +97,7 @@ public final class HashExtensions
 	 * @param input
 	 *            the input hash
 	 * @param hash
-	 *            the merkle
+	 *            the merkle hash
 	 * @param signature
 	 *            the signature
 	 * @param timestamp
@@ -117,19 +116,15 @@ public final class HashExtensions
 		switch (algorithm)
 		{
 			case SHA1 :
-				return DigestUtils.sha1(hashValue);
-			case SHA256 :
-				return DigestUtils.sha256(hashValue);
-			case SHA384 :
-				return DigestUtils.sha384(hashValue);
-			case SHA512 :
-				return DigestUtils.sha512(hashValue);
 			case SHA_1 :
 				return DigestUtils.sha1(hashValue);
+			case SHA256 :
 			case SHA_256 :
 				return DigestUtils.sha256(hashValue);
+			case SHA384 :
 			case SHA_384 :
 				return DigestUtils.sha384(hashValue);
+			case SHA512 :
 			case SHA_512 :
 				return DigestUtils.sha512(hashValue);
 			default :
@@ -155,19 +150,15 @@ public final class HashExtensions
 		switch (algorithm)
 		{
 			case SHA1 :
-				return DigestUtils.sha1(hashValue);
-			case SHA256 :
-				return DigestUtils.sha256(hashValue);
-			case SHA384 :
-				return DigestUtils.sha384(hashValue);
-			case SHA512 :
-				return DigestUtils.sha512(hashValue);
 			case SHA_1 :
 				return DigestUtils.sha1(hashValue);
+			case SHA256 :
 			case SHA_256 :
 				return DigestUtils.sha256(hashValue);
+			case SHA384 :
 			case SHA_384 :
 				return DigestUtils.sha384(hashValue);
+			case SHA512 :
 			case SHA_512 :
 				return DigestUtils.sha512(hashValue);
 			default :
@@ -181,7 +172,7 @@ public final class HashExtensions
 	 * @param input
 	 *            the input hash
 	 * @param hash
-	 *            the merkle
+	 *            the merkle hash
 	 * @param signature
 	 *            the signature
 	 * @param timestamp
@@ -200,19 +191,15 @@ public final class HashExtensions
 		switch (algorithm)
 		{
 			case SHA1 :
-				return DigestUtils.sha1(hashValue);
-			case SHA256 :
-				return DigestUtils.sha256(hashValue);
-			case SHA384 :
-				return DigestUtils.sha384(hashValue);
-			case SHA512 :
-				return DigestUtils.sha512(hashValue);
 			case SHA_1 :
 				return DigestUtils.sha1(hashValue);
+			case SHA256 :
 			case SHA_256 :
 				return DigestUtils.sha256(hashValue);
+			case SHA384 :
 			case SHA_384 :
 				return DigestUtils.sha384(hashValue);
+			case SHA512 :
 			case SHA_512 :
 				return DigestUtils.sha512(hashValue);
 			default :
@@ -221,15 +208,15 @@ public final class HashExtensions
 	}
 
 	/**
-	 * Hashes the given {@link byte[]} object with the given parameters.
+	 * Hashes the given {@link byte[]} object with the given parameters
 	 *
 	 * @param hashIt
-	 *            the hash it
+	 *            the byte array to hash
 	 * @param hashAlgorithm
 	 *            the hash algorithm
-	 * @return the generated {@link String} object
+	 * @return the generated hash as byte array
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the MessageDigest object fails.
+	 *             is thrown if instantiation of the MessageDigest object fails
 	 */
 	public static byte[] hash(final byte[] hashIt, final HashAlgorithm hashAlgorithm)
 		throws NoSuchAlgorithmException
@@ -238,19 +225,19 @@ public final class HashExtensions
 	}
 
 	/**
-	 * Hashes the given {@link byte[]} object with the given parameters.
+	 * Hashes the given {@link byte[]} object with the given parameters
 	 *
 	 * @param hashIt
-	 *            the hash it
+	 *            the byte array to hash
 	 * @param salt
 	 *            the salt
 	 * @param hashAlgorithm
 	 *            the hash algorithm
 	 * @param charset
 	 *            the charset
-	 * @return the generated {@link String} object
+	 * @return the generated hash as byte array
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the MessageDigest object fails.
+	 *             is thrown if instantiation of the MessageDigest object fails
 	 */
 	public static byte[] hash(final byte[] hashIt, final String salt,
 		final HashAlgorithm hashAlgorithm, final Charset charset) throws NoSuchAlgorithmException
@@ -267,19 +254,19 @@ public final class HashExtensions
 	}
 
 	/**
-	 * Hashes the given {@link String} object with the given parameters.
+	 * Hashes the given {@link String} object with the given parameters
 	 *
 	 * @param hashIt
-	 *            the hash it
+	 *            the string to hash
 	 * @param salt
 	 *            the salt
 	 * @param hashAlgorithm
 	 *            the hash algorithm
 	 * @param charset
 	 *            the charset
-	 * @return the generated {@link String} object
+	 * @return the generated hash as byte array
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the MessageDigest object fails.
+	 *             is thrown if instantiation of the MessageDigest object fails
 	 */
 	public static String hash(final String hashIt, final String salt,
 		final HashAlgorithm hashAlgorithm, final Charset charset) throws NoSuchAlgorithmException
@@ -292,19 +279,19 @@ public final class HashExtensions
 
 	/**
 	 * Hashes and encodes it with base64 from the given {@link String} object with the given
-	 * parameters.
+	 * parameters
 	 *
 	 * @param hashIt
-	 *            the hash it
+	 *            the string to hash
 	 * @param salt
 	 *            the salt
 	 * @param hashAlgorithm
 	 *            the hash algorithm
 	 * @param charset
 	 *            the charset
-	 * @return the generated {@link String} object
+	 * @return the generated hash encoded in base64
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the MessageDigest object fails.
+	 *             is thrown if instantiation of the MessageDigest object fails
 	 */
 	public static String hashAndBase64(final String hashIt, final String salt,
 		final HashAlgorithm hashAlgorithm, final Charset charset) throws NoSuchAlgorithmException
@@ -313,5 +300,4 @@ public final class HashExtensions
 			.encodeToString(hash(hashIt, salt, hashAlgorithm, charset).getBytes(charset));
 		return hashedAndBase64;
 	}
-
 }

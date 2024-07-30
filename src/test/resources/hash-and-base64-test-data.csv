@@ -1,0 +1,3 @@
+password,salt,hashAlgorithm,charset,expected
+secret,NzeCdmaz,SHA_512,UTF-8,77+977+9Ni4tHkdc77+9Qe+/vRjvv71R77+9UjHvv70+77+977+9NwDvv708TO+/vSHvv73vv70k77+9KHkR77+977+977+977+9F0Lvv73vv70jwoxLH++/vRLvv73vv70Y77+9Qe+/ve+/vXvvv73vv71ePu+/vQ==
+secret,NzeCdmaz,SHA_256,UTF-8,MWFqPB3vv70G77+9b++/ve+/ve+/vWFw77+977+977+977+977+9WThU77+9Qe+/vQRa77+9GG4hbQ==

@@ -25,13 +25,10 @@
 package io.github.astrapi69.crypt.data.factory;
 
 import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidParameterException;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
@@ -195,43 +192,6 @@ public final class KeyPairGeneratorFactory
 		final KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm, provider);
 		generator.initialize(namedCurveParameterSpec);
 		return generator;
-	}
-
-	/**
-	 * Retrieves the set of supported key sizes for the specified cryptographic algorithm.
-	 *
-	 * <p>
-	 * This method initializes a {@link KeyPairGenerator} instance for the given algorithm and
-	 * attempts to initialize it with key sizes from 512 bits to 8192 bits in increments of 64 bits.
-	 * If the initialization succeeds, the key size is considered supported and is added to the set
-	 * of supported key sizes. If the initialization fails with an
-	 * {@link InvalidParameterException}, the key size is considered unsupported and is not added to
-	 * the set.
-	 *
-	 * @param algorithm
-	 *            the name of the cryptographic algorithm (e.g., "RSA", "DSA")
-	 * @return a set of supported key sizes for the specified algorithm
-	 * @throws NoSuchAlgorithmException
-	 *             if no provider supports a {@link KeyPairGenerator} for the specified algorithm
-	 */
-	public static Set<Integer> getSupportedKeySizes(String algorithm)
-		throws NoSuchAlgorithmException
-	{
-		Set<Integer> supportedKeySizes = new LinkedHashSet<>();
-		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(algorithm);
-		for (int i = 512; i <= 8192; i += 64)
-		{
-			try
-			{
-				keyPairGenerator.initialize(i);
-				supportedKeySizes.add(i);
-			}
-			catch (InvalidParameterException e)
-			{
-				// Key size not supported
-			}
-		}
-		return supportedKeySizes;
 	}
 
 }
