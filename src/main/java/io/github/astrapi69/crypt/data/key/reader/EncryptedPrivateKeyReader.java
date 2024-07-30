@@ -54,6 +54,10 @@ import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.bouncycastle.openssl.jcajce.JcePEMDecryptorProviderBuilder;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.pkcs.PKCS8EncryptedPrivateKeyInfo;
+import org.bouncycastle.pkcs.PKCSException;
+import org.bouncycastle.pkcs.jcajce.JcePKCSPBEInputDecryptorProviderBuilder;
 
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
@@ -64,7 +68,7 @@ import lombok.extern.java.Log;
 
 /**
  * The class {@link EncryptedPrivateKeyReader} is a utility class for reading encrypted private keys
- * that are protected with a password.
+ * that are protected with a password
  */
 @Log
 public final class EncryptedPrivateKeyReader
@@ -86,12 +90,12 @@ public final class EncryptedPrivateKeyReader
 	 * @throws FileNotFoundException
 	 *             is thrown if the file not found
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws PEMException
 	 *             is thrown if an error occurs on read the pem file
 	 */
 	public static KeyPair getKeyPair(final File encryptedPrivateKeyFile, final String password)
-		throws FileNotFoundException, IOException, PEMException
+		throws FileNotFoundException, IOException, PEMException, PKCSException
 	{
 		PEMParser pemParser = new PEMParser(new FileReader(encryptedPrivateKeyFile));
 		Object pemObject = pemParser.readObject();
@@ -107,15 +111,27 @@ public final class EncryptedPrivateKeyReader
 			keyPair = keyConverter
 				.getKeyPair(((PEMEncryptedKeyPair)pemObject).decryptKeyPair(decryptorProvider));
 		}
-		else
+		else if (pemObject instanceof PEMKeyPair)
 		{
 			keyPair = keyConverter.getKeyPair((PEMKeyPair)pemObject);
+		}
+		else if (pemObject instanceof PKCS8EncryptedPrivateKeyInfo)
+		{
+			PKCS8EncryptedPrivateKeyInfo encryptedInfo = (PKCS8EncryptedPrivateKeyInfo)pemObject;
+			PrivateKey privateKey = keyConverter.getPrivateKey(
+				encryptedInfo.decryptPrivateKeyInfo(new JcePKCSPBEInputDecryptorProviderBuilder()
+					.setProvider(SecurityProvider.BC.name()).build(password.toCharArray())));
+			keyPair = new KeyPair(null, privateKey); // No public key available in this case
+		}
+		else
+		{
+			throw new PEMException("Invalid PEM object type: " + pemObject.getClass().getName());
 		}
 		return keyPair;
 	}
 
 	/**
-	 * Reads the given byte array that contains a password protected private key.
+	 * Reads the given byte array that contains a password protected private key
 	 *
 	 * @param encryptedPrivateKeyBytes
 	 *            the password protected private key as the byte array
@@ -125,17 +141,17 @@ public final class EncryptedPrivateKeyReader
 	 *            the algorithm
 	 * @return the {@link PrivateKey} object
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws NoSuchPaddingException
 	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails.
+	 *             is thrown if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cipher object fails.
+	 *             is thrown if initialization of the cipher object fails
 	 */
 	public static PrivateKey readPasswordProtectedPrivateKey(final byte[] encryptedPrivateKeyBytes,
 		final String password, final String algorithm)
@@ -159,7 +175,7 @@ public final class EncryptedPrivateKeyReader
 
 	/**
 	 * Reads the given {@link File} that contains a password protected private key, if fails null
-	 * will be returned.
+	 * will be returned
 	 *
 	 * @param encryptedPrivateKeyFile
 	 *            the file that contains the password protected private key
@@ -168,14 +184,14 @@ public final class EncryptedPrivateKeyReader
 	 * @return the {@link PrivateKey} object or null if it fails
 	 */
 	public static PrivateKey readPasswordProtectedPrivateKey(final File encryptedPrivateKeyFile,
-		final String password)
+		final String password) throws OperatorCreationException, PKCSException
 	{
 		return getPrivateKey(encryptedPrivateKeyFile, password).orElse(null);
 	}
 
 	/**
 	 * Gets an {@link Optional} with the password protected private key from the given file. If it
-	 * does not match the optional is empty.
+	 * does not match the optional is empty
 	 *
 	 * @param encryptedPrivateKeyFile
 	 *            the file that contains the password protected private key
@@ -185,10 +201,23 @@ public final class EncryptedPrivateKeyReader
 	 *         file or an empty {@link Optional} object if it does not match
 	 */
 	public static Optional<PrivateKey> getPrivateKey(final File encryptedPrivateKeyFile,
-		final String password)
+		final String password) throws OperatorCreationException, PKCSException
 	{
 		Optional<PrivateKey> optionalPrivateKey = Optional.empty();
 		PrivateKey privateKey;
+		try
+		{
+			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
+				KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+			optionalPrivateKey = Optional.of(privateKey);
+			return optionalPrivateKey;
+		}
+		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
+			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
+		{
+			log.log(Level.WARNING,
+				"Given password protected private key file is not stored in 'RSA' algorithm");
+		}
 		try
 		{
 			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
@@ -228,32 +257,6 @@ public final class EncryptedPrivateKeyReader
 			log.log(Level.WARNING,
 				"Given password protected private key file is not stored in 'EC' algorithm");
 		}
-		try
-		{
-			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-				KeyPairGeneratorAlgorithm.RSASSA_PSS.getAlgorithm());
-			optionalPrivateKey = Optional.of(privateKey);
-			return optionalPrivateKey;
-		}
-		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
-			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
-		{
-			log.log(Level.WARNING,
-				"Given password protected private key file is not stored in 'RSASSA-PSS' algorithm");
-		}
-		try
-		{
-			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-				KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
-			optionalPrivateKey = Optional.of(privateKey);
-			return optionalPrivateKey;
-		}
-		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
-			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
-		{
-			log.log(Level.WARNING,
-				"Given password protected private key file is not stored in 'RSA' algorithm");
-		}
 		return optionalPrivateKey;
 	}
 
@@ -269,25 +272,24 @@ public final class EncryptedPrivateKeyReader
 	 *            the algorithm
 	 * @return the {@link PrivateKey} object
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws NoSuchPaddingException
 	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails.
+	 *             is thrown if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cipher object fails.
+	 *             is thrown if initialization of the cipher object fails
 	 */
 	public static PrivateKey readPasswordProtectedPrivateKey(final File encryptedPrivateKeyFile,
-		final String password, final String algorithm)
-		throws IOException, NoSuchAlgorithmException, NoSuchPaddingException,
-		InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException
+		final String password, final String algorithm) throws IOException, NoSuchAlgorithmException,
+		NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException,
+		InvalidAlgorithmParameterException, PKCSException
 	{
 		PrivateKey privateKey = null;
-		byte[] encryptedPrivateKeyBytes;
 		boolean pemFormat = PrivateKeyReader.isPemFormat(encryptedPrivateKeyFile);
 		if (pemFormat)
 		{
@@ -299,11 +301,10 @@ public final class EncryptedPrivateKeyReader
 		}
 		else
 		{
-			encryptedPrivateKeyBytes = Files.readAllBytes(encryptedPrivateKeyFile.toPath());
+			byte[] encryptedPrivateKeyBytes = Files.readAllBytes(encryptedPrivateKeyFile.toPath());
 			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyBytes, password,
 				algorithm);
 		}
 		return privateKey;
 	}
-
 }

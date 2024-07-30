@@ -41,6 +41,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.pkcs.PKCSException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -121,7 +123,7 @@ public class EncryptedPrivateKeyWriterTest
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException,
 		IOException, InvalidKeyException, NoSuchPaddingException,
 		InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException,
-		InvalidParameterSpecException
+		InvalidParameterSpecException, OperatorCreationException, PKCSException
 	{
 		PrivateKey readedPrivateKey;
 		String password;

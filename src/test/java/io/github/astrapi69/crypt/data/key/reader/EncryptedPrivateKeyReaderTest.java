@@ -24,8 +24,10 @@
  */
 package io.github.astrapi69.crypt.data.key.reader;
 
-
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,17 +39,20 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Optional;
 
 import javax.crypto.NoSuchPaddingException;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMException;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.pkcs.PKCSException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.meanbean.test.BeanTester;
 
-import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
-import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
@@ -56,15 +61,26 @@ import io.github.astrapi69.file.search.PathFinder;
 public class EncryptedPrivateKeyReaderTest
 {
 	File derDir;
-	File encryptedPrivateKeyFile;
-	File pwProtectedPrivateKeyFile;
+	File pwProtectedPrivateKeyFileRSA;
+	File pwProtectedPrivateKeyFileDSA;
+	File pwProtectedPrivateKeyFileEC;
+	File pwProtectedPrivateKeyFileDH;
+	File pwProtectedPrivateKeyFilePSS;
 
-	String password;
-	File pemDir;
+	String passwordRSA;
+	String passwordDSA;
+	String passwordEC;
+	String passwordDH;
+	String passwordPSS;
 	PrivateKey pwProtectedPrivateKey;
 
+	File pemDir;
+	File encryptedPemFile;
+	File nonEncryptedPemFile;
+	String password;
+
 	/**
-	 * Sets up method will be invoked before every unit test method in this class.
+	 * Sets up method will be invoked before every unit test method in this class
 	 *
 	 * @throws Exception
 	 *             the exception
@@ -73,74 +89,126 @@ public class EncryptedPrivateKeyReaderTest
 	protected void setUp() throws Exception
 	{
 		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
+		pwProtectedPrivateKeyFileRSA = new File(derDir, "test-key-rsa.der");
+		pwProtectedPrivateKeyFileDSA = new File(derDir, "test-key-dsa.der");
+		pwProtectedPrivateKeyFileEC = new File(derDir, "test-key-ec.der");
+		pwProtectedPrivateKeyFileDH = new File(derDir, "test-key-dh.der");
+		pwProtectedPrivateKeyFilePSS = new File(derDir, "test-key-pss.der");
+
+		passwordRSA = "secret";
+		passwordDSA = "password123";
+		passwordEC = "myPassword";
+		passwordDH = "dhPassword";
+		passwordPSS = "pssPassword";
+
 		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
-		encryptedPrivateKeyFile = new File(pemDir, "test.key");
-		pwProtectedPrivateKeyFile = new File(derDir, "pwp-private-key-pw-is-secret.der");
+		encryptedPemFile = new File(pemDir, "encrypted-key.pem");
+		nonEncryptedPemFile = new File(pemDir, "non-encrypted-key.pem");
+		password = "password";
 	}
 
 	/**
-	 * Test method for {@link EncryptedPrivateKeyReader#getKeyPair(File, String)}
-	 * 
+	 * Test method for {@link EncryptedPrivateKeyReader#getKeyPair(File, String)} with encrypted PEM
+	 * file
+	 *
 	 * @throws FileNotFoundException
 	 *             is thrown if the file did not found
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws PEMException
 	 *             is thrown if an error occurs on read the pem file
 	 */
 	@Test
-	public void testGetKeyPair() throws FileNotFoundException, PEMException, IOException
+	public void testGetKeyPairWithEncryptedPEM() throws FileNotFoundException, IOException,
+		PEMException, OperatorCreationException, PKCSException
 	{
 		Security.addProvider(new BouncyCastleProvider());
-		password = "bosco";
-		KeyPair keyPair = EncryptedPrivateKeyReader.getKeyPair(encryptedPrivateKeyFile, password);
+		KeyPair keyPair = EncryptedPrivateKeyReader.getKeyPair(encryptedPemFile, password);
 		assertNotNull(keyPair);
 	}
 
 	/**
-	 * Test method for
-	 * {@link EncryptedPrivateKeyReader#readPasswordProtectedPrivateKey(byte[], String, String)}
+	 * Test method for {@link EncryptedPrivateKeyReader#getKeyPair(File, String)} with non-encrypted
+	 * PEM file
+	 *
+	 * @throws FileNotFoundException
+	 *             is thrown if the file did not found
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws PEMException
+	 *             is thrown if an error occurs on read the pem file
 	 */
 	@Test
-	public void testReadPasswordProtectedPrivateKeyByteArrayStringString()
-		throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException,
-		NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException
+	public void testGetKeyPairWithNonEncryptedPEM()
+		throws FileNotFoundException, IOException, PEMException, PKCSException
 	{
-		password = "secret";
-		byte[] bytes = ReadFileExtensions.readFileToBytearray(pwProtectedPrivateKeyFile);
-		pwProtectedPrivateKey = EncryptedPrivateKeyReader.readPasswordProtectedPrivateKey(bytes,
-			password, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
-		assertNotNull(pwProtectedPrivateKey);
+		Security.addProvider(new BouncyCastleProvider());
+		assertThrows(PEMException.class,
+			() -> EncryptedPrivateKeyReader.getKeyPair(nonEncryptedPemFile, password));
 	}
 
 	/**
-	 * Test method for
-	 * {@link EncryptedPrivateKeyReader#readPasswordProtectedPrivateKey(File, String)}
+	 * Test method for {@link EncryptedPrivateKeyReader#getPrivateKey(File, String)}
 	 */
 	@Test
-	public void testReadPasswordProtectedPrivateKeyFileString()
-		throws InvalidAlgorithmParameterException, NoSuchPaddingException, IOException,
-		NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException
+	public void testGetPrivateKeyRSA() throws OperatorCreationException, PKCSException
 	{
-		password = "secret";
-		pwProtectedPrivateKey = EncryptedPrivateKeyReader
-			.readPasswordProtectedPrivateKey(pwProtectedPrivateKeyFile, password);
-		assertNotNull(pwProtectedPrivateKey);
+		Security.addProvider(new BouncyCastleProvider());
+		Optional<PrivateKey> optionalPrivateKey = EncryptedPrivateKeyReader
+			.getPrivateKey(pwProtectedPrivateKeyFileRSA, passwordRSA);
+		assertTrue(optionalPrivateKey.isPresent());
 	}
 
 	/**
-	 * Test method for
-	 * {@link EncryptedPrivateKeyReader#readPasswordProtectedPrivateKey(File, String, String)}
+	 * Test method for {@link EncryptedPrivateKeyReader#getPrivateKey(File, String)}
 	 */
 	@Test
-	public void testReadPasswordProtectedPrivateKeyFileStringString()
-		throws InvalidAlgorithmParameterException, NoSuchPaddingException, IOException,
-		NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException
+	public void testGetPrivateKeyDSA() throws OperatorCreationException, PKCSException
 	{
-		password = "secret";
-		pwProtectedPrivateKey = EncryptedPrivateKeyReader.readPasswordProtectedPrivateKey(
-			pwProtectedPrivateKeyFile, password, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
-		assertNotNull(pwProtectedPrivateKey);
+		Security.addProvider(new BouncyCastleProvider());
+		Optional<PrivateKey> optionalPrivateKey = EncryptedPrivateKeyReader
+			.getPrivateKey(pwProtectedPrivateKeyFileDSA, passwordDSA);
+		assertTrue(optionalPrivateKey.isPresent());
+	}
+
+	/**
+	 * Test method for {@link EncryptedPrivateKeyReader#getPrivateKey(File, String)}
+	 */
+	@Test
+	public void testGetPrivateKeyEC() throws OperatorCreationException, PKCSException
+	{
+		Security.addProvider(new BouncyCastleProvider());
+		Optional<PrivateKey> optionalPrivateKey = EncryptedPrivateKeyReader
+			.getPrivateKey(pwProtectedPrivateKeyFileEC, passwordEC);
+		assertTrue(optionalPrivateKey.isPresent());
+	}
+
+	/**
+	 * Test method for {@link EncryptedPrivateKeyReader#getPrivateKey(File, String)}
+	 */
+	@Test
+	public void testGetPrivateKeyDH() throws OperatorCreationException, PKCSException
+	{
+		Security.addProvider(new BouncyCastleProvider());
+		Optional<PrivateKey> optionalPrivateKey = EncryptedPrivateKeyReader
+			.getPrivateKey(pwProtectedPrivateKeyFileDH, passwordDH);
+		assertTrue(optionalPrivateKey.isPresent());
+	}
+
+	/**
+	 * Test method for {@link EncryptedPrivateKeyReader#getPrivateKey(File, String)} with wrong
+	 * algorithm
+	 */
+	@Test
+	public void testGetPrivateKeyWithWrongAlgorithm()
+		throws OperatorCreationException, PKCSException
+	{
+		Security.addProvider(new BouncyCastleProvider());
+		File wrongFile = new File(derDir, "wrong-key-file.der");
+		String wrongPassword = "wrong-password";
+		Optional<PrivateKey> optionalPrivateKey = EncryptedPrivateKeyReader.getPrivateKey(wrongFile,
+			wrongPassword);
+		assertFalse(optionalPrivateKey.isPresent());
 	}
 
 	/**
@@ -153,4 +221,30 @@ public class EncryptedPrivateKeyReaderTest
 		beanTester.testBean(EncryptedPrivateKeyReader.class);
 	}
 
+	/**
+	 * Parameterized test method for
+	 * {@link EncryptedPrivateKeyReader#readPasswordProtectedPrivateKey(File, String, String)}
+	 *
+	 * @param filePath
+	 *            the file path to the password protected private key file
+	 * @param password
+	 *            the password to decrypt the private key
+	 * @param algorithm
+	 *            the algorithm of the private key
+	 * @throws InvalidAlgorithmParameterException,
+	 *             NoSuchPaddingException, IOException, NoSuchAlgorithmException,
+	 *             InvalidKeySpecException, InvalidKeyException
+	 */
+	@ParameterizedTest
+	@CsvFileSource(resources = "/encrypted-private-key-parameters.csv", numLinesToSkip = 1)
+	public void parameterizedTestReadPasswordProtectedPrivateKeyFileStringString(String filePath,
+		String password, String algorithm) throws InvalidAlgorithmParameterException,
+		NoSuchPaddingException, IOException, NoSuchAlgorithmException, InvalidKeySpecException,
+		InvalidKeyException, OperatorCreationException, PKCSException
+	{
+		File file = new File(filePath);
+		PrivateKey privateKey = EncryptedPrivateKeyReader.readPasswordProtectedPrivateKey(file,
+			password, algorithm);
+		assertNotNull(privateKey);
+	}
 }
