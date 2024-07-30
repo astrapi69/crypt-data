@@ -32,6 +32,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
 
 /**
  * The class {@code AlgorithmExtensionsTest} provides unit tests for the {@link AlgorithmExtensions}
@@ -118,4 +119,15 @@ class AlgorithmExtensionsTest
 		assertNotNull(serviceNames);
 		assertTrue(serviceNames.contains("Cipher"));
 	}
+
+	/**
+	 * Test method for {@link AlgorithmExtensions} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(AlgorithmExtensions.class);
+	}
+
 }
