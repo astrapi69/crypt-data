@@ -41,39 +41,6 @@ class KeySizeExtensionsTest
 {
 
 	/**
-	 * Test method for {@link KeySizeExtensions#getSupportedKeySizesForKeyPairGenerator(String)}
-	 *
-	 * @throws NoSuchAlgorithmException
-	 *             if the specified algorithm is not available
-	 */
-	@Test
-	public void testGetSupportedKeySizesForKeyPairGenerator() throws NoSuchAlgorithmException,
-		InvocationTargetException, NoSuchMethodException, IllegalAccessException
-	{
-
-		Set<String> keyGeneratorAlgorithms = AlgorithmExtensions.getAlgorithms("KeyPairGenerator");
-		assertNotNull(keyGeneratorAlgorithms);
-		for (String keyGeneratorAlgorithm : keyGeneratorAlgorithms)
-		{
-			Set<Integer> keySizes = KeySizeExtensions
-				.getSupportedKeySizesForKeyPairGenerator(keyGeneratorAlgorithm);
-			assertNotNull(keySizes);
-		}
-		Set<Integer> rsaKeySizes = KeySizeExtensions.getSupportedKeySizesForKeyPairGenerator("RSA");
-		assertNotNull(rsaKeySizes, "The result should not be null");
-		assertTrue(rsaKeySizes.contains(1024), "RSA should support 1024-bit keys");
-		assertTrue(rsaKeySizes.contains(2048), "RSA should support 2048-bit keys");
-		assertTrue(rsaKeySizes.contains(4096), "RSA should support 4096-bit keys");
-
-		Set<Integer> dsaKeySizes = KeySizeExtensions.getSupportedKeySizesForKeyPairGenerator("DSA");
-		assertNotNull(dsaKeySizes, "The result should not be null");
-		assertTrue(dsaKeySizes.contains(1024), "DSA should support 1024-bit keys");
-		assertTrue(dsaKeySizes.contains(2048), "DSA should support 2048-bit keys");
-		assertTrue(dsaKeySizes.contains(3072), "DSA should support 3072-bit keys");
-
-	}
-
-	/**
 	 * Test method for {@link KeySizeExtensions#getSupportedKeySizesForKeyGenerator(String)}
 	 *
 	 * @throws NoSuchAlgorithmException
@@ -103,15 +70,88 @@ class KeySizeExtensionsTest
 	}
 
 	/**
-	 * Test method for
-	 * {@link KeySizeExtensions#getSupportedKeySizesForAlgorithmParameterGenerator(String)}
+	 * Test method for {@link KeySizeExtensions#getSupportedKeySizesForKeyPairGenerator(String)}
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             if the specified algorithm is not available
+	 * @throws NoSuchMethodException
+	 *             if the specified method cannot be found
+	 * @throws InvocationTargetException
+	 *             if the underlying method throws an exception
+	 * @throws IllegalAccessException
+	 *             if the method is inaccessible
+	 */
+	@Test
+	public void testGetSupportedKeySizesForKeyPairGenerator() throws NoSuchAlgorithmException,
+		NoSuchMethodException, InvocationTargetException, IllegalAccessException
+	{
+		Set<String> keyGeneratorAlgorithms = AlgorithmExtensions.getAlgorithms("KeyPairGenerator");
+		assertNotNull(keyGeneratorAlgorithms);
+		for (String keyGeneratorAlgorithm : keyGeneratorAlgorithms)
+		{
+			Set<Integer> keySizes = KeySizeExtensions
+				.getSupportedKeySizesForKeyPairGenerator(keyGeneratorAlgorithm);
+			assertNotNull(keySizes);
+		}
+		Set<Integer> rsaKeySizes = KeySizeExtensions.getSupportedKeySizesForKeyPairGenerator("RSA");
+		assertNotNull(rsaKeySizes, "The result should not be null");
+		assertTrue(rsaKeySizes.contains(1024), "RSA should support 1024-bit keys");
+		assertTrue(rsaKeySizes.contains(2048), "RSA should support 2048-bit keys");
+		assertTrue(rsaKeySizes.contains(4096), "RSA should support 4096-bit keys");
+
+		Set<Integer> dsaKeySizes = KeySizeExtensions.getSupportedKeySizesForKeyPairGenerator("DSA");
+		assertNotNull(dsaKeySizes, "The result should not be null");
+		assertTrue(dsaKeySizes.contains(1024), "DSA should support 1024-bit keys");
+		assertTrue(dsaKeySizes.contains(2048), "DSA should support 2048-bit keys");
+		assertTrue(dsaKeySizes.contains(3072), "DSA should support 3072-bit keys");
+
+	}
+
+	/**
+	 * Test method for {@link KeySizeExtensions#getSupportedKeySizesForKeyGenerator(String)}
 	 *
 	 * @throws NoSuchAlgorithmException
 	 *             if the specified algorithm is not available
 	 */
 	@Test
+	public void testGetSupportedKeySizesForKeyGenerator() throws NoSuchAlgorithmException
+	{
+		Set<String> keyGeneratorAlgorithms = AlgorithmExtensions.getAlgorithms("KeyGenerator");
+		assertNotNull(keyGeneratorAlgorithms);
+		for (String keyGeneratorAlgorithm : keyGeneratorAlgorithms)
+		{
+			Set<Integer> supportedKeySizes = KeySizeExtensions
+				.getSupportedKeySizesForKeyGenerator(keyGeneratorAlgorithm);
+			assertNotNull(supportedKeySizes);
+		}
+		Set<Integer> aesKeySizes = KeySizeExtensions.getSupportedKeySizesForKeyGenerator("AES");
+		assertNotNull(aesKeySizes, "The result should not be null");
+		assertTrue(aesKeySizes.contains(128), "AES should support 128-bit keys");
+		assertTrue(aesKeySizes.contains(192), "AES should support 192-bit keys");
+		assertTrue(aesKeySizes.contains(256), "AES should support 256-bit keys");
+
+		Set<Integer> desKeySizes = KeySizeExtensions.getSupportedKeySizesForKeyGenerator("DES");
+		assertNotNull(desKeySizes, "The result should not be null");
+		assertTrue(desKeySizes.contains(56), "DES should support 56-bit keys");
+	}
+
+	/**
+	 * Test method for
+	 * {@link KeySizeExtensions#getSupportedKeySizesForAlgorithmParameterGenerator(String)}
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             if the specified algorithm is not available
+	 * @throws NoSuchMethodException
+	 *             if the specified method cannot be found
+	 * @throws InvocationTargetException
+	 *             if the underlying method throws an exception
+	 * @throws IllegalAccessException
+	 *             if the method is inaccessible
+	 */
+	@Test
 	public void testGetSupportedKeySizesForAlgorithmParameterGenerator()
-		throws InvocationTargetException, NoSuchMethodException, IllegalAccessException
+		throws NoSuchAlgorithmException, NoSuchMethodException, InvocationTargetException,
+		IllegalAccessException
 	{
 		Set<String> keyGeneratorAlgorithms = AlgorithmExtensions
 			.getAlgorithms("AlgorithmParameterGenerator");
@@ -124,4 +164,73 @@ class KeySizeExtensionsTest
 		}
 	}
 
+	/**
+	 * Edge case test method for
+	 * {@link KeySizeExtensions#getSupportedKeySizesForKeyPairGenerator(String)} with boundary
+	 * values
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             if the specified algorithm is not available
+	 * @throws NoSuchMethodException
+	 *             if the specified method cannot be found
+	 * @throws InvocationTargetException
+	 *             if the underlying method throws an exception
+	 * @throws IllegalAccessException
+	 *             if the method is inaccessible
+	 */
+	@Test
+	public void testKeyPairGeneratorEdgeCases() throws NoSuchAlgorithmException,
+		NoSuchMethodException, InvocationTargetException, IllegalAccessException
+	{
+		Set<Integer> rsaKeySizes = KeySizeExtensions.getSupportedKeySizesForKeyPairGenerator("RSA");
+		assertNotNull(rsaKeySizes, "The result should not be null");
+		assertFalse(rsaKeySizes.contains(511), "RSA should not support 511-bit keys");
+		assertTrue(rsaKeySizes.contains(512), "RSA should support 512-bit keys");
+		assertTrue(rsaKeySizes.contains(8192), "RSA should support 8192-bit keys");
+		assertFalse(rsaKeySizes.contains(8193), "RSA should not support 8193-bit keys");
+	}
+
+	/**
+	 * Edge case test method for
+	 * {@link KeySizeExtensions#getSupportedKeySizesForKeyGenerator(String)} with boundary values
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             if the specified algorithm is not available
+	 */
+	@Test
+	public void testKeyGeneratorEdgeCases() throws NoSuchAlgorithmException
+	{
+		Set<Integer> aesKeySizes = KeySizeExtensions.getSupportedKeySizesForKeyGenerator("AES");
+		assertNotNull(aesKeySizes, "The result should not be null");
+		assertTrue(aesKeySizes.contains(128), "AES should support 128-bit keys");
+		assertTrue(aesKeySizes.contains(192), "AES should support 192-bit keys");
+		assertTrue(aesKeySizes.contains(256), "AES should support 256-bit keys");
+	}
+
+	/**
+	 * Edge case test method for
+	 * {@link KeySizeExtensions#getSupportedKeySizesForAlgorithmParameterGenerator(String)} with
+	 * boundary values
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             if the specified algorithm is not available
+	 * @throws NoSuchMethodException
+	 *             if the specified method cannot be found
+	 * @throws InvocationTargetException
+	 *             if the underlying method throws an exception
+	 * @throws IllegalAccessException
+	 *             if the method is inaccessible
+	 */
+	@Test
+	public void testAlgorithmParameterGeneratorEdgeCases() throws NoSuchAlgorithmException,
+		NoSuchMethodException, InvocationTargetException, IllegalAccessException
+	{
+		Set<Integer> dsaKeySizes = KeySizeExtensions
+			.getSupportedKeySizesForAlgorithmParameterGenerator("DSA");
+		assertNotNull(dsaKeySizes, "The result should not be null");
+		assertFalse(dsaKeySizes.contains(0), "DSA should not support 0-bit keys");
+		assertTrue(dsaKeySizes.contains(512), "DSA should support 512-bit keys");
+		assertTrue(dsaKeySizes.contains(3072), "DSA should support 3072-bit keys");
+		assertFalse(dsaKeySizes.contains(3073), "DSA should not support 3073-bit keys");
+	}
 }

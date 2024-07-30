@@ -41,18 +41,24 @@ class KeySizeExtensionsParameterizedTest
 	/**
 	 * Test method for {@link KeySizeExtensions#getSupportedKeySizesForKeyPairGenerator(String)}
 	 * with parameterized input from a CSV file
-	 * 
+	 *
 	 * @param serviceName
 	 *            the cryptographic service name
 	 * @param algorithm
 	 *            the cryptographic algorithm
 	 * @throws NoSuchAlgorithmException
 	 *             if the specified algorithm is not available
+	 * @throws NoSuchMethodException
+	 *             if the specified method cannot be found
+	 * @throws InvocationTargetException
+	 *             if the underlying method throws an exception
+	 * @throws IllegalAccessException
+	 *             if the method is inaccessible
 	 */
 	@ParameterizedTest
 	@CsvFileSource(resources = "/key-size-resolver-data.csv", numLinesToSkip = 1)
 	void testGetSupportedKeySizes(String serviceName, String algorithm)
-		throws NoSuchAlgorithmException, InvocationTargetException, NoSuchMethodException,
+		throws NoSuchAlgorithmException, NoSuchMethodException, InvocationTargetException,
 		IllegalAccessException
 	{
 		Set<Integer> supportedKeySizes = null;
@@ -83,4 +89,56 @@ class KeySizeExtensionsParameterizedTest
 		assertFalse(supportedKeySizes.isEmpty(), "Supported key sizes should not be empty for "
 			+ serviceName + " and algorithm " + algorithm);
 	}
+
+	/**
+	 * Edge case test method for
+	 * {@link KeySizeExtensions#getSupportedKeySizesForKeyPairGenerator(String)} with boundary
+	 * values from a CSV file
+	 *
+	 * @param algorithm
+	 *            the cryptographic algorithm
+	 * @throws NoSuchAlgorithmException
+	 *             if the specified algorithm is not available
+	 * @throws NoSuchMethodException
+	 *             if the specified method cannot be found
+	 * @throws InvocationTargetException
+	 *             if the underlying method throws an exception
+	 * @throws IllegalAccessException
+	 *             if the method is inaccessible
+	 */
+	@ParameterizedTest
+	@CsvFileSource(resources = "/test-data-edge-cases.csv", numLinesToSkip = 1)
+	void testKeyPairGeneratorEdgeCases(String algorithm) throws NoSuchAlgorithmException,
+		NoSuchMethodException, InvocationTargetException, IllegalAccessException
+	{
+		Set<Integer> keySizes = KeySizeExtensions
+			.getSupportedKeySizesForKeyPairGenerator(algorithm);
+		if (algorithm.equals("DSA"))
+		{
+			assertNotNull(keySizes,
+				"The result should not be null for KeyPairGenerator and algorithm " + algorithm);
+			assertFalse(keySizes.contains(511),
+				"KeyPairGenerator should not support 511-bit keys for " + algorithm);
+			assertTrue(keySizes.contains(512),
+				"KeyPairGenerator should support 512-bit keys for " + algorithm);
+			assertTrue(keySizes.contains(3072),
+				"KeyPairGenerator should support 3072-bit keys for " + algorithm);
+			assertFalse(keySizes.contains(3073),
+				"KeyPairGenerator should not support 3073-bit keys for " + algorithm);
+		}
+		else if (algorithm.equals("RSA") || algorithm.equals("DIFFIEHELLMAN"))
+		{
+			assertNotNull(keySizes,
+				"The result should not be null for KeyPairGenerator and algorithm " + algorithm);
+			assertFalse(keySizes.contains(511),
+				"KeyPairGenerator should not support 511-bit keys for " + algorithm);
+			assertTrue(keySizes.contains(512),
+				"KeyPairGenerator should support 512-bit keys for " + algorithm);
+			assertTrue(keySizes.contains(8192),
+				"KeyPairGenerator should support 8192-bit keys for " + algorithm);
+			assertFalse(keySizes.contains(8193),
+				"KeyPairGenerator should not support 8193-bit keys for " + algorithm);
+		}
+	}
+
 }

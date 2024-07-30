@@ -63,7 +63,7 @@ public class AlgorithmExtensions
 	 *
 	 * @param serviceName
 	 *            the name of the security service (e.g., "Cipher", "KeyAgreement", "MessageDigest",
-	 *            etc.) for which the supported algorithms are to be retrieved. Must not be null
+	 *            etc.) for which the supported algorithms are to be retrieved
 	 * @return a {@link Set} of {@link String} containing the names of the algorithms supported by
 	 *         the specified security service. The set is not modifiable
 	 * @throws NullPointerException
@@ -81,7 +81,6 @@ public class AlgorithmExtensions
 	 *
 	 * @param provider
 	 *            the {@link Provider} object
-	 *
 	 * @return a set of all specified Java cryptographic service names from the given
 	 *         {@link Provider} object
 	 */
@@ -101,19 +100,15 @@ public class AlgorithmExtensions
 	 *
 	 * @param providers
 	 *            the array with the {@link Provider} objects
-	 *
 	 * @return a set of all specified Java cryptographic service names
 	 */
 	public static Set<String> getAllServiceNames(Provider[] providers)
 	{
 		Set<String> serviceNames = new HashSet<>();
-
-		// Iterate through all security providers
 		for (Provider provider : providers)
 		{
 			serviceNames.addAll(getServiceNames(provider));
 		}
 		return serviceNames;
 	}
-
 }

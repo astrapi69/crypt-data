@@ -755,4 +755,158 @@ public class HashExtensionsTest
 		assertArrayEquals(expectedHash, actualHash);
 	}
 
+	/**
+	 * Test method for {@link HashExtensions#hash(byte[], byte[], HashAlgorithm)}
+	 */
+	@Test
+	public void testHashWithPublicKeySHA1()
+	{
+		byte[] input = "input".getBytes(StandardCharsets.UTF_8);
+		byte[] publicKey = "publicKey".getBytes(StandardCharsets.UTF_8);
+		HashAlgorithm algorithm = HashAlgorithm.SHA1;
+
+		byte[] hashValue = ArrayUtils.addAll(input, publicKey);
+		byte[] expectedHash = DigestUtils.sha1(hashValue);
+		byte[] actualHash = HashExtensions.hash(input, publicKey, algorithm);
+
+		assertArrayEquals(expectedHash, actualHash);
+	}
+
+	/**
+	 * Test method for {@link HashExtensions#hash(byte[], byte[], HashAlgorithm)}
+	 */
+	@Test
+	public void testHashWithPublicKeySHA_1()
+	{
+		byte[] input = "input".getBytes(StandardCharsets.UTF_8);
+		byte[] publicKey = "publicKey".getBytes(StandardCharsets.UTF_8);
+		HashAlgorithm algorithm = HashAlgorithm.SHA_1;
+
+		byte[] hashValue = ArrayUtils.addAll(input, publicKey);
+		byte[] expectedHash = DigestUtils.sha1(hashValue);
+		byte[] actualHash = HashExtensions.hash(input, publicKey, algorithm);
+
+		assertArrayEquals(expectedHash, actualHash);
+	}
+
+	/**
+	 * Test method for {@link HashExtensions#hash(byte[], byte[], HashAlgorithm)}
+	 */
+	@Test
+	public void testHashWithPublicKeySHA256()
+	{
+		byte[] input = "input".getBytes(StandardCharsets.UTF_8);
+		byte[] publicKey = "publicKey".getBytes(StandardCharsets.UTF_8);
+		HashAlgorithm algorithm = HashAlgorithm.SHA256;
+
+		byte[] hashValue = ArrayUtils.addAll(input, publicKey);
+		byte[] expectedHash = DigestUtils.sha256(hashValue);
+		byte[] actualHash = HashExtensions.hash(input, publicKey, algorithm);
+
+		assertArrayEquals(expectedHash, actualHash);
+	}
+
+	/**
+	 * Test method for {@link HashExtensions#hash(byte[], byte[], HashAlgorithm)}
+	 */
+	@Test
+	public void testHashWithPublicKeySHA_256()
+	{
+		byte[] input = "input".getBytes(StandardCharsets.UTF_8);
+		byte[] publicKey = "publicKey".getBytes(StandardCharsets.UTF_8);
+		HashAlgorithm algorithm = HashAlgorithm.SHA_256;
+
+		byte[] hashValue = ArrayUtils.addAll(input, publicKey);
+		byte[] expectedHash = DigestUtils.sha256(hashValue);
+		byte[] actualHash = HashExtensions.hash(input, publicKey, algorithm);
+
+		assertArrayEquals(expectedHash, actualHash);
+	}
+
+	/**
+	 * Test method for {@link HashExtensions#hash(byte[], byte[], HashAlgorithm)}
+	 */
+	@Test
+	public void testHashWithPublicKeySHA384()
+	{
+		byte[] input = "input".getBytes(StandardCharsets.UTF_8);
+		byte[] publicKey = "publicKey".getBytes(StandardCharsets.UTF_8);
+		HashAlgorithm algorithm = HashAlgorithm.SHA384;
+
+		byte[] hashValue = ArrayUtils.addAll(input, publicKey);
+		byte[] expectedHash = DigestUtils.sha384(hashValue);
+		byte[] actualHash = HashExtensions.hash(input, publicKey, algorithm);
+
+		assertArrayEquals(expectedHash, actualHash);
+	}
+
+	/**
+	 * Test method for {@link HashExtensions#hash(byte[], byte[], HashAlgorithm)}
+	 */
+	@Test
+	public void testHashWithPublicKeySHA_384()
+	{
+		byte[] input = "input".getBytes(StandardCharsets.UTF_8);
+		byte[] publicKey = "publicKey".getBytes(StandardCharsets.UTF_8);
+		HashAlgorithm algorithm = HashAlgorithm.SHA_384;
+
+		byte[] hashValue = ArrayUtils.addAll(input, publicKey);
+		byte[] expectedHash = DigestUtils.sha384(hashValue);
+		byte[] actualHash = HashExtensions.hash(input, publicKey, algorithm);
+
+		assertArrayEquals(expectedHash, actualHash);
+	}
+
+	/**
+	 * Test method for {@link HashExtensions#hash(byte[], byte[], HashAlgorithm)}
+	 */
+	@Test
+	public void testHashWithPublicKeySHA512()
+	{
+		byte[] input = "input".getBytes(StandardCharsets.UTF_8);
+		byte[] publicKey = "publicKey".getBytes(StandardCharsets.UTF_8);
+		HashAlgorithm algorithm = HashAlgorithm.SHA512;
+
+		byte[] hashValue = ArrayUtils.addAll(input, publicKey);
+		byte[] expectedHash = DigestUtils.sha512(hashValue);
+		byte[] actualHash = HashExtensions.hash(input, publicKey, algorithm);
+
+		assertArrayEquals(expectedHash, actualHash);
+	}
+
+	/**
+	 * Test method for {@link HashExtensions#hash(byte[], byte[], HashAlgorithm)}
+	 */
+	@Test
+	public void testHashWithPublicKeySHA_512()
+	{
+		byte[] input = "input".getBytes(StandardCharsets.UTF_8);
+		byte[] publicKey = "publicKey".getBytes(StandardCharsets.UTF_8);
+		HashAlgorithm algorithm = HashAlgorithm.SHA_512;
+
+		byte[] hashValue = ArrayUtils.addAll(input, publicKey);
+		byte[] expectedHash = DigestUtils.sha512(hashValue);
+		byte[] actualHash = HashExtensions.hash(input, publicKey, algorithm);
+
+		assertArrayEquals(expectedHash, actualHash);
+	}
+
+	/**
+	 * Test method for {@link HashExtensions#hash(byte[], byte[], HashAlgorithm)}
+	 */
+	@Test
+	public void testHashWithPublicKeyDefault()
+	{
+		byte[] input = "input".getBytes(StandardCharsets.UTF_8);
+		byte[] publicKey = "publicKey".getBytes(StandardCharsets.UTF_8);
+		HashAlgorithm algorithm = HashAlgorithm.UNKNOWN; // An unsupported algorithm to trigger the
+															// default case
+
+		byte[] hashValue = ArrayUtils.addAll(input, publicKey);
+		byte[] expectedHash = DigestUtils.sha256(hashValue); // Default case uses SHA256
+		byte[] actualHash = HashExtensions.hash(input, publicKey, algorithm);
+
+		assertArrayEquals(expectedHash, actualHash);
+	}
+
 }

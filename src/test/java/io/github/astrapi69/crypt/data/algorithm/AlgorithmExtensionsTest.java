@@ -26,6 +26,7 @@ package io.github.astrapi69.crypt.data.algorithm;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.security.Provider;
 import java.security.Security;
 import java.util.Set;
 
@@ -92,5 +93,29 @@ class AlgorithmExtensionsTest
 		Set<String> algorithms = AlgorithmExtensions.getAlgorithms("InvalidService");
 		assertNotNull(algorithms);
 		assertTrue(algorithms.isEmpty());
+	}
+
+	/**
+	 * Test for retrieving service names from a provider
+	 */
+	@Test
+	void testGetServiceNames()
+	{
+		Provider provider = Security.getProvider("BC");
+		Set<String> serviceNames = AlgorithmExtensions.getServiceNames(provider);
+		assertNotNull(serviceNames);
+		assertTrue(serviceNames.contains("Cipher"));
+	}
+
+	/**
+	 * Test for retrieving all service names from providers
+	 */
+	@Test
+	void testGetAllServiceNames()
+	{
+		Provider[] providers = Security.getProviders();
+		Set<String> serviceNames = AlgorithmExtensions.getAllServiceNames(providers);
+		assertNotNull(serviceNames);
+		assertTrue(serviceNames.contains("Cipher"));
 	}
 }
