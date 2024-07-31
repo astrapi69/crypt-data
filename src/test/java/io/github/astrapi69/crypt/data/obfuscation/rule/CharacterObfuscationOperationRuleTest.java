@@ -22,13 +22,18 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-/**
- *
- */
 package io.github.astrapi69.crypt.data.obfuscation.rule;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
+
+import io.github.astrapi69.collection.set.SetFactory;
+import io.github.astrapi69.crypt.api.obfuscation.rule.Operation;
 
 /**
  * The unit test class for the class {@link CharacterObfuscationOperationRule}
@@ -37,12 +42,32 @@ public class CharacterObfuscationOperationRuleTest
 {
 
 	/**
-	 * Test method for {@link CharacterObfuscationOperationRule}
+	 * Test method for {@link CharacterObfuscationOperationRule} using BeanTester
 	 */
 	@Test
 	public void testWithBeanTester()
 	{
 		BeanTester beanTester = new BeanTester();
 		beanTester.testBean(CharacterObfuscationOperationRule.class);
+	}
+
+	/**
+	 * Test method for {@link CharacterObfuscationOperationRule#equals(Object)},
+	 * {@link CharacterObfuscationOperationRule#hashCode()}, and
+	 * {@link CharacterObfuscationOperationRule#toString()}
+	 */
+	@Test
+	public void testEqualsHashCodeAndToString()
+	{
+		CharacterObfuscationOperationRule rule1 = new CharacterObfuscationOperationRule('a',
+			SetFactory.newHashSet(0, 1), false, Optional.empty(), Operation.UPPERCASE, 'A');
+		CharacterObfuscationOperationRule rule2 = new CharacterObfuscationOperationRule('a',
+			SetFactory.newHashSet(0, 1), false, Optional.empty(), Operation.UPPERCASE, 'A');
+
+		assertTrue(rule1.equals(rule2));
+		assertEquals(rule1.hashCode(), rule2.hashCode());
+		assertEquals(
+			"CharacterObfuscationOperationRule(super=ObfuscationOperationRule(character=a, indexes=[0, 1], inverted=false, operatedCharacter=Optional[A], operation=UPPERCASE, replaceWith=A))",
+			rule1.toString());
 	}
 }

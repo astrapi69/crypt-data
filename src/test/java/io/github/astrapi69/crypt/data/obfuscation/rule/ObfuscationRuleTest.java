@@ -28,6 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
+import org.meanbean.test.BeanVerifier;
+
 
 /**
  * The unit test class for the class {@link ObfuscationRule}.
@@ -57,6 +59,9 @@ public class ObfuscationRuleTest
 	{
 		BeanTester beanTester = new BeanTester();
 		beanTester.testBean(ObfuscationRule.class);
+
+		BeanVerifier.forClass(ObfuscationRule.class).editSettings().edited()
+			.verifyGettersAndSetters();
 	}
 
 }

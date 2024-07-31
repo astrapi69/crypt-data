@@ -81,18 +81,6 @@ public class ObfuscationRule<C, RW> implements Serializable
 		return new ObfuscationRuleBuilder<C, RW>();
 	}
 
-	/**
-	 * Can equal boolean.
-	 *
-	 * @param other
-	 *            the other
-	 * @return the boolean
-	 */
-	protected boolean canEqual(final Object other)
-	{
-		return other instanceof ObfuscationRule;
-	}
-
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -101,8 +89,6 @@ public class ObfuscationRule<C, RW> implements Serializable
 		if (!(o instanceof ObfuscationRule))
 			return false;
 		final ObfuscationRule<?, ?> other = (ObfuscationRule<?, ?>)o;
-		if (!other.canEqual(this))
-			return false;
 		final Object this$character = this.getCharacter();
 		final Object other$character = other.getCharacter();
 		if (this$character == null

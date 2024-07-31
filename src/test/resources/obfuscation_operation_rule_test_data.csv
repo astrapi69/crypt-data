@@ -1,0 +1,4 @@
+character,replaceWith,operation,indexes
+a,bc,UPPERCASE,0,2
+b,de,LOWERCASE,1,3
+c,fg,NONE,2,4
