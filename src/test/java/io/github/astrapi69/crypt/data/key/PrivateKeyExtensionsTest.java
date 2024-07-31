@@ -192,7 +192,8 @@ public class PrivateKeyExtensionsTest
 	 * Test method for {@link PrivateKeyExtensions#getAlgorithm(byte[])} to cover the catch clause
 	 */
 	@Test
-	public void testGetAlgorithm_CatchClause() {
+	public void testGetAlgorithm_CatchClause()
+	{
 		// Create a dummy key with invalid data to trigger the catch clause
 		byte[] invalidKeyBytes = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05 };
 
@@ -217,7 +218,7 @@ public class PrivateKeyExtensionsTest
 	 */
 	@Test
 	public void testGetAlgorithm() throws IOException, NoSuchAlgorithmException,
-			InvalidKeySpecException, NoSuchProviderException
+		InvalidKeySpecException, NoSuchProviderException
 	{
 
 		String expected;
@@ -246,7 +247,7 @@ public class PrivateKeyExtensionsTest
 	 */
 	@Test
 	public void testGetFormat() throws IOException, NoSuchAlgorithmException,
-			InvalidKeySpecException, NoSuchProviderException
+		InvalidKeySpecException, NoSuchProviderException
 	{
 
 		String expected;
@@ -275,7 +276,7 @@ public class PrivateKeyExtensionsTest
 	 */
 	@Test
 	public void testGetEncoded() throws IOException, NoSuchAlgorithmException,
-			InvalidKeySpecException, NoSuchProviderException
+		InvalidKeySpecException, NoSuchProviderException
 	{
 
 		byte[] expected;
