@@ -69,12 +69,13 @@ public final class PublicKeyReader
 	{
 		final byte[] keyBytes = Files.readAllBytes(file.toPath());
 		final String publicKeyAsBase64String = new String(keyBytes)
-			.replace(BEGIN_PUBLIC_KEY_PREFIX, "").replace(END_PUBLIC_KEY_SUFFIX, "");
+			.replace(BEGIN_PUBLIC_KEY_PREFIX, "").replaceAll(System.lineSeparator(), "")
+			.replace(END_PUBLIC_KEY_SUFFIX, "");
 		return publicKeyAsBase64String;
 	}
 
 	/**
-	 * reads a public key from a file.
+	 * reads a public key from a file with algorithm RSA
 	 *
 	 * @param file
 	 *            the file
@@ -92,9 +93,34 @@ public final class PublicKeyReader
 	public static PublicKey readPemPublicKey(final File file) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
+		return readPemPublicKey(file, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+	}
+
+	/**
+	 * reads a public key from a file.
+	 *
+	 * @param file
+	 *            the file
+	 * @param algorithm
+	 *            the algorithm for the {@link KeyFactory}
+	 * @return the public key
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails.
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails.
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list.
+	 */
+	public static PublicKey readPemPublicKey(final File file, final String algorithm)
+		throws IOException, NoSuchAlgorithmException, InvalidKeySpecException,
+		NoSuchProviderException
+	{
 		final String publicKeyAsString = readPemFileAsBase64(file);
 		final byte[] decoded = Base64.decodeBase64(publicKeyAsString);
-		return readPublicKey(decoded);
+		return readPublicKey(decoded, algorithm);
 	}
 
 	/**

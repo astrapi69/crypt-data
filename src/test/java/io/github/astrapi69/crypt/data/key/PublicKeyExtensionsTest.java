@@ -24,6 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.key;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
@@ -38,6 +39,8 @@ import java.security.spec.InvalidKeySpecException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
@@ -51,15 +54,15 @@ import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
- * The unit test class for the class {@link PublicKeyExtensions}.
+ * The unit test class for the class {@link PublicKeyExtensions}
  */
 public class PublicKeyExtensionsTest
 {
 
-	/** The hex string encoded for use in tests. */
+	/** The hex string encoded for use in tests */
 	public static String HEX_STRING_ENCODED = "30820122300d06092a864886f70d01010105000382010f003082010a0282010100de9ad9316a7690eeab7c434ee29ed728d2bd3868ac26cc78286d6019f49cb337507c8c56ffa29a0045a08544a17759f6b725fa2e8dd4a80e6df4eca1c949ed5e7010d8264f63936ad9ae4709b1f67bd408cc97623c13425d3b37c08a6b20626fd93d0ef6a90e1bb088aa16638ab9e168650002a312d21bd50e7f80029cefd0570989d68ee6a5f9e8bb28e653e93960910441eac10c9b5e116b0e96d36d8d2ed0a857a200e743e8c6b7d94c12cf121af287d05b96dd3b97b03351938b874bdc3f8db6f1d430b5b2314cbf78cd1e8e13acaa29bd195c2f60f7b87a7f880008794f835de6525081118bf155910c4835125fd9b01dbd134381316d0945b8250766610203010001";
 
-	/** The public key base64 encoded for use in tests. */
+	/** The public key base64 encoded for use in tests */
 	public static String PUBLIC_KEY_BASE64_ENCODED = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3prZMWp2kO6rfENO4p7X"
 		+ "KNK9OGisJsx4KG1gGfScszdQfIxW/6KaAEWghUShd1n2tyX6Lo3UqA5t9OyhyUnt"
 		+ "XnAQ2CZPY5Nq2a5HCbH2e9QIzJdiPBNCXTs3wIprIGJv2T0O9qkOG7CIqhZjirnh"
@@ -67,7 +70,7 @@ public class PublicKeyExtensionsTest
 		+ "0KhXogDnQ+jGt9lMEs8SGvKH0FuW3TuXsDNRk4uHS9w/jbbx1DC1sjFMv3jNHo4T"
 		+ "rKopvRlcL2D3uHp/iAAIeU+DXeZSUIERi/FVkQxINRJf2bAdvRNDgTFtCUW4JQdm" + "YQIDAQAB";
 
-	/** The public key in pem format for use in tests. */
+	/** The public key in pem format for use in tests */
 	public static String PUBLIC_KEY_PEM_FORMATED = PublicKeyReader.BEGIN_PUBLIC_KEY_PREFIX
 		+ "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3prZMWp2kO6rfENO4p7X" + "\n"
 		+ "KNK9OGisJsx4KG1gGfScszdQfIxW/6KaAEWghUShd1n2tyX6Lo3UqA5t9OyhyUnt" + "\n"
@@ -106,7 +109,7 @@ public class PublicKeyExtensionsTest
 	 * Test method for {@link PublicKeyExtensions#getKeyLength(PublicKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testGetKeyLength() throws Exception
@@ -141,7 +144,7 @@ public class PublicKeyExtensionsTest
 	 * Test method for {@link PublicKeyExtensions#toBase64(PublicKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToBase64() throws Exception
@@ -156,10 +159,10 @@ public class PublicKeyExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyExtensions#toHexString(PrivateKey)}.
+	 * Test method for {@link PrivateKeyExtensions#toHexString(PrivateKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToHexString() throws Exception
@@ -175,10 +178,10 @@ public class PublicKeyExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyExtensions#toHexString(PrivateKey)}.
+	 * Test method for {@link PrivateKeyExtensions#toHexString(PrivateKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToHexStringBoolean() throws Exception
@@ -220,7 +223,7 @@ public class PublicKeyExtensionsTest
 	 * Test method for {@link PublicKeyExtensions#toBase64(PublicKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testToPemFormat() throws Exception
@@ -236,10 +239,10 @@ public class PublicKeyExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link PublicKeyExtensions#toBase64(PublicKey)}
+	 * Test method for {@link PublicKeyExtensions#getFormat(PublicKey)}
 	 *
 	 * @throws Exception
-	 *             is thrown if an security error occurs
+	 *             is thrown if a security error occurs
 	 */
 	@Test
 	public void testGetFormat() throws Exception
@@ -262,6 +265,53 @@ public class PublicKeyExtensionsTest
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(PublicKeyExtensions.class);
+	}
+
+	/**
+	 * Parameterized test method for {@link PublicKeyExtensions#getAlgorithm(PublicKey)}
+	 *
+	 * @param algorithm
+	 *            the expected algorithm
+	 * @param keyFile
+	 *            the file containing the public key
+	 * @throws Exception
+	 *             is thrown if a security error occurs
+	 */
+	@ParameterizedTest
+	@CsvFileSource(resources = "/public_keys.csv", numLinesToSkip = 1)
+	public void testGetAlgorithmParameterized(String algorithm, String keyFile) throws Exception
+	{
+		File file = new File(pemDir, keyFile);
+		PublicKey publicKey = PublicKeyReader.readPemPublicKey(file, algorithm);
+		String actual = PublicKeyExtensions.getAlgorithm(publicKey);
+		assertEquals(algorithm, actual);
+	}
+
+	/**
+	 * Test method for {@link PublicKeyExtensions#getEncoded(PublicKey)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 */
+	@Test
+	public void testGetEncoded() throws IOException, NoSuchAlgorithmException,
+		InvalidKeySpecException, NoSuchProviderException
+	{
+		byte[] expected;
+		byte[] actual;
+		// new scenario...
+		publicKey = PublicKeyReader.readPemPublicKey(publicKeyPemFile);
+
+		actual = PublicKeyExtensions.getEncoded(publicKey);
+		expected = publicKey.getEncoded();
+		assertArrayEquals(expected, actual);
 	}
 
 }

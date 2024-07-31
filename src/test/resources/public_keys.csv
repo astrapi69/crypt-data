@@ -1,0 +1,4 @@
+algorithm,keyFile
+RSA,public_rsa.pem
+DSA,public_dsa.pem
+EC,public_ec.pem

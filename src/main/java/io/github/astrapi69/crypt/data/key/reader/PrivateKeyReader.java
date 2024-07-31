@@ -189,6 +189,7 @@ public final class PrivateKeyReader
 			// PKCS#8 format
 			privateKeyAsBase64String = new String(keyBytes)
 				.replace(KeyStringEntry.BEGIN_PRIVATE_KEY_PREFIX.getValue(), "")
+				.replaceAll(System.lineSeparator(), "")
 				.replace(KeyStringEntry.END_PRIVATE_KEY_SUFFIX.getValue(), "").trim();
 		}
 		if (privateKeyPem.contains(KeyStringEntry.BEGIN_RSA_PRIVATE_KEY_PREFIX.getValue()))
@@ -196,6 +197,7 @@ public final class PrivateKeyReader
 			// PKCS#1 format
 			privateKeyAsBase64String = new String(keyBytes)
 				.replace(KeyStringEntry.BEGIN_RSA_PRIVATE_KEY_PREFIX.getValue(), "")
+				.replaceAll(System.lineSeparator(), "")
 				.replace(KeyStringEntry.END_RSA_PRIVATE_KEY_SUFFIX.getValue(), "").trim();
 		}
 		return privateKeyAsBase64String;

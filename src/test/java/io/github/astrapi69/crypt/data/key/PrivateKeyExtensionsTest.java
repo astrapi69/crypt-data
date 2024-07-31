@@ -260,9 +260,8 @@ public class PrivateKeyExtensionsTest
 		assertEquals(expected, actual);
 	}
 
-
 	/**
-	 * Test method for {@link PrivateKeyExtensions#getFormat(PrivateKey)}
+	 * Test method for {@link PrivateKeyExtensions#getEncoded(PrivateKey)}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
