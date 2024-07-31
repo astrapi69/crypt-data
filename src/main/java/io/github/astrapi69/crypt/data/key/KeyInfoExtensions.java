@@ -39,18 +39,17 @@ import io.github.astrapi69.crypt.data.model.KeyInfo;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
- * The class {@link KeyInfoExtensions} provides algorithms for transform a given {@link KeyInfo}
+ * The class {@link KeyInfoExtensions} provides algorithms for transforming a given {@link KeyInfo}
  * object to the appropriate key objects and given keys to the appropriate {@link KeyInfo} object
  */
 public class KeyInfoExtensions
 {
 
 	/**
-	 * Reads the given byte array with the given algorithm and returns the {@link PrivateKey}
-	 * object.
+	 * Reads the given byte array with the given algorithm and returns the {@link PrivateKey} object
 	 *
 	 * @param keyInfo
-	 *            the info model for create the private key
+	 *            the info model for creating the private key
 	 * @return the {@link PrivateKey} object
 	 */
 	public static PrivateKey toPrivateKey(KeyInfo keyInfo)
@@ -66,14 +65,12 @@ public class KeyInfoExtensions
 			() -> PrivateKeyReader.readPrivateKey(keyInfo.getEncoded(), keyInfo.getAlgorithm()));
 	}
 
-
 	/**
-	 * Reads the given byte array with the given algorithm and returns the {@link PrivateKey}
-	 * object.
+	 * Reads the given byte array with the given algorithm and returns the {@link PublicKey} object
 	 *
 	 * @param keyInfo
-	 *            the info model for create the private key
-	 * @return the {@link PrivateKey} object
+	 *            the info model for creating the public key
+	 * @return the {@link PublicKey} object
 	 */
 	public static PublicKey toPublicKey(KeyInfo keyInfo)
 	{
@@ -89,12 +86,12 @@ public class KeyInfoExtensions
 	}
 
 	/**
-	 * Reads the given byte array with the given algorithm and returns the {@link PrivateKey}
-	 * object.
+	 * Reads the given byte array with the given algorithm and returns the {@link X509Certificate}
+	 * object
 	 *
 	 * @param keyInfo
-	 *            the info model for create the private key
-	 * @return the {@link PrivateKey} object
+	 *            the info model for creating the X509 certificate
+	 * @return the {@link X509Certificate} object
 	 */
 	public static X509Certificate toX509Certificate(KeyInfo keyInfo)
 	{
@@ -110,7 +107,7 @@ public class KeyInfoExtensions
 
 	/**
 	 * Transforms the given {@link PrivateKey} object to a {@link KeyInfo} object
-	 * 
+	 *
 	 * @param privateKey
 	 *            the {@link PrivateKey} object to transform
 	 * @return the {@link KeyInfo} object from the given {@link PrivateKey} object
@@ -124,7 +121,7 @@ public class KeyInfoExtensions
 
 	/**
 	 * Transforms the given {@link PublicKey} object to a {@link KeyInfo} object
-	 * 
+	 *
 	 * @param publicKey
 	 *            the {@link PublicKey} object to transform
 	 * @return the {@link KeyInfo} object from the given {@link PublicKey} object
@@ -138,7 +135,7 @@ public class KeyInfoExtensions
 
 	/**
 	 * Transforms the given {@link Certificate} object to a {@link KeyInfo} object
-	 * 
+	 *
 	 * @param certificate
 	 *            the {@link Certificate} object to transform
 	 * @return the {@link KeyInfo} object from the given {@link Certificate} object
