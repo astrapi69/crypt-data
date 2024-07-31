@@ -38,8 +38,10 @@ import java.security.cert.X509Certificate;
 import java.util.Base64;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.data.model.KeyInfo;
 
@@ -48,6 +50,16 @@ import io.github.astrapi69.crypt.data.model.KeyInfo;
  */
 class KeyInfoExtensionsTest
 {
+
+	/**
+	 * Test method for {@link KeyInfoExtensions} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(KeyInfoExtensions.class);
+	}
 
 	@BeforeEach
 	void setUp()

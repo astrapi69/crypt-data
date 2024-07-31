@@ -31,6 +31,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
 
@@ -39,6 +40,16 @@ import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
  */
 class KeySizeExtensionsTest
 {
+
+	/**
+	 * Test method for {@link KeySizeExtensions} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(KeySizeExtensions.class);
+	}
 
 	/**
 	 * Test method for {@link KeySizeExtensions#getSupportedKeySizesForKeyGenerator(String)}

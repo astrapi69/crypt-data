@@ -42,6 +42,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
@@ -105,6 +106,16 @@ public class KeyStoreExtensionsTest
 	protected void tearDown()
 	{
 		keystoreFile.delete();
+	}
+
+	/**
+	 * Test method for {@link KeyStoreExtensions} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(KeyStoreExtensions.class);
 	}
 
 	/**
