@@ -87,7 +87,7 @@ public class CryptoAlgorithmTest
 		BeanVerifier.forClass(CryptoAlgorithm.class).editSettings()
 			.registerFactory(CryptoAlgorithm.class,
 				() -> (CryptoAlgorithm)CryptoAlgorithm.newAlgorithm("AES"))
-			.edited().verifyGettersAndSetters();
+			.edited().verifyGettersAndSetters().verifyEqualsAndHashCode().verifyToString();
 	}
 
 }

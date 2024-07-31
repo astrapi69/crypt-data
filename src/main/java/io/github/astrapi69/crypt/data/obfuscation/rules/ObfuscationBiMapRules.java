@@ -71,17 +71,6 @@ public class ObfuscationBiMapRules<K, V>
 		return new ObfuscationBiMapRulesBuilder<K, V>();
 	}
 
-	/**
-	 * Can equal boolean.
-	 *
-	 * @param other
-	 *            the other
-	 * @return the boolean
-	 */
-	protected boolean canEqual(final Object other)
-	{
-		return other instanceof ObfuscationBiMapRules;
-	}
 
 	@Override
 	public boolean equals(final Object o)
@@ -91,8 +80,6 @@ public class ObfuscationBiMapRules<K, V>
 		if (!(o instanceof ObfuscationBiMapRules))
 			return false;
 		final ObfuscationBiMapRules<?, ?> other = (ObfuscationBiMapRules<?, ?>)o;
-		if (!other.canEqual(this))
-			return false;
 		final Object this$obfuscationRules = this.getObfuscationRules();
 		final Object other$obfuscationRules = other.getObfuscationRules();
 		return this$obfuscationRules == null

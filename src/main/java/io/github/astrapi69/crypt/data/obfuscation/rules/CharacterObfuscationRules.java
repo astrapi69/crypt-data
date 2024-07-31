@@ -55,12 +55,6 @@ public class CharacterObfuscationRules extends ObfuscationBiMapRules<Character, 
 	}
 
 	@Override
-	protected boolean canEqual(final Object other)
-	{
-		return other instanceof CharacterObfuscationRules;
-	}
-
-	@Override
 	public boolean equals(final Object o)
 	{
 		if (o == this)
@@ -68,8 +62,6 @@ public class CharacterObfuscationRules extends ObfuscationBiMapRules<Character, 
 		if (!(o instanceof CharacterObfuscationRules))
 			return false;
 		final CharacterObfuscationRules other = (CharacterObfuscationRules)o;
-		if (!other.canEqual(this))
-			return false;
 		return super.equals(o);
 	}
 
