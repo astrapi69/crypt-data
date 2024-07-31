@@ -93,6 +93,8 @@ public final class EncryptedPrivateKeyReader
 	 *             Signals that an I/O exception has occurred
 	 * @throws PEMException
 	 *             is thrown if an error occurs on read the pem file
+	 * @throws PKCSException
+	 *             is thrown if an error occurs on read the key file
 	 */
 	public static KeyPair getKeyPair(final File encryptedPrivateKeyFile, final String password)
 		throws FileNotFoundException, IOException, PEMException, PKCSException
@@ -182,6 +184,10 @@ public final class EncryptedPrivateKeyReader
 	 * @param password
 	 *            the password
 	 * @return the {@link PrivateKey} object or null if it fails
+	 * @throws OperatorCreationException
+	 *             is thrown if an error occurs on the operator creation
+	 * @throws PKCSException
+	 *             is thrown if an error occurs on read the key file
 	 */
 	public static PrivateKey readPasswordProtectedPrivateKey(final File encryptedPrivateKeyFile,
 		final String password) throws OperatorCreationException, PKCSException
@@ -199,6 +205,10 @@ public final class EncryptedPrivateKeyReader
 	 *            the password
 	 * @return the {@link Optional} object with the password protected private key from the given
 	 *         file or an empty {@link Optional} object if it does not match
+	 * @throws OperatorCreationException
+	 *             is thrown if an error occurs on the operator creation
+	 * @throws PKCSException
+	 *             is thrown if an error occurs on read the key file
 	 */
 	public static Optional<PrivateKey> getPrivateKey(final File encryptedPrivateKeyFile,
 		final String password) throws OperatorCreationException, PKCSException
@@ -283,6 +293,8 @@ public final class EncryptedPrivateKeyReader
 	 *             is thrown if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
 	 *             is thrown if initialization of the cipher object fails
+	 * @throws PKCSException
+	 *             is thrown if an error occurs on read the key file
 	 */
 	public static PrivateKey readPasswordProtectedPrivateKey(final File encryptedPrivateKeyFile,
 		final String password, final String algorithm) throws IOException, NoSuchAlgorithmException,
