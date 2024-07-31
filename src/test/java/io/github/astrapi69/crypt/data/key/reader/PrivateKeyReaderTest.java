@@ -27,9 +27,11 @@ package io.github.astrapi69.crypt.data.key.reader;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
@@ -51,7 +53,7 @@ import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
- * The unit test class for the class {@link PrivateKeyReader}.
+ * The unit test class for the class {@link PrivateKeyReader}
  */
 public class PrivateKeyReaderTest
 {
@@ -70,7 +72,7 @@ public class PrivateKeyReaderTest
 	File privateKeyPemFile2;
 
 	/**
-	 * Sets up method will be invoked before every unit test method in this class.
+	 * Sets up method will be invoked before every unit test method in this class
 	 */
 	@BeforeEach
 	protected void setUp()
@@ -90,10 +92,10 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#getPrivateKey(File)}.
+	 * Test method for {@link PrivateKeyReader#getPrivateKey(File)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testGetPrivateKey() throws IOException
@@ -155,7 +157,7 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#getKeyFormat(File)}.
+	 * Test method for {@link PrivateKeyReader#getKeyFormat(File)}
 	 */
 	@Test
 	public void testGetKeyFormat() throws IOException
@@ -181,7 +183,7 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#isPemFormat(File)}.
+	 * Test method for {@link PrivateKeyReader#isPemFormat(File)}
 	 */
 	@Test
 	public void testIsPemFormat() throws Exception
@@ -197,7 +199,7 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#isPrivateKeyPasswordProtected(File)}.
+	 * Test method for {@link PrivateKeyReader#isPrivateKeyPasswordProtected(File)}
 	 */
 	@Test
 	public void testIsPrivateKeyPasswordProtected() throws Exception
@@ -231,9 +233,8 @@ public class PrivateKeyReaderTest
 		assertFalse(actual);
 	}
 
-
 	/**
-	 * Test method for {@link PrivateKeyReader#validatePrivateKey(File)}.
+	 * Test method for {@link PrivateKeyReader#validatePrivateKey(File)}
 	 */
 	@Test
 	public void testValidatePrivateKey() throws Exception
@@ -268,17 +269,17 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#readPrivateKey(File)}.
+	 * Test method for {@link PrivateKeyReader#readPemFileAsBase64(File)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cipher object fails.
+	 *             is thrown if instantiation of the cipher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	@Test
 	public void testReadPemFileAsBase64() throws IOException, NoSuchAlgorithmException,
@@ -305,17 +306,17 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#readPemPrivateKey(File)}.
+	 * Test method for {@link PrivateKeyReader#readPemPrivateKey(File)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cipher object fails.
+	 *             is thrown if instantiation of the cipher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	@Test
 	public void testReadPemPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException,
@@ -326,17 +327,17 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#readPemPrivateKey(File, String)}.
+	 * Test method for {@link PrivateKeyReader#readPemPrivateKey(File, String)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	@Test
 	public void testReadPemPrivateKeyFileString() throws NoSuchAlgorithmException,
@@ -348,17 +349,17 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#readPemPrivateKey(String, String)}.
+	 * Test method for {@link PrivateKeyReader#readPemPrivateKey(String, String)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	@Test
 	public void testReadPemPrivateKeyStringString() throws IOException, NoSuchAlgorithmException,
@@ -374,17 +375,17 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#readPemPrivateKey(String)}.
+	 * Test method for {@link PrivateKeyReader#readPemPrivateKey(String)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	@Test
 	public void testReadPemPrivateKeyString() throws IOException, NoSuchAlgorithmException,
@@ -397,17 +398,17 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#readPrivateKey(File)}.
+	 * Test method for {@link PrivateKeyReader#readPrivateKey(File)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cipher object fails.
+	 *             is thrown if instantiation of the cipher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	@Test
 	public void testReadPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException,
@@ -418,17 +419,17 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#readPrivateKey(byte[])}.
+	 * Test method for {@link PrivateKeyReader#readPrivateKey(byte[])}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cipher object fails.
+	 *             is thrown if instantiation of the cipher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	@Test
 	public void testReadPrivateKeyFromByteArray() throws NoSuchAlgorithmException,
@@ -439,14 +440,14 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader#readPrivateKey(File, String)}.
+	 * Test method for {@link PrivateKeyReader#readPrivateKey(File, String)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cipher object fails.
+	 *             is thrown if instantiation of the cipher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 */
 	@Test
 	public void testReadPrivateKeyFromFileWithAlgorithm()
@@ -458,7 +459,46 @@ public class PrivateKeyReaderTest
 	}
 
 	/**
-	 * Test method for {@link PrivateKeyReader} with {@link BeanTester}.
+	 * Test method for {@link PrivateKeyReader#getPrivateKey(File)} for an invalid file
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testGetPrivateKeyInvalidFile() throws IOException
+	{
+		File invalidFile = new File("invalid-file.der");
+		assertThrows(FileNotFoundException.class,
+			() -> PrivateKeyReader.readPrivateKey(invalidFile));
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyReader#readPrivateKey(File)} with invalid algorithm
+	 */
+	@Test
+	public void testReadPrivateKeyInvalidAlgorithm()
+	{
+		byte[] invalidKeyBytes = new byte[0];
+		assertThrows(NoSuchAlgorithmException.class, () -> {
+			PrivateKeyReader.readPrivateKey(invalidKeyBytes, "InvalidAlgorithm");
+		});
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyReader#readPrivateKey(File)} with empty byte array
+	 */
+	@Test
+	public void testReadPrivateKeyEmptyByteArray()
+	{
+		assertThrows(InvalidKeySpecException.class, () -> {
+			byte[] emptyKeyBytes = new byte[0];
+			PrivateKeyReader.readPrivateKey(emptyKeyBytes,
+				KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		});
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyReader} with {@link BeanTester}
 	 */
 	@Test
 	public void testWithBeanTester()
@@ -466,5 +506,4 @@ public class PrivateKeyReaderTest
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(PrivateKeyReader.class);
 	}
-
 }
