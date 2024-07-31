@@ -33,7 +33,7 @@ import org.apache.commons.codec.binary.Base64;
 import lombok.NonNull;
 
 /**
- * The class {@link KeyExtensions} provides utility methods for key transformations and retrievals.
+ * The class {@link KeyExtensions} provides utility methods for key transformations and retrievals
  */
 public final class KeyExtensions
 {

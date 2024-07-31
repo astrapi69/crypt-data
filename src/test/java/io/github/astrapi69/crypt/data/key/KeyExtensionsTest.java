@@ -26,6 +26,8 @@ package io.github.astrapi69.crypt.data.key;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.security.Key;
 import java.security.KeyPair;
@@ -51,7 +53,7 @@ class KeyExtensionsTest
 {
 
 	/**
-	 * Helper method to format a {@link Key} into a readable {@link String}.
+	 * Helper method to format a {@link Key} into a readable {@link String}
 	 *
 	 * @param key
 	 *            the {@link Key} to format
@@ -74,7 +76,7 @@ class KeyExtensionsTest
 	}
 
 	/**
-	 * Test method for formatting various keys.
+	 * Test method for formatting various keys
 	 */
 	@Test
 	@DisplayName("Test formatting of various keys")
@@ -87,7 +89,7 @@ class KeyExtensionsTest
 		System.out.println(formatKey);
 
 		KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA");
-		kpg.initialize(512); // 512 is the keysize.
+		kpg.initialize(512); // 512 is the keysize
 		KeyPair kp = kpg.generateKeyPair();
 		PublicKey pubk = kp.getPublic();
 		PrivateKey prvk = kp.getPrivate();
@@ -96,7 +98,7 @@ class KeyExtensionsTest
 	}
 
 	/**
-	 * Test method for base64 encoding and decoding.
+	 * Test method for base64 encoding and decoding
 	 */
 	@Test
 	@DisplayName("Test base64 encoding and decoding")
@@ -109,7 +111,7 @@ class KeyExtensionsTest
 	}
 
 	/**
-	 * Test method for base64 binary encoding and decoding.
+	 * Test method for base64 binary encoding and decoding
 	 */
 	@Test
 	@DisplayName("Test base64 binary encoding and decoding")
@@ -122,14 +124,14 @@ class KeyExtensionsTest
 	}
 
 	/**
-	 * Test method for getting algorithm, format, and encoded key.
+	 * Test method for getting algorithm, format, and encoded key
 	 */
 	@Test
 	@DisplayName("Test getAlgorithm, getFormat, and getEncoded methods")
 	void testKeyAttributes() throws NoSuchAlgorithmException
 	{
 		KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA");
-		kpg.initialize(512); // 512 is the keysize.
+		kpg.initialize(512); // 512 is the keysize
 		KeyPair kp = kpg.generateKeyPair();
 		PublicKey pubk = kp.getPublic();
 		PrivateKey prvk = kp.getPrivate();
@@ -151,5 +153,40 @@ class KeyExtensionsTest
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(KeyExtensions.class);
+	}
+
+	/**
+	 * Test method for toBase64 with null parameter
+	 */
+	@Test
+	@DisplayName("Test toBase64 with null parameter")
+	void testToBase64WithNull()
+	{
+		byte[] nullKey = null;
+		String base64Encoded = KeyExtensions.toBase64(nullKey);
+		assertNull(base64Encoded);
+	}
+
+	/**
+	 * Test method for toBase64Binary with null parameter
+	 */
+	@Test
+	@DisplayName("Test toBase64Binary with null parameter")
+	void testToBase64BinaryWithNull()
+	{
+		byte[] nullKey = null;
+		assertThrows(NullPointerException.class, () -> KeyExtensions.toBase64Binary(nullKey));
+	}
+
+	/**
+	 * Test method for decodeBase64 with null parameter
+	 */
+	@Test
+	@DisplayName("Test decodeBase64 with null parameter")
+	void testDecodeBase64WithNull()
+	{
+		String nullBase64 = null;
+		byte[] decodedKey = KeyExtensions.decodeBase64(nullBase64);
+		assertNull(decodedKey);
 	}
 }
