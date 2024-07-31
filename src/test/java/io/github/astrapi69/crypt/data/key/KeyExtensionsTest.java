@@ -39,6 +39,7 @@ import javax.crypto.SecretKey;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.data.hex.HexExtensions;
 
@@ -140,5 +141,15 @@ class KeyExtensionsTest
 		assertEquals("DSA", KeyExtensions.getAlgorithm(prvk));
 		assertEquals("PKCS#8", KeyExtensions.getFormat(prvk));
 		assertArrayEquals(prvk.getEncoded(), KeyExtensions.getEncoded(prvk));
+	}
+
+	/**
+	 * Test method for {@link KeyExtensions} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(KeyExtensions.class);
 	}
 }
