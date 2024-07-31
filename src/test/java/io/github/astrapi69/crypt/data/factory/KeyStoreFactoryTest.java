@@ -118,10 +118,9 @@ public class KeyStoreFactoryTest
 		certificate = CertFactory.newX509CertificateV3(keyPair, x509CertificateV3Info);
 	}
 
-
 	/**
 	 * Test for
-	 * {@link KeyStoreFactory#newKeystoreAndSaveForSsl(KeyStoreInfo, KeyInfo, KeyInfo, String, char[])}.
+	 * {@link KeyStoreFactory#newKeystoreAndSaveForSsl(KeyStoreInfo, KeyInfo, KeyInfo, String, char[])}
 	 */
 	@Test
 	public void testNewKeystoreAndSaveForSsl() throws Exception
@@ -161,7 +160,7 @@ public class KeyStoreFactoryTest
 
 	/**
 	 * Test for
-	 * {@link KeyStoreFactory#newKeystoreAndSaveForSsl(KeyStoreInfo, KeyInfo, KeyInfo, String, char[])}.
+	 * {@link KeyStoreFactory#newKeystoreAndSaveForSsl(KeyStoreInfo, KeyInfo, KeyInfo, String, char[])}
 	 */
 	@Test
 	public void testStoreAndRetrieveCertificateOnly() throws Exception
@@ -200,10 +199,9 @@ public class KeyStoreFactoryTest
 	 * @throws FileNotFoundException
 	 *             if the file not found
 	 * @throws KeyStoreException
-	 *             if the keystore has not been initialized (loaded).
-	 *
+	 *             if the keystore has not been initialized (loaded)
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testNewKeyStore() throws NoSuchAlgorithmException, CertificateException,
@@ -234,13 +232,13 @@ public class KeyStoreFactoryTest
 	 * Test method for {@link KeyStoreFactory#loadKeyStore(File, String, String)}
 	 *
 	 * @throws KeyStoreException
-	 *             is thrown if there is an error accessing the key store
+	 *             if there is an error accessing the key store
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws CertificateException
-	 *             is thrown if there is an error with an certificate
+	 *             if there is an error with a certificate
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testLoadKeyStore()
@@ -258,18 +256,17 @@ public class KeyStoreFactoryTest
 		assertNotNull(keystore);
 	}
 
-
 	/**
 	 * Test method for {@link KeyStoreFactory#loadKeyStore(File, String, String)}
 	 *
 	 * @throws KeyStoreException
-	 *             is thrown if there is an error accessing the key store
+	 *             if there is an error accessing the key store
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws CertificateException
-	 *             is thrown if there is an error with an certificate
+	 *             if there is an error with a certificate
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testLoadKeyStoreWithKeyStoreInfo()
@@ -298,5 +295,4 @@ public class KeyStoreFactoryTest
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(KeyStoreFactory.class);
 	}
-
 }

@@ -1,0 +1,8 @@
+filePath,password,algorithm
+./src/test/resources/der/pwp-private-key-pw-is-secret.der,secret,RSA
+./src/test/resources/der/test-key-rsa.der,secret,RSA
+./src/test/resources/der/test-key-dsa.der,password123,DSA
+./src/test/resources/der/test-key-ec.der,myPassword,EC
+./src/test/resources/der/test-key-dh.der,dhPassword,DH
+
+

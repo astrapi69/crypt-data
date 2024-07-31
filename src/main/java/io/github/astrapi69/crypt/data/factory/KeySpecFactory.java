@@ -37,7 +37,7 @@ import javax.crypto.spec.SecretKeySpec;
 import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
 
 /**
- * The factory class {@link KeySpecFactory} holds methods for creating {@link KeySpec} objects.
+ * The factory class {@link KeySpecFactory} holds methods for creating {@link KeySpec} objects
  */
 public final class KeySpecFactory
 {
@@ -47,11 +47,11 @@ public final class KeySpecFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link PBEKeySpec} from the given private key.
+	 * Factory method for creating a new {@link PBEKeySpec} from the given private key
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the new {@link PBEKeySpec} from the given private key.
+	 * @return the new {@link PBEKeySpec} from the given private key
 	 */
 	public static KeySpec newPBEKeySpec(final String privateKey)
 	{
@@ -107,9 +107,9 @@ public final class KeySpecFactory
 	 * @param algorithm
 	 *            the algorithm
 	 * @param offset
-	 *            the offset in <code>key</code> where the key material starts.
+	 *            the offset in <code>key</code> where the key material starts
 	 * @param len
-	 *            the length of the key material.
+	 *            the length of the key material
 	 * @param secretKey
 	 *            the secret key
 	 * @return the new {@link SecretKeySpec} from the given algorithm and the given secret key
@@ -152,15 +152,15 @@ public final class KeySpecFactory
 
 	/**
 	 * Factory method for creating a new {@link SecretKeySpec} from the given algorithm and the
-	 * given key length.
+	 * given key length
 	 *
 	 * @param algorithm
 	 *            the algorithm
 	 * @param keyLength
 	 *            the key length
-	 * @return the new {@link SecretKeySpec} from the given algorithm and the given key length.
+	 * @return the new {@link SecretKeySpec} from the given algorithm and the given key length
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 */
 	public static SecretKeySpec newSecretKeySpec(final String algorithm, final int keyLength)
 		throws NoSuchAlgorithmException
@@ -172,7 +172,7 @@ public final class KeySpecFactory
 
 	/**
 	 * Factory method for creating a new symmetric {@link SecretKey} from the given algorithm and
-	 * the given key length.
+	 * the given key length
 	 *
 	 * @param decryptedKey
 	 *            the symmetric key as byte array

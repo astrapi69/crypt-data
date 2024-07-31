@@ -39,7 +39,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Data class representing the distinguished name information.
+ * Data class representing the distinguished name information
  */
 @Data
 @RequiredArgsConstructor
@@ -49,58 +49,91 @@ public class DistinguishedNameInfo
 {
 
 	/**
-	 * The common name.
+	 * Shortcut for country code
+	 */
+	public static final String SHOTCUT_COUNTRY_CODE = "C";
+
+	/**
+	 * Shortcut for state
+	 */
+	public static final String SHORTCUT_STATE = "ST";
+
+	/**
+	 * Shortcut for location
+	 */
+	public static final String SHORTCUT_LOCATION = "L";
+
+	/**
+	 * Shortcut for organisation
+	 */
+	public static final String SHORTCUT_ORGANISATION = "O";
+
+	/**
+	 * Shortcut for organisation unit
+	 */
+	public static final String SHORTCUT_ORGANISATION_UNIT = "OU";
+
+	/**
+	 * Shortcut for common name
+	 */
+	public static final String SHORTCUT_COMMON_NAME = "CN";
+
+	/**
+	 * The common name
 	 */
 	private String commonName;
 
 	/**
-	 * The country code.
+	 * The country code
 	 */
 	private String countryCode;
 
 	/**
-	 * The location.
+	 * The location
 	 */
 	private String location;
 
 	/**
-	 * The organisation name.
+	 * The organisation name
 	 */
 	private String organisation;
 
 	/**
-	 * The organisation unit.
+	 * The organisation unit
 	 */
 	private String organisationUnit;
 
 	/**
-	 * The state.
+	 * The state
 	 */
 	private String state;
 
 	/**
-	 * Converts a representable string to a {@link DistinguishedNameInfo} object.
+	 * Converts a representable string to a {@link DistinguishedNameInfo} object
 	 *
 	 * @param representableString
-	 *            the string to convert.
-	 * @return the corresponding {@link DistinguishedNameInfo} object.
+	 *            the string to convert
+	 * @return the corresponding {@link DistinguishedNameInfo} object
 	 */
 	public static DistinguishedNameInfo toDistinguishedNameInfo(String representableString)
 	{
 		Map<String, String> map = new HashMap<>();
-		String[] parts = representableString.split(", ");
+		String[] parts = representableString.split(",");
 		for (String part : parts)
 		{
-			String[] keyValue = part.split("=");
+			String[] keyValue = part.trim().split("=");
 			if (keyValue.length == 2)
 			{
-				map.put(keyValue[0], keyValue[1]);
+				map.put(keyValue[0].trim(), keyValue[1].trim());
 			}
 		}
+		DistinguishedNameInfo distinguishedNameInfo = DistinguishedNameInfo.builder()
+			.countryCode(map.get(SHOTCUT_COUNTRY_CODE)).state(map.get(SHORTCUT_STATE))
+			.location(map.get(SHORTCUT_LOCATION)).organisation(map.get(SHORTCUT_ORGANISATION))
+			.organisationUnit(map.get(SHORTCUT_ORGANISATION_UNIT))
+			.commonName(map.get(SHORTCUT_COMMON_NAME)).build();
 
-		return DistinguishedNameInfo.builder().countryCode(map.get("C")).state(map.get("ST"))
-			.location(map.get("L")).organisation(map.get("O")).organisationUnit(map.get("OU"))
-			.commonName(map.get("CN")).build();
+		return distinguishedNameInfo;
 	}
 
 	/**
@@ -125,11 +158,11 @@ public class DistinguishedNameInfo
 	}
 
 	/**
-	 * Converts the {@link DistinguishedNameInfo} object to a representable string.
+	 * Converts the {@link DistinguishedNameInfo} object to a {@link X500Name} object
 	 *
 	 * @param distinguishedNameInfo
-	 *            the {@link DistinguishedNameInfo} object to convert.
-	 * @return the corresponding string representation.
+	 *            the {@link DistinguishedNameInfo} object to convert
+	 * @return the corresponding {@link X500Name} object
 	 */
 	public static X500Name toX500Name(@NonNull DistinguishedNameInfo distinguishedNameInfo)
 	{
@@ -137,33 +170,34 @@ public class DistinguishedNameInfo
 	}
 
 	/**
-	 * Converts the {@link DistinguishedNameInfo} object to a representable string.
+	 * Converts the {@link DistinguishedNameInfo} object to a representable string
 	 *
 	 * @param distinguishedNameInfo
-	 *            the {@link DistinguishedNameInfo} object to convert.
-	 * @return the corresponding string representation.
+	 *            the {@link DistinguishedNameInfo} object to convert
+	 * @return the corresponding string representation
 	 */
 	public static String toRepresentableString(DistinguishedNameInfo distinguishedNameInfo)
 	{
 		List<String> parts = new ArrayList<>();
-		addCertificateValue(parts, "C", distinguishedNameInfo.countryCode);
-		addCertificateValue(parts, "ST", distinguishedNameInfo.state);
-		addCertificateValue(parts, "L", distinguishedNameInfo.location);
-		addCertificateValue(parts, "O", distinguishedNameInfo.organisation);
-		addCertificateValue(parts, "OU", distinguishedNameInfo.organisationUnit);
-		addCertificateValue(parts, "CN", distinguishedNameInfo.commonName);
-		return String.join(", ", parts);
+		addCertificateValue(parts, SHORTCUT_COMMON_NAME, distinguishedNameInfo.commonName);
+		addCertificateValue(parts, SHORTCUT_ORGANISATION_UNIT,
+			distinguishedNameInfo.organisationUnit);
+		addCertificateValue(parts, SHORTCUT_ORGANISATION, distinguishedNameInfo.organisation);
+		addCertificateValue(parts, SHORTCUT_LOCATION, distinguishedNameInfo.location);
+		addCertificateValue(parts, SHORTCUT_STATE, distinguishedNameInfo.state);
+		addCertificateValue(parts, SHOTCUT_COUNTRY_CODE, distinguishedNameInfo.countryCode);
+		return String.join(",", parts);
 	}
 
 	/**
-	 * Adds the certificate value to the list if it is not null or empty.
+	 * Adds the certificate value to the list if it is not null or empty
 	 *
 	 * @param parts
-	 *            the list to add the value to.
+	 *            the list to add the value to
 	 * @param key
-	 *            the key representing the certificate field.
+	 *            the key representing the certificate field
 	 * @param certificateValue
-	 *            the value of the certificate field.
+	 *            the value of the certificate field
 	 */
 	private static void addCertificateValue(List<String> parts, String key, String certificateValue)
 	{

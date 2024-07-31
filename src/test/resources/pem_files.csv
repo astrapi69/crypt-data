@@ -1,0 +1,4 @@
+filePath,expectedType
+src/test/resources/pem/private.pem,RSA PRIVATE KEY
+src/test/resources/pem/public.pem,PUBLIC KEY
+src/test/resources/pem/rsa-public-key.pem,RSA PUBLIC KEY

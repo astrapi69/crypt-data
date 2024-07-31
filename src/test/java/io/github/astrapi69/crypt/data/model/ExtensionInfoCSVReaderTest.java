@@ -22,48 +22,37 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.crypt.data.certificate;
+package io.github.astrapi69.crypt.data.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.io.File;
-import java.security.cert.X509Certificate;
+import java.io.IOException;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.github.astrapi69.crypt.data.key.CertificateExtensions;
-import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
-import io.github.astrapi69.file.search.PathFinder;
-
-public class CertificateModelTest
+public class ExtensionInfoCSVReaderTest
 {
 
-	/** The certificate for tests. */
-	private X509Certificate certificate;
-
-	/**
-	 * Sets up method will be invoked before every unit test method in this class.
-	 *
-	 * @throws Exception
-	 *             is thrown if any error occurs on the execution
-	 */
-	@BeforeEach
-	protected void setUp() throws Exception
-	{
-		if (certificate == null)
-		{
-			final File pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
-			final File certificatePemFile = new File(pemDir, "certificate.pem");
-			certificate = CertificateReader.readPemCertificate(certificatePemFile);
-			assertNotNull(certificate);
-		}
-	}
-
 	@Test
-	public void loadCert()
+	void testReadExtensionInfoFromCSV() throws IOException
 	{
-		CertificateModel actual = CertificateExtensions.toCertificateModel(certificate);
-		assertNotNull(actual);
+		ExtensionInfo[] extensionInfos = ExtensionInfoCSVReader
+			.readExtensionInfoFromCSV("src/test/resources/extension_info_data.csv");
+
+		assertNotNull(extensionInfos);
+		assertEquals(17, extensionInfos.length);
+
+		ExtensionInfo firstExtension = extensionInfos[0];
+		assertEquals("1.3.6.1.4.1.11129.2.4.2", firstExtension.getExtensionId());
+		assertEquals(true, firstExtension.isCritical());
+		assertEquals("testValue1", firstExtension.getValue());
+
+		ExtensionInfo secondExtension = extensionInfos[1];
+		assertEquals("1.2.840.113549.1.1.5", secondExtension.getExtensionId());
+		assertEquals(false, secondExtension.isCritical());
+		assertEquals("testValue2", secondExtension.getValue());
+
+		// Add more assertions as needed
 	}
 }

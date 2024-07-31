@@ -1,0 +1,5 @@
+algorithm,keySize
+RSA,2048
+DSA,2048
+EC,256
+ECDSA,256

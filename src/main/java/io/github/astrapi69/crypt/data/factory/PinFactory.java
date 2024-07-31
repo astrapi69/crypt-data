@@ -33,19 +33,19 @@ import io.github.astrapi69.collection.list.ListFactory;
 import lombok.NonNull;
 
 /**
- * The factory class {@link PinFactory} holds methods for creating lists of possible pins.
+ * The factory class {@link PinFactory} holds methods for creating lists of possible pins
  */
 public final class PinFactory
 {
 	/**
-	 * Private constructor to prevent instantiation.
+	 * Private constructor to prevent instantiation
 	 */
 	private PinFactory()
 	{
 	}
 
 	/**
-	 * Creates a new list of pins formatted from the provided local dates and date patterns.
+	 * Creates a new list of pins formatted from the provided local dates and date patterns
 	 *
 	 * @param localDates
 	 *            the list of local dates to be formatted

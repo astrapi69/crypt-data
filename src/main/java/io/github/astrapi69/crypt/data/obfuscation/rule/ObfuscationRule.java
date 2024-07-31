@@ -39,25 +39,25 @@ public class ObfuscationRule<C, RW> implements Serializable
 {
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
-	/** The character. */
+	/** The character to be obfuscated */
 	private C character;
-	/** The character(s) that will be replaced with. */
+	/** The character(s) that will replace the original character */
 	private RW replaceWith;
 
 	/**
-	 * Instantiates a new Obfuscation rule.
+	 * Instantiates a new Obfuscation rule
 	 */
 	public ObfuscationRule()
 	{
 	}
 
 	/**
-	 * Instantiates a new Obfuscation rule.
+	 * Instantiates a new Obfuscation rule
 	 *
 	 * @param character
-	 *            the character
+	 *            the character to be obfuscated
 	 * @param replaceWith
-	 *            the replace with
+	 *            the replacement character(s)
 	 */
 	public ObfuscationRule(C character, RW replaceWith)
 	{
@@ -68,29 +68,17 @@ public class ObfuscationRule<C, RW> implements Serializable
 	}
 
 	/**
-	 * Builder obfuscation rule builder.
+	 * Builder obfuscation rule builder
 	 *
 	 * @param <C>
-	 *            the type parameter
+	 *            the type parameter for the character to be obfuscated
 	 * @param <RW>
-	 *            the type parameter
+	 *            the type parameter for the replacement character(s)
 	 * @return the obfuscation rule builder
 	 */
 	public static <C, RW> ObfuscationRuleBuilder<C, RW> builder()
 	{
-		return new ObfuscationRuleBuilder<C, RW>();
-	}
-
-	/**
-	 * Can equal boolean.
-	 *
-	 * @param other
-	 *            the other
-	 * @return the boolean
-	 */
-	protected boolean canEqual(final Object other)
-	{
-		return other instanceof ObfuscationRule;
+		return new ObfuscationRuleBuilder<>();
 	}
 
 	@Override
@@ -101,8 +89,6 @@ public class ObfuscationRule<C, RW> implements Serializable
 		if (!(o instanceof ObfuscationRule))
 			return false;
 		final ObfuscationRule<?, ?> other = (ObfuscationRule<?, ?>)o;
-		if (!other.canEqual(this))
-			return false;
 		final Object this$character = this.getCharacter();
 		final Object other$character = other.getCharacter();
 		if (this$character == null
@@ -117,9 +103,9 @@ public class ObfuscationRule<C, RW> implements Serializable
 	}
 
 	/**
-	 * Gets character.
+	 * Gets character
 	 *
-	 * @return the character
+	 * @return the character to be obfuscated
 	 */
 	public C getCharacter()
 	{
@@ -127,10 +113,10 @@ public class ObfuscationRule<C, RW> implements Serializable
 	}
 
 	/**
-	 * Sets character.
+	 * Sets character
 	 *
 	 * @param character
-	 *            the character
+	 *            the character to be obfuscated
 	 */
 	public void setCharacter(C character)
 	{
@@ -139,9 +125,9 @@ public class ObfuscationRule<C, RW> implements Serializable
 	}
 
 	/**
-	 * Gets replace with.
+	 * Gets replace with
 	 *
-	 * @return the replace with
+	 * @return the replacement character(s)
 	 */
 	public RW getReplaceWith()
 	{
@@ -149,10 +135,10 @@ public class ObfuscationRule<C, RW> implements Serializable
 	}
 
 	/**
-	 * Sets replace with.
+	 * Sets replace with
 	 *
 	 * @param replaceWith
-	 *            the replace with
+	 *            the replacement character(s)
 	 */
 	public void setReplaceWith(RW replaceWith)
 	{
@@ -173,7 +159,7 @@ public class ObfuscationRule<C, RW> implements Serializable
 	}
 
 	/**
-	 * To builder obfuscation rule builder.
+	 * To builder obfuscation rule builder
 	 *
 	 * @return the obfuscation rule builder
 	 */
@@ -191,12 +177,12 @@ public class ObfuscationRule<C, RW> implements Serializable
 	}
 
 	/**
-	 * The type Obfuscation rule builder.
+	 * The type Obfuscation rule builder
 	 *
 	 * @param <C>
-	 *            the type parameter
+	 *            the type parameter for the character to be obfuscated
 	 * @param <RW>
-	 *            the type parameter
+	 *            the type parameter for the replacement character(s)
 	 */
 	public static class ObfuscationRuleBuilder<C, RW>
 	{
@@ -204,30 +190,30 @@ public class ObfuscationRule<C, RW> implements Serializable
 		private RW replaceWith;
 
 		/**
-		 * Instantiates a new Obfuscation rule builder.
+		 * Instantiates a new Obfuscation rule builder
 		 */
 		ObfuscationRuleBuilder()
 		{
 		}
 
 		/**
-		 * Build obfuscation rule.
+		 * Build obfuscation rule
 		 *
 		 * @return the obfuscation rule
 		 */
 		public ObfuscationRule<C, RW> build()
 		{
-			return new ObfuscationRule<C, RW>(character, replaceWith);
+			return new ObfuscationRule<>(character, replaceWith);
 		}
 
 		/**
-		 * Character obfuscation rule . obfuscation rule builder.
+		 * Character obfuscation rule builder
 		 *
 		 * @param character
-		 *            the character
-		 * @return the obfuscation rule . obfuscation rule builder
+		 *            the character to be obfuscated
+		 * @return the obfuscation rule builder
 		 */
-		public ObfuscationRule.ObfuscationRuleBuilder<C, RW> character(C character)
+		public ObfuscationRuleBuilder<C, RW> character(C character)
 		{
 			Objects.requireNonNull(character);
 			this.character = character;
@@ -235,13 +221,13 @@ public class ObfuscationRule<C, RW> implements Serializable
 		}
 
 		/**
-		 * Replace with obfuscation rule . obfuscation rule builder.
+		 * Replace with obfuscation rule builder
 		 *
 		 * @param replaceWith
-		 *            the replace with
-		 * @return the obfuscation rule . obfuscation rule builder
+		 *            the replacement character(s)
+		 * @return the obfuscation rule builder
 		 */
-		public ObfuscationRule.ObfuscationRuleBuilder<C, RW> replaceWith(RW replaceWith)
+		public ObfuscationRuleBuilder<C, RW> replaceWith(RW replaceWith)
 		{
 			Objects.requireNonNull(replaceWith);
 			this.replaceWith = replaceWith;

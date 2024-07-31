@@ -1,0 +1,7 @@
+serviceName,algorithm
+KeyPairGenerator,RSA
+KeyPairGenerator,DSA
+KeyGenerator,AES
+KeyGenerator,DES
+AlgorithmParameterGenerator,DSA
+AlgorithmParameterGenerator,DIFFIEHELLMAN

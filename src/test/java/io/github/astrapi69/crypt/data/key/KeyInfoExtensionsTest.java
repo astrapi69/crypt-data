@@ -38,13 +38,28 @@ import java.security.cert.X509Certificate;
 import java.util.Base64;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.data.model.KeyInfo;
 
+/**
+ * Test class for {@link KeyInfoExtensions}
+ */
 class KeyInfoExtensionsTest
 {
+
+	/**
+	 * Test method for {@link KeyInfoExtensions} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(KeyInfoExtensions.class);
+	}
 
 	@BeforeEach
 	void setUp()
@@ -52,6 +67,9 @@ class KeyInfoExtensionsTest
 		// Any setup code if needed
 	}
 
+	/**
+	 * Test method for {@link KeyInfoExtensions#toPrivateKey(KeyInfo)}
+	 */
 	@ParameterizedTest
 	@CsvFileSource(resources = "/private_key_data.csv", numLinesToSkip = 1)
 	void testToPrivateKey(String keyType, String encoded, String algorithm)
@@ -70,6 +88,9 @@ class KeyInfoExtensionsTest
 		}
 	}
 
+	/**
+	 * Test method for {@link KeyInfoExtensions#toPublicKey(KeyInfo)}
+	 */
 	@ParameterizedTest
 	@CsvFileSource(resources = "/public_key_data.csv", numLinesToSkip = 1)
 	void testToPublicKey(String keyType, String encoded, String algorithm)
@@ -81,6 +102,9 @@ class KeyInfoExtensionsTest
 		assertNotNull(result);
 	}
 
+	/**
+	 * Test method for {@link KeyInfoExtensions#toX509Certificate(KeyInfo)}
+	 */
 	@ParameterizedTest
 	@CsvFileSource(resources = "/certificate_data.csv", numLinesToSkip = 1)
 	void testToX509Certificate(String keyType, String encoded, String algorithm)
@@ -92,6 +116,9 @@ class KeyInfoExtensionsTest
 		assertNotNull(result);
 	}
 
+	/**
+	 * Test method for {@link KeyInfoExtensions#toKeyInfo(PrivateKey)}
+	 */
 	@ParameterizedTest
 	@CsvFileSource(resources = "/private_key_data.csv", numLinesToSkip = 1)
 	void testToKeyInfoPrivateKey(String keyType, String encoded, String algorithm)
@@ -107,6 +134,9 @@ class KeyInfoExtensionsTest
 		assertEquals(algorithm, result.getAlgorithm());
 	}
 
+	/**
+	 * Test method for {@link KeyInfoExtensions#toKeyInfo(PublicKey)}
+	 */
 	@ParameterizedTest
 	@CsvFileSource(resources = "/public_key_data.csv", numLinesToSkip = 1)
 	void testToKeyInfoPublicKey(String keyType, String encoded, String algorithm)
@@ -122,6 +152,9 @@ class KeyInfoExtensionsTest
 		assertEquals(algorithm, result.getAlgorithm());
 	}
 
+	/**
+	 * Test method for {@link KeyInfoExtensions#toKeyInfo(X509Certificate)}
+	 */
 	@ParameterizedTest
 	@CsvFileSource(resources = "/certificate_data.csv", numLinesToSkip = 1)
 	void testToKeyInfoCertificate(String keyType, String encoded, String algorithm)

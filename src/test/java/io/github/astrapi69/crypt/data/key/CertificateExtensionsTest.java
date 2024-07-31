@@ -26,27 +26,46 @@ package io.github.astrapi69.crypt.data.key;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
+import java.security.Security;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x509.Extensions;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.operator.OperatorCreationException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypt.data.factory.CertFactory;
+import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
 import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
+import io.github.astrapi69.crypt.data.model.CertificateV1Info;
+import io.github.astrapi69.crypt.data.model.CertificateV3Info;
+import io.github.astrapi69.crypt.data.model.DistinguishedNameInfo;
+import io.github.astrapi69.crypt.data.model.ExtensionInfo;
+import io.github.astrapi69.crypt.data.model.ExtensionInfoCSVReader;
+import io.github.astrapi69.crypt.data.model.Validity;
+import io.github.astrapi69.crypt.data.model.X509CertificateV1Info;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
@@ -55,12 +74,11 @@ import io.github.astrapi69.file.search.PathFinder;
 public class CertificateExtensionsTest
 {
 
-	/** The certificate for tests. */
+	/** The certificate for tests */
 	private X509Certificate certificate;
 
-
 	/**
-	 * Sets up method will be invoked before every unit test method in this class.
+	 * Sets up method will be invoked before every unit test method in this class
 	 *
 	 * @throws Exception
 	 *             is thrown if any error occurs on the execution
@@ -68,6 +86,7 @@ public class CertificateExtensionsTest
 	@BeforeEach
 	protected void setUp() throws Exception
 	{
+		Security.addProvider(new BouncyCastleProvider());
 		if (certificate == null)
 		{
 			final File pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
@@ -81,17 +100,62 @@ public class CertificateExtensionsTest
 	 * Test method for {@link CertificateExtensions#getExtensions(Certificate)}
 	 */
 	@Test
-	public void testGetExtensions() throws CertificateEncodingException, IOException
+	public void testGetExtensions() throws CertificateException, IOException,
+		NoSuchAlgorithmException, NoSuchProviderException, OperatorCreationException
 	{
+		KeyPair keyPair;
+		X509CertificateV1Info x509CertificateV1Info;
+		CertificateV1Info certificateV1Info;
+		CertificateV3Info certificateV3Info;
+		ExtensionInfo[] extensionInfos;
+		extensionInfos = ExtensionInfoCSVReader.readExtensionInfoFromCSV();
+
+		extensionInfos = Arrays.stream(extensionInfos).limit(5).toList()
+			.toArray(new ExtensionInfo[5]);
+
+		// Initialize certificateV1Info
+		DistinguishedNameInfo issuer = DistinguishedNameInfo.builder().commonName("Issuer")
+			.countryCode("GB").location("London").organisation("My Company")
+			.organisationUnit("IT Department").state("Greater London").build();
+		DistinguishedNameInfo subject = DistinguishedNameInfo.builder().commonName("Subject")
+			.countryCode("GB").location("London").organisation("My Company")
+			.organisationUnit("IT Department").state("Greater London").build();
+		x509CertificateV1Info = X509CertificateV1Info.builder().issuer(issuer)
+			.serial(new BigInteger(160, new SecureRandom()))
+			.validity(Validity.builder().notBefore(ZonedDateTime.parse("2023-12-01T00:00:00Z"))
+				.notAfter(ZonedDateTime.parse("2025-01-01T00:00:00Z")).build())
+			.subject(subject).signatureAlgorithm("SHA256withRSA").build();
+
+		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, 2048);
+
+		certificateV1Info = CertificateV1Info.builder()
+			.privateKeyInfo(KeyInfoExtensions.toKeyInfo(keyPair.getPrivate()))
+			.publicKeyInfo(KeyInfoExtensions.toKeyInfo(keyPair.getPublic()))
+			.certificateV1Info(x509CertificateV1Info).build();
+
+		certificateV3Info = CertificateV3Info.builder().certificateV1Info(certificateV1Info)
+			.extensions(extensionInfos).build();
+
+		X509Certificate certificate;
+		certificate = CertFactory.newX509CertificateV3(certificateV3Info);
+		String issuerName = certificate.getIssuerX500Principal().getName();
+		String subjectName = certificate.getSubjectX500Principal().getName();
+		DistinguishedNameInfo distinguishedNameInfoIssuer = DistinguishedNameInfo
+			.toDistinguishedNameInfo(issuerName);
+		DistinguishedNameInfo distinguishedNameInfoSubject = DistinguishedNameInfo
+			.toDistinguishedNameInfo(subjectName);
+		assertEquals(issuer, distinguishedNameInfoIssuer);
+		assertEquals(subject, distinguishedNameInfoSubject);
+
 		Extensions extensions = CertificateExtensions.getExtensions(certificate);
-		// TODO test
+		assertNotNull(extensions);
 	}
 
 	/**
 	 * Test method for {@link CertificateExtensions#toHex(Certificate)}
 	 *
 	 * @throws CertificateEncodingException
-	 *             is thrown if an encoding error occurs.
+	 *             is thrown if an encoding error occurs
 	 */
 	@Test
 	public void testToHex() throws CertificateEncodingException
@@ -108,7 +172,7 @@ public class CertificateExtensionsTest
 	 * Test method for {@link CertificateExtensions#toBase64(Certificate)}
 	 *
 	 * @throws CertificateEncodingException
-	 *             is thrown if an encoding error occurs.
+	 *             is thrown if an encoding error occurs
 	 */
 	@Test
 	public void testToBase64() throws CertificateEncodingException
@@ -125,7 +189,7 @@ public class CertificateExtensionsTest
 	 * Test method for {@link CertificateExtensions#getCountry(X509Certificate)}
 	 *
 	 * @throws CertificateEncodingException
-	 *             is thrown if an encoding error occurs.
+	 *             is thrown if an encoding error occurs
 	 */
 	@Test
 	public void testGetCountry() throws CertificateEncodingException
@@ -142,9 +206,9 @@ public class CertificateExtensionsTest
 	 * Test method for {@link CertificateExtensions#getFingerprint(X509Certificate, HashAlgorithm)}
 	 *
 	 * @throws CertificateEncodingException
-	 *             is thrown if an encoding error occurs.
+	 *             is thrown if an encoding error occurs
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 */
 	@Test
 	public void testGetFingerprint() throws CertificateEncodingException, NoSuchAlgorithmException
@@ -174,7 +238,7 @@ public class CertificateExtensionsTest
 	 * {@link CertificateExtensions#getFirstValueOf(X509Certificate, org.bouncycastle.asn1.ASN1ObjectIdentifier)}
 	 *
 	 * @throws CertificateEncodingException
-	 *             is thrown if an encoding error occurs.
+	 *             is thrown if an encoding error occurs
 	 */
 	@Test
 	public void testGetFirstValueOf() throws CertificateEncodingException
@@ -219,7 +283,7 @@ public class CertificateExtensionsTest
 	 * Test method for {@link CertificateExtensions#getLocality(X509Certificate)}
 	 *
 	 * @throws CertificateEncodingException
-	 *             is thrown if an encoding error occurs.
+	 *             is thrown if an encoding error occurs
 	 */
 	@Test
 	public void testGetLocality() throws CertificateEncodingException
@@ -236,7 +300,7 @@ public class CertificateExtensionsTest
 	 * Test method for {@link CertificateExtensions#getOrganization(X509Certificate)}
 	 *
 	 * @throws CertificateEncodingException
-	 *             is thrown if an encoding error occurs.
+	 *             is thrown if an encoding error occurs
 	 */
 	@Test
 	public void testGetOrganization() throws CertificateEncodingException
@@ -297,11 +361,37 @@ public class CertificateExtensionsTest
 	 * Test method for {@link CertificateExtensions} with {@link BeanTester}
 	 */
 	@Test
-	@Disabled
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(CertificateExtensions.class);
 	}
 
+	/**
+	 * Test method for additional coverage
+	 */
+	@Test
+	public void testAdditionalCoverage()
+		throws CertificateEncodingException, IOException, NoSuchAlgorithmException
+	{
+		assertNotNull(CertificateExtensions.getEncoded(certificate));
+		assertNotNull(CertificateExtensions.getPublicKey(certificate));
+		assertTrue(
+			CertificateExtensions.getSerialNumber(certificate).compareTo(BigInteger.ZERO) > 0);
+		assertNotNull(CertificateExtensions.toX509CertificateV3Info(certificate));
+	}
+
+	/**
+	 * Test method for {@link CertificateExtensions#getVersion(X509Certificate)}
+	 */
+	@Test
+	public void testGetVersion()
+	{
+		int expected;
+		int actual;
+
+		actual = CertificateExtensions.getVersion(certificate);
+		expected = 3; // Assuming the version is 3 for this example
+		assertEquals(expected, actual);
+	}
 }

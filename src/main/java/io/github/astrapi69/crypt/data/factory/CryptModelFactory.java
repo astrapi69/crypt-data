@@ -43,7 +43,7 @@ public class CryptModelFactory
 	}
 
 	/**
-	 * Factory method for create a new {@link CryptModel} from the given {@link PublicKey}
+	 * Factory method for creating a new {@link CryptModel} from the given {@link PublicKey}
 	 *
 	 * @param publicKey
 	 *            the public key
@@ -55,7 +55,7 @@ public class CryptModelFactory
 	}
 
 	/**
-	 * Factory method for create a new {@link CryptModel} from the given {@link PrivateKey}
+	 * Factory method for creating a new {@link CryptModel} from the given {@link PrivateKey}
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -67,9 +67,9 @@ public class CryptModelFactory
 	}
 
 	/**
-	 * Factory method for create a new {@link CryptModel} from the given {@link Algorithm} and the
-	 * given key as {@link String} object. The key have to fulfil the requirements for instance the
-	 * length have to be 16 characters
+	 * Factory method for creating a new {@link CryptModel} from the given {@link Algorithm} and the
+	 * given key as {@link String} object. The key has to fulfill the requirements, for instance,
+	 * the length has to be 16 characters
 	 *
 	 * Examples: for the key: 'D1D15ED36B887AF1' <code>
 	 *     String key;

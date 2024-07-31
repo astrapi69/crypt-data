@@ -103,8 +103,7 @@ public class CryptModelFactoryTest
 
 		key = "D1D15ED36B887AF1";
 		algorithm = SunJCEAlgorithm.PBEWithMD5AndDES;
-		cryptModel = CryptModel.<Cipher, String, String> builder().key(key).algorithm(algorithm)
-			.build();
+		cryptModel = CryptModelFactory.newCryptModel(algorithm, key);
 		assertNotNull(cryptModel);
 	}
 
@@ -117,4 +116,5 @@ public class CryptModelFactoryTest
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(CryptModelFactory.class);
 	}
+
 }

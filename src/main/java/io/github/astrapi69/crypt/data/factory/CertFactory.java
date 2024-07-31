@@ -55,6 +55,9 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
+import io.github.astrapi69.crypt.data.key.KeyInfoExtensions;
+import io.github.astrapi69.crypt.data.model.CertificateV1Info;
+import io.github.astrapi69.crypt.data.model.CertificateV3Info;
 import io.github.astrapi69.crypt.data.model.DistinguishedNameInfo;
 import io.github.astrapi69.crypt.data.model.ExtensionInfo;
 import io.github.astrapi69.crypt.data.model.Validity;
@@ -64,7 +67,7 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
  * The factory class {@link CertFactory} holds methods for creating {@link Certificate} objects and
- * subclasses like {@link X509Certificate}. Note: a very good entry point for creating yourself
+ * subclasses like {@link X509Certificate} Note: a very good entry point for creating yourself
  * certificate you can follow this <a href=
  * "http://www.bouncycastle.org/wiki/display/JA1/X.509+Public+Key+Certificate+and+Certification+Request+Generation">link</a>
  */
@@ -77,31 +80,30 @@ public final class CertFactory
 
 	/**
 	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
-	 * X.509 from the given parameters that can be used as an end entity certificate.
+	 * X.509 from the given parameters that can be used as an end entity certificate
 	 *
 	 * @param keyPair
 	 *            the key pair
 	 * @param issuer
-	 *            X500Name representing the issuer of this certificate.
+	 *            X500Name representing the issuer of this certificate
 	 * @param serial
-	 *            the serial number for the certificate.
+	 *            the serial number for the certificate
 	 * @param notBefore
-	 *            date before which the certificate is not valid.
+	 *            date before which the certificate is not valid
 	 * @param notAfter
-	 *            date after which the certificate is not valid.
+	 *            date after which the certificate is not valid
 	 * @param subject
-	 *            X500Name representing the subject of this certificate.
+	 *            X500Name representing the subject of this certificate
 	 * @param signatureAlgorithm
 	 *            the signature algorithm i.e 'SHA1withRSA'
 	 * @param caCert
 	 *            the ca cert
 	 * @return the {@link X509Certificate} object
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
-	 *             available from the specified provider.
+	 *             available from the specified provider
 	 * @throws OperatorCreationException
-	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 *             is thrown if a security error occurs on the creation of {@link ContentSigner}
 	 * @throws CertificateException
 	 *             if the conversion is unable to be made
 	 * @throws IOException
@@ -112,50 +114,36 @@ public final class CertFactory
 		String signatureAlgorithm, X509Certificate caCert) throws NoSuchAlgorithmException,
 		OperatorCreationException, CertificateException, IOException
 	{
-		JcaX509ExtensionUtils extensionUtils = new JcaX509ExtensionUtils();
-		final Extension authorityKeyIdentifier = new Extension(Extension.authorityKeyIdentifier,
-			false,
-			extensionUtils.createAuthorityKeyIdentifier(caCert).toASN1Primitive().getEncoded());
-		final Extension subjectKeyIdentifier = new Extension(Extension.subjectKeyIdentifier, false,
-			extensionUtils.createSubjectKeyIdentifier(keyPair.getPublic()).toASN1Primitive()
-				.getEncoded());
-		final Extension basicConstraints = new Extension(Extension.basicConstraints, false,
-			new BasicConstraints(false).toASN1Primitive().getEncoded());
-		final Extension keyUsage = new Extension(Extension.keyUsage, false,
-			new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyEncipherment).toASN1Primitive()
-				.getEncoded());
 		return newX509CertificateV3(keyPair, issuer, serial, notBefore, notAfter, subject,
-			signatureAlgorithm, authorityKeyIdentifier, subjectKeyIdentifier, basicConstraints,
-			keyUsage);
+			signatureAlgorithm, caCert, false);
 	}
 
 	/**
 	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
-	 * X.509 from the given parameters that can be used to sign other certificates.
+	 * X.509 from the given parameters that can be used to sign other certificates
 	 *
 	 * @param keyPair
 	 *            the key pair
 	 * @param issuer
-	 *            X500Name representing the issuer of this certificate.
+	 *            X500Name representing the issuer of this certificate
 	 * @param serial
-	 *            the serial number for the certificate.
+	 *            the serial number for the certificate
 	 * @param notBefore
-	 *            date before which the certificate is not valid.
+	 *            date before which the certificate is not valid
 	 * @param notAfter
-	 *            date after which the certificate is not valid.
+	 *            date after which the certificate is not valid
 	 * @param subject
-	 *            X500Name representing the subject of this certificate.
+	 *            X500Name representing the subject of this certificate
 	 * @param signatureAlgorithm
 	 *            the signature algorithm i.e 'SHA1withRSA'
 	 * @param caCert
 	 *            the v1 ca certificate
 	 * @return the {@link X509Certificate} object
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
 	 *             available from the specified provider
 	 * @throws OperatorCreationException
-	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 *             is thrown if a security error occurs on the creation of {@link ContentSigner}
 	 * @throws CertificateException
 	 *             if the conversion is unable to be made
 	 * @throws IOException
@@ -166,6 +154,49 @@ public final class CertFactory
 		String signatureAlgorithm, X509Certificate caCert) throws NoSuchAlgorithmException,
 		OperatorCreationException, CertificateException, IOException
 	{
+		return newX509CertificateV3(keyPair, issuer, serial, notBefore, notAfter, subject,
+			signatureAlgorithm, caCert, true);
+	}
+
+	/**
+	 * Helper method for creating a new {@link X509Certificate} object of version 3 of X.509 from
+	 * the given parameters
+	 *
+	 * @param keyPair
+	 *            the key pair
+	 * @param issuer
+	 *            X500Name representing the issuer of this certificate
+	 * @param serial
+	 *            the serial number for the certificate
+	 * @param notBefore
+	 *            date before which the certificate is not valid
+	 * @param notAfter
+	 *            date after which the certificate is not valid
+	 * @param subject
+	 *            X500Name representing the subject of this certificate
+	 * @param signatureAlgorithm
+	 *            the signature algorithm i.e 'SHA1withRSA'
+	 * @param caCert
+	 *            the ca cert
+	 * @param isIntermediate
+	 *            flag indicating if it is an intermediate certificate
+	 * @return the {@link X509Certificate} object
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if a SecureRandomSpi implementation for the specified algorithm is not
+	 *             available from the specified provider
+	 * @throws OperatorCreationException
+	 *             is thrown if a security error occurs on the creation of {@link ContentSigner}
+	 * @throws CertificateException
+	 *             if the conversion is unable to be made
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	private static X509Certificate newX509CertificateV3(KeyPair keyPair, X500Name issuer,
+		BigInteger serial, Date notBefore, Date notAfter, X500Name subject,
+		String signatureAlgorithm, X509Certificate caCert, boolean isIntermediate)
+		throws NoSuchAlgorithmException, OperatorCreationException, CertificateException,
+		IOException
+	{
 		JcaX509ExtensionUtils extensionUtils = new JcaX509ExtensionUtils();
 		final Extension authorityKeyIdentifier = new Extension(Extension.authorityKeyIdentifier,
 			false,
@@ -173,8 +204,17 @@ public final class CertFactory
 		final Extension subjectKeyIdentifier = new Extension(Extension.subjectKeyIdentifier, false,
 			extensionUtils.createSubjectKeyIdentifier(keyPair.getPublic()).toASN1Primitive()
 				.getEncoded());
+		byte[] encoded;
+		if (isIntermediate)
+		{
+			encoded = new BasicConstraints(0).toASN1Primitive().getEncoded();
+		}
+		else
+		{
+			encoded = new BasicConstraints(false).toASN1Primitive().getEncoded();
+		}
 		final Extension basicConstraints = new Extension(Extension.basicConstraints, false,
-			new BasicConstraints(0).toASN1Primitive().getEncoded());
+			encoded);
 		final Extension keyUsage = new Extension(Extension.keyUsage, false,
 			new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyEncipherment).toASN1Primitive()
 				.getEncoded());
@@ -400,6 +440,33 @@ public final class CertFactory
 		X509CertificateV3Info certificateInfo)
 		throws OperatorCreationException, CertificateException, CertIOException
 	{
+		return newX509CertificateV3(keyPair.getPrivate(), keyPair.getPublic(), certificateInfo);
+	}
+
+	/**
+	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
+	 * X.509 from the given {@link X509CertificateV3Info} that can be used as an end entity
+	 * certificate.
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @param publicKey
+	 *            the public key
+	 * @param certificateInfo
+	 *            the certificate information
+	 * @return the {@link X509Certificate} object
+	 *
+	 * @throws OperatorCreationException
+	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 * @throws CertificateException
+	 *             if the conversion is unable to be made
+	 * @throws CertIOException
+	 *             if there is an issue with the new extension value
+	 */
+	public static X509Certificate newX509CertificateV3(final PrivateKey privateKey,
+		final PublicKey publicKey, X509CertificateV3Info certificateInfo)
+		throws OperatorCreationException, CertificateException, CertIOException
+	{
 		X509CertificateV1Info v1Info = certificateInfo.getCertificateV1Info();
 
 		DistinguishedNameInfo issuer = v1Info.getIssuer();
@@ -413,11 +480,11 @@ public final class CertFactory
 		Date endDate = Date.from(validity.getNotAfter().toInstant());
 
 		ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgorithm)
-			.build(keyPair.getPrivate());
+			.build(privateKey);
 
 		JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(
 			new X500Name(issuer.toRepresentableString()), serial, startDate, endDate,
-			new X500Name(subject.toRepresentableString()), keyPair.getPublic());
+			new X500Name(subject.toRepresentableString()), publicKey);
 
 		if (extensions != null && extensions.length > 0)
 		{
@@ -467,6 +534,35 @@ public final class CertFactory
 
 		return new JcaX509CertificateConverter().setProvider("BC")
 			.getCertificate(certBuilder.build(signer));
+	}
+
+	/**
+	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
+	 * X.509 from the given {@link CertificateV3Info} that can be used as an end entity certificate.
+	 *
+	 * @param certificateInfo
+	 *            the certificate information
+	 * @return the {@link X509Certificate} object
+	 *
+	 * @throws OperatorCreationException
+	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 * @throws CertificateException
+	 *             if the conversion is unable to be made
+	 * @throws CertIOException
+	 *             if there is an issue with the new extension value
+	 */
+	public static X509Certificate newX509CertificateV3(final CertificateV3Info certificateInfo)
+		throws OperatorCreationException, CertificateException, CertIOException
+	{
+		CertificateV1Info v1Info = certificateInfo.getCertificateV1Info();
+		X509CertificateV1Info certificateV1Info = v1Info.getCertificateV1Info();
+		PrivateKey privateKey = KeyInfoExtensions.toPrivateKey(v1Info.getPrivateKeyInfo());
+		PublicKey publicKey = KeyInfoExtensions.toPublicKey(v1Info.getPublicKeyInfo());
+		ExtensionInfo[] extensions = certificateInfo.getExtensions();
+		X509CertificateV3Info x509CertificateV3Info = X509CertificateV3Info.builder()
+			.certificateV1Info(certificateV1Info).extensions(extensions).build();
+
+		return newX509CertificateV3(privateKey, publicKey, x509CertificateV3Info);
 	}
 
 }

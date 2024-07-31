@@ -27,9 +27,10 @@ package io.github.astrapi69.crypt.data.algorithm;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.meanbean.lang.Factory;
 import org.meanbean.test.BeanTester;
+import org.meanbean.test.BeanVerifier;
 
 import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 
@@ -66,11 +67,27 @@ public class CryptoAlgorithmTest
 	 * Test method for {@link CryptoAlgorithm} with {@link BeanTester}
 	 */
 	@Test
-	@Disabled
 	public void testWithBeanTester()
 	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(CryptoAlgorithm.class);
+		BeanVerifier.forClass(CryptoAlgorithm.class).editSettings()
+			.registerFactory(CryptoAlgorithm.class, new Factory<CryptoAlgorithm>()
+			{
+				@Override
+				public CryptoAlgorithm create()
+				{
+					return (CryptoAlgorithm)CryptoAlgorithm.newAlgorithm("AES");
+				}
+			}).edited().verifyGettersAndSetters();
+
+		BeanVerifier.forClass(CryptoAlgorithm.class).editSettings()
+			.registerFactory(CryptoAlgorithm.class, () -> {
+				return (CryptoAlgorithm)CryptoAlgorithm.newAlgorithm("AES");
+			}).edited().verifyGettersAndSetters();
+
+		BeanVerifier.forClass(CryptoAlgorithm.class).editSettings()
+			.registerFactory(CryptoAlgorithm.class,
+				() -> (CryptoAlgorithm)CryptoAlgorithm.newAlgorithm("AES"))
+			.edited().verifyGettersAndSetters().verifyEqualsAndHashCode().verifyToString();
 	}
 
 }

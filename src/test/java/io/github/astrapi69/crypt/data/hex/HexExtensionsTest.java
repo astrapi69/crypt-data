@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 /**
- * The unit test class for the class {@link HexExtensions}.
+ * The unit test class for the class {@link HexExtensions}
  */
 public class HexExtensionsTest
 {

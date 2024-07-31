@@ -45,7 +45,7 @@ import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
 import io.github.astrapi69.crypt.data.model.CryptModel;
 
 /**
- * The factory class {@link CipherFactory} holds methods for creating {@link Cipher} objects.
+ * The factory class {@link CipherFactory} holds methods for creating {@link Cipher} objects
  */
 public final class CipherFactory
 {
@@ -55,24 +55,23 @@ public final class CipherFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link Cipher} from the given parameters.
+	 * Factory method for creating a new {@link Cipher} from the given parameters
 	 *
 	 * @param model
-	 *            the model bean for create the cipher
+	 *            the model bean for creating the cipher
 	 * @return the cipher
-	 *
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails
+	 *             if generation of the SecretKey object fails
 	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cypher object fails
+	 *             if instantiation of the cipher object fails
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cypher object fails
+	 *             if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cypher object fails
+	 *             if initialization of the cipher object fails
 	 * @throws UnsupportedEncodingException
-	 *             is thrown if the named charset is not supported
+	 *             if the named charset is not supported
 	 */
 	public static Cipher newCipher(final CryptModel<Cipher, String, String> model)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
@@ -99,11 +98,11 @@ public final class CipherFactory
 	 *            the algorithm
 	 * @return the new {@link Cipher}
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             if instantiation of the cipher object fails
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cypher object fails.
+	 *             if initialization of the cipher object fails
 	 */
 	public static Cipher newCipher(final int operationMode, final SecretKey key,
 		final String algorithm)
@@ -115,7 +114,7 @@ public final class CipherFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link Cipher} from the given parameters.
+	 * Factory method for creating a new {@link Cipher} from the given parameters
 	 *
 	 * @param operationMode
 	 *            the operation mode
@@ -126,15 +125,14 @@ public final class CipherFactory
 	 * @param algorithm
 	 *            the algorithm
 	 * @return the new {@link Cipher}
-	 *
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             if instantiation of the cipher object fails
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cypher object fails.
+	 *             if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cypher object fails.
+	 *             if initialization of the cipher object fails
 	 */
 	public static Cipher newCipher(final int operationMode, final SecretKey key,
 		final AlgorithmParameterSpec paramSpec, final String algorithm)
@@ -147,16 +145,15 @@ public final class CipherFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link Cipher} from the given algorithm.
+	 * Factory method for creating a new {@link Cipher} from the given algorithm
 	 *
 	 * @param algorithm
-	 *            the alg
+	 *            the algorithm
 	 * @return the new {@link Cipher}
-	 *
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             if instantiation of the cipher object fails
 	 */
 	public static Cipher newCipher(final String algorithm)
 		throws NoSuchAlgorithmException, NoSuchPaddingException
@@ -166,7 +163,7 @@ public final class CipherFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link Cipher} from the given algorithm and provider.
+	 * Factory method for creating a new {@link Cipher} from the given algorithm and provider
 	 *
 	 * @param algorithm
 	 *            the algorithm
@@ -174,12 +171,11 @@ public final class CipherFactory
 	 *            the provider
 	 * @return the new {@link Cipher}
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             if the specified provider is not registered in the security provider list
 	 * @throws NoSuchPaddingException
-	 *             is thrown if algorithm contains a padding scheme that is not available.
+	 *             if the algorithm contains a padding scheme that is not available
 	 */
 	public static Cipher newCipher(final String algorithm, final String provider)
 		throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException
@@ -189,7 +185,7 @@ public final class CipherFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link Cipher} from the given parameters.
+	 * Factory method for creating a new {@link Cipher} from the given parameters
 	 *
 	 * @param password
 	 *            the password
@@ -202,17 +198,16 @@ public final class CipherFactory
 	 * @param operationMode
 	 *            the operation mode for the new cipher object
 	 * @return the cipher
-	 *
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             if generation of the SecretKey object fails
 	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             if instantiation of the cipher object fails
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cypher object fails.
+	 *             if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cypher object fails.
+	 *             if initialization of the cipher object fails
 	 */
 	public static Cipher newCipher(final String password, final String algorithm, final byte[] salt,
 		final int iterationCount, final int operationMode)
@@ -228,7 +223,7 @@ public final class CipherFactory
 	}
 
 	/**
-	 * Factory method for creating a new PBE {@link Cipher} from the given parameters.
+	 * Factory method for creating a new PBE {@link Cipher} from the given parameters
 	 *
 	 * @param password
 	 *            the password
@@ -236,18 +231,17 @@ public final class CipherFactory
 	 *            the operation mode
 	 * @param algorithm
 	 *            the algorithm
-	 *
 	 * @return the cipher
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             if generation of the SecretKey object fails
 	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cipher object fails.
+	 *             if instantiation of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cipher object fails.
+	 *             if initialization of the cipher object fails
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails.
+	 *             if initialization of the cipher object fails
 	 */
 	public static Cipher newPBECipher(char[] password, int operationMode, String algorithm)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
@@ -258,7 +252,7 @@ public final class CipherFactory
 	}
 
 	/**
-	 * Factory method for creating a new PBE {@link Cipher} from the given parameters.
+	 * Factory method for creating a new PBE {@link Cipher} from the given parameters
 	 *
 	 * @param password
 	 *            the password
@@ -270,18 +264,17 @@ public final class CipherFactory
 	 *            the salt
 	 * @param iterationCount
 	 *            the iteration count
-	 *
 	 * @return the cipher
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             if generation of the SecretKey object fails
 	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cipher object fails.
+	 *             if instantiation of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cipher object fails.
+	 *             if initialization of the cipher object fails
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails.
+	 *             if initialization of the cipher object fails
 	 */
 	public static Cipher newPBECipher(char[] password, int operationMode, String algorithm,
 		final byte[] salt, final int iterationCount)
@@ -296,7 +289,7 @@ public final class CipherFactory
 	}
 
 	/**
-	 * Factory method for creating a new PBE {@link Cipher} from the given parameters.
+	 * Factory method for creating a new PBE {@link Cipher} from the given parameters
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -309,17 +302,16 @@ public final class CipherFactory
 	 * @param operationMode
 	 *            the operation mode for the new cipher object
 	 * @return the cipher
-	 *
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             if generation of the SecretKey object fails
 	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cipher object fails.
+	 *             if instantiation of the cipher object fails
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cipher object fails.
+	 *             if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cipher object fails.
+	 *             if initialization of the cipher object fails
 	 */
 	public static Cipher newPBECipher(final String privateKey, final String algorithm,
 		final byte[] salt, final int iterationCount, final int operationMode)

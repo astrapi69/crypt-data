@@ -49,8 +49,6 @@ public final class KeyStoreExtensions
 
 	private KeyStoreExtensions()
 	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
 	}
 
 	/**
@@ -76,7 +74,7 @@ public final class KeyStoreExtensions
 	 * @throws FileNotFoundException
 	 *             is thrown if the keystore file not found
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static void addAndStoreCertificate(final KeyStore keyStore, final File keystoreFile,
 		final String password, String alias, Certificate certificate)
@@ -111,7 +109,7 @@ public final class KeyStoreExtensions
 	 * @throws FileNotFoundException
 	 *             is thrown if the keystore file not found
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static void addAndStorePrivateKey(final KeyStore keyStore, final File keystoreFile,
 		String alias, PrivateKey privateKey, char[] password, Certificate[] certificateChain)
@@ -125,7 +123,7 @@ public final class KeyStoreExtensions
 	 * Add the given certificate to the given {@link KeyStore} object.
 	 * <p>
 	 * Note: it is added only to the {@link KeyStore} object. Do not forget to store the
-	 * {@link KeyStore} object, for store it permanently to the keystore file.
+	 * {@link KeyStore} object, for store it permanently to the keystore file
 	 *
 	 * @param keyStore
 	 *            the keystore
@@ -146,7 +144,7 @@ public final class KeyStoreExtensions
 	 * Add the given private key to the given {@link KeyStore} object
 	 * <p>
 	 * Note: it is added only to the {@link KeyStore} object. Do not forget to store the
-	 * {@link KeyStore} object, for store it permanently to the keystore file.
+	 * {@link KeyStore} object, for store it permanently to the keystore file
 	 *
 	 * @param keyStore
 	 *            the keystore
@@ -224,7 +222,6 @@ public final class KeyStoreExtensions
 	 *            the password as char array
 	 * @param chain
 	 *            the certificate chain for the corresponding public key
-	 *
 	 * @throws KeyStoreException
 	 *             is thrown if there is an error accessing the key store
 	 */
@@ -234,9 +231,8 @@ public final class KeyStoreExtensions
 		keyStore.setKeyEntry(alias, key, password, chain);
 	}
 
-
 	/**
-	 * Delete the given alias from the given keystore file.
+	 * Delete the given alias from the given keystore file
 	 *
 	 * @param keystoreFile
 	 *            the keystore file
@@ -253,7 +249,7 @@ public final class KeyStoreExtensions
 	 * @throws KeyStoreException
 	 *             the key store exception
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static void deleteAlias(final File keystoreFile, String alias, final String password)
 		throws NoSuchAlgorithmException, CertificateException, FileNotFoundException,
@@ -284,7 +280,7 @@ public final class KeyStoreExtensions
 	 * @throws FileNotFoundException
 	 *             is thrown if the keystore file not found
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static void store(final KeyStore keyStore, final File keystoreFile,
 		final String password)
@@ -311,7 +307,7 @@ public final class KeyStoreExtensions
 	 * @throws FileNotFoundException
 	 *             is thrown if the keystore file not found
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static void store(final KeyStore keyStore, final File keystoreFile,
 		final char[] password)
@@ -322,5 +318,4 @@ public final class KeyStoreExtensions
 			keyStore.store(fos, password);
 		}
 	}
-
 }

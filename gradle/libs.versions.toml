@@ -2,6 +2,7 @@
 bcpkix-jdk15on-version = "1.70"
 checksum-up-version = "3"
 commons-codec-version = "1.17.1"
+commons-csv-version = "1.11.0"
 commons-io-version = "2.16.1"
 commons-lang3-version = "3.15.0"
 crypt-api-version = "9.3"
@@ -18,10 +19,11 @@ jobj-contract-verifier-version = "5.2"
 jobj-core-version = "8.2"
 jsoup-version = "1.18.1"
 jsr305-version = "3.0.2"
-junit-jupiter-params-version = "5.11.0-M2"
-junit-jupiter-version = "5.11.0-M2"
-junit-platform-launcher-version = "1.11.0-M2"
+junit-jupiter-params-version = "5.11.0-RC1"
+junit-jupiter-version = "5.11.0-RC1"
+junit-platform-launcher-version = "1.11.0-RC1"
 lombok-version = "1.18.34"
+meanbean-factories-version = "3"
 meanbean-version = "3.0.0-M9"
 mockito-core-version = "5.12.0"
 random-beans-version = "3.9.0"
@@ -38,6 +40,7 @@ vintage-time-version = "6"
 bcpkix-jdk15on = { module = "org.bouncycastle:bcpkix-jdk15on", version.ref = "bcpkix-jdk15on-version" }
 checksum-up = { module = "io.github.astrapi69:checksum-up", version.ref = "checksum-up-version" }
 commons-codec = { module = "commons-codec:commons-codec", version.ref = "commons-codec-version" }
+commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commons-csv-version" }
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io-version" }
 commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3-version" }
 crypt-api = { module = "io.github.astrapi69:crypt-api", version.ref = "crypt-api-version" }
@@ -53,6 +56,7 @@ junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", vers
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform-launcher-version" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok-version" }
 meanbean = { module = "com.github.meanbeanlib:meanbean", version.ref = "meanbean-version" }
+meanbean-factories = { module = "io.github.astrapi69:meanbean-factories", version.ref = "meanbean-factories-version" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core-version" }
 random-beans = { module = "io.github.benas:random-beans", version.ref = "random-beans-version" }
 randomizer = { module = "io.github.astrapi69:randomizer", version.ref = "randomizer-version" }
@@ -66,10 +70,12 @@ vintage-time = { module = "io.github.astrapi69:vintage-time", version.ref = "vin
 
 [bundles]
 unit-testing = [
+    "commons-csv",
     "jsoup",
     "junit-jupiter",
     "junit-jupiter-params",
     "meanbean",
+    "meanbean-factories",
     "mockito-core",
     "test-object",
 ]

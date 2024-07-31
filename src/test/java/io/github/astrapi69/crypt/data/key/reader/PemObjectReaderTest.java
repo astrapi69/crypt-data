@@ -24,9 +24,11 @@
  */
 package io.github.astrapi69.crypt.data.key.reader;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -48,13 +50,11 @@ import io.github.astrapi69.crypt.api.key.PemType;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensionsTest;
 import io.github.astrapi69.file.search.PathFinder;
 
-
 /**
  * The unit test class for the class {@link PemObjectReader}
  */
 public class PemObjectReaderTest
 {
-
 	File pemDir;
 	File derDir;
 	File privateKeyDerFile;
@@ -76,7 +76,7 @@ public class PemObjectReaderTest
 	 * Test method for {@link PemObjectReader#getPemObject(File)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testGetPemObjectOnDerFile() throws IOException
@@ -91,7 +91,7 @@ public class PemObjectReaderTest
 	 * Test method for {@link PemObjectReader#getPemObject(File)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testGetPemObject() throws IOException
@@ -196,7 +196,7 @@ public class PemObjectReaderTest
 	 * Test method for {@link PemObjectReader#getPemObject(String)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testGetPemObjectWithPemString() throws IOException
@@ -220,7 +220,7 @@ public class PemObjectReaderTest
 	 * file id_rsa with following command: ssh-keygen -t rsa -b 4096 -f ~/.ssh-tmp/id_rsa
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testReadPemPrivateKey() throws IOException
@@ -245,7 +245,7 @@ public class PemObjectReaderTest
 	 * Test method for {@link PemObjectReader#readPemPrivateKey(File)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testReadPemPrivateKeyWithoutPassword() throws IOException, NoSuchAlgorithmException,
@@ -266,7 +266,7 @@ public class PemObjectReaderTest
 	 * Test method for {@link PemObjectReader#toPemFormat(PemObject)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testToPemFormat() throws IOException
@@ -288,7 +288,7 @@ public class PemObjectReaderTest
 	 * Test method for {@link PemObjectReader#toPemFormat(File)}
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testToPemFormatFile() throws IOException
@@ -316,4 +316,70 @@ public class PemObjectReaderTest
 		beanTester.testBean(PemObjectReader.class);
 	}
 
+	/**
+	 * Test method for {@link PemObjectReader#toDer(PemObject)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testToDer() throws IOException
+	{
+		File pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
+		File privateKeyPemFile = new File(pemDir, "private.pem");
+
+		PemObject pemObject = PemObjectReader.getPemObject(privateKeyPemFile);
+		byte[] derBytes = PemObjectReader.toDer(pemObject);
+
+		assertNotNull(derBytes);
+
+		// Verify the content by comparing it with the expected DER content
+		byte[] expectedDerBytes = pemObject.getContent();
+		assertArrayEquals(expectedDerBytes, derBytes);
+	}
+
+	/**
+	 * Test method for {@link PemObjectReader#toDer(PemObject)} with null input
+	 */
+	@Test
+	public void testToDerWithNull()
+	{
+		assertThrows(NullPointerException.class, () -> {
+			PemObjectReader.toDer(null);
+		});
+	}
+
+	/**
+	 * Test method for {@link PemObjectReader#getPemType(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testGetPemType() throws IOException
+	{
+		File pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
+		File rsaPrivatekeyPemFile = new File(pemDir, "private.pem");
+		File invalidPemFile = new File(pemDir, "test.txt");
+
+		// Test with a valid PEM file
+		PemType pemType = PemObjectReader.getPemType(rsaPrivatekeyPemFile);
+		assertEquals(PemType.RSA_PRIVATE_KEY, pemType);
+
+		// Test with an invalid PEM file (file without PEM object)
+		assertThrows(RuntimeException.class, () -> {
+			PemObjectReader.getPemType(invalidPemFile);
+		});
+	}
+
+	/**
+	 * Test method for {@link PemObjectReader#getPemType(File)} with null input
+	 */
+	@Test
+	public void testGetPemTypeWithNull()
+	{
+		assertThrows(NullPointerException.class, () -> {
+			PemObjectReader.getPemType((File)null);
+		});
+	}
 }

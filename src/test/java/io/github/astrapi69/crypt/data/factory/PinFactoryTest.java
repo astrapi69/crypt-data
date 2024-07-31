@@ -30,12 +30,19 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.collection.list.ListFactory;
 
+/**
+ * The unit test class for {@link PinFactory}
+ */
 public class PinFactoryTest
 {
 
+	/**
+	 * Test method for {@link PinFactory#newPins(List, List)}
+	 */
 	@Test
 	public void testNewPins()
 	{
@@ -47,5 +54,29 @@ public class PinFactoryTest
 		List<String> pins = PinFactory.newPins(localDates, datePatterns);
 		assertEquals(pins.size(), 20);
 		// pins.stream().forEach(System.out::println);
+	}
+
+	/**
+	 * Additional test method for edge cases and additional coverage for
+	 * {@link PinFactory#newPins(List, List)}
+	 */
+	@Test
+	public void testNewPinsWithAdditionalDates()
+	{
+		List<LocalDate> localDates = ListFactory.newArrayList(LocalDate.of(2000, 2, 29),
+			LocalDate.of(2024, 7, 4));
+		List<String> datePatterns = ListFactory.newArrayList("dd-MM-yyyy", "yyyy/MM/dd");
+		List<String> pins = PinFactory.newPins(localDates, datePatterns);
+		assertEquals(pins.size(), 4);
+	}
+
+	/**
+	 * Test method for {@link PinFactory} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(PinFactory.class);
 	}
 }

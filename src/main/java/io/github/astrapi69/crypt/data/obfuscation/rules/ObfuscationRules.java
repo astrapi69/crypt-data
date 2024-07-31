@@ -77,18 +77,6 @@ public class ObfuscationRules<C, RW>
 		return new ObfuscationRulesBuilder<C, RW>();
 	}
 
-	/**
-	 * Can equal boolean.
-	 *
-	 * @param other
-	 *            the other
-	 * @return the boolean
-	 */
-	protected boolean canEqual(final Object other)
-	{
-		return other instanceof ObfuscationRules;
-	}
-
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -97,8 +85,6 @@ public class ObfuscationRules<C, RW>
 		if (!(o instanceof ObfuscationRules))
 			return false;
 		final ObfuscationRules<?, ?> other = (ObfuscationRules<?, ?>)o;
-		if (!other.canEqual(this))
-			return false;
 		final Object this$rules = this.getRules();
 		final Object other$rules = other.getRules();
 		return this$rules == null ? other$rules == null : this$rules.equals(other$rules);

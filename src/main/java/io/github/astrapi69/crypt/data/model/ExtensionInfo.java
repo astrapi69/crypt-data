@@ -1,3 +1,27 @@
+/**
+ * The MIT License
+ *
+ * Copyright (C) 2015 Asterios Raptis
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package io.github.astrapi69.crypt.data.model;
 
 import java.security.cert.X509Certificate;
@@ -25,27 +49,28 @@ import lombok.experimental.SuperBuilder;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExtensionInfo
 {
+
 	/**
-	 * The identifier of the extension.
+	 * The identifier of the extension
 	 */
 	String extensionId;
 
 	/**
-	 * Indicates whether the extension is critical.
+	 * Indicates whether the extension is critical
 	 */
 	boolean critical;
 
 	/**
-	 * The value of the extension.
+	 * The value of the extension
 	 */
 	String value;
 
 	/**
-	 * Converts an {@link ExtensionInfo} object to a {@link Extension} object.
+	 * Converts an {@link ExtensionInfo} object to a {@link Extension} object
 	 *
 	 * @param extensionInfo
-	 *            the {@link ExtensionInfo} object to convert.
-	 * @return the corresponding {@link Extension} object.
+	 *            the {@link ExtensionInfo} object to convert
+	 * @return the corresponding {@link Extension} object
 	 */
 	public static Extension toExtension(final ExtensionInfo extensionInfo)
 	{
@@ -56,11 +81,29 @@ public class ExtensionInfo
 	}
 
 	/**
-	 * Factory method to create an {@link ExtensionInfo} object from a {@link Extension} object.
+	 * Transforms an array of {@link ExtensionInfo} objects to an array of {@link Extension} objects
+	 *
+	 * @param extensionInfos
+	 *            the array of {@link ExtensionInfo} objects
+	 * @return an array of {@link Extension} objects
+	 */
+	public static Extension[] toExtensions(final ExtensionInfo[] extensionInfos)
+	{
+		Extension[] extensions = new Extension[extensionInfos.length];
+		int i = 0;
+		for (ExtensionInfo extensionInfo : extensionInfos)
+		{
+			extensions[i++] = ExtensionInfo.toExtension(extensionInfo);
+		}
+		return extensions;
+	}
+
+	/**
+	 * Factory method to create an {@link ExtensionInfo} object from a {@link Extension} object
 	 *
 	 * @param extension
-	 *            the {@link Extension} object to convert.
-	 * @return the corresponding {@link ExtensionInfo} object.
+	 *            the {@link Extension} object to convert
+	 * @return the corresponding {@link ExtensionInfo} object
 	 */
 	public static ExtensionInfo fromExtension(final Extension extension)
 	{
@@ -77,8 +120,8 @@ public class ExtensionInfo
 	 * {@link ExtensionInfo} objects
 	 *
 	 * @param certificate
-	 *            the {@link X509Certificate} to extract extensions from.
-	 * @return a list of {@link ExtensionInfo} objects.
+	 *            the {@link X509Certificate} to extract extensions from
+	 * @return a list of {@link ExtensionInfo} objects
 	 */
 	public static List<ExtensionInfo> extractExtensionInfos(X509Certificate certificate)
 	{
@@ -113,11 +156,11 @@ public class ExtensionInfo
 
 	/**
 	 * Extracts extension-infos from an {@link X509Certificate} and returns them as an array of
-	 * {@link ExtensionInfo} objects.
+	 * {@link ExtensionInfo} objects
 	 *
 	 * @param certificate
-	 *            the {@link X509Certificate} to extract extensions from.
-	 * @return an array of {@link ExtensionInfo} objects.
+	 *            the {@link X509Certificate} to extract extensions from
+	 * @return an array of {@link ExtensionInfo} objects
 	 */
 	public static ExtensionInfo[] extractToExtensionInfoArray(X509Certificate certificate)
 	{

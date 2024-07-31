@@ -54,23 +54,22 @@ import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import lombok.NonNull;
 
 /**
- * The class {@link PemObjectReader} is a utility class for reading {@link PemObject} from a file.
+ * The class {@link PemObjectReader} is a utility class for reading {@link PemObject} from a file
  */
 public final class PemObjectReader
 {
-
 	private PemObjectReader()
 	{
 	}
 
 	/**
-	 * Gets the pem object.
+	 * Gets the pem object
 	 *
 	 * @param file
 	 *            the file
 	 * @return the pem object
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static PemObject getPemObject(final @NonNull File file) throws IOException
 	{
@@ -89,7 +88,7 @@ public final class PemObjectReader
 	 *            the pem as string
 	 * @return the pem object
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static PemObject getPemObject(final @NonNull String pemString) throws IOException
 	{
@@ -109,7 +108,7 @@ public final class PemObjectReader
 	 *            the file
 	 * @return true if the file contains a pem object otherwise false
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static boolean isPemObject(final @NonNull File file) throws IOException
 	{
@@ -123,7 +122,7 @@ public final class PemObjectReader
 	 *            the key in pem format
 	 * @return the key object
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static Object readPemKeyObject(final @NonNull File keyFile) throws IOException
 	{
@@ -135,25 +134,23 @@ public final class PemObjectReader
 	}
 
 	/**
-	 * Reads the given {@link File}( in *.pem format) that contains a password protected private
-	 * key.
+	 * Reads the given {@link File}( in *.pem format) that contains a password protected private key
 	 *
 	 * @param keyFile
 	 *            the file with the password protected private key
 	 * @param password
 	 *            the password
 	 * @return the {@link PrivateKey} object or null if the given file is not a password protected
-	 *         private key.
+	 *         private key
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static Optional<PrivateKey> readPemPrivateKey(final @NonNull File keyFile,
 		String password) throws IOException
 	{
 		Object pemKeyObject = readPemKeyObject(keyFile);
-		if (pemKeyObject instanceof PEMEncryptedKeyPair)
+		if (pemKeyObject instanceof PEMEncryptedKeyPair encryptedKeyPair)
 		{
-			PEMEncryptedKeyPair encryptedKeyPair = (PEMEncryptedKeyPair)pemKeyObject;
 			PEMDecryptorProvider pemDecryptorProvider = new JcePEMDecryptorProviderBuilder()
 				.build(password.toCharArray());
 			PEMKeyPair pemKeyPair = encryptedKeyPair.decryptKeyPair(pemDecryptorProvider);
@@ -166,20 +163,20 @@ public final class PemObjectReader
 	}
 
 	/**
-	 * Reads the given {@link File}( in *.pem format) that contains private key.
+	 * Reads the given {@link File}( in *.pem format) that contains private key
 	 *
 	 * @param keyPemFile
 	 *            the file with the private key ( in *.pem format)
 	 * @return the {@link PrivateKey} object or null if the given file is not private key
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	public static PrivateKey readPemPrivateKey(final @NonNull File keyPemFile) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
@@ -188,7 +185,7 @@ public final class PemObjectReader
 	}
 
 	/**
-	 * Reads the given {@link File}( in *.pem format) that contains private key.
+	 * Reads the given {@link File}( in *.pem format) that contains private key
 	 *
 	 * @param keyPemFile
 	 *            the file with the private key ( in *.pem format)
@@ -196,14 +193,14 @@ public final class PemObjectReader
 	 *            the algorithm for the {@link KeyFactory}
 	 * @return the {@link PrivateKey} object or null if the given file is not private key
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	public static PrivateKey readPrivateKey(final @NonNull File keyPemFile,
 		final @NonNull Algorithm algorithm) throws IOException, NoSuchAlgorithmException,
@@ -214,13 +211,13 @@ public final class PemObjectReader
 	}
 
 	/**
-	 * Transform the given {@link PemObject} object in pem format {@link String} object.
+	 * Transform the given {@link PemObject} object in pem format {@link String} object
 	 *
 	 * @param pemObject
 	 *            the pem object
 	 * @return the string
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static String toPemFormat(final @NonNull PemObject pemObject) throws IOException
 	{
@@ -238,7 +235,7 @@ public final class PemObjectReader
 	 *            the key file
 	 * @return the string or null if the given key file is not in pem format
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static Optional<String> toPemFormat(final @NonNull File file) throws IOException
 	{
@@ -251,7 +248,7 @@ public final class PemObjectReader
 	}
 
 	/**
-	 * Transform the given {@link PemObject} object in to a byte array in the der format.
+	 * Transform the given {@link PemObject} object in to a byte array in the der format
 	 *
 	 * @param pemObject
 	 *            the pem object
@@ -281,7 +278,7 @@ public final class PemObjectReader
 	 *            the file
 	 * @return the {@link PemType} the given {@link File} object
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static PemType getPemType(final @NonNull File file) throws IOException
 	{
@@ -292,5 +289,4 @@ public final class PemObjectReader
 		}
 		return getPemType(pemObject);
 	}
-
 }

@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -42,6 +43,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
@@ -59,7 +61,7 @@ public class KeyStoreExtensionsTest
 {
 
 	String alias = "alias-for-delete";
-	/** The certificate for tests. */
+	/** The certificate for tests */
 	X509Certificate certificate;
 	File derDir;
 	File keystoreFile;
@@ -68,7 +70,7 @@ public class KeyStoreExtensionsTest
 	String password = "foobar-secret-pw";
 
 	/**
-	 * Sets up method will be invoked before every unit test method in this class.
+	 * Sets up method will be invoked before every unit test method in this class
 	 *
 	 * @throws Exception
 	 *             is thrown if any error occurs on the execution
@@ -105,6 +107,16 @@ public class KeyStoreExtensionsTest
 	protected void tearDown()
 	{
 		keystoreFile.delete();
+	}
+
+	/**
+	 * Test method for {@link KeyStoreExtensions} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(KeyStoreExtensions.class);
 	}
 
 	/**
@@ -182,7 +194,6 @@ public class KeyStoreExtensionsTest
 		Certificate certificate1 = keyStore.getCertificate(alias);
 		assertEquals(certificate, certificate1);
 	}
-
 
 	/**
 	 * Test method for {@link KeyStoreExtensions#addCertificate(KeyStore, String, Certificate)}
@@ -339,4 +350,32 @@ public class KeyStoreExtensionsTest
 		assertEquals(actual, expected);
 	}
 
+	/**
+	 * Test method for
+	 * {@link KeyStoreExtensions#setKeyEntry(KeyStore, String, Key, char[], Certificate[])}
+	 */
+	@Test
+	public void testSetKeyEntry() throws Exception
+	{
+		KeyPair keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA,
+			KeySize.KEYSIZE_2048);
+		PrivateKey privateKey = keyPair.getPrivate();
+		KeyStore keyStore = KeyStoreFactory.loadKeyStore(keystoreFile, KeystoreType.JKS.name(),
+			password);
+
+		Certificate certificate = TestObjectFactory.newCertificateForTests(privateKey);
+		Certificate[] certificateChain = ArrayFactory.newArray(certificate);
+		String alias = "set-key-entry-alias";
+
+		KeyStoreExtensions.setKeyEntry(keyStore, alias, privateKey, password.toCharArray(),
+			certificateChain);
+
+		Key actualKey = keyStore.getKey(alias, password.toCharArray());
+		assertNotNull(actualKey);
+		assertEquals(privateKey, actualKey);
+
+		Certificate actualCertificate = keyStore.getCertificate(alias);
+		assertNotNull(actualCertificate);
+		assertEquals(certificate, actualCertificate);
+	}
 }

@@ -41,13 +41,13 @@ import io.github.astrapi69.crypt.data.model.SharedSecretModel;
 
 /**
  * The factory class {@link KeyAgreementFactory} holds methods for creating new shared
- * {@link SecretKey} objects and {@link KeyAgreement} objects.
+ * {@link SecretKey} objects and {@link KeyAgreement} objects
  */
 public class KeyAgreementFactory
 {
 
 	/**
-	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments.
+	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments
 	 *
 	 * @param sharedSecretModel
 	 *            the {@link SharedSecretModel} object
@@ -71,7 +71,7 @@ public class KeyAgreementFactory
 
 	/**
 	 * Factory method for creating a new shared {@link SecretKey} object from the given
-	 * {@link SharedSecretInfo}.
+	 * {@link SharedSecretInfo}
 	 *
 	 * @param sharedSecretInfo
 	 *            the {@link SharedSecretInfo} object
@@ -91,7 +91,7 @@ public class KeyAgreementFactory
 	}
 
 	/**
-	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments.
+	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -111,7 +111,7 @@ public class KeyAgreementFactory
 	 * @throws NoSuchProviderException
 	 *             if the provider is not registered For instance:<br>
 	 *             SecretKey secretKey = KeyAgreementFactory.newSharedSecret( privateKey, publicKey,
-	 *             "ECDH", "AES", "SunJCE");
+	 *             "ECDH", "AES", "SunJCE")
 	 */
 	public static SecretKey newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
 		String keyAgreementAlgorithm, String secretKeyAlgorithm, String provider)
@@ -124,7 +124,7 @@ public class KeyAgreementFactory
 	}
 
 	/**
-	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments.
+	 * Factory method for creating a new shared {@link SecretKey} object from the given arguments
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -146,7 +146,7 @@ public class KeyAgreementFactory
 	 * @throws NoSuchProviderException
 	 *             if the provider is not registered For instance:<br>
 	 *             SecretKey secretKey = KeyAgreementFactory.newSharedSecret( privateKey, publicKey,
-	 *             "ECDH", "AES", "SunJCE", true);
+	 *             "ECDH", "AES", "SunJCE", true)
 	 */
 	public static SecretKey newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
 		String keyAgreementAlgorithm, String secretKeyAlgorithm, String provider, boolean lastPhase)
@@ -174,7 +174,7 @@ public class KeyAgreementFactory
 	}
 
 	/**
-	 * Factory method for creating a new shared secret byte array from the given arguments.
+	 * Factory method for creating a new shared secret byte array from the given arguments
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -194,7 +194,7 @@ public class KeyAgreementFactory
 	 * @throws NoSuchProviderException
 	 *             if the provider is not registered For instance:<br>
 	 *             byte[] sharedSecret = KeyAgreementFactory.newSharedSecret( privateKey, publicKey,
-	 *             "ECDH", "SunJCE", true);
+	 *             "ECDH", "SunJCE", true)
 	 */
 	public static byte[] newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
 		String keyAgreementAlgorithm, String provider, boolean lastPhase)
@@ -206,7 +206,7 @@ public class KeyAgreementFactory
 	}
 
 	/**
-	 * Factory method for creating a new shared secret byte array from the given arguments.
+	 * Factory method for creating a new shared secret byte array from the given arguments
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -224,7 +224,7 @@ public class KeyAgreementFactory
 	 * @throws NoSuchProviderException
 	 *             if the provider is not registered For instance:<br>
 	 *             byte[] sharedSecret = KeyAgreementFactory.newSharedSecret( privateKey, publicKey,
-	 *             "ECDH", "SunJCE");
+	 *             "ECDH", "SunJCE")
 	 */
 	public static byte[] newSharedSecret(PrivateKey privateKey, PublicKey publicKey,
 		String keyAgreementAlgorithm, String provider)
@@ -234,7 +234,7 @@ public class KeyAgreementFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyAgreement} object from the given arguments.
+	 * Factory method for creating a new {@link KeyAgreement} object from the given arguments
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -254,7 +254,7 @@ public class KeyAgreementFactory
 	 * @throws NoSuchProviderException
 	 *             if the provider is not registered For instance:<br>
 	 *             KeyAgreement keyAgreement = KeyAgreementFactory.newKeyAgreement( privateKey,
-	 *             publicKey, "ECDH", "SunJCE", true);
+	 *             publicKey, "ECDH", "SunJCE", true)
 	 */
 	public static KeyAgreement newKeyAgreement(PrivateKey privateKey, PublicKey publicKey,
 		String keyAgreementAlgorithm, String provider, boolean lastPhase)

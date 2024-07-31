@@ -24,6 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
+import static javax.crypto.Cipher.ENCRYPT_MODE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.UnsupportedEncodingException;
@@ -41,6 +42,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -54,22 +56,30 @@ import io.github.astrapi69.crypt.data.model.CryptModel;
  */
 public class CipherFactoryTest
 {
+	/**
+	 * Sets up method will be invoked before every unit test method in this class
+	 */
+	@BeforeEach
+	protected void setUp()
+	{
+		Security.addProvider(new BouncyCastleProvider());
+	}
 
 	/**
 	 * Test method for {@link CipherFactory#newCipher(CryptModel)}
 	 *
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails
+	 *             if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails
+	 *             if generation of the SecretKey object fails
 	 * @throws NoSuchPaddingException
-	 *             is thrown if instantiation of the cypher object fails
+	 *             if instantiation of the cipher object fails
 	 * @throws InvalidKeyException
-	 *             is thrown if initialization of the cypher object fails
+	 *             if initialization of the cipher object fails
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cypher object fails
+	 *             if initialization of the cipher object fails
 	 * @throws UnsupportedEncodingException
-	 *             is thrown if the named charset is not supported
+	 *             if the named charset is not supported
 	 */
 	@Test
 	public void testNewCipherCryptModelOfCipherString()
@@ -83,8 +93,7 @@ public class CipherFactoryTest
 		privateKey = "D1D15ED36B887AF1";
 		encryptorModel = CryptModel.<Cipher, String, String> builder().key(privateKey)
 			.algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
-			.iterationCount(CompoundAlgorithm.ITERATIONCOUNT).operationMode(Cipher.ENCRYPT_MODE)
-			.build();
+			.iterationCount(CompoundAlgorithm.ITERATIONCOUNT).operationMode(ENCRYPT_MODE).build();
 
 		actual = CipherFactory.newCipher(encryptorModel);
 		assertNotNull(actual);
@@ -111,7 +120,7 @@ public class CipherFactoryTest
 		factory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm);
 		key = factory.generateSecret(keySpec);
 
-		operationMode = Cipher.ENCRYPT_MODE;
+		operationMode = ENCRYPT_MODE;
 		paramSpec = AlgorithmParameterSpecFactory.newPBEParameterSpec(CompoundAlgorithm.SALT,
 			CompoundAlgorithm.ITERATIONCOUNT);
 		cipher = CipherFactory.newCipher(operationMode, key, paramSpec, algorithm);
@@ -141,11 +150,86 @@ public class CipherFactoryTest
 		String algorithm;
 		Cipher cipher;
 
-		Security.addProvider(new BouncyCastleProvider());
 		algorithm = "AES/CBC/PKCS5Padding";
 		cipher = CipherFactory.newCipher(algorithm, SecurityProvider.BC.name());
 		assertNotNull(cipher);
 	}
+
+	/**
+	 * Test method for {@link CipherFactory#newCipher(int, SecretKey, String)}
+	 */
+	@Test
+	public void testNewCipherIntSecretKeyString() throws Exception
+	{
+		int operationMode;
+		SecretKey key;
+		String algorithm;
+		Cipher cipher;
+
+		operationMode = Cipher.ENCRYPT_MODE;
+		algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
+		key = SecretKeyFactoryExtensions.newSecretKey("secret".toCharArray(), algorithm);
+
+		cipher = CipherFactory.newCipher(operationMode, key, algorithm);
+		assertNotNull(cipher);
+	}
+
+	/**
+	 * Test method for {@link CipherFactory#newPBECipher(String, String, byte[], int, int)}
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             if instantiation of the SecretKeyFactory object fails
+	 * @throws InvalidKeySpecException
+	 *             if generation of the SecretKey object fails
+	 * @throws NoSuchPaddingException
+	 *             if instantiation of the cipher object fails
+	 * @throws InvalidAlgorithmParameterException
+	 *             if initialization of the cipher object fails
+	 * @throws InvalidKeyException
+	 *             if initialization of the cipher object fails
+	 */
+	@Test
+	public void testNewPBECipherWithPrivateKey()
+		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
+		InvalidKeyException, InvalidAlgorithmParameterException
+	{
+		String privateKey = "D1D15ED36B887AF1";
+		String algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
+		byte[] salt = CompoundAlgorithm.SALT;
+		int iterationCount = CompoundAlgorithm.ITERATIONCOUNT;
+		int operationMode = Cipher.ENCRYPT_MODE;
+
+		Cipher cipher = CipherFactory.newPBECipher(privateKey, algorithm, salt, iterationCount,
+			operationMode);
+		assertNotNull(cipher);
+	}
+
+	/**
+	 * Test method for {@link CipherFactory#newPBECipher(char[], int, String)}
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             if instantiation of the SecretKeyFactory object fails
+	 * @throws InvalidKeySpecException
+	 *             if generation of the SecretKey object fails
+	 * @throws NoSuchPaddingException
+	 *             if instantiation of the cipher object fails
+	 * @throws InvalidAlgorithmParameterException
+	 *             if initialization of the cipher object fails
+	 * @throws InvalidKeyException
+	 *             if initialization of the cipher object fails
+	 */
+	@Test
+	public void testNewPBECipher() throws NoSuchAlgorithmException, InvalidKeySpecException,
+		NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException
+	{
+		char[] password = "password".toCharArray();
+		int operationMode = Cipher.ENCRYPT_MODE;
+		String algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
+
+		Cipher cipher = CipherFactory.newPBECipher(password, operationMode, algorithm);
+		assertNotNull(cipher);
+	}
+
 
 	/**
 	 * Test method for {@link CipherFactory#newCipher(String, String, byte[], int, int)}
@@ -158,7 +242,7 @@ public class CipherFactoryTest
 		int operationMode;
 
 		algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
-		operationMode = Cipher.ENCRYPT_MODE;
+		operationMode = ENCRYPT_MODE;
 		cipher = CipherFactory.newCipher(CompoundAlgorithm.PASSWORD, algorithm,
 			CompoundAlgorithm.SALT, CompoundAlgorithm.ITERATIONCOUNT, operationMode);
 		assertNotNull(cipher);

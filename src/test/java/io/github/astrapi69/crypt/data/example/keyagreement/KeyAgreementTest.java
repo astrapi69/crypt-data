@@ -38,7 +38,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.crypt.data.factory.KeyPairGeneratorFactory;
@@ -54,7 +53,6 @@ public class KeyAgreementTest
 	 * Test method for KeyAgreement communication
 	 */
 	@Test
-	@Disabled
 	void newSharedSecret() throws Exception
 	{
 		String cipherAlgorithm;
@@ -117,7 +115,7 @@ public class KeyAgreementTest
 		bobKeyAgreement.doPhase(aliceKeyPair.getPublic(), true);
 
 		// Read shared secret from Bob
-		byte[] bobSharedSecret = aliceKeyAgreement.generateSecret();
+		byte[] bobSharedSecret = bobKeyAgreement.generateSecret();
 		System.out.format("Bob Shared secret: %s%n", printHexBinary(bobSharedSecret));
 
 		// 5. generate key from Alice shared secret

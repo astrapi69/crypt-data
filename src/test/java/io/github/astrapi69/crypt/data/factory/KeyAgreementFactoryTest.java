@@ -243,4 +243,27 @@ class KeyAgreementFactoryTest
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(KeyAgreementFactory.class);
 	}
+
+
+	/**
+	 * Test method for
+	 * {@link KeyAgreementFactory#newSharedSecret(PrivateKey, PublicKey, String, String)}
+	 */
+	@Test
+	@DisplayName("Test newSharedSecret with provider")
+	void testNewSharedSecretWithProvider() throws Exception
+	{
+		byte[] sharedSecret = KeyAgreementFactory.newSharedSecret(aliceKeyPair.getPrivate(),
+			bobPublicKey, "ECDH", null);
+
+		assertNotNull(sharedSecret);
+
+		KeyAgreement keyAgreement = KeyAgreement.getInstance("ECDH");
+		keyAgreement.init(aliceKeyPair.getPrivate());
+		keyAgreement.doPhase(bobPublicKey, true);
+		byte[] expectedSecret = keyAgreement.generateSecret();
+
+		assertArrayEquals(expectedSecret, sharedSecret);
+	}
+
 }

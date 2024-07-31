@@ -24,13 +24,17 @@
  */
 package io.github.astrapi69.crypt.data.obfuscation.rule;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.meanbean.test.BeanTester;
+import org.meanbean.test.BeanVerifier;
 
 /**
- * The unit test class for the class {@link ObfuscationRule}.
+ * The unit test class for the class {@link ObfuscationRule}
  */
 public class ObfuscationRuleTest
 {
@@ -57,6 +61,26 @@ public class ObfuscationRuleTest
 	{
 		BeanTester beanTester = new BeanTester();
 		beanTester.testBean(ObfuscationRule.class);
+
+		BeanVerifier.forClass(ObfuscationRule.class).editSettings().edited()
+			.verifyGettersAndSetters().verifyToString().verifyEqualsAndHashCode();
 	}
 
+	/**
+	 * Parameterized test method for {@link ObfuscationRule} with CSV source
+	 *
+	 * @param character
+	 *            the character to be obfuscated
+	 * @param replaceWith
+	 *            the replacement character(s)
+	 */
+	@ParameterizedTest
+	@CsvSource({ "'a', 'b'", "'x', 'y'", "'1', '2'", "'$', '%'" })
+	public void testWithCsvSource(char character, char replaceWith)
+	{
+		ObfuscationRule<Character, Character> model = new ObfuscationRule<>(character, replaceWith);
+		assertNotNull(model);
+		assertEquals(character, model.getCharacter());
+		assertEquals(replaceWith, model.getReplaceWith());
+	}
 }

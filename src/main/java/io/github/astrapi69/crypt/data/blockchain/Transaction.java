@@ -81,29 +81,13 @@ public class Transaction implements ITransaction
 			HashAlgorithm.SHA256);
 	}
 
-	/**
-	 * Checks if the other object is an instance of {@link Transaction}.
-	 *
-	 * @param other
-	 *            the other object to check
-	 * @return true if the other object is an instance of {@link Transaction}, false otherwise
-	 */
-	protected boolean canEqual(final Object other)
-	{
-		return other instanceof Transaction;
-	}
-
-
 	/** {@inheritDoc} */
 	@Override
 	public boolean equals(final Object o)
 	{
 		if (o == this)
 			return true;
-		if (!(o instanceof Transaction))
-			return false;
-		final Transaction other = (Transaction)o;
-		if (!other.canEqual(this))
+		if (!(o instanceof Transaction other))
 			return false;
 		if (!java.util.Arrays.equals(this.getHash(), other.getHash()))
 			return false;

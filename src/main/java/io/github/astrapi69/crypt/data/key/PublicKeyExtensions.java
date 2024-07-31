@@ -46,8 +46,6 @@ public final class PublicKeyExtensions
 
 	private PublicKeyExtensions()
 	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
 	}
 
 	/**
@@ -63,13 +61,13 @@ public final class PublicKeyExtensions
 	}
 
 	/**
-	 * Get the name of the primary encoding format from the given {@link PublicKey} or null it does
-	 * not support encoding
+	 * Get the name of the primary encoding format from the given {@link PublicKey} or null if it
+	 * does not support encoding
 	 *
 	 * @param publicKey
 	 *            the public key
-	 * @return the name of the primary encoding format from the given {@link PublicKey} or null it
-	 *         does not support encoding
+	 * @return the name of the primary encoding format from the given {@link PublicKey} or null if
+	 *         it does not support encoding
 	 */
 	public static String getFormat(final PublicKey publicKey)
 	{
@@ -82,7 +80,7 @@ public final class PublicKeyExtensions
 	 *
 	 * @param publicKey
 	 *            the public key
-	 * @return the {@link PublicKey} in its primary encoding format, or null if this key does not *
+	 * @return the {@link PublicKey} in its primary encoding format, or null if this key does not
 	 *         support encoding
 	 */
 	public static byte[] getEncoded(final PublicKey publicKey)
@@ -91,7 +89,7 @@ public final class PublicKeyExtensions
 	}
 
 	/**
-	 * Gets the key length of the given {@link PublicKey}.
+	 * Gets the key length of the given {@link PublicKey}
 	 *
 	 * @param publicKey
 	 *            the public key
@@ -121,11 +119,11 @@ public final class PublicKeyExtensions
 	}
 
 	/**
-	 * Transform the given {@link PublicKey} to a base64 encoded {@link String} value.
+	 * Transform the given {@link PublicKey} to a base64 encoded {@link String} value
 	 *
 	 * @param publicKey
 	 *            the public key
-	 * @return the base64 encoded {@link String} value.
+	 * @return the base64 encoded {@link String} value
 	 */
 	public static String toBase64(final PublicKey publicKey)
 	{
@@ -133,11 +131,11 @@ public final class PublicKeyExtensions
 	}
 
 	/**
-	 * Transform the given {@link PublicKey} to a hexadecimal {@link String} value.
+	 * Transform the given {@link PublicKey} to a hexadecimal {@link String} value
 	 *
 	 * @param publicKey
 	 *            the public key
-	 * @return the new hexadecimal {@link String} value.
+	 * @return the new hexadecimal {@link String} value
 	 */
 	public static String toHexString(final PublicKey publicKey)
 	{
@@ -145,13 +143,14 @@ public final class PublicKeyExtensions
 	}
 
 	/**
-	 * Transform the given {@link PublicKey} to a hexadecimal {@link String} value.
+	 * Transform the given {@link PublicKey} to a hexadecimal {@link String} value
 	 *
 	 * @param publicKey
 	 *            the public key
 	 * @param lowerCase
-	 *            the flag if the result shell be transform in lower case. If true the result is
-	 * @return the new hexadecimal {@link String} value.
+	 *            the flag if the result shall be transformed to lower case. If true the result is
+	 *            in lower case
+	 * @return the new hexadecimal {@link String} value
 	 */
 	public static String toHexString(final PublicKey publicKey, final boolean lowerCase)
 	{
@@ -159,14 +158,14 @@ public final class PublicKeyExtensions
 	}
 
 	/**
-	 * Write the given {@link PublicKey} into the given {@link File}.
+	 * Write the given {@link PublicKey} into the given {@link File}
 	 *
 	 * @param publicKey
 	 *            the public key
 	 * @param file
 	 *            the file to write in
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static void toPemFile(final PublicKey publicKey, final File file) throws IOException
 	{
@@ -176,7 +175,7 @@ public final class PublicKeyExtensions
 	}
 
 	/**
-	 * Transform the public key in pem format.
+	 * Transform the public key to pem format
 	 *
 	 * @param publicKey
 	 *            the public key
@@ -198,5 +197,4 @@ public final class PublicKeyExtensions
 		sb.append(System.lineSeparator());
 		return sb.toString();
 	}
-
 }

@@ -46,7 +46,7 @@ import io.github.astrapi69.crypt.data.model.KeyPairInfo;
 import lombok.NonNull;
 
 /**
- * The factory class {@link KeyPairFactory} holds methods for creating {@link KeyPair} objects.
+ * The factory class {@link KeyPairFactory} holds methods for creating {@link KeyPair} objects
  */
 public final class KeyPairFactory
 {
@@ -56,14 +56,13 @@ public final class KeyPairFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPair} from the given algorithm and key size.
+	 * Factory method for creating a new {@link KeyPair} from the given algorithm and key size
 	 *
 	 * @param algorithm
 	 *            the algorithm
 	 * @param keySize
 	 *            the key size
 	 * @return the new {@link KeyPair} from the given salt and iteration count
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -84,7 +83,6 @@ public final class KeyPairFactory
 	 * @param algorithm
 	 *            the algorithm
 	 * @return the new {@link KeyPair} from the given salt and iteration count
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -105,7 +103,6 @@ public final class KeyPairFactory
 	 * @param algorithm
 	 *            the algorithm
 	 * @return the new {@link KeyPair} from the given salt and iteration count
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -128,7 +125,6 @@ public final class KeyPairFactory
 	 * @param keySize
 	 *            the key size as enum
 	 * @return the new {@link KeyPair} from the given salt and iteration count
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -143,21 +139,20 @@ public final class KeyPairFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPair} from the given parameters.
+	 * Factory method for creating a new {@link KeyPair} from the given parameters
 	 *
 	 * @param publicKeyDerFile
 	 *            the public key der file
 	 * @param privateKeyDerFile
 	 *            the private key der file
-	 * @return the new {@link KeyPair} from the given parameters.
-	 *
+	 * @return the new {@link KeyPair} from the given parameters
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list
@@ -191,13 +186,13 @@ public final class KeyPairFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPair} from the given parameters.
+	 * Factory method for creating a new {@link KeyPair} from the given parameters
 	 *
 	 * @param publicKey
 	 *            the public key
 	 * @param privateKey
 	 *            the private key
-	 * @return the new {@link KeyPair} from the given parameters.
+	 * @return the new {@link KeyPair} from the given parameters
 	 */
 	public static KeyPair newKeyPair(final PublicKey publicKey, final PrivateKey privateKey)
 	{
@@ -206,14 +201,13 @@ public final class KeyPairFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPair} from the given parameters.
+	 * Factory method for creating a new {@link KeyPair} from the given parameters
 	 *
 	 * @param algorithm
 	 *            the algorithm
 	 * @param keySize
 	 *            the key size
 	 * @return the new {@link KeyPair} from the given parameters
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -230,7 +224,7 @@ public final class KeyPairFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPair} from the given parameters.
+	 * Factory method for creating a new {@link KeyPair} from the given parameters
 	 *
 	 * @param namedCurveParameterSpec
 	 *            the name of the ecliptic curve requested
@@ -239,7 +233,6 @@ public final class KeyPairFactory
 	 * @param provider
 	 *            the provider
 	 * @return the new {@link KeyPair} from the given parameters
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -259,7 +252,7 @@ public final class KeyPairFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPair} from the given parameters.
+	 * Factory method for creating a new {@link KeyPair} from the given parameters
 	 *
 	 * @param eCNamedCurveParameterSpecName
 	 *            the name of the ecliptic curve requested
@@ -268,7 +261,6 @@ public final class KeyPairFactory
 	 * @param provider
 	 *            the provider
 	 * @return the new {@link KeyPair} from the given parameters
-	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
 	 *             specified algorithm
@@ -290,12 +282,11 @@ public final class KeyPairFactory
 
 	/**
 	 * Factory method to create a new {@link KeyPair} object from the given {@link KeyPairInfo}
-	 * object.
+	 * object
 	 *
 	 * @param keyPairInfo
 	 *            the name of the ecliptic curve requested
 	 * @return the new {@link KeyPair} from the given parameters
-	 *
 	 * @throws InvalidAlgorithmParameterException
 	 *             is thrown if initialization of the cipher object fails
 	 * @throws NoSuchAlgorithmException

@@ -22,14 +22,13 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-/**
- *
- */
 package io.github.astrapi69.crypt.data.factory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import javax.crypto.SecretKey;
+import java.security.NoSuchProviderException;
+
 import javax.crypto.SecretKeyFactory;
 
 import org.junit.jupiter.api.Test;
@@ -51,11 +50,11 @@ public class SecretKeyFactoryExtensionsTest
 	public void testNewSecretKey() throws Exception
 	{
 		String algorithm;
-		SecretKey secretKey;
+		SecretKeyFactory secretKeyFactory;
 
 		algorithm = SunJCEAlgorithm.PBEWithMD5AndDES.getAlgorithm();
-		secretKey = SecretKeyFactoryExtensions.newSecretKey("secret".toCharArray(), algorithm);
-		assertNotNull(secretKey);
+		secretKeyFactory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm);
+		assertNotNull(secretKeyFactory);
 	}
 
 	/**
@@ -73,6 +72,35 @@ public class SecretKeyFactoryExtensionsTest
 	}
 
 	/**
+	 * Test method for {@link SecretKeyFactoryExtensions#newSecretKeyFactory(String, String)}
+	 */
+	@Test
+	public void testNewSecretKeyFactoryWithProvider() throws Exception
+	{
+		String algorithm = CompoundAlgorithm.PBE_WITH_MD5_AND_DES.getAlgorithm();
+		String provider = "SunJCE";
+		SecretKeyFactory secretKeyFactory;
+
+		// Test with a valid provider
+		secretKeyFactory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm, provider);
+		assertNotNull(secretKeyFactory);
+
+		// Test with null provider
+		secretKeyFactory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm, null);
+		assertNotNull(secretKeyFactory);
+
+		// Test with empty provider
+		secretKeyFactory = SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm, "");
+		assertNotNull(secretKeyFactory);
+
+		// Test with invalid provider
+		String invalidProvider = "InvalidProvider";
+		assertThrows(NoSuchProviderException.class, () -> {
+			SecretKeyFactoryExtensions.newSecretKeyFactory(algorithm, invalidProvider);
+		});
+	}
+
+	/**
 	 * Test method for {@link SecretKeyFactoryExtensions} with {@link BeanTester}
 	 */
 	@Test
@@ -81,5 +109,4 @@ public class SecretKeyFactoryExtensionsTest
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(SecretKeyFactoryExtensions.class);
 	}
-
 }

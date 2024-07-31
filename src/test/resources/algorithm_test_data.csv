@@ -1,0 +1,4 @@
+serviceName,algorithm,expectedResult
+Cipher,AES,true
+Cipher,InvalidAlgorithm,false
+InvalidService,AES,false

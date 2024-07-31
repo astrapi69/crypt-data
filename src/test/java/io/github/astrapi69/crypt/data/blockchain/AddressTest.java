@@ -25,6 +25,7 @@
 package io.github.astrapi69.crypt.data.blockchain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -46,7 +47,7 @@ import io.github.astrapi69.crypt.data.hash.HashExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.file.search.PathFinder;
-import io.github.astrapi69.test.MeanBeanExtensions;
+import io.github.astrapi69.meanbean.extension.MeanBeanExtensions;
 
 /**
  * The unit test class for the class {@link Address}
@@ -110,10 +111,15 @@ public class AddressTest
 	@Test
 	public void testEqualsHashcodeAndToStringWithClass()
 	{
+		Address address;
 		boolean expected = true;
 		boolean actual = EqualsHashCodeAndToStringEvaluator
 			.evaluateEqualsHashcodeAndToString(Address.class);
 		assertEquals(expected, actual);
+		address = new Address("foo", publicKey.getEncoded());
+		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(address);
+		assertEquals(expected, actual);
+
 	}
 
 	/**
@@ -134,10 +140,13 @@ public class AddressTest
 		Address address1 = new Address("foo", publicKey.getEncoded());
 		Address address2 = new Address("foo", publicKey.getEncoded());
 		Address address3 = new Address("bar", publicKey.getEncoded());
+		Address address4 = new Address("bar", publicKey.getEncoded());
 
 		assertEquals(address1, address2);
 		assertNotEquals(address1, address3);
 		assertNotEquals(address2, address3);
+		assertEquals(address3, address4);
+		assertFalse(address3.canEqual(new Transaction()));
 	}
 
 	/**

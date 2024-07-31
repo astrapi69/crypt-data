@@ -49,6 +49,7 @@ import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeySize;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
+import io.github.astrapi69.crypt.data.model.KeyPairInfo;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
@@ -58,7 +59,7 @@ public class KeyPairFactoryTest
 {
 
 	/**
-	 * Sets up method will be invoked before every unit test method in this class.
+	 * Sets up method will be invoked before every unit test method in this class
 	 *
 	 * @throws Exception
 	 *             is thrown if any error occurs on the execution
@@ -71,7 +72,7 @@ public class KeyPairFactoryTest
 
 	/**
 	 * Test method for {@link KeyPairFactory#newKeyPair(Algorithm, KeySize)}
-	 * 
+	 *
 	 * @throws NoSuchAlgorithmException
 	 *             the no such algorithm exception
 	 * @throws NoSuchProviderException
@@ -104,13 +105,13 @@ public class KeyPairFactoryTest
 
 	/**
 	 * Test method for {@link KeyPairFactory#newKeyPair(File, File)}
-	 * 
+	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list
@@ -225,4 +226,118 @@ public class KeyPairFactoryTest
 		assertNotNull(keyPair);
 	}
 
+	/**
+	 * Test method for {@link KeyPairFactory#newKeyPair(String)}
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
+	 *             specified algorithm
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 */
+	@Test
+	public void testNewKeyPairWithDefaultKeySize()
+		throws NoSuchAlgorithmException, NoSuchProviderException
+	{
+		KeyPair keyPair;
+
+		keyPair = KeyPairFactory.newKeyPair("RSA");
+		assertNotNull(keyPair);
+
+		keyPair = KeyPairFactory.newKeyPair("DSA");
+		assertNotNull(keyPair);
+
+		keyPair = KeyPairFactory.newKeyPair("EC");
+		assertNotNull(keyPair);
+	}
+
+	/**
+	 * Test method for {@link KeyPairFactory#newKeyPair(Algorithm)}
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
+	 *             specified algorithm
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 */
+	@Test
+	public void testNewKeyPairAlgorithm() throws NoSuchAlgorithmException, NoSuchProviderException
+	{
+		KeyPair keyPair;
+
+		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA);
+		assertNotNull(keyPair);
+
+		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.DSA);
+		assertNotNull(keyPair);
+
+		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.EC);
+		assertNotNull(keyPair);
+	}
+
+	/**
+	 * Test method for {@link KeyPairFactory#newKeyPair(PrivateKey)}
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
+	 *             specified algorithm
+	 * @throws InvalidKeySpecException
+	 *             is thrown if generation of the SecretKey object fails
+	 */
+	@Test
+	public void testNewKeyPairPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException,
+		IOException, NoSuchProviderException
+	{
+		File derDir;
+		File privateKeyDerFile;
+		PrivateKey privateKey;
+		KeyPair keyPair;
+
+		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
+		privateKeyDerFile = new File(derDir, "private.der");
+
+		privateKey = PrivateKeyReader.readPrivateKey(privateKeyDerFile);
+
+		keyPair = KeyPairFactory.newKeyPair(privateKey);
+		assertNotNull(keyPair);
+	}
+
+	/**
+	 * Test method for {@link KeyPairFactory#newKeyPair(KeyPairInfo)}
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
+	 *             specified algorithm
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails
+	 */
+	@Test
+	public void testNewKeyPairKeyPairInfo()
+		throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException
+	{
+		KeyPairInfo keyPairInfo;
+		KeyPair keyPair;
+
+		keyPairInfo = KeyPairInfo.builder().algorithm("ECDH")
+			.eCNamedCurveParameterSpecName("brainpoolp256r1").provider("BC").build();
+
+		keyPair = KeyPairFactory.newKeyPair(keyPairInfo);
+		assertNotNull(keyPair);
+
+		keyPairInfo = KeyPairInfo.builder().algorithm("ECDH")
+			.eCNamedCurveParameterSpecName("brainpoolp256r1").build();
+
+		keyPair = KeyPairFactory.newKeyPair(keyPairInfo);
+		assertNotNull(keyPair);
+
+		keyPairInfo = KeyPairInfo.builder().algorithm("RSA").keySize(2048).build();
+
+		keyPair = KeyPairFactory.newKeyPair(keyPairInfo);
+		assertNotNull(keyPair);
+	}
 }

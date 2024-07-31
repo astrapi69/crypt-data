@@ -168,14 +168,6 @@ public final class PrivateKeyExtensions
 		{
 			return KeySize.KEYSIZE_8192;
 		}
-		else if (length == 16384)
-		{
-			return KeySize.KEYSIZE_16384;
-		}
-		else if (length == 32768)
-		{
-			return KeySize.KEYSIZE_32768;
-		}
 		return KeySize.UNKNOWN;
 	}
 

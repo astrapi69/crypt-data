@@ -1,0 +1,4 @@
+password,saltHex,iterationCount
+password1,5F2C1E6B8A3D4C6F,1000
+password2,7E3F2B1D6C4A3B2E,2000
+password3,1A2B3C4D5E6F7A8B,3000
