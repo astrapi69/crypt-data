@@ -50,7 +50,7 @@ import lombok.extern.java.Log;
 
 /**
  * The class {@link PrivateKeyReader} is a utility class for reading private keys in *.der or *.pem
- * format.
+ * format
  */
 @Log
 public final class PrivateKeyReader
@@ -61,13 +61,13 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Checks if the given {@link File} is in pem format.
+	 * Checks if the given {@link File} is in pem format
 	 *
 	 * @param file
 	 *            the file
 	 * @return true, if the given {@link File} is in pem format otherwise false
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static boolean isPemFormat(final File file) throws IOException
 	{
@@ -75,14 +75,13 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Resolves the format of the given {@link File}.
+	 * Resolves the format of the given {@link File}
 	 *
 	 * @param file
 	 *            the file
 	 * @return true, if the given {@link File} is in pem format otherwise false
-	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static KeyFileFormat getKeyFormat(final File file) throws IOException
 	{
@@ -104,7 +103,7 @@ public final class PrivateKeyReader
 	 *            the file that contains the private key
 	 * @return true, if the given {@link File} is password protected otherwise false
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static boolean isPrivateKeyPasswordProtected(final File file) throws IOException
 	{
@@ -141,7 +140,7 @@ public final class PrivateKeyReader
 	 *            the file to check
 	 * @return true, if the given {@link File} is a valid private key file otherwise false
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static boolean validatePrivateKey(final File file) throws IOException
 	{
@@ -172,13 +171,13 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Read the private key from a pem file as base64 encoded {@link String} value.
+	 * Read the private key from a pem file as base64 encoded {@link String} value
 	 *
 	 * @param file
 	 *            the file( in *.pem format) that contains the private key
-	 * @return the base64 encoded {@link String} value.
+	 * @return the base64 encoded {@link String} value
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static String readPemFileAsBase64(final File file) throws IOException
 	{
@@ -204,20 +203,20 @@ public final class PrivateKeyReader
 
 	/**
 	 * Reads the given {@link File}( in *.pem format) with the default RSA algorithm and returns the
-	 * {@link PrivateKey} object.
+	 * {@link PrivateKey} object
 	 *
 	 * @param file
 	 *            the file( in *.pem format) that contains the private key
 	 * @return the {@link PrivateKey} object
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	public static PrivateKey readPemPrivateKey(final File file) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
@@ -227,7 +226,7 @@ public final class PrivateKeyReader
 
 	/**
 	 * Reads the given {@link File}( in *.pem format) with given algorithm and returns the
-	 * {@link PrivateKey} object.
+	 * {@link PrivateKey} object
 	 *
 	 * @param file
 	 *            the file( in *.pem format) that contains the private key
@@ -235,14 +234,14 @@ public final class PrivateKeyReader
 	 *            the algorithm
 	 * @return the {@link PrivateKey} object
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	public static PrivateKey readPemPrivateKey(final File file, final String algorithm)
 		throws IOException, NoSuchAlgorithmException, InvalidKeySpecException,
@@ -253,7 +252,7 @@ public final class PrivateKeyReader
 
 	/**
 	 * Reads the given {@link String}( in *.pem format) with given algorithm and returns the
-	 * {@link PrivateKey} object.
+	 * {@link PrivateKey} object
 	 *
 	 * @param privateKeyAsString
 	 *            the private key as string( in *.pem format)
@@ -261,12 +260,12 @@ public final class PrivateKeyReader
 	 *            the algorithm
 	 * @return the {@link PrivateKey} object
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	public static PrivateKey readPemPrivateKey(final String privateKeyAsString,
 		final String algorithm)
@@ -278,7 +277,7 @@ public final class PrivateKeyReader
 
 	/**
 	 * Reads the given {@link PemObject} with given algorithm and returns the {@link PrivateKey}
-	 * object.
+	 * object
 	 *
 	 * @param pemObject
 	 *            the pem object
@@ -286,12 +285,12 @@ public final class PrivateKeyReader
 	 *            the algorithm
 	 * @return the {@link PrivateKey} object
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	public static PrivateKey readPrivateKey(final PemObject pemObject, final String algorithm)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
@@ -308,12 +307,12 @@ public final class PrivateKeyReader
 	 *            the private key as string( in *.pem format)
 	 * @return the {@link PrivateKey} object
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	public static PrivateKey readPemPrivateKey(final String privateKeyAsString)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
@@ -323,7 +322,7 @@ public final class PrivateKeyReader
 
 	/**
 	 * Reads the given byte array with the default RSA algorithm and returns the {@link PrivateKey}
-	 * object.
+	 * object
 	 *
 	 * @param privateKeyBytes
 	 *            the byte array that contains the private key bytes
@@ -335,8 +334,7 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Reads the given byte array with the given algorithm and returns the {@link PrivateKey}
-	 * object.
+	 * Reads the given byte array with the given algorithm and returns the {@link PrivateKey} object
 	 *
 	 * @param privateKeyBytes
 	 *            the byte array that contains the private key bytes
@@ -344,9 +342,9 @@ public final class PrivateKeyReader
 	 *            the algorithm for the {@link KeyFactory}
 	 * @return the {@link PrivateKey} object
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 */
 	public static PrivateKey readPrivateKey(final byte[] privateKeyBytes, final String algorithm)
 		throws NoSuchAlgorithmException, InvalidKeySpecException
@@ -357,15 +355,15 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Reads the given {@link KeyInfo} object and returns the {@link PrivateKey} object.
+	 * Reads the given {@link KeyInfo} object and returns the {@link PrivateKey} object
 	 *
 	 * @param keyInfo
 	 *            the info model for create the private key
 	 * @return the {@link PrivateKey} object
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 */
 	public static PrivateKey readPrivateKey(KeyInfo keyInfo)
 		throws NoSuchAlgorithmException, InvalidKeySpecException
@@ -381,20 +379,20 @@ public final class PrivateKeyReader
 
 	/**
 	 * Reads the given {@link File} with the default RSA algorithm and returns the
-	 * {@link PrivateKey} object.
+	 * {@link PrivateKey} object
 	 *
 	 * @param file
 	 *            the file that contains the private key
 	 * @return the {@link PrivateKey} object
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list.
+	 *             list
 	 */
 	public static PrivateKey readPrivateKey(final File file) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
@@ -408,14 +406,14 @@ public final class PrivateKeyReader
 
 	/**
 	 * Gets an {@link Optional} with the private key from the given file. If it does not match, the
-	 * optional is empty.
+	 * optional is empty
 	 *
 	 * @param privateKeyFile
 	 *            the file that contains the private key
 	 * @return the {@link Optional} object with the private key from the given file or an empty
 	 *         {@link Optional} object if it does not match
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static Optional<PrivateKey> getPrivateKey(File privateKeyFile) throws IOException
 	{
@@ -424,7 +422,7 @@ public final class PrivateKeyReader
 
 	/**
 	 * Gets an {@link Optional} with the private key from the given file. If it does not match, the
-	 * optional is empty.
+	 * optional is empty
 	 *
 	 * @param privateKeyBytes
 	 *            the byte array that contains the private key bytes
@@ -497,7 +495,7 @@ public final class PrivateKeyReader
 
 	/**
 	 * Reads the given {@link File}( in *.der format) with the given algorithm and returns the
-	 * {@link PrivateKey} object.
+	 * {@link PrivateKey} object
 	 *
 	 * @param file
 	 *            the file( in *.der format) that contains the private key
@@ -505,11 +503,11 @@ public final class PrivateKeyReader
 	 *            the algorithm
 	 * @return the {@link PrivateKey} object
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cypher object fails.
+	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 */
 	public static PrivateKey readPrivateKey(final File file, final String algorithm)
 		throws IOException, NoSuchAlgorithmException, InvalidKeySpecException
@@ -520,7 +518,7 @@ public final class PrivateKeyReader
 
 	/**
 	 * Constructs from the given root, parent directory, and file name the file and reads the
-	 * private key.
+	 * private key
 	 *
 	 * @param root
 	 *            the root directory of the parent directory
@@ -530,13 +528,13 @@ public final class PrivateKeyReader
 	 *            the file name of the file that contains the private key
 	 * @return the private key
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails.
+	 *             is thrown if generation of the SecretKey object fails
 	 * @throws NoSuchProviderException
 	 *             the no such provider exception
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 */
 	public static PrivateKey readPrivateKey(final File root, final String directory,
 		final String fileName) throws NoSuchAlgorithmException, InvalidKeySpecException,
