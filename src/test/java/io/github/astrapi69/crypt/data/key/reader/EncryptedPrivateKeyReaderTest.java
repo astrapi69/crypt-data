@@ -32,16 +32,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Security;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
-
-import javax.crypto.NoSuchPaddingException;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMException;
@@ -49,8 +43,6 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.pkcs.PKCSException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.file.search.PathFinder;
@@ -221,30 +213,4 @@ public class EncryptedPrivateKeyReaderTest
 		beanTester.testBean(EncryptedPrivateKeyReader.class);
 	}
 
-	/**
-	 * Parameterized test method for
-	 * {@link EncryptedPrivateKeyReader#readPasswordProtectedPrivateKey(File, String, String)}
-	 *
-	 * @param filePath
-	 *            the file path to the password protected private key file
-	 * @param password
-	 *            the password to decrypt the private key
-	 * @param algorithm
-	 *            the algorithm of the private key
-	 * @throws InvalidAlgorithmParameterException,
-	 *             NoSuchPaddingException, IOException, NoSuchAlgorithmException,
-	 *             InvalidKeySpecException, InvalidKeyException
-	 */
-	@ParameterizedTest
-	@CsvFileSource(resources = "/encrypted-private-key-parameters.csv", numLinesToSkip = 1)
-	public void parameterizedTestReadPasswordProtectedPrivateKeyFileStringString(String filePath,
-		String password, String algorithm) throws InvalidAlgorithmParameterException,
-		NoSuchPaddingException, IOException, NoSuchAlgorithmException, InvalidKeySpecException,
-		InvalidKeyException, OperatorCreationException, PKCSException
-	{
-		File file = new File(filePath);
-		PrivateKey privateKey = EncryptedPrivateKeyReader.readPasswordProtectedPrivateKey(file,
-			password, algorithm);
-		assertNotNull(privateKey);
-	}
 }

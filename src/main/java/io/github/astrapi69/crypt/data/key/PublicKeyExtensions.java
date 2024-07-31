@@ -46,8 +46,6 @@ public final class PublicKeyExtensions
 
 	private PublicKeyExtensions()
 	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
 	}
 
 	/**
