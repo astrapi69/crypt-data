@@ -29,13 +29,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.meanbean.test.BeanTester;
+import org.meanbean.test.BeanVerifier;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import io.github.astrapi69.crypt.data.obfuscation.ObfuscationBiMapTestData;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 
 /**
@@ -95,11 +95,15 @@ public class ObfuscationBiMapRulesTest
 	 * Test method for {@link ObfuscationBiMapRules}
 	 */
 	@Test
-	@Disabled
 	public void testWithBeanTester()
 	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(ObfuscationBiMapRules.class);
+		BiMap<Character, Character> obfuscationRules = ObfuscationBiMapTestData
+			.getSmallestBiMapObfuscationRules();
+		BeanVerifier.forClass(ObfuscationBiMapRules.class).editSettings()
+			.registerFactory(ObfuscationBiMapRules.class,
+				() -> ObfuscationBiMapRules.<Character, Character> builder()
+					.obfuscationRules(obfuscationRules).build())
+			.edited().verifyGettersAndSetters().verifyEqualsAndHashCode().verifyToString();
 	}
 
 }
