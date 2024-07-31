@@ -21,6 +21,7 @@ CHANGED:
 
 - removed deprecated class references
 - removed deprecated method references
+- update of test dependency junit-jupiter in version 5.11.0-RC1
 
 Version 9.4
 -------------
