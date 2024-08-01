@@ -24,34 +24,71 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
-import java.io.Serializable;
+import java.math.BigInteger;
 
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 /**
- * The class {@link AesRsaCryptModel} holds a byte array of the encrypted asymmetric key and the
- * byte array of the encrypted object that is encrypted with the symmetric key
+ * The class {@link CertificateInfo} represents all the information for an X.509 certificate
  */
 @Data
-@RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AesRsaCryptModel implements Serializable
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class CertificateInfo
 {
-
-	/** The Constant serialVersionUID */
-	private static final long serialVersionUID = 1L;
-
-	/** The encrypted symmetric key that was encrypted with the public key */
+	/**
+	 * Information about the private key
+	 */
 	@NonNull
-	byte[] encryptedKey;
+	KeyInfo privateKeyInfo;
 
-	/** The encrypted object with the symmetric key */
+	/**
+	 * Information about the public key
+	 */
 	@NonNull
-	byte[] symmetricKeyEncryptedObject;
+	KeyInfo publicKeyInfo;
+
+	/**
+	 * The distinguished name information of the issuer
+	 */
+	@NonNull
+	DistinguishedNameInfo issuer;
+
+	/**
+	 * The serial number of the certificate
+	 */
+	@NonNull
+	BigInteger serial;
+
+	/**
+	 * The validity period of the certificate
+	 */
+	@NonNull
+	Validity validity;
+
+	/**
+	 * The distinguished name information of the subject
+	 */
+	@NonNull
+	DistinguishedNameInfo subject;
+
+	/**
+	 * The signature algorithm used to sign the certificate
+	 */
+	@NonNull
+	String signatureAlgorithm;
+
+	/**
+	 * The version of the certificate
+	 */
+	Integer version;
+
+	/**
+	 * The extensions added in X.509 V3 certificate
+	 */
+	ExtensionInfo[] extensions;
 }

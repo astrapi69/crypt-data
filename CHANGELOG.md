@@ -4,6 +4,10 @@
 Version 9.6-SNAPSHOT
 -------------
 
+ADDED:
+
+- new data info class CertificateInfo
+- new test dependency mockito-junit-jupiter
 
 Version 9.5
 -------------

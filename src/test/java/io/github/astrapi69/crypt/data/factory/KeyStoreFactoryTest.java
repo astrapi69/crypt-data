@@ -88,8 +88,9 @@ public class KeyStoreFactoryTest
 	@BeforeEach
 	public void setUp() throws Exception
 	{
-		password = "password".toCharArray();
 		Security.addProvider(new BouncyCastleProvider());
+
+		password = "password".toCharArray();
 
 		File keystoreFile = FileFactory.newFile(tempDir.toFile(), "new-keystore.jks");
 		distinguishedNameInfo = DistinguishedNameInfo.builder().commonName("Test Server")
