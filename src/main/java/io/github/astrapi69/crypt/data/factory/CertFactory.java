@@ -292,6 +292,47 @@ public final class CertFactory
 	 * Factory method for creating a new {@link X509Certificate} object of the first version of
 	 * X.509 from the given parameters. SecurityProvider is Bouncy Castle.
 	 *
+	 * @param privateKey
+	 *            the private key
+	 * @param publicKey
+	 *            the public key
+	 * @param issuer
+	 *            X500Name representing the issuer of this certificate.
+	 * @param serial
+	 *            the serial number for the certificate.
+	 * @param notBefore
+	 *            date before which the certificate is not valid.
+	 * @param notAfter
+	 *            date after which the certificate is not valid.
+	 * @param subject
+	 *            X500Name representing the subject of this certificate.
+	 *
+	 * @param signatureAlgorithm
+	 *            the signature algorithm i.e 'SHA1withRSA'
+	 * @return the new {@link X509Certificate} object
+	 *
+	 * @throws OperatorCreationException
+	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 * @throws CertificateException
+	 *             if the conversion is unable to be made
+	 */
+	public static X509Certificate newX509CertificateV1(final PrivateKey privateKey,
+		final PublicKey publicKey, X500Name issuer, BigInteger serial, Date notBefore,
+		Date notAfter, X500Name subject, String signatureAlgorithm)
+		throws OperatorCreationException, CertificateException
+	{
+		X509v1CertificateBuilder certBuilder = new JcaX509v1CertificateBuilder(issuer, serial,
+			notBefore, notAfter, subject, publicKey);
+		ContentSigner signer = new JcaContentSignerBuilder(signatureAlgorithm)
+			.setProvider(SecurityProvider.BC.name()).build(privateKey);
+		return new JcaX509CertificateConverter().setProvider(SecurityProvider.BC.name())
+			.getCertificate(certBuilder.build(signer));
+	}
+
+	/**
+	 * Factory method for creating a new {@link X509Certificate} object of the first version of
+	 * X.509 from the given parameters. SecurityProvider is Bouncy Castle.
+	 *
 	 * @param keyPair
 	 *            the key pair
 	 * @param issuer
@@ -318,17 +359,13 @@ public final class CertFactory
 		BigInteger serial, Date notBefore, Date notAfter, X500Name subject,
 		String signatureAlgorithm) throws OperatorCreationException, CertificateException
 	{
-		X509v1CertificateBuilder certBuilder = new JcaX509v1CertificateBuilder(issuer, serial,
-			notBefore, notAfter, subject, keyPair.getPublic());
-		ContentSigner signer = new JcaContentSignerBuilder(signatureAlgorithm)
-			.setProvider(SecurityProvider.BC.name()).build(keyPair.getPrivate());
-		return new JcaX509CertificateConverter().setProvider(SecurityProvider.BC.name())
-			.getCertificate(certBuilder.build(signer));
+		return newX509CertificateV1(keyPair.getPrivate(), keyPair.getPublic(), issuer, serial,
+			notBefore, notAfter, subject, signatureAlgorithm);
 	}
 
 	/**
 	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
-	 * X.509 from the given parameters that can be used as an end entity certificate.
+	 * X.509 from the given parameters
 	 *
 	 * @param keyPair
 	 *            the key pair
@@ -358,18 +395,8 @@ public final class CertFactory
 		String signatureAlgorithm, Extension... extensions)
 		throws OperatorCreationException, CertificateException
 	{
-		X509v3CertificateBuilder certBuilder = CertificateBuilderFactory
-			.newX509v3CertificateBuilder(issuer, serial, notBefore, notAfter, subject,
-				keyPair.getPublic());
-		if (extensions != null && 0 < extensions.length)
-		{
-			Arrays.stream(extensions)
-				.forEach(RuntimeExceptionDecorator.decorate(certBuilder::addExtension));
-		}
-		ContentSigner signer = new JcaContentSignerBuilder(signatureAlgorithm)
-			.setProvider(SecurityProvider.BC.name()).build(keyPair.getPrivate());
-		return new JcaX509CertificateConverter().setProvider(SecurityProvider.BC.name())
-			.getCertificate(certBuilder.build(signer));
+		return newX509CertificateV3(keyPair.getPrivate(), keyPair.getPublic(), issuer, serial,
+			notBefore, notAfter, subject, signatureAlgorithm, extensions);
 	}
 
 	/**
@@ -474,7 +501,8 @@ public final class CertFactory
 			.publicKeyInfo(KeyInfoExtensions.toKeyInfo(publicKey))
 			.issuer(certificateV1Info.getIssuer()).subject(certificateV1Info.getSubject())
 			.serial(certificateV1Info.getSerial()).validity(certificateV1Info.getValidity())
-			.signatureAlgorithm(certificateV1Info.getSignatureAlgorithm()).build();
+			.signatureAlgorithm(certificateV1Info.getSignatureAlgorithm()).version(3)
+			.extensions(certificateV3Info.getExtensions()).build();
 		return newX509Certificate(certificateInfo);
 	}
 
@@ -502,7 +530,7 @@ public final class CertFactory
 			.publicKeyInfo(KeyInfoExtensions.toKeyInfo(keyPair.getPublic()))
 			.issuer(certificateV1Info.getIssuer()).subject(certificateV1Info.getSubject())
 			.serial(certificateV1Info.getSerial()).validity(certificateV1Info.getValidity())
-			.signatureAlgorithm(certificateV1Info.getSignatureAlgorithm()).build();
+			.version(1).signatureAlgorithm(certificateV1Info.getSignatureAlgorithm()).build();
 		return newX509Certificate(certificateInfo);
 	}
 
@@ -531,7 +559,7 @@ public final class CertFactory
 			.privateKeyInfo(v1Info.getPrivateKeyInfo()).publicKeyInfo(v1Info.getPublicKeyInfo())
 			.issuer(certificateV1Info.getIssuer()).subject(certificateV1Info.getSubject())
 			.serial(certificateV1Info.getSerial()).validity(certificateV1Info.getValidity())
-			.signatureAlgorithm(certificateV1Info.getSignatureAlgorithm())
+			.signatureAlgorithm(certificateV1Info.getSignatureAlgorithm()).version(3)
 			.extensions(certificateInfo.getExtensions()).build();
 		return newX509Certificate(certificateInfo1);
 	}
@@ -566,23 +594,68 @@ public final class CertFactory
 		Date startDate = Date.from(validity.getNotBefore().toInstant());
 		Date endDate = Date.from(validity.getNotAfter().toInstant());
 
-		ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgorithm)
-			.build(privateKey);
-
-		JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(
-			new X500Name(issuer.toRepresentableString()), serial, startDate, endDate,
-			new X500Name(subject.toRepresentableString()), publicKey);
-
-		if (extensions != null && extensions.length > 0)
+		Integer certificateVersion = certificateInfo.getVersion();
+		X500Name x500NameIssuer = new X500Name(issuer.toRepresentableString());
+		X500Name x500NameSubject = new X500Name(subject.toRepresentableString());
+		if (certificateVersion == null || certificateVersion.equals(1))
 		{
-			for (ExtensionInfo extensionInfo : extensions)
-			{
-				certBuilder.addExtension(ExtensionInfo.toExtension(extensionInfo));
-			}
+			return newX509CertificateV1(privateKey, publicKey, x500NameIssuer, serial, startDate,
+				endDate, x500NameSubject, signatureAlgorithm);
 		}
+		else
+		{
+			return newX509CertificateV3(privateKey, publicKey, x500NameIssuer, serial, startDate,
+				endDate, x500NameSubject, signatureAlgorithm,
+				ExtensionInfo.toExtensions(extensions));
+		}
+	}
 
+	/**
+	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
+	 * X.509 from the given parameters
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @param publicKey
+	 *            the public key
+	 * @param issuer
+	 *            X500Name representing the issuer of this certificate.
+	 * @param serial
+	 *            the serial number for the certificate.
+	 * @param notBefore
+	 *            date before which the certificate is not valid.
+	 * @param notAfter
+	 *            date after which the certificate is not valid.
+	 * @param subject
+	 *            X500Name representing the subject of this certificate.
+	 * @param signatureAlgorithm
+	 *            the signature algorithm i.e 'SHA1withRSA'
+	 * @param extensions
+	 *            the extensions
+	 * @return the {@link X509Certificate} object
+	 *
+	 * @throws OperatorCreationException
+	 *             is thrown if a security error occur on creation of {@link ContentSigner}
+	 * @throws CertificateException
+	 *             if the conversion is unable to be made
+	 */
+	public static X509Certificate newX509CertificateV3(final PrivateKey privateKey,
+		final PublicKey publicKey, X500Name issuer, BigInteger serial, Date notBefore,
+		Date notAfter, X500Name subject, String signatureAlgorithm, Extension... extensions)
+		throws OperatorCreationException, CertificateException
+	{
+		ContentSigner signer = new JcaContentSignerBuilder(signatureAlgorithm)
+			.setProvider(SecurityProvider.BC.name()).build(privateKey);
+
+		X509v3CertificateBuilder certBuilder = CertificateBuilderFactory
+			.newX509v3CertificateBuilder(issuer, serial, notBefore, notAfter, subject, publicKey);
+		if (extensions != null && 0 < extensions.length)
+		{
+			Arrays.stream(extensions)
+				.forEach(RuntimeExceptionDecorator.decorate(certBuilder::addExtension));
+		}
 		return new JcaX509CertificateConverter().setProvider(SecurityProvider.BC.name())
-			.getCertificate(certBuilder.build(contentSigner));
+			.getCertificate(certBuilder.build(signer));
 	}
 
 }
