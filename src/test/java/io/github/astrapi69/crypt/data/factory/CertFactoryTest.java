@@ -390,6 +390,20 @@ public class CertFactoryTest
 
 		nonCriticalExtensionOIDs = cert.getNonCriticalExtensionOIDs();
 		criticalExtensionOIDs = cert.getCriticalExtensionOIDs();
+		//
+		// KeyInfo certificateKeyInfo = KeyInfoExtensions.toKeyInfo(cert);
+		// String certificateBase64 = KeyExtensions.toBase64(certificateKeyInfo.getEncoded());
+		// System.out.println(certificateKeyInfo);
+		//
+		// PrivateKey privateKey = keyPair.getPrivate();
+		// KeyInfo privateKeyKeyInfo = KeyInfoExtensions.toKeyInfo(privateKey);
+		// String privateKeyBase64 = KeyExtensions.toBase64(privateKeyKeyInfo.getEncoded());
+		//
+		// PublicKey publicKey = keyPair.getPublic();
+		// KeyInfo publicKeyInfo = KeyInfoExtensions.toKeyInfo(publicKey);
+		// String publicKeyBase64 = KeyExtensions.toBase64(publicKeyInfo.getEncoded());
+		//
+
 		assertNotNull(nonCriticalExtensionOIDs);
 		assertNotNull(criticalExtensionOIDs);
 	}

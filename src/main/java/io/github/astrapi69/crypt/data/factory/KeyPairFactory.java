@@ -33,12 +33,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 
 import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 import io.github.astrapi69.crypt.api.key.KeySize;
+import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
@@ -299,20 +301,33 @@ public final class KeyPairFactory
 	public static KeyPair newKeyPair(@NonNull KeyPairInfo keyPairInfo)
 		throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException
 	{
-		KeyPair keyPair;
-		if (keyPairInfo.getECNamedCurveParameterSpecName() != null
-			&& keyPairInfo.getProvider() != null)
+
+		if ("EC".equals(keyPairInfo.getAlgorithm())
+			&& keyPairInfo.getECNamedCurveParameterSpecName() != null)
 		{
-			keyPair = KeyPairFactory.newKeyPair(keyPairInfo.getECNamedCurveParameterSpecName(),
-				keyPairInfo.getAlgorithm(), keyPairInfo.getProvider());
-			return keyPair;
+			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC",
+				keyPairInfo.getProvider());
+			keyPairGenerator
+				.initialize(new ECGenParameterSpec(keyPairInfo.getECNamedCurveParameterSpecName()));
+			return keyPairGenerator.generateKeyPair();
 		}
-		if (keyPairInfo.getECNamedCurveParameterSpecName() != null)
+		else
 		{
-			keyPair = KeyPairFactory.newKeyPair(keyPairInfo.getECNamedCurveParameterSpecName(),
-				keyPairInfo.getAlgorithm(), "BC");
-			return keyPair;
+			KeyPair keyPair;
+			if (keyPairInfo.getECNamedCurveParameterSpecName() != null
+				&& keyPairInfo.getProvider() != null)
+			{
+				keyPair = KeyPairFactory.newKeyPair(keyPairInfo.getECNamedCurveParameterSpecName(),
+					keyPairInfo.getAlgorithm(), keyPairInfo.getProvider());
+				return keyPair;
+			}
+			if (keyPairInfo.getECNamedCurveParameterSpecName() != null)
+			{
+				return KeyPairFactory.newKeyPair(keyPairInfo.getECNamedCurveParameterSpecName(),
+					keyPairInfo.getAlgorithm(), SecurityProvider.BC.name());
+			}
+			return KeyPairFactory.newKeyPair(keyPairInfo.getAlgorithm(), keyPairInfo.getKeySize());
 		}
-		return KeyPairFactory.newKeyPair(keyPairInfo.getAlgorithm(), keyPairInfo.getKeySize());
+
 	}
 }

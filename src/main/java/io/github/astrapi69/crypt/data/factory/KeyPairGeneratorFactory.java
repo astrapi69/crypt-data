@@ -33,6 +33,8 @@ import java.security.SecureRandom;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 
+import io.github.astrapi69.crypt.api.provider.SecurityProvider;
+
 /**
  * The factory class {@link KeyPairGeneratorFactory} holds methods for creating
  * {@link KeyPairGenerator} objects.
@@ -105,7 +107,7 @@ public final class KeyPairGeneratorFactory
 		KeyPairGenerator generator;
 		if ("EC".equals(algorithm))
 		{
-			generator = newKeyPairGenerator(algorithm, "BC");
+			generator = newKeyPairGenerator(algorithm, SecurityProvider.BC.name());
 		}
 		else
 		{
