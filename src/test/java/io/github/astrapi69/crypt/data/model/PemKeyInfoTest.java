@@ -51,9 +51,9 @@ import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
- * The unit test class for the class {@link PemKeyModel}
+ * The unit test class for the class {@link PemKeyInfo}
  */
-public class PemKeyModelTest
+public class PemKeyInfoTest
 {
 	File derDir;
 	File pemDir;
@@ -84,50 +84,51 @@ public class PemKeyModelTest
 	}
 
 	/**
-	 * Test method for {@link PemKeyModel} constructors and builders
+	 * Test method for {@link PemKeyInfo} constructors and builders
 	 */
 	@Test
 	public final void testConstructors() throws IOException, NoSuchAlgorithmException,
 		InvalidKeySpecException, NoSuchProviderException
 	{
-		PemKeyModel keyModel;
+		PemKeyInfo keyInfo;
 		PrivateKey privateKeyFromModel;
 		PublicKey publicKeyFromModel;
 		PemObject pemObject;
 		// new scenario...
 		// @formatter:off
-		keyModel = PemKeyModel
+		keyInfo = PemKeyInfo
 			.builder()
 			.pemEncoded(PrivateKeyExtensions.toPemFormat(privateKey))
-			.keyType(PemType.RSA_PRIVATE_KEY)
+			.keyType(PemType.RSA_PRIVATE_KEY.getName())
 			.algorithm(privateKey.getAlgorithm()).build();
 		// @formatter:on
-		pemObject = PemObjectReader.getPemObject(keyModel.getPemEncoded());
-		privateKeyFromModel = PrivateKeyReader.readPrivateKey(pemObject, keyModel.getAlgorithm());
+		pemObject = PemObjectReader.getPemObject(keyInfo.getPemEncoded());
+		privateKeyFromModel = PrivateKeyReader.readPrivateKey(pemObject, keyInfo.getAlgorithm());
 		assertEquals(privateKey, privateKeyFromModel);
 		// new scenario...
 		// @formatter:off
-		keyModel = PemKeyModel
+		keyInfo = PemKeyInfo
 			.builder()
 			.pemEncoded(PublicKeyExtensions.toPemFormat(publicKey))
-			.keyType(PemType.PUBLIC_KEY)
+			.keyType(PemType.PUBLIC_KEY.getName())
 			.algorithm(publicKey.getAlgorithm()).build();
 		// @formatter:on
-		pemObject = PemObjectReader.getPemObject(keyModel.getPemEncoded());
-		publicKeyFromModel = PublicKeyReader.readPublicKey(pemObject, keyModel.getAlgorithm());
+		pemObject = PemObjectReader.getPemObject(keyInfo.getPemEncoded());
+		publicKeyFromModel = PublicKeyReader.readPublicKey(pemObject, keyInfo.getAlgorithm());
 		assertEquals(publicKey, publicKeyFromModel);
 	}
 
 	/**
-	 * Test method for {@link PemKeyModel} with {@link BeanTester}
+	 * Test method for {@link PemKeyInfo} with {@link BeanTester}
 	 */
 	@Test
 	public void testWithBeanTester()
 	{
-		BeanVerifier.forClass(PemKeyModel.class).editSettings()
-			.registerFactory(PemKeyModel.class, () -> {
-				return PemKeyModel.builder().pemEncoded(PublicKeyExtensions.toPemFormat(publicKey))
-					.keyType(PemType.PUBLIC_KEY).algorithm(publicKey.getAlgorithm()).build();
+		BeanVerifier.forClass(PemKeyInfo.class).editSettings()
+			.registerFactory(PemKeyInfo.class, () -> {
+				return PemKeyInfo.builder().pemEncoded(PublicKeyExtensions.toPemFormat(publicKey))
+					.keyType(PemType.PUBLIC_KEY.getName()).algorithm(publicKey.getAlgorithm())
+					.build();
 			}).edited().verify();
 	}
 }

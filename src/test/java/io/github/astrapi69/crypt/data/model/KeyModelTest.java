@@ -40,6 +40,8 @@ import java.security.spec.InvalidKeySpecException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
+import org.meanbean.test.BeanVerifier;
 
 import io.github.astrapi69.crypt.api.key.KeyType;
 import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
@@ -177,5 +179,17 @@ public class KeyModelTest
 		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(keyModel);
 		expected = true;
 		assertEquals(expected, actual);
+	}
+
+	/**
+	 * Test method for {@link KeyModel} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		BeanVerifier.forClass(KeyModel.class).editSettings().registerFactory(KeyModel.class, () -> {
+			return KeyModel.builder().encoded(privateKey.getEncoded()).keyType(KeyType.PRIVATE_KEY)
+				.algorithm(privateKey.getAlgorithm()).build();
+		}).edited().verify();
 	}
 }

@@ -24,16 +24,13 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.ZonedDateTime;
-import java.util.stream.Stream;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
+import org.meanbean.test.BeanVerifier;
+
 
 /**
  * Test class for {@link Validity} using JUnit 5 with parameterized tests. This class reads test
@@ -44,37 +41,15 @@ class ValidityTest
 {
 
 	/**
-	 * Parameterized test for {@link Validity#getValidityInDays()}. The test data is provided by the
-	 * {@link #validityDataProvider()} method.
-	 *
-	 * @param notBefore
-	 *            the start time of the validity period
-	 * @param notAfter
-	 *            the end time of the validity period
-	 * @param expectedDays
-	 *            the expected number of days between {@code notBefore} and {@code notAfter}
+	 * Test method for {@link Validity} with {@link BeanTester}
 	 */
-	@ParameterizedTest
-	@MethodSource("validityDataProvider")
-	void testGetValidityInDays(ZonedDateTime notBefore, ZonedDateTime notAfter, long expectedDays)
+	@Test
+	public void testWithBeanTester()
 	{
-		Validity validity = Validity.builder().notBefore(notBefore).notAfter(notAfter).build();
-		assertEquals(expectedDays, validity.getValidityInDays());
+		BeanVerifier.forClass(Validity.class).editSettings().registerFactory(Validity.class, () -> {
+			return Validity.builder().notBefore(ZonedDateTime.parse("2023-12-01T00:00:00Z"))
+				.notAfter(ZonedDateTime.parse("2025-01-01T00:00:00Z")).build();
+		}).edited().verify();
 	}
 
-	/**
-	 * Provides test data for the parameterized test
-	 * {@link #testGetValidityInDays(ZonedDateTime, ZonedDateTime, long)}. The test data is read
-	 * from a CSV file located at {@code src/test/resources/validity_data.csv}.
-	 *
-	 * @return a stream of arguments to be passed to the parameterized test
-	 * @throws Exception
-	 *             if an I/O error occurs reading from the CSV file
-	 */
-	static Stream<Arguments> validityDataProvider() throws Exception
-	{
-		return Files.lines(Paths.get("src/test/resources/validity_data.csv")).skip(1) // Skip header
-			.map(line -> line.split(",")).map(data -> Arguments.of(ZonedDateTime.parse(data[0]),
-				ZonedDateTime.parse(data[1]), Long.parseLong(data[2])));
-	}
 }
