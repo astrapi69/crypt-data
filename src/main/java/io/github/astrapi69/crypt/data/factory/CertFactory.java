@@ -520,6 +520,8 @@ public final class CertFactory
 	 *             is thrown if a security error occur on creation of {@link ContentSigner}
 	 * @throws CertificateException
 	 *             if the conversion is unable to be made
+	 * @throws CertIOException
+	 *             if there is an issue with the new extension value
 	 */
 	public static X509Certificate newX509CertificateV1(KeyPair keyPair,
 		X509CertificateV1Info certificateV1Info)
