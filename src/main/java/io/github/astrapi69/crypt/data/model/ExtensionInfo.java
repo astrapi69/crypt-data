@@ -36,7 +36,6 @@ import org.bouncycastle.asn1.x509.Extension;
 
 import lombok.AccessLevel;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
@@ -44,7 +43,6 @@ import lombok.experimental.SuperBuilder;
  * Data class representing extension information
  */
 @Data
-@RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExtensionInfo
