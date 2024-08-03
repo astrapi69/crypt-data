@@ -8,6 +8,11 @@ ADDED:
 
 - new data info class CertificateInfo
 - new test dependency mockito-junit-jupiter
+- new factory method in class CertFactory with the new data info class CertificateInfo
+
+CHANGED:
+
+- improved factory method in class KeyPairFactory#newKeyPair(KeyPairInfo)
 
 Version 9.5
 -------------

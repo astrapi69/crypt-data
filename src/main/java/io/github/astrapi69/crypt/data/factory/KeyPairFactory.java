@@ -39,6 +39,7 @@ import java.security.spec.InvalidKeySpecException;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 
 import io.github.astrapi69.crypt.api.algorithm.Algorithm;
+import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeySize;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
@@ -302,11 +303,11 @@ public final class KeyPairFactory
 		throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException
 	{
 
-		if ("EC".equals(keyPairInfo.getAlgorithm())
+		if (KeyPairGeneratorAlgorithm.EC.getAlgorithm().equals(keyPairInfo.getAlgorithm())
 			&& keyPairInfo.getECNamedCurveParameterSpecName() != null)
 		{
-			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC",
-				keyPairInfo.getProvider());
+			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(
+				KeyPairGeneratorAlgorithm.EC.getAlgorithm(), keyPairInfo.getProvider());
 			keyPairGenerator
 				.initialize(new ECGenParameterSpec(keyPairInfo.getECNamedCurveParameterSpecName()));
 			return keyPairGenerator.generateKeyPair();
