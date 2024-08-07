@@ -88,6 +88,17 @@ class AlgorithmExtensionsTest
 	}
 
 	/**
+	 * Test for retrieving algorithms for a valid service of Signature
+	 */
+	@Test
+	void testGetAlgorithmsFromSignature()
+	{
+		Set<String> signatureAlgorithms = AlgorithmExtensions.getAlgorithms("Signature");
+		assertNotNull(signatureAlgorithms);
+		assertTrue(signatureAlgorithms.contains("SHA1withRSA".toUpperCase()));
+	}
+
+	/**
 	 * Test for retrieving algorithms for an invalid service
 	 */
 	@Test
