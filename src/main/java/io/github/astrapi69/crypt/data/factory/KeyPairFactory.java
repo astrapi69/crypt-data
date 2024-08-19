@@ -116,7 +116,9 @@ public final class KeyPairFactory
 	public static KeyPair newKeyPair(final Algorithm algorithm)
 		throws NoSuchAlgorithmException, NoSuchProviderException
 	{
-		return newKeyPair(algorithm.getAlgorithm(), KeySize.KEYSIZE_2048.getKeySize());
+		final KeyPairGenerator generator = KeyPairGeneratorFactory
+			.newKeyPairGenerator(algorithm.getAlgorithm());
+		return generator.generateKeyPair();
 	}
 
 	/**

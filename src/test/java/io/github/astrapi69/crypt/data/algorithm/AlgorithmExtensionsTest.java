@@ -98,6 +98,18 @@ class AlgorithmExtensionsTest
 		assertTrue(signatureAlgorithms.contains("SHA1withRSA".toUpperCase()));
 	}
 
+
+	/**
+	 * Test for retrieving algorithms for a valid service of KeyPairGenerator
+	 */
+	@Test
+	void testGetAlgorithmsFromKeyPairGenerator()
+	{
+		Set<String> signatureAlgorithms = AlgorithmExtensions.getAlgorithms("KeyPairGenerator");
+		assertNotNull(signatureAlgorithms);
+		assertTrue(signatureAlgorithms.contains("RSA".toUpperCase()));
+	}
+
 	/**
 	 * Test for retrieving algorithms for an invalid service
 	 */

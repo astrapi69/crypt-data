@@ -12,7 +12,12 @@ ADDED:
 
 CHANGED:
 
+- update gradle to new version 8.10
 - improved factory method in class KeyPairFactory#newKeyPair(KeyPairInfo)
+- update of dependency commons-lang3 dependency version to 3.16.0
+- update of dependency file-worker to new version to 17.3
+- update of test dependency junit-jupiter in version 5.11.0
+- update of test dependency checksum-up to new version 3.1
 
 Version 9.5
 -------------

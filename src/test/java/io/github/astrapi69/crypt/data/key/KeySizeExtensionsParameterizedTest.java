@@ -28,8 +28,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Security;
 import java.util.Set;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
@@ -38,6 +41,16 @@ import org.junit.jupiter.params.provider.CsvFileSource;
  */
 class KeySizeExtensionsParameterizedTest
 {
+
+	/**
+	 * Sets up method will be invoked before every unit test method in this class
+	 */
+	@BeforeEach
+	protected void setUp()
+	{
+		Security.addProvider(new BouncyCastleProvider());
+	}
+
 	/**
 	 * Test method for {@link KeySizeExtensions#getSupportedKeySizesForKeyPairGenerator(String)}
 	 * with parameterized input from a CSV file

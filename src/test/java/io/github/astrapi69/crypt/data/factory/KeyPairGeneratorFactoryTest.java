@@ -26,12 +26,18 @@ package io.github.astrapi69.crypt.data.factory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
+import java.security.Security;
+import java.security.spec.ECGenParameterSpec;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -47,6 +53,45 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
  */
 class KeyPairGeneratorFactoryTest
 {
+
+	/**
+	 * Sets up method will be invoked before every unit test method in this class
+	 */
+	@BeforeEach
+	protected void setUp()
+	{
+		Security.addProvider(new BouncyCastleProvider());
+	}
+
+	@Test
+	public void testNewKeyPairGeneratorWithECGOST3410() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+		KeyPairGenerator keyPairGenerator;
+		KeyPair keyPair;
+		String stdName;
+		// Test with  GostR3410-2001-CryptoPro-A
+		stdName = "GostR3410-2001-CryptoPro-A";
+		keyPairGenerator = KeyPairGenerator.getInstance("ECGOST3410", "BC");
+		keyPairGenerator.initialize( new ECGenParameterSpec( stdName) );
+
+		keyPair = keyPairGenerator.generateKeyPair();
+		assertNotNull(keyPair);
+
+		// Test with  GostR3410-2001-CryptoPro-B
+		stdName = "GostR3410-2001-CryptoPro-B";
+		keyPairGenerator = KeyPairGenerator.getInstance("ECGOST3410", "BC");
+		keyPairGenerator.initialize( new ECGenParameterSpec( stdName) );
+
+		keyPair = keyPairGenerator.generateKeyPair();
+		assertNotNull(keyPair);
+
+		// Test with  GostR3410-2001-CryptoPro-C
+		stdName = "GostR3410-2001-CryptoPro-C";
+		keyPairGenerator = KeyPairGenerator.getInstance("ECGOST3410", "BC");
+		keyPairGenerator.initialize( new ECGenParameterSpec( stdName) );
+
+		keyPair = keyPairGenerator.generateKeyPair();
+		assertNotNull(keyPair);
+	}
 
 	/**
 	 * Test method for
