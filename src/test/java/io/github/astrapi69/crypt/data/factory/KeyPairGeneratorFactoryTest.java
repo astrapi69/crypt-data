@@ -64,30 +64,32 @@ class KeyPairGeneratorFactoryTest
 	}
 
 	@Test
-	public void testNewKeyPairGeneratorWithECGOST3410() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+	public void testNewKeyPairGeneratorWithECGOST3410()
+		throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException
+	{
 		KeyPairGenerator keyPairGenerator;
 		KeyPair keyPair;
 		String stdName;
-		// Test with  GostR3410-2001-CryptoPro-A
+		// Test with GostR3410-2001-CryptoPro-A
 		stdName = "GostR3410-2001-CryptoPro-A";
 		keyPairGenerator = KeyPairGenerator.getInstance("ECGOST3410", "BC");
-		keyPairGenerator.initialize( new ECGenParameterSpec( stdName) );
+		keyPairGenerator.initialize(new ECGenParameterSpec(stdName));
 
 		keyPair = keyPairGenerator.generateKeyPair();
 		assertNotNull(keyPair);
 
-		// Test with  GostR3410-2001-CryptoPro-B
+		// Test with GostR3410-2001-CryptoPro-B
 		stdName = "GostR3410-2001-CryptoPro-B";
 		keyPairGenerator = KeyPairGenerator.getInstance("ECGOST3410", "BC");
-		keyPairGenerator.initialize( new ECGenParameterSpec( stdName) );
+		keyPairGenerator.initialize(new ECGenParameterSpec(stdName));
 
 		keyPair = keyPairGenerator.generateKeyPair();
 		assertNotNull(keyPair);
 
-		// Test with  GostR3410-2001-CryptoPro-C
+		// Test with GostR3410-2001-CryptoPro-C
 		stdName = "GostR3410-2001-CryptoPro-C";
 		keyPairGenerator = KeyPairGenerator.getInstance("ECGOST3410", "BC");
-		keyPairGenerator.initialize( new ECGenParameterSpec( stdName) );
+		keyPairGenerator.initialize(new ECGenParameterSpec(stdName));
 
 		keyPair = keyPairGenerator.generateKeyPair();
 		assertNotNull(keyPair);
