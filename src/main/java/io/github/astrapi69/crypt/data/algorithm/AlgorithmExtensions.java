@@ -37,8 +37,11 @@ import lombok.NonNull;
  * The class {@code AlgorithmExtensions} provides methods to validate if a given algorithm is
  * supported for a specific service and to retrieve the supported algorithms for a service
  */
-public class AlgorithmExtensions
+public final class AlgorithmExtensions
 {
+	private AlgorithmExtensions()
+	{
+	}
 
 	/**
 	 * Retrieves a list of algorithms that are appropriate for the specified key algorithm based on
