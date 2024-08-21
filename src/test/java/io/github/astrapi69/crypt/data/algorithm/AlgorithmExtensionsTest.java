@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.Provider;
 import java.security.Security;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -74,6 +75,37 @@ class AlgorithmExtensionsTest
 	void testInvalidService()
 	{
 		assertFalse(AlgorithmExtensions.isValid("InvalidService", "AES"));
+	}
+
+	/**
+	 * Test method for {@link AlgorithmExtensions#getAlgorithmsFromServiceName(String, String)}
+	 *
+	 * This method tests the retrieval of signature algorithms for a given key algorithm, ensuring
+	 * that the returned list is not null and that all algorithms are valid for the specified
+	 * service name.
+	 */
+	@Test
+	void testGetAlgorithmsFromServiceName()
+	{
+		List<String> actual;
+		String serviceName;
+		String keyAlgorithm;
+
+		// Test with RSA
+		serviceName = "Signature";
+		keyAlgorithm = "RSA";
+		actual = AlgorithmExtensions.getAlgorithmsFromServiceName(serviceName, keyAlgorithm);
+		assertNotNull(actual);
+		assertFalse(actual.isEmpty(), "The list of algorithms should not be empty");
+		actual
+			.forEach(algorithm -> assertTrue(AlgorithmExtensions.isValid(serviceName, algorithm)));
+
+		// Test with an algorithm that should not return any result
+		keyAlgorithm = "NonExistentAlgorithm";
+		actual = AlgorithmExtensions.getAlgorithmsFromServiceName(serviceName, keyAlgorithm);
+		assertNotNull(actual);
+		assertTrue(actual.isEmpty(),
+			"The list of algorithms should be empty for an invalid key algorithm");
 	}
 
 	/**

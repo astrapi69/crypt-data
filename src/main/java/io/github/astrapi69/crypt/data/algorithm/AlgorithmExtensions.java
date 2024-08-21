@@ -27,7 +27,9 @@ package io.github.astrapi69.crypt.data.algorithm;
 import java.security.Provider;
 import java.security.Security;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import lombok.NonNull;
 
@@ -37,6 +39,27 @@ import lombok.NonNull;
  */
 public class AlgorithmExtensions
 {
+
+	/**
+	 * Retrieves a list of algorithms that are appropriate for the specified key algorithm based on
+	 * the provided service name
+	 *
+	 * @param serviceName
+	 *            the name of the service, for instance "Signature"
+	 * @param keyAlgorithm
+	 *            the key algorithm (e.g., "RSA") for which to find appropriate signature algorithms
+	 * @return a list of algorithms that match the specified key algorithm
+	 */
+	public static List<String> getAlgorithmsFromServiceName(final @NonNull String serviceName,
+		final @NonNull String keyAlgorithm)
+	{
+		Set<String> signatureAlgorithms = AlgorithmExtensions.getAlgorithms(serviceName);
+		List<String> appropriateAlgorithms = signatureAlgorithms.stream()
+			.filter(signatureAlgorithm -> signatureAlgorithm.contains(keyAlgorithm))
+			.collect(Collectors.toList());
+		return appropriateAlgorithms;
+	}
+
 	/**
 	 * Validates if the provided algorithm is supported for the given service name
 	 *

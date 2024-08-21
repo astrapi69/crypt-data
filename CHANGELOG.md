@@ -4,6 +4,9 @@
 Version 9.7-SNAPSHOT
 -------------
 
+ADDED:
+
+- new method in class AlgorithmExtensions that retrieves all appropriate algorithms from a given service name
 
 Version 9.6
 -------------
