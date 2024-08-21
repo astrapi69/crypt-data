@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 9.6-SNAPSHOT
+Version 9.6
 -------------
 
 ADDED:
