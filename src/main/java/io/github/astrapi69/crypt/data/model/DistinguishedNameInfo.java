@@ -34,7 +34,6 @@ import org.bouncycastle.asn1.x500.X500Name;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
@@ -42,7 +41,6 @@ import lombok.experimental.SuperBuilder;
  * Data class representing the distinguished name information
  */
 @Data
-@RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class DistinguishedNameInfo

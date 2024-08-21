@@ -30,9 +30,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import javax.crypto.Cipher;
 
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
+import org.meanbean.test.BeanVerifier;
 
+import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 import io.github.astrapi69.crypt.api.algorithm.SunJCEAlgorithm;
 import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypt.data.algorithm.CryptoAlgorithm;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.random.object.RandomStringFactory;
 
@@ -85,6 +89,27 @@ public class CryptModelTest
 		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(cryptModel);
 		expected = true;
 		assertEquals(expected, actual);
+	}
+
+
+	/**
+	 * Test method for {@link CryptModel} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		BeanVerifier.forClass(CryptModel.class).editSettings()
+			.registerFactory(Algorithm.class, () -> {
+				return CryptoAlgorithm.newAlgorithm("AES");
+			}).registerFactory(CryptModel.class, () -> {
+				return CryptModel.<Cipher, String, String> builder()
+					.key(RandomStringFactory.randomHexString(16).toUpperCase())
+					.algorithm(SunJCEAlgorithm.PBEWithMD5AndDES).salt(CompoundAlgorithm.SALT)
+					.iterationCount(19).operationMode(Cipher.ENCRYPT_MODE)
+					.decorator(
+						CryptObjectDecorator.<String> builder().prefix("s").suffix("s").build())
+					.build();
+			}).edited().verify();
 	}
 
 }

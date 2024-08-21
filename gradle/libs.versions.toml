@@ -1,27 +1,27 @@
 [versions]
 bcpkix-jdk15on-version = "1.70"
-checksum-up-version = "3"
+checksum-up-version = "3.1"
 commons-codec-version = "1.17.1"
 commons-csv-version = "1.11.0"
 commons-io-version = "2.16.1"
-commons-lang3-version = "3.15.0"
+commons-lang3-version = "3.16.0"
 crypt-api-version = "9.3"
-file-worker-version = "17.3"
+file-worker-version = "17.4"
 gradle-plugin-grgit-version = "5.2.2"
 gradle-plugin-license-version = "0.16.1"
-gradle-plugin-lombok-version = "8.6"
+gradle-plugin-lombok-version = "8.10"
 gradle-plugin-spotless-version = "7.0.0.BETA1"
 gradle-plugin-version-catalog-update-version = "0.8.4"
 gradle-plugin-versions-version = "0.51.0"
-guava-version = "33.2.1-jre"
+guava-version = "33.3.0-jre"
 jaxb-api-version = "2.4.0-b180830.0359"
 jobj-contract-verifier-version = "5.2"
 jobj-core-version = "8.2"
 jsoup-version = "1.18.1"
 jsr305-version = "3.0.2"
-junit-jupiter-params-version = "5.11.0-RC1"
-junit-jupiter-version = "5.11.0-RC1"
-junit-platform-launcher-version = "1.11.0-RC1"
+junit-jupiter-params-version = "5.11.0"
+junit-jupiter-version = "5.11.0"
+junit-platform-launcher-version = "1.11.0"
 lombok-version = "1.18.34"
 meanbean-factories-version = "3"
 meanbean-version = "3.0.0-M9"
@@ -58,6 +58,7 @@ lombok = { module = "org.projectlombok:lombok", version.ref = "lombok-version" }
 meanbean = { module = "com.github.meanbeanlib:meanbean", version.ref = "meanbean-version" }
 meanbean-factories = { module = "io.github.astrapi69:meanbean-factories", version.ref = "meanbean-factories-version" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core-version" }
+mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito-core-version" }
 random-beans = { module = "io.github.benas:random-beans", version.ref = "random-beans-version" }
 randomizer = { module = "io.github.astrapi69:randomizer", version.ref = "randomizer-version" }
 silly-collection = { module = "io.github.astrapi69:silly-collection", version.ref = "silly-collection-version" }
@@ -77,6 +78,7 @@ unit-testing = [
     "meanbean",
     "meanbean-factories",
     "mockito-core",
+    "mockito-junit-jupiter",
     "test-object",
 ]
 

@@ -44,7 +44,7 @@ import lombok.experimental.SuperBuilder;
 public class AesRsaCryptModel implements Serializable
 {
 
-	/** The Constant serialVersionUID. */
+	/** The Constant serialVersionUID */
 	private static final long serialVersionUID = 1L;
 
 	/** The encrypted symmetric key that was encrypted with the public key */

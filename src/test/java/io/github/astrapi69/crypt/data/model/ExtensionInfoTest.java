@@ -50,6 +50,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
+import org.meanbean.test.BeanVerifier;
 import org.mockito.Mockito;
 
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
@@ -88,9 +90,9 @@ public class ExtensionInfoTest
 	protected void setUp() throws IOException, CertificateException, NoSuchAlgorithmException,
 		NoSuchProviderException, OperatorCreationException
 	{
+		Security.addProvider(new BouncyCastleProvider());
 		extensionInfo = ExtensionInfo.builder().extensionId("1.2.3.4.5.6.7").critical(true)
 			.value("testValue").build();
-		Security.addProvider(new BouncyCastleProvider());
 
 		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 		certificatePemFile = new File(pemDir, "certificate.pem");
@@ -241,4 +243,18 @@ public class ExtensionInfoTest
 			assertEquals(info.getValue(), new String(ext.getExtnValue().getOctets()));
 		}
 	}
+
+	/**
+	 * Test method for {@link ExtensionInfo} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		BeanVerifier.forClass(ExtensionInfo.class).editSettings()
+			.registerFactory(ExtensionInfo.class, () -> {
+				return ExtensionInfo.builder().extensionId("1.2.3.4.5.6.7").critical(true)
+					.value("testValue").build();
+			}).edited().verify();
+	}
+
 }

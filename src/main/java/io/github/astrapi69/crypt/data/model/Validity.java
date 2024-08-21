@@ -30,7 +30,6 @@ import java.time.temporal.ChronoUnit;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
@@ -38,7 +37,6 @@ import lombok.experimental.SuperBuilder;
  * Data class representing the validity period with start and end times.
  */
 @Data
-@RequiredArgsConstructor
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Validity

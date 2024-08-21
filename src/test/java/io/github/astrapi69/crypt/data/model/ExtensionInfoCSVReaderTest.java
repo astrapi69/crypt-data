@@ -31,9 +31,15 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test class for {@link ExtensionInfoCSVReader}
+ */
 public class ExtensionInfoCSVReaderTest
 {
 
+	/**
+	 * Test method for {@link ExtensionInfoCSVReader#readExtensionInfoFromCSV(String)}
+	 */
 	@Test
 	void testReadExtensionInfoFromCSV() throws IOException
 	{
@@ -52,7 +58,5 @@ public class ExtensionInfoCSVReaderTest
 		assertEquals("1.2.840.113549.1.1.5", secondExtension.getExtensionId());
 		assertEquals(false, secondExtension.isCritical());
 		assertEquals("testValue2", secondExtension.getValue());
-
-		// Add more assertions as needed
 	}
 }

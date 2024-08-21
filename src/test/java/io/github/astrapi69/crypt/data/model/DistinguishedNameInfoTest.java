@@ -30,6 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.bouncycastle.asn1.x500.X500Name;
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
+import org.meanbean.test.BeanVerifier;
+
 
 /**
  * Test class for {@link DistinguishedNameInfo}
@@ -135,4 +138,19 @@ class DistinguishedNameInfoTest
 		assertNotNull(x500Name1);
 		assertEquals(x500Name1, x500Name);
 	}
+
+	/**
+	 * Test method for {@link DistinguishedNameInfo} with {@link BeanTester}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		BeanVerifier.forClass(DistinguishedNameInfo.class).editSettings()
+			.registerFactory(DistinguishedNameInfo.class, () -> {
+				return DistinguishedNameInfo.builder().countryCode("US").state("California")
+					.location("San Francisco").organisation("MyOrg").organisationUnit("MyUnit")
+					.commonName("John Doe").build();
+			}).edited().verify();
+	}
+
 }

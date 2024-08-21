@@ -47,6 +47,7 @@ import org.meanbean.test.BeanTester;
 import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeySize;
+import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypt.data.model.KeyPairInfo;
@@ -191,7 +192,7 @@ public class KeyPairFactoryTest
 		ECNamedCurveParameterSpec parameterSpec;
 
 		algorithm = "ECDH";
-		provider = "BC";
+		provider = SecurityProvider.BC.name();
 		eCurveNameAlgorithm = "brainpoolp256r1";
 
 		parameterSpec = ECNamedCurveTable.getParameterSpec(eCurveNameAlgorithm);
@@ -220,7 +221,7 @@ public class KeyPairFactoryTest
 
 		eCurveNameAlgorithm = "brainpoolp256r1";
 		algorithm = "ECDH";
-		provider = "BC";
+		provider = SecurityProvider.BC.name();
 
 		keyPair = KeyPairFactory.newKeyPair(eCurveNameAlgorithm, algorithm, provider);
 		assertNotNull(keyPair);
@@ -324,7 +325,8 @@ public class KeyPairFactoryTest
 		KeyPair keyPair;
 
 		keyPairInfo = KeyPairInfo.builder().algorithm("ECDH")
-			.eCNamedCurveParameterSpecName("brainpoolp256r1").provider("BC").build();
+			.eCNamedCurveParameterSpecName("brainpoolp256r1").provider(SecurityProvider.BC.name())
+			.build();
 
 		keyPair = KeyPairFactory.newKeyPair(keyPairInfo);
 		assertNotNull(keyPair);

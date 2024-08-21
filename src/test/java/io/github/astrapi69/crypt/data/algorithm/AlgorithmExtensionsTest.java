@@ -34,6 +34,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
+import io.github.astrapi69.crypt.api.provider.SecurityProvider;
+
 /**
  * The class {@code AlgorithmExtensionsTest} provides unit tests for the {@link AlgorithmExtensions}
  * class
@@ -86,6 +88,29 @@ class AlgorithmExtensionsTest
 	}
 
 	/**
+	 * Test for retrieving algorithms for a valid service of Signature
+	 */
+	@Test
+	void testGetAlgorithmsFromSignature()
+	{
+		Set<String> signatureAlgorithms = AlgorithmExtensions.getAlgorithms("Signature");
+		assertNotNull(signatureAlgorithms);
+		assertTrue(signatureAlgorithms.contains("SHA1withRSA".toUpperCase()));
+	}
+
+
+	/**
+	 * Test for retrieving algorithms for a valid service of KeyPairGenerator
+	 */
+	@Test
+	void testGetAlgorithmsFromKeyPairGenerator()
+	{
+		Set<String> signatureAlgorithms = AlgorithmExtensions.getAlgorithms("KeyPairGenerator");
+		assertNotNull(signatureAlgorithms);
+		assertTrue(signatureAlgorithms.contains("RSA".toUpperCase()));
+	}
+
+	/**
 	 * Test for retrieving algorithms for an invalid service
 	 */
 	@Test
@@ -102,7 +127,7 @@ class AlgorithmExtensionsTest
 	@Test
 	void testGetServiceNames()
 	{
-		Provider provider = Security.getProvider("BC");
+		Provider provider = Security.getProvider(SecurityProvider.BC.name());
 		Set<String> serviceNames = AlgorithmExtensions.getServiceNames(provider);
 		assertNotNull(serviceNames);
 		assertTrue(serviceNames.contains("Cipher"));

@@ -25,6 +25,7 @@
 package io.github.astrapi69.crypt.data.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +40,7 @@ import java.security.spec.InvalidKeySpecException;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 import org.meanbean.test.BeanVerifier;
@@ -51,15 +53,14 @@ import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEv
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
- * The unit test class for the class {@link KeyModel}
+ * The unit test class for the class {@link KeyInfo}
  */
-public class KeyModelTest
+public class KeyInfoTest
 {
 	File derDir;
 	File pemDir;
 
 	PrivateKey privateKey;
-
 	File privateKeyDerFile;
 	File privateKeyPemFile;
 	PublicKey publicKey;
@@ -86,110 +87,110 @@ public class KeyModelTest
 	}
 
 	/**
-	 * Test method for {@link KeyModel} constructors and builders
+	 * Test method for {@link KeyInfo} constructors and builders
 	 */
 	@Test
+	@DisplayName("Test KeyInfo constructors and builders")
 	public final void testConstructors() throws NoSuchAlgorithmException, InvalidKeySpecException,
 		NoSuchProviderException, IOException, CertificateException
 	{
 		File keyFile;
-		KeyModel keyModel;
-		PrivateKey privateKeyFromModel;
-		PublicKey publicKeyFromModel;
+		KeyInfo keyInfo;
+		PrivateKey privateKeyFromInfo;
+		PublicKey publicKeyFromInfo;
 		X509Certificate certificate;
-		X509Certificate certificateFromModel;
-		// new scenario...
-		// @formatter:off
-		keyModel = KeyModel
-			.builder()
-			.encoded(privateKey.getEncoded())
-			.keyType(KeyType.PRIVATE_KEY)
-			.algorithm(privateKey.getAlgorithm()).build();
-		// @formatter:on
-		privateKeyFromModel = PrivateKeyReader.readPrivateKey(keyModel.getEncoded(),
-			keyModel.getAlgorithm());
+		X509Certificate certificateFromInfo;
 
-		assertEquals(privateKey, privateKeyFromModel);
-		// new scenario...
-		// @formatter:off
-		keyModel = KeyModel
-			.builder()
-			.encoded(publicKey.getEncoded())
-			.keyType(KeyType.PUBLIC_KEY)
-			.algorithm(publicKey.getAlgorithm()).build();
-		// @formatter:on
-		publicKeyFromModel = PublicKeyReader.readPublicKey(keyModel.getEncoded(),
-			keyModel.getAlgorithm());
-		assertEquals(publicKey, publicKeyFromModel);
-		// new scenario...
+		// Test with private key
+		keyInfo = KeyInfo.builder().encoded(privateKey.getEncoded())
+			.keyType(KeyType.PRIVATE_KEY.getDisplayValue()).algorithm(privateKey.getAlgorithm())
+			.build();
+		privateKeyFromInfo = PrivateKeyReader.readPrivateKey(keyInfo.getEncoded(),
+			keyInfo.getAlgorithm());
+		assertEquals(privateKey, privateKeyFromInfo);
+
+		// Test with public key
+		keyInfo = KeyInfo.builder().encoded(publicKey.getEncoded())
+			.keyType(KeyType.PUBLIC_KEY.getDisplayValue()).algorithm(publicKey.getAlgorithm())
+			.build();
+		publicKeyFromInfo = PublicKeyReader.readPublicKey(keyInfo.getEncoded(),
+			keyInfo.getAlgorithm());
+		assertEquals(publicKey, publicKeyFromInfo);
+
+		// Test with new private key file
 		keyFile = new File(pemDir, "8192-ssh-key.pem");
 		privateKey = PrivateKeyReader.readPemPrivateKey(keyFile);
-		// @formatter:off
-		keyModel = KeyModel
-			.builder()
-			.encoded(privateKey.getEncoded())
-			.keyType(KeyType.PRIVATE_KEY)
-			.algorithm(privateKey.getAlgorithm()).build();
-		// @formatter:on
-		privateKeyFromModel = PrivateKeyReader.readPrivateKey(keyModel.getEncoded(),
-			keyModel.getAlgorithm());
+		keyInfo = KeyInfo.builder().encoded(privateKey.getEncoded())
+			.keyType(KeyType.PRIVATE_KEY.getDisplayValue()).algorithm(privateKey.getAlgorithm())
+			.build();
+		privateKeyFromInfo = PrivateKeyReader.readPrivateKey(keyInfo.getEncoded(),
+			keyInfo.getAlgorithm());
+		assertEquals(privateKey, privateKeyFromInfo);
 
-		assertEquals(privateKey, privateKeyFromModel);
-		// new scenario...
+		// Test with certificate
 		keyFile = new File(pemDir, "certificate.pem");
 		certificate = CertificateReader.readCertificate(keyFile);
-		// @formatter:off
-		keyModel = KeyModel
-			.builder()
-			.encoded(certificate.getEncoded())
-			.keyType(KeyType.CERTIFICATE)
-			.algorithm("")
-			.build();
-		// @formatter:on
-		certificateFromModel = CertificateReader.readCertificate(keyModel.getEncoded());
-
-		assertEquals(certificate, certificateFromModel);
+		keyInfo = KeyInfo.builder().encoded(certificate.getEncoded())
+			.keyType(KeyType.CERTIFICATE.getDisplayValue()).algorithm("").build();
+		certificateFromInfo = CertificateReader.readCertificate(keyInfo.getEncoded());
+		assertEquals(certificate, certificateFromInfo);
 	}
 
 	/**
-	 * Test method for {@link KeyModel#equals(Object)} , {@link KeyModel#hashCode()} and
-	 * {@link KeyModel#toString()}
+	 * Test method for {@link KeyInfo#equals(Object)}, {@link KeyInfo#hashCode()} and
+	 * {@link KeyInfo#toString()}
 	 */
 	@Test
+	@DisplayName("Test KeyInfo equals, hashCode and toString methods")
 	public void testEqualsHashcodeAndToStringWithClass() throws CertificateException, IOException
 	{
-
 		File keyFile;
-		KeyModel keyModel;
+		KeyInfo keyInfo;
 		X509Certificate certificate;
 		boolean expected;
 		boolean actual;
 
 		keyFile = new File(pemDir, "certificate.pem");
 		certificate = CertificateReader.readCertificate(keyFile);
-		// @formatter:off
-		keyModel = KeyModel
-			.builder()
-			.encoded(certificate.getEncoded())
-			.keyType(KeyType.CERTIFICATE)
-			.algorithm("")
-			.build();
-		// @formatter:on
-
-		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(keyModel);
+		keyInfo = KeyInfo.builder().encoded(certificate.getEncoded())
+			.keyType(KeyType.CERTIFICATE.getDisplayValue()).algorithm("").build();
+		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(keyInfo);
 		expected = true;
 		assertEquals(expected, actual);
 	}
 
 	/**
-	 * Test method for {@link KeyModel} with {@link BeanTester}
+	 * Test method for {@link KeyInfo} with {@link BeanTester}
 	 */
 	@Test
+	@DisplayName("Test KeyInfo with BeanTester")
 	public void testWithBeanTester()
 	{
-		BeanVerifier.forClass(KeyModel.class).editSettings().registerFactory(KeyModel.class, () -> {
-			return KeyModel.builder().encoded(privateKey.getEncoded()).keyType(KeyType.PRIVATE_KEY)
-				.algorithm(privateKey.getAlgorithm()).build();
-		}).edited().verify();
+		BeanVerifier.forClass(KeyInfo.class).editSettings()
+			.registerFactory(KeyInfo.class,
+				() -> KeyInfo.builder().encoded(privateKey.getEncoded())
+					.keyType(KeyType.PRIVATE_KEY.getDisplayValue())
+					.algorithm(privateKey.getAlgorithm()).build())
+			.edited().verify();
+	}
+
+	/**
+	 * Test method for handling invalid data
+	 */
+	@Test
+	@DisplayName("Test KeyInfo with invalid data")
+	public void testInvalidData()
+	{
+		// Test for null keyType
+		assertThrows(NullPointerException.class,
+			() -> KeyInfo.builder().encoded(new byte[] { }).algorithm("algorithm").build());
+
+		// Test for null encoded
+		assertThrows(NullPointerException.class,
+			() -> KeyInfo.builder().keyType("keyType").algorithm("algorithm").build());
+
+		// Test for null algorithm
+		assertThrows(NullPointerException.class,
+			() -> KeyInfo.builder().encoded(new byte[] { }).keyType("keyType").build());
 	}
 }

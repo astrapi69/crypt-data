@@ -24,20 +24,12 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.spec.ECGenParameterSpec;
+import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
+import org.meanbean.test.BeanVerifier;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
-
-import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
+import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 
 /**
  * Test class for {@link KeyPairInfo}.
@@ -46,118 +38,16 @@ class KeyPairInfoTest
 {
 
 	/**
-	 * Tests the {@link KeyPairInfo#toKeyPair(KeyPairInfo)} method.
-	 *
-	 * @param eCNamedCurveParameterSpecName
-	 *            the EC named curve parameter specification name
-	 * @param algorithm
-	 *            the algorithm used for the key pair
-	 * @param provider
-	 *            the provider of the key pair
-	 * @param keySize
-	 *            the key size for the key pair
-	 * @throws InvalidAlgorithmParameterException
-	 *             if initialization of the cipher object fails
-	 * @throws NoSuchAlgorithmException
-	 *             if no Provider supports a KeyPairGeneratorSpi implementation for the specified
-	 *             algorithm
-	 * @throws NoSuchProviderException
-	 *             if the specified provider is not registered in the security provider list
+	 * Test method for {@link KeyPairInfo} with {@link BeanTester}
 	 */
-	@ParameterizedTest
-	@CsvFileSource(resources = "/keypairinfo_test_data.csv", numLinesToSkip = 1)
-	void testToKeyPair(String eCNamedCurveParameterSpecName, String algorithm, String provider,
-		int keySize)
-		throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException
+	@Test
+	public void testWithBeanTester()
 	{
-
-		// Create a KeyPairInfo object from the CSV parameters
-		KeyPairInfo keyPairInfo = KeyPairInfo.builder()
-			.eCNamedCurveParameterSpecName(eCNamedCurveParameterSpecName).algorithm(algorithm)
-			.provider(provider).keySize(keySize).build();
-
-		// Convert KeyPairInfo to KeyPair using the factory method
-		KeyPair keyPair = createKeyPair(keyPairInfo);
-
-		// Validate the KeyPair object
-		assertNotNull(keyPair);
-		assertNotNull(keyPair.getPrivate());
-		assertNotNull(keyPair.getPublic());
-		assertEquals(algorithm, keyPair.getPrivate().getAlgorithm());
+		BeanVerifier.forClass(KeyPairInfo.class).editSettings()
+			.registerFactory(KeyPairInfo.class, () -> {
+				return KeyPairInfo.builder().eCNamedCurveParameterSpecName("secp256r1")
+					.algorithm("EC").provider(SecurityProvider.BC.name()).keySize(256).build();
+			}).edited().verify();
 	}
 
-	/**
-	 * Tests the {@link KeyPairInfo#toKeyPairInfo(KeyPair)} method.
-	 *
-	 * @param eCNamedCurveParameterSpecName
-	 *            the EC named curve parameter specification name
-	 * @param algorithm
-	 *            the algorithm used for the key pair
-	 * @param provider
-	 *            the provider of the key pair
-	 * @param keySize
-	 *            the key size for the key pair
-	 * @throws InvalidAlgorithmParameterException
-	 *             if initialization of the cipher object fails
-	 * @throws NoSuchAlgorithmException
-	 *             if no Provider supports a KeyPairGeneratorSpi implementation for the specified
-	 *             algorithm
-	 * @throws NoSuchProviderException
-	 *             if the specified provider is not registered in the security provider list
-	 */
-	@ParameterizedTest
-	@CsvFileSource(resources = "/keypairinfo_test_data.csv", numLinesToSkip = 1)
-	void testToKeyPairInfo(String eCNamedCurveParameterSpecName, String algorithm, String provider,
-		int keySize)
-		throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException
-	{
-
-		// Create a KeyPairInfo object from the CSV parameters
-		KeyPairInfo keyPairInfo = KeyPairInfo.builder()
-			.eCNamedCurveParameterSpecName(eCNamedCurveParameterSpecName).algorithm(algorithm)
-			.provider(provider).keySize(keySize).build();
-
-		// Convert KeyPairInfo to KeyPair using the factory method
-		KeyPair keyPair = createKeyPair(keyPairInfo);
-
-		// Convert KeyPair back to KeyPairInfo using the static method
-		KeyPairInfo newKeyPairInfo = KeyPairInfo.toKeyPairInfo(keyPair);
-
-		// Validate the new KeyPairInfo object
-		assertNotNull(newKeyPairInfo);
-		assertEquals(algorithm, newKeyPairInfo.getAlgorithm());
-		assertEquals(keySize, newKeyPairInfo.getKeySize());
-	}
-
-	/**
-	 * Creates a new {@link KeyPair} from the given {@link KeyPairInfo}.
-	 *
-	 * @param keyPairInfo
-	 *            the key pair information
-	 * @return the newly created {@link KeyPair}
-	 * @throws NoSuchAlgorithmException
-	 *             if no Provider supports a KeyPairGeneratorSpi implementation for the specified
-	 *             algorithm
-	 * @throws NoSuchProviderException
-	 *             if the specified provider is not registered in the security provider list
-	 * @throws InvalidAlgorithmParameterException
-	 *             if initialization of the cipher object fails
-	 */
-	private KeyPair createKeyPair(KeyPairInfo keyPairInfo)
-		throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException
-	{
-		if ("EC".equals(keyPairInfo.getAlgorithm())
-			&& keyPairInfo.getECNamedCurveParameterSpecName() != null)
-		{
-			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC",
-				keyPairInfo.getProvider());
-			keyPairGenerator
-				.initialize(new ECGenParameterSpec(keyPairInfo.getECNamedCurveParameterSpecName()));
-			return keyPairGenerator.generateKeyPair();
-		}
-		else
-		{
-			return KeyPairFactory.newKeyPair(keyPairInfo);
-		}
-	}
 }
