@@ -27,7 +27,10 @@ package io.github.astrapi69.crypt.data.factory;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -36,7 +39,15 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
@@ -44,13 +55,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
+import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeySize;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
+import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
+import io.github.astrapi69.crypt.data.key.KeySizeExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypt.data.model.KeyPairInfo;
+import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
@@ -69,6 +84,135 @@ public class KeyPairFactoryTest
 	protected void setUp() throws Exception
 	{
 		Security.addProvider(new BouncyCastleProvider());
+	}
+
+	/**
+	 * Test method for with all algorithms
+	 *
+	 * @throws NoSuchAlgorithmException
+	 *             the no such algorithm exception
+	 * @throws NoSuchProviderException
+	 *             is thrown if the specified provider is not registered in the security provider
+	 *             list
+	 */
+	@Test
+	public void testWithAllAlgorithms() throws IOException
+	{
+		List<KeyPairEntry> keyPairEntries;
+		File csvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
+			"valid_key_pair_algorithms.csv");
+		if (!csvFile.exists())
+		{
+			keyPairEntries = null;
+			appendLines(csvFile, "algorithm,keysize");
+		}
+		else
+		{
+			keyPairEntries = readKeyPairEntriesFromCsv(csvFile);
+		}
+		Map<String, List<Integer>> algorithmKeysizeMap = new HashMap<>();
+		List<String> algorithms;
+		algorithms = new ArrayList<>();
+		Set<String> keyPairGeneratorAlgorithms = AlgorithmExtensions
+			.getAlgorithms("KeyPairGenerator");
+		keyPairGeneratorAlgorithms.forEach(algorithm -> {
+			try
+			{
+				Set<Integer> supportedKeySizes = KeySizeExtensions
+					.getSupportedKeySizesForKeyPairGenerator(algorithm);
+				List<Integer> keySizes = new ArrayList<>(supportedKeySizes);
+
+				keySizes.forEach(keysize -> {
+					try
+					{
+						KeyPairEntry currentEntry = KeyPairEntry.builder().keySize(keysize)
+							.algorithm(algorithm).build();
+						if (keyPairEntries != null && !keyPairEntries.contains(currentEntry))
+						{
+							KeyPairFactory.newKeyPair(algorithm, keysize);
+							System.out
+								.println("algorithm: " + algorithm + " , keysize: " + keysize);
+
+							appendLines(csvFile, algorithm + "," + keysize);
+							if (algorithmKeysizeMap.containsKey(algorithm))
+							{
+								algorithmKeysizeMap.get(algorithm).add(keysize);
+							}
+							else
+							{
+								algorithmKeysizeMap.put(algorithm,
+									ListFactory.newArrayList(keysize));
+							}
+						}
+						else
+						{
+							System.out.println(
+								"algorithm: " + algorithm + " , keysize: " + keysize + " exists");
+						}
+					}
+					catch (NoSuchAlgorithmException e)
+					{
+						throw new RuntimeException(e);
+					}
+					catch (NoSuchProviderException e)
+					{
+						throw new RuntimeException(e);
+					}
+					catch (Exception e)
+					{
+						// ignore...
+					}
+				});
+
+			}
+			catch (Exception e)
+			{
+				// ignore...
+			}
+		});
+		algorithmKeysizeMap.forEach((key, value) -> {
+			System.out.println(key + "," + value);
+		});
+	}
+
+	public static List<KeyPairEntry> readKeyPairEntriesFromCsv(File csvFile) throws IOException
+	{
+		List<KeyPairEntry> keyPairEntries = new ArrayList<>();
+
+		try (FileReader reader = new FileReader(csvFile);
+			CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader()))
+		{
+
+			for (CSVRecord csvRecord : csvParser)
+			{
+				String algorithm = csvRecord.get("algorithm");
+				String keySizeString = csvRecord.get("keysize");
+
+				Integer keySize = keySizeString.isEmpty() ? null : Integer.valueOf(keySizeString);
+
+				KeyPairEntry entry = KeyPairEntry.builder().algorithm(algorithm).keySize(keySize)
+					.build();
+
+				keyPairEntries.add(entry);
+			}
+		}
+		return keyPairEntries;
+	}
+
+	/**
+	 * Appends the given lines to the given {@link File} object
+	 *
+	 * @param file
+	 *            The source file
+	 * @param lineToAppend
+	 *            The lines to append
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static void appendLines(File file, String... lineToAppend) throws IOException
+	{
+		Files.write(file.toPath(), ListFactory.newArrayList(lineToAppend),
+			StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 	}
 
 	/**

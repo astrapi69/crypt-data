@@ -137,9 +137,10 @@ class AlgorithmExtensionsTest
 	@Test
 	void testGetAlgorithmsFromKeyPairGenerator()
 	{
-		Set<String> signatureAlgorithms = AlgorithmExtensions.getAlgorithms("KeyPairGenerator");
-		assertNotNull(signatureAlgorithms);
-		assertTrue(signatureAlgorithms.contains("RSA".toUpperCase()));
+		Set<String> keyPairGeneratorAlgorithms = AlgorithmExtensions
+			.getAlgorithms("KeyPairGenerator");
+		assertNotNull(keyPairGeneratorAlgorithms);
+		assertTrue(keyPairGeneratorAlgorithms.contains("RSA".toUpperCase()));
 	}
 
 	/**

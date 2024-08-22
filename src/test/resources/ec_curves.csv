@@ -1,0 +1,4 @@
+curveName,algorithm,provider
+secp256r1,EC,BC
+secp384r1,EC,BC
+secp521r1,EC,BC

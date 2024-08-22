@@ -25,6 +25,7 @@
 package io.github.astrapi69.crypt.data.factory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
@@ -38,6 +39,7 @@ import java.security.spec.ECGenParameterSpec;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -100,10 +102,11 @@ class KeyPairGeneratorFactoryTest
 	 * {@link KeyPairGeneratorFactory#newKeyPairGenerator(String, int, SecureRandom)}
 	 *
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
+	 *             if no Provider supports a KeyPairGeneratorSpi implementation for the specified
+	 *             algorithm
 	 */
 	@Test
+	@DisplayName("Test KeyPairGeneratorFactory with RSA algorithm and key size 2048")
 	public void testNewKeyPairGeneratorStringIntSecureRandom() throws NoSuchAlgorithmException
 	{
 		KeyPairGenerator actual;
@@ -121,9 +124,38 @@ class KeyPairGeneratorFactoryTest
 	}
 
 	/**
+	 * Test method for {@link KeyPairGeneratorFactory#newKeyPairGenerator(String, String)}
+	 */
+	@Test
+	@DisplayName("Test KeyPairGeneratorFactory with EC algorithm and BouncyCastle provider")
+	public void testNewKeyPairGeneratorWithEC()
+		throws NoSuchAlgorithmException, NoSuchProviderException
+	{
+		KeyPairGenerator actual;
+
+		actual = KeyPairGeneratorFactory.newKeyPairGenerator("EC", "BC");
+		assertNotNull(actual);
+		KeyPair keyPair = actual.generateKeyPair();
+		assertNotNull(keyPair);
+	}
+
+	/**
+	 * Test method for {@link KeyPairGeneratorFactory#newKeyPairGenerator(String, int)}
+	 */
+	@Test
+	@DisplayName("Test KeyPairGeneratorFactory with invalid algorithm")
+	public void testNewKeyPairGeneratorWithInvalidAlgorithm()
+	{
+		assertThrows(NoSuchAlgorithmException.class, () -> {
+			KeyPairGeneratorFactory.newKeyPairGenerator("INVALID_ALGO", 1024);
+		});
+	}
+
+	/**
 	 * Test method for {@link KeyPairGeneratorFactory} with {@link BeanTester}
 	 */
 	@Test
+	@DisplayName("Test KeyPairGeneratorFactory with BeanTester")
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
