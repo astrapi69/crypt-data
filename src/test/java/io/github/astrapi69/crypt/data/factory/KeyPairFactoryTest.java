@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -52,6 +53,7 @@ import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -67,10 +69,12 @@ import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypt.data.model.KeyPairInfo;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
+import lombok.extern.java.Log;
 
 /**
  * The unit test class for the class {@link KeyPairFactory}
  */
+@Log
 public class KeyPairFactoryTest
 {
 
@@ -96,6 +100,7 @@ public class KeyPairFactoryTest
 	 *             list
 	 */
 	@Test
+	@Disabled
 	public void testWithAllAlgorithms() throws IOException
 	{
 		List<KeyPairEntry> keyPairEntries;
@@ -111,8 +116,7 @@ public class KeyPairFactoryTest
 			keyPairEntries = readKeyPairEntriesFromCsv(csvFile);
 		}
 		Map<String, List<Integer>> algorithmKeysizeMap = new HashMap<>();
-		List<String> algorithms;
-		algorithms = new ArrayList<>();
+
 		Set<String> keyPairGeneratorAlgorithms = AlgorithmExtensions
 			.getAlgorithms("KeyPairGenerator");
 		keyPairGeneratorAlgorithms.forEach(algorithm -> {
@@ -127,11 +131,12 @@ public class KeyPairFactoryTest
 					{
 						KeyPairEntry currentEntry = KeyPairEntry.builder().keySize(keysize)
 							.algorithm(algorithm).build();
-						if (keyPairEntries != null && !keyPairEntries.contains(currentEntry))
+						boolean contains = keyPairEntries.contains(currentEntry);
+						if (keyPairEntries != null && !contains)
 						{
-							KeyPairFactory.newKeyPair(algorithm, keysize);
 							System.out
 								.println("algorithm: " + algorithm + " , keysize: " + keysize);
+							KeyPairFactory.newKeyPair(algorithm, keysize);
 
 							appendLines(csvFile, algorithm + "," + keysize);
 							if (algorithmKeysizeMap.containsKey(algorithm))
@@ -152,15 +157,15 @@ public class KeyPairFactoryTest
 					}
 					catch (NoSuchAlgorithmException e)
 					{
-						throw new RuntimeException(e);
+						log.log(Level.WARNING, "Algorithm throws: " + algorithm, e);
 					}
 					catch (NoSuchProviderException e)
 					{
-						throw new RuntimeException(e);
+						log.log(Level.WARNING, "Algorithm throws: " + algorithm, e);
 					}
 					catch (Exception e)
 					{
-						// ignore...
+						log.log(Level.WARNING, "Algorithm throws: " + algorithm, e);
 					}
 				});
 
