@@ -9,6 +9,10 @@ ADDED:
 - new method in class AlgorithmExtensions that retrieves all appropriate algorithms from a given service name
 - new validation method in class KeyPairInfo for validation of KeyPair creation
 
+CHANGED:
+
+- update of gradle-plugin with id 'com.diffplug.spotless' to new beta version 7.0.0.BETA2
+
 Version 9.6
 -------------
 
