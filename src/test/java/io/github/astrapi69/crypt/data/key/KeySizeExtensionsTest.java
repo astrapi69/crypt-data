@@ -27,9 +27,11 @@ package io.github.astrapi69.crypt.data.key;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -54,11 +56,41 @@ class KeySizeExtensionsTest
 	/**
 	 * Test method for {@link KeySizeExtensions#getSupportedKeySizesForKeyGenerator(String)}
 	 *
+	 * @throws NoSuchMethodException
+	 *             if the specified method cannot be found
+	 * @throws InvocationTargetException
+	 *             if the underlying method throws an exception
+	 * @throws IllegalAccessException
+	 *             if the method is inaccessible
+	 */
+	@Test
+	@Disabled("only for print algorithms and key sizes")
+	public void testGetSupportedKeySizesForKeyGeneratorForKeyPairGenerator()
+		throws InvocationTargetException, NoSuchMethodException, IllegalAccessException
+	{
+		Set<String> keyGeneratorAlgorithms = AlgorithmExtensions.getAlgorithms("KeyPairGenerator");
+		assertNotNull(keyGeneratorAlgorithms);
+		for (String keyGeneratorAlgorithm : keyGeneratorAlgorithms)
+		{
+			Set<Integer> supportedKeySizes = KeySizeExtensions.getSupportedKeySizes(
+				keyGeneratorAlgorithm, KeyPairGenerator.class, KeyPairGenerator::initialize, 1,
+				32768, 1);
+
+			assertNotNull(supportedKeySizes);
+			supportedKeySizes.forEach(keySize -> {
+				System.out.println(keyGeneratorAlgorithm + "," + keySize);
+			});
+		}
+	}
+
+	/**
+	 * Test method for {@link KeySizeExtensions#getSupportedKeySizesForKeyGenerator(String)}
+	 *
 	 * @throws NoSuchAlgorithmException
 	 *             if the specified algorithm is not available
 	 */
 	@Test
-	public void testGetSupportedKeySizesForKeyGeneratorForKeyPairGenerator()
+	public void testGetSupportedKeySizesForKeyGeneratorForKeyGenerator()
 		throws NoSuchAlgorithmException
 	{
 		Set<String> keyGeneratorAlgorithms = AlgorithmExtensions.getAlgorithms("KeyGenerator");

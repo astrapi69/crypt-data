@@ -24,12 +24,17 @@
  */
 package io.github.astrapi69.crypt.data.model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.Set;
 
+import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
 import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
+import io.github.astrapi69.crypt.data.key.KeySizeExtensions;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -38,7 +43,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Data class representing key pair information.
+ * Data class representing key pair information
  */
 @Data
 @SuperBuilder(toBuilder = true)
@@ -47,42 +52,41 @@ public class KeyPairInfo
 {
 
 	/**
-	 * The name of the EC named curve parameter specification.
+	 * The name of the EC named curve parameter specification
 	 */
 	String eCNamedCurveParameterSpecName;
 
 	/**
-	 * The algorithm used for the key pair.
+	 * The algorithm used for the key pair
 	 */
 	@NonNull
 	String algorithm;
 
 	/**
-	 * The provider of the key pair.
+	 * The provider of the key pair
 	 */
 	String provider;
 
 	/**
-	 * The key size for the key pair.
+	 * The key size for the key pair
 	 */
 	int keySize;
 
 	/**
 	 * Factory method to create a new {@link KeyPair} object from the given {@link KeyPairInfo}
-	 * object.
+	 * object
 	 *
 	 * @param keyPairInfo
-	 *            the {@link KeyPairInfo} object containing the key pair details.
-	 * @return the newly created {@link KeyPair} object.
+	 *            the {@link KeyPairInfo} object containing the key pair details
+	 * @return the newly created {@link KeyPair} object
 	 *
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cipher object fails
+	 *             if initialization of the cipher object fails
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
+	 *             if no Provider supports a KeyPairGeneratorSpi implementation for the specified
+	 *             algorithm
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 *             if the specified provider is not registered in the security provider list
 	 */
 	public static KeyPair toKeyPair(@NonNull KeyPairInfo keyPairInfo)
 		throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException
@@ -92,11 +96,11 @@ public class KeyPairInfo
 
 	/**
 	 * Factory method to create a new {@link KeyPairInfo} object from the given {@link KeyPair}
-	 * object.
+	 * object
 	 *
 	 * @param keyPair
-	 *            the {@link KeyPair} object containing the key pair details.
-	 * @return the newly created {@link KeyPair} object.
+	 *            the {@link KeyPair} object containing the key pair details
+	 * @return the newly created {@link KeyPairInfo} object
 	 */
 	public static KeyPairInfo toKeyPairInfo(@NonNull KeyPair keyPair)
 	{
@@ -104,4 +108,34 @@ public class KeyPairInfo
 			.keySize(PrivateKeyExtensions.getKeyLength(keyPair.getPrivate()))
 			.algorithm(keyPair.getPrivate().getAlgorithm()).build();
 	}
+
+	/**
+	 * Validation method to see if the given {@link KeyPairInfo} object is valid for creation
+	 *
+	 * @param keyPairInfo
+	 *            the {@link KeyPairInfo} object containing the key pair details
+	 * @return true if the given {@link KeyPairInfo} object is valid for creation otherwise false
+	 * @throws NoSuchMethodException
+	 *             if the specified method cannot be found
+	 * @throws InvocationTargetException
+	 *             if the underlying method throws an exception
+	 * @throws IllegalAccessException
+	 *             if the method is inaccessible
+	 */
+	public static boolean isValid(@NonNull KeyPairInfo keyPairInfo)
+		throws InvocationTargetException, NoSuchMethodException, IllegalAccessException
+	{
+		String keyGeneratorAlgorithm = keyPairInfo.getAlgorithm();
+		boolean keyPairGenerator = AlgorithmExtensions.isValid("KeyPairGenerator",
+			keyGeneratorAlgorithm);
+		if (keyPairGenerator)
+		{
+			return false;
+		}
+		Set<Integer> supportedKeySizes = KeySizeExtensions.getSupportedKeySizes(
+			keyGeneratorAlgorithm, KeyPairGenerator.class, KeyPairGenerator::initialize,
+			keyPairInfo.getKeySize() - 1, keyPairInfo.getKeySize() + 1, 1);
+		return supportedKeySizes.contains(keyPairInfo.getKeySize());
+	}
+
 }

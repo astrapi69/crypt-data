@@ -103,18 +103,32 @@ public class KeyPairFactoryTest
 	@Disabled
 	public void testWithAllAlgorithms() throws IOException
 	{
-		List<KeyPairEntry> keyPairEntries;
-		File csvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
+		List<KeyPairEntry> validKeyPairEntries;
+		List<KeyPairEntry> invalidKeyPairEntries;
+		File validCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
 			"valid_key_pair_algorithms.csv");
-		if (!csvFile.exists())
+		File invalidCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
+			"invalid_key_pair_algorithms.csv");
+		if (!invalidCsvFile.exists())
 		{
-			keyPairEntries = null;
-			appendLines(csvFile, "algorithm,keysize");
+			invalidKeyPairEntries = null;
+			appendLines(invalidCsvFile, "algorithm,keysize");
 		}
 		else
 		{
-			keyPairEntries = readKeyPairEntriesFromCsv(csvFile);
+			invalidKeyPairEntries = readKeyPairEntriesFromCsv(invalidCsvFile);
 		}
+
+		if (!validCsvFile.exists())
+		{
+			validKeyPairEntries = null;
+			appendLines(validCsvFile, "algorithm,keysize");
+		}
+		else
+		{
+			validKeyPairEntries = readKeyPairEntriesFromCsv(validCsvFile);
+		}
+
 		Map<String, List<Integer>> algorithmKeysizeMap = new HashMap<>();
 
 		Set<String> keyPairGeneratorAlgorithms = AlgorithmExtensions
@@ -131,14 +145,17 @@ public class KeyPairFactoryTest
 					{
 						KeyPairEntry currentEntry = KeyPairEntry.builder().keySize(keysize)
 							.algorithm(algorithm).build();
-						boolean contains = keyPairEntries.contains(currentEntry);
-						if (keyPairEntries != null && !contains)
+						boolean containsInValidAlgorithm = validKeyPairEntries
+							.contains(currentEntry);
+						boolean containsInInvalidAlgorithm = invalidKeyPairEntries
+							.contains(currentEntry);
+						if (!containsInValidAlgorithm && !containsInInvalidAlgorithm)
 						{
 							System.out
 								.println("algorithm: " + algorithm + " , keysize: " + keysize);
 							KeyPairFactory.newKeyPair(algorithm, keysize);
 
-							appendLines(csvFile, algorithm + "," + keysize);
+							appendLines(validCsvFile, algorithm + "," + keysize);
 							if (algorithmKeysizeMap.containsKey(algorithm))
 							{
 								algorithmKeysizeMap.get(algorithm).add(keysize);
@@ -172,7 +189,7 @@ public class KeyPairFactoryTest
 			}
 			catch (Exception e)
 			{
-				// ignore...
+				log.log(Level.WARNING, "Algorithm throws: " + algorithm, e);
 			}
 		});
 		algorithmKeysizeMap.forEach((key, value) -> {

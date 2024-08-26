@@ -48,10 +48,19 @@ public class PinFactoryTest
 	{
 		List<LocalDate> localDates;
 		List<String> datePatterns;
+		List<String> pins;
+
 		datePatterns = ListFactory.newArrayList("ddMM", "MMdd", "MMyy", "yyyy");
 		localDates = ListFactory.newArrayList(LocalDate.of(1963, 11, 14), LocalDate.of(1967, 4, 18),
 			LocalDate.of(1977, 5, 21), LocalDate.of(1981, 1, 19), LocalDate.of(1988, 3, 11));
-		List<String> pins = PinFactory.newPins(localDates, datePatterns);
+		pins = PinFactory.newPins(localDates, datePatterns);
+		assertEquals(pins.size(), 20);
+		// pins.stream().forEach(System.out::println);
+
+		datePatterns = ListFactory.newArrayList("ddMMyy", "MMddyy", "MMyydd", "yyyydd");
+		localDates = ListFactory.newArrayList(LocalDate.of(1963, 11, 14), LocalDate.of(1967, 4, 18),
+			LocalDate.of(1977, 5, 21), LocalDate.of(1981, 1, 19), LocalDate.of(1988, 3, 11));
+		pins = PinFactory.newPins(localDates, datePatterns);
 		assertEquals(pins.size(), 20);
 		// pins.stream().forEach(System.out::println);
 	}
@@ -68,6 +77,7 @@ public class PinFactoryTest
 		List<String> datePatterns = ListFactory.newArrayList("dd-MM-yyyy", "yyyy/MM/dd");
 		List<String> pins = PinFactory.newPins(localDates, datePatterns);
 		assertEquals(pins.size(), 4);
+		// pins.stream().forEach(System.out::println);
 	}
 
 	/**

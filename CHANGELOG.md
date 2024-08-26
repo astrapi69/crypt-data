@@ -7,6 +7,7 @@ Version 9.7-SNAPSHOT
 ADDED:
 
 - new method in class AlgorithmExtensions that retrieves all appropriate algorithms from a given service name
+- new validation method in class KeyPairInfo for validation of KeyPair creation
 
 Version 9.6
 -------------
