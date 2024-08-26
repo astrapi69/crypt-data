@@ -201,10 +201,12 @@ public class KeyPairFactoryTest
 	{
 		List<KeyPairEntry> keyPairEntries = new ArrayList<>();
 
-		try (FileReader reader = new FileReader(csvFile);
-			CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withHeader()))
-		{
+		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true)
+			.build();
 
+		try (FileReader reader = new FileReader(csvFile);
+			CSVParser csvParser = new CSVParser(reader, csvFormat))
+		{
 			for (CSVRecord csvRecord : csvParser)
 			{
 				String algorithm = csvRecord.get("algorithm");
@@ -220,6 +222,7 @@ public class KeyPairFactoryTest
 		}
 		return keyPairEntries;
 	}
+
 
 	/**
 	 * Appends the given lines to the given {@link File} object
