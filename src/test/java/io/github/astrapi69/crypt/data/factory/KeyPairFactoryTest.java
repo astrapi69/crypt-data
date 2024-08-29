@@ -148,7 +148,7 @@ public class KeyPairFactoryTest
 
 		// Use the new method to process the key pair entries
 		processKeyPairEntries(testKeypairEntries, validKeyPairEntries, invalidKeyPairEntries,
-			completedKeypairEntries, validCsvFile, invalidCsvFile, 45);
+			completedKeypairEntries, validCsvFile, invalidCsvFile, 60);
 
 		validKeyPairEntries.forEach(keyPairEntry -> {
 			try
