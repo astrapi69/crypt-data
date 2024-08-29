@@ -102,16 +102,17 @@ public class KeyPairFactoryTest
 	@Disabled
 	public void testWithAllExistingAlgorithms() throws IOException
 	{
-		List<KeyPairEntry> completedKeypairEntries;
 		final List<KeyPairEntry> validKeyPairEntries = ListFactory.newArrayList();
+		List<KeyPairEntry> completedKeypairEntries;
 		List<KeyPairEntry> testKeypairEntries;
 		List<KeyPairEntry> invalidKeyPairEntries;
+
 		File validCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
-			"new_valid_key_pair_algorithms.csv");
+				"new_valid_key_pair_algorithms.csv");
 		File testKeypairAlgorithmsCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
-			"test_key_pair_algorithms.csv");
+				"test_key_pair_algorithms.csv");
 		File invalidCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
-			"invalid_key_pair_algorithms.csv");
+				"invalid_key_pair_algorithms.csv");
 
 		if (!invalidCsvFile.exists())
 		{
@@ -143,112 +144,22 @@ public class KeyPairFactoryTest
 			testKeypairEntries = CsvReader.readKeyPairEntriesFromCsv(testKeypairAlgorithmsCsvFile);
 		}
 
-		testKeypairEntries.forEach(keyPairEntry -> {
-
-			boolean containsInValidAlgorithm = validKeyPairEntries.contains(keyPairEntry);
-			boolean containsInProcessedAlgorithm = completedKeypairEntries.contains(keyPairEntry);
-			boolean containsInInvalidAlgorithm = invalidKeyPairEntries.contains(keyPairEntry);
-			String algorithm = keyPairEntry.getAlgorithm();
-			Integer keySize = keyPairEntry.getKeySize();
-			if (!containsInValidAlgorithm && !containsInProcessedAlgorithm
-				&& !containsInInvalidAlgorithm)
-			{
-
-
-				System.out.println("algorithm: " + algorithm + " , keysize: " + keySize);
-				Runnable task = () -> {
-					try
-					{
-						KeyPair keyPair = KeyPairFactory.newKeyPair(algorithm, keySize);
-						PrivateKey privateKey = keyPair.getPrivate();
-						PublicKey publicKey = keyPair.getPublic();
-						validKeyPairEntries.add(keyPairEntry);
-
-						LineAppender.appendLines(validCsvFile, algorithm + "," + keySize);
-						System.out.println("Task " + "algorithm: " + algorithm + " , keysize: "
-							+ keySize + " completed");
-					}
-					catch (NoSuchAlgorithmException e)
-					{
-						invalidKeyPairEntries.add(keyPairEntry);
-						try
-						{
-							LineAppender.appendLines(invalidCsvFile, algorithm + "," + keySize);
-						}
-						catch (IOException ex)
-						{
-							log.log(Level.WARNING, "Algorithm did not saved to file "
-								+ invalidCsvFile.getName() + " : " + keyPairEntry.getAlgorithm(),
-								ex);
-						}
-						log.log(Level.WARNING, "Algorithm throws: " + keyPairEntry.getAlgorithm(),
-							e);
-					}
-					catch (NoSuchProviderException e)
-					{
-						invalidKeyPairEntries.add(keyPairEntry);
-						try
-						{
-							LineAppender.appendLines(invalidCsvFile, algorithm + "," + keySize);
-						}
-						catch (IOException ex)
-						{
-							log.log(Level.WARNING, "Algorithm did not saved to file "
-								+ invalidCsvFile.getName() + " : " + keyPairEntry.getAlgorithm(),
-								ex);
-						}
-						log.log(Level.WARNING, "Algorithm throws: " + keyPairEntry.getAlgorithm(),
-							e);
-					}
-					catch (IOException e)
-					{
-						log.log(Level.WARNING, "Algorithm did not saved to file "
-							+ validCsvFile.getName() + " : " + keyPairEntry.getAlgorithm(), e);
-					}
-				};
-
-				try
-				{
-					// Run task with a 45-second timeout
-					ThreadExtensions.runWithTimeout(task, 45, TimeUnit.SECONDS);
-				}
-				catch (TimeoutException e)
-				{
-					invalidKeyPairEntries.add(keyPairEntry);
-					log.log(Level.WARNING, "Algorithm throws: " + keyPairEntry.getAlgorithm(), e);
-					try
-					{
-						LineAppender.appendLines(invalidCsvFile, algorithm + "," + keySize);
-					}
-					catch (IOException ex)
-					{
-						log.log(
-							Level.WARNING, "Algorithm did not saved to file "
-								+ invalidCsvFile.getName() + " : " + keyPairEntry.getAlgorithm(),
-							ex);
-					}
-				}
-			}
-			else
-			{
-				System.out
-					.println("algorithm: " + algorithm + " , keysize: " + keySize + " exists");
-			}
-		});
+		// Use the new method to process the key pair entries
+		processKeyPairEntries(testKeypairEntries, validKeyPairEntries, invalidKeyPairEntries,
+				completedKeypairEntries, validCsvFile, invalidCsvFile, 45);
 
 		validKeyPairEntries.forEach(keyPairEntry -> {
 			try
 			{
 				LineAppender.appendLines(validCsvFile,
-					keyPairEntry.getAlgorithm() + "," + keyPairEntry.getKeySize());
+						keyPairEntry.getAlgorithm() + "," + keyPairEntry.getKeySize());
 			}
 			catch (IOException e)
 			{
 				log.log(Level.WARNING, "Entry '" + keyPairEntry.getAlgorithm() + ","
-					+ keyPairEntry.getKeySize() + "' throws IOException", e);
+						+ keyPairEntry.getKeySize() + "' throws IOException", e);
 			}
 		});
-
 	}
 
 	public void processKeyPairEntries(List<KeyPairEntry> testKeypairEntries,
