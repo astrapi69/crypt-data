@@ -41,6 +41,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
@@ -167,19 +169,21 @@ public class KeyPairFactoryTest
 		List<KeyPairEntry> completedKeypairEntries, File validCsvFile, File invalidCsvFile,
 		long timeoutSeconds)
 	{
+		// Create a thread pool with 10 threads
+		ExecutorService executorService = Executors.newFixedThreadPool(10);
+
 		testKeypairEntries.forEach(keyPairEntry -> {
+			Runnable task = () -> {
+				boolean containsInValidAlgorithm = validKeyPairEntries.contains(keyPairEntry);
+				boolean containsInProcessedAlgorithm = completedKeypairEntries
+					.contains(keyPairEntry);
+				boolean containsInInvalidAlgorithm = invalidKeyPairEntries.contains(keyPairEntry);
+				String algorithm = keyPairEntry.getAlgorithm();
+				Integer keySize = keyPairEntry.getKeySize();
 
-			boolean containsInValidAlgorithm = validKeyPairEntries.contains(keyPairEntry);
-			boolean containsInProcessedAlgorithm = completedKeypairEntries.contains(keyPairEntry);
-			boolean containsInInvalidAlgorithm = invalidKeyPairEntries.contains(keyPairEntry);
-			String algorithm = keyPairEntry.getAlgorithm();
-			Integer keySize = keyPairEntry.getKeySize();
-
-			if (!containsInValidAlgorithm && !containsInProcessedAlgorithm
-				&& !containsInInvalidAlgorithm)
-			{
-
-				Runnable task = () -> {
+				if (!containsInValidAlgorithm && !containsInProcessedAlgorithm
+					&& !containsInInvalidAlgorithm)
+				{
 					try
 					{
 						System.out.println(
@@ -214,8 +218,16 @@ public class KeyPairFactoryTest
 						log.log(Level.WARNING, "Algorithm did not save to file "
 							+ validCsvFile.getName() + " : " + keyPairEntry.getAlgorithm(), e);
 					}
-				};
+				}
+				else
+				{
+					System.out
+						.println("algorithm: " + algorithm + " , keysize: " + keySize + " exists");
+				}
+			};
 
+			// Submit the task to the executor service
+			executorService.submit(() -> {
 				try
 				{
 					// Run task with a specified timeout
@@ -227,7 +239,8 @@ public class KeyPairFactoryTest
 					log.log(Level.WARNING, "Algorithm throws: " + keyPairEntry.getAlgorithm(), e);
 					try
 					{
-						LineAppender.appendLines(invalidCsvFile, algorithm + "," + keySize);
+						LineAppender.appendLines(invalidCsvFile,
+							keyPairEntry.getAlgorithm() + "," + keyPairEntry.getKeySize());
 					}
 					catch (IOException ex)
 					{
@@ -237,15 +250,25 @@ public class KeyPairFactoryTest
 							ex);
 					}
 				}
-			}
-			else
-			{
-				System.out
-					.println("algorithm: " + algorithm + " , keysize: " + keySize + " exists");
-			}
+			});
 		});
-	}
 
+		// Shutdown the executor service after submitting all tasks
+		executorService.shutdown();
+		try
+		{
+			// Wait for all tasks to complete or timeout
+			if (!executorService.awaitTermination(timeoutSeconds * testKeypairEntries.size(),
+				TimeUnit.SECONDS))
+			{
+				executorService.shutdownNow();
+			}
+		}
+		catch (InterruptedException e)
+		{
+			executorService.shutdownNow();
+		}
+	}
 
 	/**
 	 * Test method for with all algorithms
