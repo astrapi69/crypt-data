@@ -99,7 +99,7 @@ public class KeyPairFactoryTest
 	 *             list
 	 */
 	@Test
-	@Disabled
+//	@Disabled
 	public void testWithAllExistingAlgorithms() throws IOException
 	{
 		final List<KeyPairEntry> validKeyPairEntries = ListFactory.newArrayList();
@@ -179,10 +179,10 @@ public class KeyPairFactoryTest
 				&& !containsInInvalidAlgorithm)
 			{
 
-				System.out.println("algorithm: " + algorithm + " , keysize: " + keySize);
 				Runnable task = () -> {
 					try
 					{
+						System.out.println("Start task with algorithm: " + algorithm + " , keysize: " + keySize);
 						KeyPair keyPair = KeyPairFactory.newKeyPair(algorithm, keySize);
 						PrivateKey privateKey = keyPair.getPrivate();
 						PublicKey publicKey = keyPair.getPublic();
