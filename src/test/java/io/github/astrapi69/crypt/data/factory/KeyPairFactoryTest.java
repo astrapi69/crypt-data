@@ -27,10 +27,7 @@ package io.github.astrapi69.crypt.data.factory;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -48,9 +45,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
@@ -65,6 +59,8 @@ import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeySize;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
+import io.github.astrapi69.crypt.data.extension.CsvReader;
+import io.github.astrapi69.crypt.data.extension.FileAppender;
 import io.github.astrapi69.crypt.data.key.KeySizeExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
@@ -120,31 +116,31 @@ public class KeyPairFactoryTest
 		if (!invalidCsvFile.exists())
 		{
 			invalidKeyPairEntries = ListFactory.newArrayList();
-			appendLines(invalidCsvFile, "algorithm,keysize");
+			FileAppender.appendLines(invalidCsvFile, "algorithm,keysize");
 		}
 		else
 		{
-			invalidKeyPairEntries = readKeyPairEntriesFromCsv(invalidCsvFile);
+			invalidKeyPairEntries = CsvReader.readKeyPairEntriesFromCsv(invalidCsvFile);
 		}
 
 		if (!validCsvFile.exists())
 		{
 			completedKeypairEntries = ListFactory.newArrayList();
-			appendLines(validCsvFile, "algorithm,keysize");
+			FileAppender.appendLines(validCsvFile, "algorithm,keysize");
 		}
 		else
 		{
-			completedKeypairEntries = readKeyPairEntriesFromCsv(validCsvFile);
+			completedKeypairEntries = CsvReader.readKeyPairEntriesFromCsv(validCsvFile);
 		}
 
 		if (!testKeypairAlgorithmsCsvFile.exists())
 		{
 			testKeypairEntries = null;
-			appendLines(testKeypairAlgorithmsCsvFile, "algorithm,keysize");
+			FileAppender.appendLines(testKeypairAlgorithmsCsvFile, "algorithm,keysize");
 		}
 		else
 		{
-			testKeypairEntries = readKeyPairEntriesFromCsv(testKeypairAlgorithmsCsvFile);
+			testKeypairEntries = CsvReader.readKeyPairEntriesFromCsv(testKeypairAlgorithmsCsvFile);
 		}
 
 		testKeypairEntries.forEach(keyPairEntry -> {
@@ -168,7 +164,7 @@ public class KeyPairFactoryTest
 						PublicKey publicKey = keyPair.getPublic();
 						validKeyPairEntries.add(keyPairEntry);
 
-						appendLines(validCsvFile, algorithm + "," + keySize);
+						FileAppender.appendLines(validCsvFile, algorithm + "," + keySize);
 						System.out.println("Task " + "algorithm: " + algorithm + " , keysize: "
 							+ keySize + " completed");
 					}
@@ -177,7 +173,7 @@ public class KeyPairFactoryTest
 						invalidKeyPairEntries.add(keyPairEntry);
 						try
 						{
-							appendLines(invalidCsvFile, algorithm + "," + keySize);
+							FileAppender.appendLines(invalidCsvFile, algorithm + "," + keySize);
 						}
 						catch (IOException ex)
 						{
@@ -193,7 +189,7 @@ public class KeyPairFactoryTest
 						invalidKeyPairEntries.add(keyPairEntry);
 						try
 						{
-							appendLines(invalidCsvFile, algorithm + "," + keySize);
+							FileAppender.appendLines(invalidCsvFile, algorithm + "," + keySize);
 						}
 						catch (IOException ex)
 						{
@@ -222,7 +218,7 @@ public class KeyPairFactoryTest
 					log.log(Level.WARNING, "Algorithm throws: " + keyPairEntry.getAlgorithm(), e);
 					try
 					{
-						appendLines(invalidCsvFile, algorithm + "," + keySize);
+						FileAppender.appendLines(invalidCsvFile, algorithm + "," + keySize);
 					}
 					catch (IOException ex)
 					{
@@ -243,7 +239,7 @@ public class KeyPairFactoryTest
 		validKeyPairEntries.forEach(keyPairEntry -> {
 			try
 			{
-				appendLines(validCsvFile,
+				FileAppender.appendLines(validCsvFile,
 					keyPairEntry.getAlgorithm() + "," + keyPairEntry.getKeySize());
 			}
 			catch (IOException e)
@@ -254,6 +250,90 @@ public class KeyPairFactoryTest
 		});
 
 	}
+
+	public void processKeyPairEntries(List<KeyPairEntry> testKeypairEntries,
+		List<KeyPairEntry> validKeyPairEntries, List<KeyPairEntry> invalidKeyPairEntries,
+		List<KeyPairEntry> completedKeypairEntries, File validCsvFile, File invalidCsvFile,
+		long timeoutSeconds)
+	{
+		testKeypairEntries.forEach(keyPairEntry -> {
+
+			boolean containsInValidAlgorithm = validKeyPairEntries.contains(keyPairEntry);
+			boolean containsInProcessedAlgorithm = completedKeypairEntries.contains(keyPairEntry);
+			boolean containsInInvalidAlgorithm = invalidKeyPairEntries.contains(keyPairEntry);
+			String algorithm = keyPairEntry.getAlgorithm();
+			Integer keySize = keyPairEntry.getKeySize();
+
+			if (!containsInValidAlgorithm && !containsInProcessedAlgorithm
+				&& !containsInInvalidAlgorithm)
+			{
+
+				System.out.println("algorithm: " + algorithm + " , keysize: " + keySize);
+				Runnable task = () -> {
+					try
+					{
+						KeyPair keyPair = KeyPairFactory.newKeyPair(algorithm, keySize);
+						PrivateKey privateKey = keyPair.getPrivate();
+						PublicKey publicKey = keyPair.getPublic();
+						validKeyPairEntries.add(keyPairEntry);
+
+						FileAppender.appendLines(validCsvFile, algorithm + "," + keySize);
+						System.out.println("Task " + "algorithm: " + algorithm + " , keysize: "
+							+ keySize + " completed");
+					}
+					catch (NoSuchAlgorithmException | NoSuchProviderException e)
+					{
+						invalidKeyPairEntries.add(keyPairEntry);
+						try
+						{
+							FileAppender.appendLines(invalidCsvFile, algorithm + "," + keySize);
+						}
+						catch (IOException ex)
+						{
+							log.log(Level.WARNING, "Algorithm did not save to file "
+								+ invalidCsvFile.getName() + " : " + keyPairEntry.getAlgorithm(),
+								ex);
+						}
+						log.log(Level.WARNING, "Algorithm throws: " + keyPairEntry.getAlgorithm(),
+							e);
+					}
+					catch (IOException e)
+					{
+						log.log(Level.WARNING, "Algorithm did not save to file "
+							+ validCsvFile.getName() + " : " + keyPairEntry.getAlgorithm(), e);
+					}
+				};
+
+				try
+				{
+					// Run task with a specified timeout
+					ThreadExtensions.runWithTimeout(task, timeoutSeconds, TimeUnit.SECONDS);
+				}
+				catch (TimeoutException e)
+				{
+					invalidKeyPairEntries.add(keyPairEntry);
+					log.log(Level.WARNING, "Algorithm throws: " + keyPairEntry.getAlgorithm(), e);
+					try
+					{
+						FileAppender.appendLines(invalidCsvFile, algorithm + "," + keySize);
+					}
+					catch (IOException ex)
+					{
+						log.log(
+							Level.WARNING, "Algorithm did not save to file "
+								+ invalidCsvFile.getName() + " : " + keyPairEntry.getAlgorithm(),
+							ex);
+					}
+				}
+			}
+			else
+			{
+				System.out
+					.println("algorithm: " + algorithm + " , keysize: " + keySize + " exists");
+			}
+		});
+	}
+
 
 	/**
 	 * Test method for with all algorithms
@@ -277,21 +357,21 @@ public class KeyPairFactoryTest
 		if (!invalidCsvFile.exists())
 		{
 			invalidKeyPairEntries = null;
-			appendLines(invalidCsvFile, "algorithm,keysize");
+			FileAppender.appendLines(invalidCsvFile, "algorithm,keysize");
 		}
 		else
 		{
-			invalidKeyPairEntries = readKeyPairEntriesFromCsv(invalidCsvFile);
+			invalidKeyPairEntries = CsvReader.readKeyPairEntriesFromCsv(invalidCsvFile);
 		}
 
 		if (!validCsvFile.exists())
 		{
 			validKeyPairEntries = null;
-			appendLines(validCsvFile, "algorithm,keysize");
+			FileAppender.appendLines(validCsvFile, "algorithm,keysize");
 		}
 		else
 		{
-			validKeyPairEntries = readKeyPairEntriesFromCsv(validCsvFile);
+			validKeyPairEntries = CsvReader.readKeyPairEntriesFromCsv(validCsvFile);
 		}
 
 		Map<String, List<Integer>> algorithmKeysizeMap = new HashMap<>();
@@ -320,7 +400,7 @@ public class KeyPairFactoryTest
 								.println("algorithm: " + algorithm + " , keysize: " + keysize);
 							KeyPairFactory.newKeyPair(algorithm, keysize);
 
-							appendLines(validCsvFile, algorithm + "," + keysize);
+							FileAppender.appendLines(validCsvFile, algorithm + "," + keysize);
 							if (algorithmKeysizeMap.containsKey(algorithm))
 							{
 								algorithmKeysizeMap.get(algorithm).add(keysize);
@@ -360,49 +440,6 @@ public class KeyPairFactoryTest
 		algorithmKeysizeMap.forEach((key, value) -> {
 			System.out.println(key + "," + value);
 		});
-	}
-
-	public static List<KeyPairEntry> readKeyPairEntriesFromCsv(File csvFile) throws IOException
-	{
-		List<KeyPairEntry> keyPairEntries = new ArrayList<>();
-
-		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true)
-			.build();
-
-		try (FileReader reader = new FileReader(csvFile);
-			CSVParser csvParser = new CSVParser(reader, csvFormat))
-		{
-			for (CSVRecord csvRecord : csvParser)
-			{
-				String algorithm = csvRecord.get("algorithm");
-				String keySizeString = csvRecord.get("keysize");
-
-				Integer keySize = keySizeString.isEmpty() ? null : Integer.valueOf(keySizeString);
-
-				KeyPairEntry entry = KeyPairEntry.builder().algorithm(algorithm).keySize(keySize)
-					.build();
-
-				keyPairEntries.add(entry);
-			}
-		}
-		return keyPairEntries;
-	}
-
-
-	/**
-	 * Appends the given lines to the given {@link File} object
-	 *
-	 * @param file
-	 *            The source file
-	 * @param lineToAppend
-	 *            The lines to append
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static void appendLines(File file, String... lineToAppend) throws IOException
-	{
-		Files.write(file.toPath(), ListFactory.newArrayList(lineToAppend),
-			StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 	}
 
 	/**
