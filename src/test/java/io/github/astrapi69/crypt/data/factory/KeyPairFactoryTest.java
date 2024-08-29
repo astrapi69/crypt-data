@@ -45,7 +45,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
-import io.github.astrapi69.crypt.data.extension.LineAppender;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
@@ -61,6 +60,7 @@ import io.github.astrapi69.crypt.api.key.KeySize;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
 import io.github.astrapi69.crypt.data.extension.CsvReader;
+import io.github.astrapi69.crypt.data.extension.LineAppender;
 import io.github.astrapi69.crypt.data.key.KeySizeExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
@@ -99,7 +99,7 @@ public class KeyPairFactoryTest
 	 *             list
 	 */
 	@Test
-//	@Disabled
+	// @Disabled
 	public void testWithAllExistingAlgorithms() throws IOException
 	{
 		final List<KeyPairEntry> validKeyPairEntries = ListFactory.newArrayList();
@@ -108,11 +108,11 @@ public class KeyPairFactoryTest
 		List<KeyPairEntry> invalidKeyPairEntries;
 
 		File validCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
-				"new_valid_key_pair_algorithms.csv");
+			"new_valid_key_pair_algorithms.csv");
 		File testKeypairAlgorithmsCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
-				"test_key_pair_algorithms.csv");
+			"test_key_pair_algorithms.csv");
 		File invalidCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
-				"invalid_key_pair_algorithms.csv");
+			"invalid_key_pair_algorithms.csv");
 
 		if (!invalidCsvFile.exists())
 		{
@@ -146,18 +146,18 @@ public class KeyPairFactoryTest
 
 		// Use the new method to process the key pair entries
 		processKeyPairEntries(testKeypairEntries, validKeyPairEntries, invalidKeyPairEntries,
-				completedKeypairEntries, validCsvFile, invalidCsvFile, 45);
+			completedKeypairEntries, validCsvFile, invalidCsvFile, 45);
 
 		validKeyPairEntries.forEach(keyPairEntry -> {
 			try
 			{
 				LineAppender.appendLines(validCsvFile,
-						keyPairEntry.getAlgorithm() + "," + keyPairEntry.getKeySize());
+					keyPairEntry.getAlgorithm() + "," + keyPairEntry.getKeySize());
 			}
 			catch (IOException e)
 			{
 				log.log(Level.WARNING, "Entry '" + keyPairEntry.getAlgorithm() + ","
-						+ keyPairEntry.getKeySize() + "' throws IOException", e);
+					+ keyPairEntry.getKeySize() + "' throws IOException", e);
 			}
 		});
 	}
@@ -182,7 +182,8 @@ public class KeyPairFactoryTest
 				Runnable task = () -> {
 					try
 					{
-						System.out.println("Start task with algorithm: " + algorithm + " , keysize: " + keySize);
+						System.out.println(
+							"Start task with algorithm: " + algorithm + " , keysize: " + keySize);
 						KeyPair keyPair = KeyPairFactory.newKeyPair(algorithm, keySize);
 						PrivateKey privateKey = keyPair.getPrivate();
 						PublicKey publicKey = keyPair.getPublic();

@@ -30,6 +30,7 @@ import java.time.ZonedDateTime;
 import org.bouncycastle.asn1.x500.X500Name;
 
 import io.github.astrapi69.crypt.data.model.DistinguishedNameInfo;
+import io.github.astrapi69.crypt.data.model.ExtensionInfo;
 import io.github.astrapi69.crypt.data.model.Validity;
 import io.github.astrapi69.random.number.RandomBigIntegerFactory;
 
@@ -102,5 +103,26 @@ public class CertificateTestDataFactory
 	public static BigInteger newSerialNumber()
 	{
 		return RandomBigIntegerFactory.randomBigInteger();
+	}
+
+	/**
+	 * Generates a new {@link ExtensionInfo} for unit tests
+	 *
+	 * @return the created {@link ExtensionInfo} for unit tests
+	 */
+	public static ExtensionInfo newExtensionInfo()
+	{
+		return ExtensionInfo.builder().extensionId("1.2.3.4.5.6.7").critical(true)
+			.value("testValue").build();
+	}
+
+	/**
+	 * Generates a new array of {@link ExtensionInfo} objects for unit tests
+	 *
+	 * @return the created array of {@link ExtensionInfo} objects for unit tests
+	 */
+	public static ExtensionInfo[] newExtensionInfos()
+	{
+		return new ExtensionInfo[] { newExtensionInfo() };
 	}
 }
