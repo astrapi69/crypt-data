@@ -47,6 +47,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
+import io.github.astrapi69.crypt.data.extension.CsvExtensions;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
@@ -61,7 +62,6 @@ import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeySize;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
-import io.github.astrapi69.crypt.data.extension.CsvReader;
 import io.github.astrapi69.crypt.data.extension.LineAppender;
 import io.github.astrapi69.crypt.data.key.KeySizeExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
@@ -123,7 +123,7 @@ public class KeyPairFactoryTest
 		}
 		else
 		{
-			invalidKeyPairEntries = CsvReader.readKeyPairEntriesFromCsv(invalidCsvFile);
+			invalidKeyPairEntries = CsvExtensions.readKeyPairEntriesFromCsv(invalidCsvFile);
 		}
 
 		if (!validCsvFile.exists())
@@ -133,7 +133,7 @@ public class KeyPairFactoryTest
 		}
 		else
 		{
-			completedKeypairEntries = CsvReader.readKeyPairEntriesFromCsv(validCsvFile);
+			completedKeypairEntries = CsvExtensions.readKeyPairEntriesFromCsv(validCsvFile);
 		}
 
 		if (!testKeypairAlgorithmsCsvFile.exists())
@@ -143,7 +143,7 @@ public class KeyPairFactoryTest
 		}
 		else
 		{
-			testKeypairEntries = CsvReader.readKeyPairEntriesFromCsv(testKeypairAlgorithmsCsvFile);
+			testKeypairEntries = CsvExtensions.readKeyPairEntriesFromCsv(testKeypairAlgorithmsCsvFile);
 		}
 
 		// Use the new method to process the key pair entries
@@ -297,7 +297,7 @@ public class KeyPairFactoryTest
 		}
 		else
 		{
-			invalidKeyPairEntries = CsvReader.readKeyPairEntriesFromCsv(invalidCsvFile);
+			invalidKeyPairEntries = CsvExtensions.readKeyPairEntriesFromCsv(invalidCsvFile);
 		}
 
 		if (!validCsvFile.exists())
@@ -307,7 +307,7 @@ public class KeyPairFactoryTest
 		}
 		else
 		{
-			validKeyPairEntries = CsvReader.readKeyPairEntriesFromCsv(validCsvFile);
+			validKeyPairEntries = CsvExtensions.readKeyPairEntriesFromCsv(validCsvFile);
 		}
 
 		Map<String, List<Integer>> algorithmKeysizeMap = new HashMap<>();
