@@ -24,11 +24,15 @@
  */
 package io.github.astrapi69.crypt.data.key;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Disabled;
@@ -68,19 +72,19 @@ class KeySizeExtensionsTest
 	public void testGetSupportedKeySizesForKeyGeneratorForKeyPairGenerator()
 		throws InvocationTargetException, NoSuchMethodException, IllegalAccessException
 	{
-		Set<String> keyGeneratorAlgorithms = AlgorithmExtensions.getAlgorithms("KeyPairGenerator");
-		assertNotNull(keyGeneratorAlgorithms);
-		for (String keyGeneratorAlgorithm : keyGeneratorAlgorithms)
-		{
-			Set<Integer> supportedKeySizes = KeySizeExtensions.getSupportedKeySizes(
-				keyGeneratorAlgorithm, KeyPairGenerator.class, KeyPairGenerator::initialize, 1,
-				32768, 1);
-
-			assertNotNull(supportedKeySizes);
-			supportedKeySizes.forEach(keySize -> {
-				System.out.println(keyGeneratorAlgorithm + "," + keySize);
+		Set<String> keyPairGeneratorAlgorithms = AlgorithmExtensions
+			.getAlgorithms("KeyPairGenerator");
+		assertNotNull(keyPairGeneratorAlgorithms);
+		Map<String, Set<Integer>> supportedKeySizesForKeyPairGenerator = AlgorithmExtensions
+			.getSupportedAlgorithmsAndKeySizes("KeyPairGenerator", KeyPairGenerator.class,
+				KeyPairGenerator::initialize, 1, 32768, 1);
+		assertEquals(keyPairGeneratorAlgorithms.size(),
+			supportedKeySizesForKeyPairGenerator.size());
+		supportedKeySizesForKeyPairGenerator.forEach((algorithm, keySizes) -> {
+			keySizes.forEach(keySize -> {
+				System.out.println(algorithm + "," + keySize);
 			});
-		}
+		});
 	}
 
 	/**

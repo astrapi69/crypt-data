@@ -24,18 +24,24 @@
  */
 package io.github.astrapi69.crypt.data.algorithm;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
+import java.security.KeyPairGenerator;
 import java.security.Provider;
 import java.security.Security;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
+import io.github.astrapi69.crypt.data.key.KeySizeExtensions;
 
 /**
  * The class {@code AlgorithmExtensionsTest} provides unit tests for the {@link AlgorithmExtensions}
@@ -43,11 +49,23 @@ import io.github.astrapi69.crypt.api.provider.SecurityProvider;
  */
 class AlgorithmExtensionsTest
 {
-	@BeforeAll
-	static void setUp()
+
+	@BeforeEach
+	public void setUp()
 	{
 		// Ensuring that some default algorithms are registered for the tests
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		Security.addProvider(new BouncyCastleProvider());
+
+	}
+
+	@Test
+	public void testGetSupportedAlgorithmsAndKeySizes()
+		throws InvocationTargetException, NoSuchMethodException, IllegalAccessException
+	{
+
+		Set<Integer> keySizes = KeySizeExtensions.getSupportedKeySizes("RSA",
+			KeyPairGenerator.class, KeyPairGenerator::initialize, 1, 32768, 1);
+		assertNotNull(keySizes);
 	}
 
 	/**
@@ -141,6 +159,8 @@ class AlgorithmExtensionsTest
 			.getAlgorithms("KeyPairGenerator");
 		assertNotNull(keyPairGeneratorAlgorithms);
 		assertTrue(keyPairGeneratorAlgorithms.contains("RSA".toUpperCase()));
+		System.out
+			.println("keyPairGeneratorAlgorithms.size():" + keyPairGeneratorAlgorithms.size());
 	}
 
 	/**
