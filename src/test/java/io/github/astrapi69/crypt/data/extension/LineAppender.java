@@ -7,7 +7,7 @@ import java.nio.file.StandardOpenOption;
 
 import io.github.astrapi69.collection.list.ListFactory;
 
-public class FileAppender
+public class LineAppender
 {
 
 	/**
