@@ -169,8 +169,9 @@ public class KeyPairFactoryTest
 		List<KeyPairEntry> completedKeypairEntries, File validCsvFile, File invalidCsvFile,
 		long timeoutSeconds)
 	{
-		// Create a thread pool with 10 threads
-		ExecutorService executorService = Executors.newFixedThreadPool(10);
+		// Create a thread pool from the available processor cores
+		int cores = Runtime.getRuntime().availableProcessors();
+		ExecutorService executorService = Executors.newFixedThreadPool(cores);
 
 		testKeypairEntries.forEach(keyPairEntry -> {
 			Runnable task = () -> {
