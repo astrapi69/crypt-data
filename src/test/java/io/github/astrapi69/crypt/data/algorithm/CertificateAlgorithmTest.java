@@ -1,27 +1,3 @@
-/**
- * The MIT License
- *
- * Copyright (C) 2015 Asterios Raptis
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
 package io.github.astrapi69.crypt.data.algorithm;
 
 import static io.github.astrapi69.crypt.data.factory.CertFactory.newX509Certificate;
@@ -46,20 +22,15 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
+import io.github.astrapi69.crypt.data.extension.FileInitializerExtension;
 import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import io.github.astrapi69.collection.list.ListFactory;
-import io.github.astrapi69.crypt.data.extension.CsvExtensions;
-import io.github.astrapi69.crypt.data.extension.FileInitializerExtension;
 import io.github.astrapi69.crypt.data.extension.LineAppender;
 import io.github.astrapi69.crypt.data.factory.CertificateAlgorithmEntry;
 import io.github.astrapi69.crypt.data.factory.CertificateTestDataFactory;
@@ -68,8 +39,6 @@ import io.github.astrapi69.crypt.data.key.KeyInfoExtensions;
 import io.github.astrapi69.crypt.data.model.CertificateInfo;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
-import io.github.astrapi69.lang.thread.ThreadExtensions;
-import lombok.NonNull;
 import lombok.extern.java.Log;
 
 /**
@@ -85,29 +54,6 @@ public class CertificateAlgorithmTest
 	{
 		// Ensuring that some default algorithms are registered for the tests
 		Security.addProvider(new BouncyCastleProvider());
-
-	}
-
-	/**
-	 * Tests and retrieves a list of valid signature algorithms that can be used to create an
-	 * {@link X509Certificate} using the given certificate information.
-	 *
-	 * @param certificateInfo
-	 *            the certificate information containing details like issuer, subject, etc.
-	 * @param serviceName
-	 *            the name of the service, typically "Signature"
-	 * @return a list of valid signature algorithms that do not throw exceptions during certificate
-	 *         creation
-	 */
-	public static List<String> getValidSignatureAlgorithms(final CertificateInfo certificateInfo,
-		final @NonNull String serviceName)
-	{
-		Set<String> signatureAlgorithms = AlgorithmExtensions.getAlgorithms(serviceName);
-
-		// Filter and test each algorithm, returning only those that are valid
-		return signatureAlgorithms.stream()
-			.filter(signatureAlgorithm -> isAlgorithmValidForCertificate(certificateInfo))
-			.collect(Collectors.toList());
 	}
 
 	/**
@@ -116,11 +62,10 @@ public class CertificateAlgorithmTest
 	 *
 	 * @param certificateInfo
 	 *            the certificate information containing details like issuer, subject, etc.
-	 *
 	 * @return true if the algorithm is valid and can be used to create the certificate, false
 	 *         otherwise
 	 */
-	private static boolean isAlgorithmValidForCertificate(CertificateInfo certificateInfo)
+	public static boolean isAlgorithmValidForCertificate(CertificateInfo certificateInfo)
 	{
 		try
 		{
@@ -131,152 +76,280 @@ public class CertificateAlgorithmTest
 			// valid
 			return certificate != null;
 		}
+		catch (IllegalArgumentException e)
+		{
+			// Handle specific cases where the signature type is unknown
+			log.log(Level.WARNING,
+				"Unknown signature type: " + certificateInfo.getSignatureAlgorithm(), e);
+			return false;
+		}
 		catch (OperatorCreationException | CertificateException | CertIOException e)
 		{
-			// If any exception occurs, the algorithm is not valid
+			log.log(Level.WARNING, "Certificate creation failed for algorithm: "
+				+ certificateInfo.getSignatureAlgorithm(), e);
 			return false;
 		}
 	}
 
 
+
+
+
 	@Test
-	@Disabled
+// @Disabled
 	public void testAllKeyPairGeneratorAlgorithmsWithSignature()
-		throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException
-	{
+			throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
 
+		// Initialize CSV files for valid and invalid signature algorithms
 		File invalidSignatureAlgorithmsCsvFile = FileFactory.newFile(
-			PathFinder.getSrcTestResourcesDir(), "invalid_certificate_signature_algorithms.csv");
+				PathFinder.getSrcTestResourcesDir(), "invalid_certificate_signature_algorithms.csv");
 		File validSignatureAlgorithmsCsvFile = FileFactory.newFile(
-			PathFinder.getSrcTestResourcesDir(), "valid_certificate_signature_algorithms.csv");
+				PathFinder.getSrcTestResourcesDir(), "valid_certificate_signature_algorithms.csv");
 
-		List<CertificateAlgorithmEntry> invalidSignatureAlgorithmEntries = FileInitializerExtension
-			.inializeFile(invalidSignatureAlgorithmsCsvFile);
-		List<CertificateAlgorithmEntry> validSignatureAlgorithmEntries = FileInitializerExtension
-			.inializeFile(validSignatureAlgorithmsCsvFile);
+		List<CertificateAlgorithmEntry> invalidSignatureAlgorithmEntries = FileInitializerExtension.inializeFile(
+				invalidSignatureAlgorithmsCsvFile);
+		List<CertificateAlgorithmEntry> validSignatureAlgorithmEntries = FileInitializerExtension.inializeFile(
+				validSignatureAlgorithmsCsvFile);
 
-		Set<String> keyPairGeneratorAlgorithms = AlgorithmExtensions
-			.getAlgorithms("KeyPairGenerator");
+		// Retrieve available KeyPairGenerator algorithms and their supported key sizes
+		Set<String> keyPairGeneratorAlgorithms = AlgorithmExtensions.getAlgorithms("KeyPairGenerator");
 		assertNotNull(keyPairGeneratorAlgorithms);
 
 		Map<String, Set<Integer>> supportedKeySizesForKeyPairGenerator = AlgorithmExtensions
-			.getSupportedAlgorithmsAndKeySizes("KeyPairGenerator", KeyPairGenerator.class,
-				KeyPairGenerator::initialize, 1, 32768, 1);
-		assertEquals(keyPairGeneratorAlgorithms.size(),
-			supportedKeySizesForKeyPairGenerator.size());
+				.getSupportedAlgorithmsAndKeySizes("KeyPairGenerator", KeyPairGenerator.class,
+						KeyPairGenerator::initialize, 1, 32768, 1);
+		assertEquals(keyPairGeneratorAlgorithms.size(), supportedKeySizesForKeyPairGenerator.size());
 
-		// Create a thread pool from the available processor cores
+		// Prepare a thread pool for parallel processing
 		int cores = Runtime.getRuntime().availableProcessors();
-		int halfOfCores = Math.max(1, cores / 2);
+		ExecutorService executorService = Executors.newFixedThreadPool(Math.max(1, cores / 2));
 		long timeoutSeconds = 60;
-		ExecutorService executorService = Executors.newFixedThreadPool(halfOfCores);
 
-		supportedKeySizesForKeyPairGenerator.entrySet().stream().forEach(entry -> {
-
+		// Iterate over each KeyPairGenerator algorithm and its supported key sizes
+		for (Map.Entry<String, Set<Integer>> entry : supportedKeySizesForKeyPairGenerator.entrySet()) {
 			String keyPairAlgorithm = entry.getKey();
 			Set<Integer> keySizes = entry.getValue();
-			List<Integer> list = keySizes.stream().toList();
 
+			// Retrieve available Signature algorithms
 			Set<String> signatureAlgorithms = AlgorithmExtensions.getAlgorithms("Signature");
-			Runnable task = () -> {
-				try
-				{
-					KeyPair keyPair = KeyPairFactory.newKeyPair(keyPairAlgorithm, list.get(0));
-					PrivateKey privateKey = keyPair.getPrivate();
-					PublicKey publicKey = keyPair.getPublic();
-					signatureAlgorithms.forEach(signatureAlgorithm -> {
-						CertificateAlgorithmEntry certificateAlgorithmEntry = CertificateAlgorithmEntry
-							.builder().keyPairAlgorithm(keyPairAlgorithm)
-							.signatureAlgorithm(signatureAlgorithm).build();
-						CertificateInfo certificateInfo = CertificateInfo.builder()
-							.privateKeyInfo(KeyInfoExtensions.toKeyInfo(privateKey))
-							.publicKeyInfo(KeyInfoExtensions.toKeyInfo(publicKey))
-							.issuer(CertificateTestDataFactory.newIssuerDistinguishedNameInfo())
-							.subject(CertificateTestDataFactory.newSubjectDistinguishedNameInfo())
-							.serial(CertificateTestDataFactory.newSerialNumber())
-							.validity(CertificateTestDataFactory.newValidity())
-							.signatureAlgorithm(signatureAlgorithm).version(3)
-							.extensions(CertificateTestDataFactory.newExtensionInfos()).build();
 
-						if (isAlgorithmValidForCertificate(certificateInfo))
-						{
-							try
-							{
-								LineAppender.appendLines(validSignatureAlgorithmsCsvFile,
-									certificateAlgorithmEntry.getKeyPairAlgorithm() + ","
-										+ certificateAlgorithmEntry.getSignatureAlgorithm());
-							}
-							catch (IOException e)
-							{
-								log.log(Level.WARNING,
-									"Entry '" + certificateAlgorithmEntry.getKeyPairAlgorithm()
-										+ "," + certificateAlgorithmEntry.getSignatureAlgorithm()
-										+ "' throws IOException",
-									e);
-							}
-						}
-						else
-						{
-							try
-							{
-								LineAppender.appendLines(invalidSignatureAlgorithmsCsvFile,
-									certificateAlgorithmEntry.getKeyPairAlgorithm() + ","
-										+ certificateAlgorithmEntry.getSignatureAlgorithm());
-							}
-							catch (IOException e)
-							{
-								log.log(Level.WARNING,
-									"Entry '" + certificateAlgorithmEntry.getKeyPairAlgorithm()
-										+ "," + certificateAlgorithmEntry.getSignatureAlgorithm()
-										+ "' throws IOException",
-									e);
-							}
-						}
-
-					});
-
-
-				}
-				catch (NoSuchAlgorithmException | NoSuchProviderException e)
-				{
-					log.log(Level.WARNING, "Entry '" + keyPairAlgorithm + "' throws IOException",
-						e);
-				}
-			};
-
-
-			// Submit the task to the executor service
+			// Process each algorithm in a separate task
 			executorService.submit(() -> {
-				try
-				{
-					// Run task with a specified timeout
-					ThreadExtensions.runWithTimeout(task, timeoutSeconds, TimeUnit.SECONDS);
-				}
-				catch (TimeoutException e)
-				{
-					log.log(Level.WARNING, "Algorithm throws: " + keyPairAlgorithm, e);
+				try {
+					for (Integer keySize : keySizes) {
+						KeyPair keyPair = KeyPairFactory.newKeyPair(keyPairAlgorithm, keySize);
+						PrivateKey privateKey = keyPair.getPrivate();
+						PublicKey publicKey = keyPair.getPublic();
+
+						for (String signatureAlgorithm : signatureAlgorithms) {
+							processSignatureAlgorithm(keyPairAlgorithm, signatureAlgorithm, keySize,
+									privateKey, publicKey, validSignatureAlgorithmsCsvFile,
+									invalidSignatureAlgorithmsCsvFile);
+						}
+					}
+				} catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+					log.log(Level.WARNING, "KeyPair generation failed for algorithm: " + keyPairAlgorithm, e);
 				}
 			});
-		});
+		}
 
+		// Shutdown the executor service and wait for completion
+		shutdownExecutorService(executorService, timeoutSeconds);
 	}
 
-	private static List<CertificateAlgorithmEntry> inializeFile(
-		File validSignatureAlgorithmsCsvFile) throws IOException
-	{
-		List<CertificateAlgorithmEntry> completedAlgorithmEntries;
-		if (!validSignatureAlgorithmsCsvFile.exists())
-		{
-			completedAlgorithmEntries = ListFactory.newArrayList();
-			LineAppender.appendLines(validSignatureAlgorithmsCsvFile,
-				"keypair-algorithm,signature-algorithm");
+
+
+
+
+
+//
+//
+//	@Test
+//	// @Disabled
+//	public void testAllKeyPairGeneratorAlgorithmsWithSignature()
+//		throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException
+//	{
+//
+//		File invalidSignatureAlgorithmsCsvFile = FileFactory.newFile(
+//			PathFinder.getSrcTestResourcesDir(), "invalid_certificate_signature_algorithms.csv");
+//		File validSignatureAlgorithmsCsvFile = FileFactory.newFile(
+//			PathFinder.getSrcTestResourcesDir(), "valid_certificate_signature_algorithms.csv");
+//
+//		List<CertificateAlgorithmEntry> invalidSignatureAlgorithmEntries = FileInitializerExtension.inializeFile(
+//			invalidSignatureAlgorithmsCsvFile);
+//		List<CertificateAlgorithmEntry> validSignatureAlgorithmEntries = FileInitializerExtension.inializeFile(
+//			validSignatureAlgorithmsCsvFile);
+//
+//		Set<String> keyPairGeneratorAlgorithms = AlgorithmExtensions
+//			.getAlgorithms("KeyPairGenerator");
+//		assertNotNull(keyPairGeneratorAlgorithms);
+//
+//		Map<String, Set<Integer>> supportedKeySizesForKeyPairGenerator = AlgorithmExtensions
+//			.getSupportedAlgorithmsAndKeySizes("KeyPairGenerator", KeyPairGenerator.class,
+//				KeyPairGenerator::initialize, 1, 32768, 1);
+//		assertEquals(keyPairGeneratorAlgorithms.size(),
+//			supportedKeySizesForKeyPairGenerator.size());
+//
+//		// Create a thread pool from the available processor cores
+//		int cores = Runtime.getRuntime().availableProcessors();
+//		int halfOfCores = Math.max(1, cores / 2);
+//		long timeoutSeconds = 60;
+//		ExecutorService executorService = Executors.newFixedThreadPool(halfOfCores);
+//
+//		supportedKeySizesForKeyPairGenerator.forEach((keyPairAlgorithm, keySizes) -> {
+//
+//			Set<String> signatureAlgorithms = AlgorithmExtensions.getAlgorithms("Signature");
+//
+//			Runnable task = () -> {
+//				try
+//				{
+//					Iterator<Integer> keySizeIterator = keySizes.iterator();
+//					if (!keySizeIterator.hasNext())
+//					{
+//						log.log(Level.WARNING,
+//							"No valid key sizes found for algorithm: " + keyPairAlgorithm);
+//						return;
+//					}
+//					int keySize = keySizeIterator.next();
+//					KeyPair keyPair = KeyPairFactory.newKeyPair(keyPairAlgorithm, keySize);
+//					PrivateKey privateKey = keyPair.getPrivate();
+//					PublicKey publicKey = keyPair.getPublic();
+//
+//					signatureAlgorithms.forEach(signatureAlgorithm -> {
+//						CertificateAlgorithmEntry certificateAlgorithmEntry = CertificateAlgorithmEntry
+//							.builder().keyPairAlgorithm(keyPairAlgorithm)
+//							.signatureAlgorithm(signatureAlgorithm).build();
+//
+//						CertificateInfo certificateInfo = CertificateInfo.builder()
+//							.privateKeyInfo(KeyInfoExtensions.toKeyInfo(privateKey))
+//							.publicKeyInfo(KeyInfoExtensions.toKeyInfo(publicKey))
+//							.issuer(CertificateTestDataFactory.newIssuerDistinguishedNameInfo())
+//							.subject(CertificateTestDataFactory.newSubjectDistinguishedNameInfo())
+//							.serial(CertificateTestDataFactory.newSerialNumber())
+//							.validity(CertificateTestDataFactory.newValidity())
+//							.signatureAlgorithm(signatureAlgorithm).version(3)
+//							.extensions(CertificateTestDataFactory.newExtensionInfos()).build();
+//
+//						if (isAlgorithmValidForCertificate(certificateInfo))
+//						{
+//							try
+//							{
+//								LineAppender.appendLines(validSignatureAlgorithmsCsvFile,
+//									certificateAlgorithmEntry.getKeyPairAlgorithm() + ","
+//										+ certificateAlgorithmEntry.getSignatureAlgorithm());
+//							}
+//							catch (IOException e)
+//							{
+//								log.log(Level.WARNING,
+//									"IOException while appending valid entry: "
+//										+ certificateAlgorithmEntry.getKeyPairAlgorithm() + ","
+//										+ certificateAlgorithmEntry.getSignatureAlgorithm(),
+//									e);
+//							}
+//						}
+//						else
+//						{
+//							try
+//							{
+//								LineAppender.appendLines(invalidSignatureAlgorithmsCsvFile,
+//									certificateAlgorithmEntry.getKeyPairAlgorithm() + ","
+//										+ certificateAlgorithmEntry.getSignatureAlgorithm());
+//							}
+//							catch (IOException e)
+//							{
+//								log.log(Level.WARNING,
+//									"IOException while appending invalid entry: "
+//										+ certificateAlgorithmEntry.getKeyPairAlgorithm() + ","
+//										+ certificateAlgorithmEntry.getSignatureAlgorithm(),
+//									e);
+//							}
+//						}
+//					});
+//
+//				}
+//				catch (NoSuchAlgorithmException | NoSuchProviderException e)
+//				{
+//					log.log(Level.WARNING,
+//						"KeyPair generation failed for algorithm: " + keyPairAlgorithm, e);
+//				}
+//			};
+//
+//			// Submit the task to the executor service
+//			executorService.submit(() -> {
+//				try
+//				{
+//					// Run task with a specified timeout
+//					ThreadExtensions.runWithTimeout(task, timeoutSeconds, TimeUnit.SECONDS);
+//				}
+//				catch (TimeoutException e)
+//				{
+//					log.log(Level.WARNING, "Task timed out for algorithm: " + keyPairAlgorithm, e);
+//				}
+//			});
+//		});
+//
+//		// Shutdown the executor service
+//		executorService.shutdown();
+//		try
+//		{
+//			if (!executorService.awaitTermination(60, TimeUnit.SECONDS))
+//			{
+//				executorService.shutdownNow();
+//			}
+//		}
+//		catch (InterruptedException e)
+//		{
+//			executorService.shutdownNow();
+//			Thread.currentThread().interrupt();
+//		}
+//	}
+
+	private void processSignatureAlgorithm(String keyPairAlgorithm, String signatureAlgorithm,
+										   int keySize, PrivateKey privateKey, PublicKey publicKey, File validSignatureAlgorithmsCsvFile,
+										   File invalidSignatureAlgorithmsCsvFile) {
+
+		CertificateAlgorithmEntry certificateAlgorithmEntry = CertificateAlgorithmEntry.builder()
+				.keyPairAlgorithm(keyPairAlgorithm)
+				.signatureAlgorithm(signatureAlgorithm)
+				.build();
+
+		CertificateInfo certificateInfo = CertificateInfo.builder()
+				.privateKeyInfo(KeyInfoExtensions.toKeyInfo(privateKey))
+				.publicKeyInfo(KeyInfoExtensions.toKeyInfo(publicKey))
+				.issuer(CertificateTestDataFactory.newIssuerDistinguishedNameInfo())
+				.subject(CertificateTestDataFactory.newSubjectDistinguishedNameInfo())
+				.serial(CertificateTestDataFactory.newSerialNumber())
+				.validity(CertificateTestDataFactory.newValidity())
+				.signatureAlgorithm(signatureAlgorithm)
+				.version(3)
+				.extensions(CertificateTestDataFactory.newExtensionInfos())
+				.build();
+
+		if (isAlgorithmValidForCertificate(certificateInfo)) {
+			appendToFile(validSignatureAlgorithmsCsvFile, certificateAlgorithmEntry);
+		} else {
+			appendToFile(invalidSignatureAlgorithmsCsvFile, certificateAlgorithmEntry);
 		}
-		else
-		{
-			completedAlgorithmEntries = CsvExtensions
-				.readCertificateAlgorithmEntryFromCsv(validSignatureAlgorithmsCsvFile);
-		}
-		return completedAlgorithmEntries;
 	}
 
+
+	private void appendToFile(File file, CertificateAlgorithmEntry entry) {
+		try {
+			LineAppender.appendLines(file, entry.getKeyPairAlgorithm() + "," + entry.getSignatureAlgorithm());
+		} catch (IOException e) {
+			log.log(Level.WARNING, "IOException while appending entry to file: " + file.getName(), e);
+		}
+	}
+
+	private void shutdownExecutorService(ExecutorService executorService, long timeoutSeconds) {
+		executorService.shutdown();
+		try {
+			if (!executorService.awaitTermination(timeoutSeconds * 2, TimeUnit.SECONDS)) {
+				executorService.shutdownNow();
+			}
+		} catch (InterruptedException e) {
+			executorService.shutdownNow();
+			Thread.currentThread().interrupt();
+		}
+	}
 }

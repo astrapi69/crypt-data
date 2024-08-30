@@ -30,6 +30,9 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
 @Data
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -47,4 +50,8 @@ public class CertificateAlgorithmEntry
 	 */
 	@NonNull
 	String signatureAlgorithm;
+
+	PrivateKey privateKey;
+
+	PublicKey publicKey;
 }
