@@ -37,6 +37,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Security;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.List;
@@ -50,7 +51,9 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.bouncycastle.cert.CertIOException;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.OperatorCreationException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -76,6 +79,14 @@ import lombok.extern.java.Log;
 @Log
 public class CertificateAlgorithmTest
 {
+
+	@BeforeEach
+	public void setUp()
+	{
+		// Ensuring that some default algorithms are registered for the tests
+		Security.addProvider(new BouncyCastleProvider());
+
+	}
 
 	/**
 	 * Tests and retrieves a list of valid signature algorithms that can be used to create an
