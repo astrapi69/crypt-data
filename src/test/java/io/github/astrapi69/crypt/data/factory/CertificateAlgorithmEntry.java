@@ -22,31 +22,29 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.crypt.data.extension;
+package io.github.astrapi69.crypt.data.factory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-
-import org.junit.jupiter.api.Test;
-
-import io.github.astrapi69.file.create.FileFactory;
-import io.github.astrapi69.file.search.PathFinder;
-
-class CsvExtensionsTest
+@Data
+@SuperBuilder(toBuilder = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class CertificateAlgorithmEntry
 {
 
-	@Test
-	void sortCsvByAlgorithmAndKeysize() throws IOException
-	{
+	/**
+	 * The algorithm used for the key pair
+	 */
+	@NonNull
+	String keyPairAlgorithm;
 
-		File validCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
-			"new_valid_key_pair_algorithms.csv");
-		// Example usage with a CSV file path
-		Path csvFilePath = validCsvFile.toPath();
-		CsvExtensions.sortCsvByAlgorithmAndKeysize(csvFilePath);
-		System.out.println("CSV file sorted successfully.");
-	}
+	/**
+	 * The signature algorithm used to sign the certificate
+	 */
+	@NonNull
+	String signatureAlgorithm;
 }

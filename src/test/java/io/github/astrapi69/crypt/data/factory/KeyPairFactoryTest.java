@@ -62,6 +62,7 @@ import io.github.astrapi69.crypt.api.key.KeySize;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
 import io.github.astrapi69.crypt.data.extension.CsvExtensions;
+import io.github.astrapi69.crypt.data.extension.FileInitializerExtension;
 import io.github.astrapi69.crypt.data.extension.LineAppender;
 import io.github.astrapi69.crypt.data.key.KeySizeExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
@@ -116,36 +117,10 @@ public class KeyPairFactoryTest
 		File invalidCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
 			"invalid_key_pair_algorithms.csv");
 
-		if (!invalidCsvFile.exists())
-		{
-			invalidKeyPairEntries = ListFactory.newArrayList();
-			LineAppender.appendLines(invalidCsvFile, "algorithm,keysize");
-		}
-		else
-		{
-			invalidKeyPairEntries = CsvExtensions.readKeyPairEntriesFromCsv(invalidCsvFile);
-		}
-
-		if (!validCsvFile.exists())
-		{
-			completedKeypairEntries = ListFactory.newArrayList();
-			LineAppender.appendLines(validCsvFile, "algorithm,keysize");
-		}
-		else
-		{
-			completedKeypairEntries = CsvExtensions.readKeyPairEntriesFromCsv(validCsvFile);
-		}
-
-		if (!testKeypairAlgorithmsCsvFile.exists())
-		{
-			testKeypairEntries = null;
-			LineAppender.appendLines(testKeypairAlgorithmsCsvFile, "algorithm,keysize");
-		}
-		else
-		{
-			testKeypairEntries = CsvExtensions
-				.readKeyPairEntriesFromCsv(testKeypairAlgorithmsCsvFile);
-		}
+		invalidKeyPairEntries = FileInitializerExtension.getKeyPairEntries(invalidCsvFile);
+		completedKeypairEntries = FileInitializerExtension.getKeyPairEntries(validCsvFile);
+		testKeypairEntries = FileInitializerExtension
+			.getKeyPairEntries(testKeypairAlgorithmsCsvFile);
 
 		// Use the new method to process the key pair entries
 		processKeyPairEntries(testKeypairEntries, validKeyPairEntries, invalidKeyPairEntries,
@@ -163,6 +138,21 @@ public class KeyPairFactoryTest
 					+ keyPairEntry.getKeySize() + "' throws IOException", e);
 			}
 		});
+	}
+
+	private static List<KeyPairEntry> getKeyPairEntries(File invalidCsvFile) throws IOException
+	{
+		List<KeyPairEntry> invalidKeyPairEntries;
+		if (!invalidCsvFile.exists())
+		{
+			invalidKeyPairEntries = ListFactory.newArrayList();
+			LineAppender.appendLines(invalidCsvFile, "algorithm,keysize");
+		}
+		else
+		{
+			invalidKeyPairEntries = CsvExtensions.readKeyPairEntriesFromCsv(invalidCsvFile);
+		}
+		return invalidKeyPairEntries;
 	}
 
 	public void processKeyPairEntries(List<KeyPairEntry> testKeypairEntries,

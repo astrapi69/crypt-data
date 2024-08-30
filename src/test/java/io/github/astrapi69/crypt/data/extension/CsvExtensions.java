@@ -1,3 +1,27 @@
+/**
+ * The MIT License
+ *
+ * Copyright (C) 2015 Asterios Raptis
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package io.github.astrapi69.crypt.data.extension;
 
 import java.io.File;
@@ -7,12 +31,14 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import io.github.astrapi69.crypt.data.factory.CertificateAlgorithmEntry;
 import io.github.astrapi69.crypt.data.factory.KeyPairEntry;
 
 public class CsvExtensions
@@ -51,9 +77,10 @@ public class CsvExtensions
 		Files.write(csvFilePath, sortedLines);
 	}
 
-	public static List<KeyPairEntry> readKeyPairEntriesFromCsv(File csvFile) throws IOException
+	public static <T> List<T> readEntriesFromCsv(File csvFile, Function<CSVRecord, T> recordMapper)
+		throws IOException
 	{
-		List<KeyPairEntry> keyPairEntries = new ArrayList<>();
+		List<T> entries = new ArrayList<>();
 
 		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true)
 			.build();
@@ -63,19 +90,33 @@ public class CsvExtensions
 		{
 			for (CSVRecord csvRecord : csvParser)
 			{
-				String algorithm = csvRecord.get("algorithm");
-				String keySizeString = csvRecord.get("keysize");
-
-				Integer keySize = keySizeString.isEmpty() ? null : Integer.valueOf(keySizeString);
-
-				KeyPairEntry entry = KeyPairEntry.builder().algorithm(algorithm).keySize(keySize)
-					.build();
-
-				keyPairEntries.add(entry);
+				T entry = recordMapper.apply(csvRecord);
+				entries.add(entry);
 			}
 		}
-		return keyPairEntries;
+		return entries;
 	}
 
+	public static List<KeyPairEntry> readKeyPairEntriesFromCsv(File csvFile) throws IOException
+	{
+		return readEntriesFromCsv(csvFile, csvRecord -> {
+			String algorithm = csvRecord.get("algorithm");
+			String keySizeString = csvRecord.get("keysize");
+			Integer keySize = keySizeString.isEmpty() ? null : Integer.valueOf(keySizeString);
 
+			return KeyPairEntry.builder().algorithm(algorithm).keySize(keySize).build();
+		});
+	}
+
+	public static List<CertificateAlgorithmEntry> readCertificateAlgorithmEntryFromCsv(File csvFile)
+		throws IOException
+	{
+		return readEntriesFromCsv(csvFile, csvRecord -> {
+			String algorithm = csvRecord.get("keypair-algorithm");
+			String signatureAlgorithm = csvRecord.get("signature-algorithm");
+
+			return CertificateAlgorithmEntry.builder().keyPairAlgorithm(algorithm)
+				.signatureAlgorithm(signatureAlgorithm).build();
+		});
+	}
 }
