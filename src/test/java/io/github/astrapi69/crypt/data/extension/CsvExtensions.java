@@ -45,6 +45,40 @@ public class CsvExtensions
 {
 
 	/**
+	 * Sorts a CSV file by keypair-algorithm and signature-algorithm and removes duplicates.
+	 *
+	 * @param csvFilePath
+	 *            the path to the CSV file to be sorted
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static void sortCsvByKeypairAndSignatureAlgorithm(Path csvFilePath) throws IOException
+	{
+		// Read the CSV file lines
+		List<String> lines = Files.readAllLines(csvFilePath);
+
+		// Extract header
+		String header = lines.get(0);
+
+		// Sort the remaining lines based on keypair-algorithm and signature-algorithm,
+		// and remove duplicates by using a LinkedHashSet
+		Set<String> sortedUniqueLines = lines.stream().skip(1) // Skip the header
+			.map(line -> line.split(",")) // Split the line into columns
+			.sorted(Comparator.comparing((String[] columns) -> columns[0]) // First sort by
+																			// keypair-algorithm
+				.thenComparing(columns -> columns[1])) // Then sort by signature-algorithm
+			.map(columns -> String.join(",", columns)) // Join the columns back into a line
+			.collect(Collectors.toCollection(LinkedHashSet::new)); // Remove duplicates and preserve
+																	// order
+
+		// Add the header back to the sorted unique lines
+		sortedUniqueLines.add(header);
+
+		// Write the sorted unique lines back to the file
+		Files.write(csvFilePath, sortedUniqueLines);
+	}
+
+	/**
 	 * Reads a CSV file, sorts the data by algorithm and keysize in ascending order, and writes the
 	 * sorted data back to the CSV file.
 	 *

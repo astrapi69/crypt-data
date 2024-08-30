@@ -102,7 +102,7 @@ public class KeyPairFactoryTest
 	 *             list
 	 */
 	@Test
-	@Disabled
+//	@Disabled
 	public void testWithAllExistingAlgorithms() throws IOException
 	{
 		final List<KeyPairEntry> validKeyPairEntries = ListFactory.newArrayList();

@@ -49,4 +49,19 @@ class CsvExtensionsTest
 		CsvExtensions.sortCsvByAlgorithmAndKeysize(csvFilePath);
 		System.out.println("CSV file sorted successfully.");
 	}
+
+	@Test
+	void sortCsvByKeypairAndSignatureAlgorithm() throws IOException
+	{
+		File invalidCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
+			"invalid_certificate_signature_algorithms.csv");
+		File validCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
+			"invalid_certificate_signature_algorithms.csv");
+		// Example usage with a CSV file path
+		Path csvFilePath = validCsvFile.toPath();
+		CsvExtensions.sortCsvByKeypairAndSignatureAlgorithm(csvFilePath);
+		csvFilePath = invalidCsvFile.toPath();
+		CsvExtensions.sortCsvByKeypairAndSignatureAlgorithm(csvFilePath);
+		System.out.println("CSV file sorted successfully.");
+	}
 }

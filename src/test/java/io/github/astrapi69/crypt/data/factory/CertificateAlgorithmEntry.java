@@ -24,14 +24,14 @@
  */
 package io.github.astrapi69.crypt.data.factory;
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-
-import java.security.PrivateKey;
-import java.security.PublicKey;
 
 @Data
 @SuperBuilder(toBuilder = true)
