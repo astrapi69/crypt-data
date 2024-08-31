@@ -102,11 +102,10 @@ public class KeyPairFactoryTest
 	 *             list
 	 */
 	@Test
-	@Disabled
+//	@Disabled
 	public void testWithAllExistingAlgorithms() throws IOException
 	{
-		final List<KeyPairEntry> validKeyPairEntries = ListFactory.newArrayList();
-		List<KeyPairEntry> completedKeypairEntries;
+		List<KeyPairEntry> validKeypairEntries;
 		List<KeyPairEntry> testKeypairEntries;
 		List<KeyPairEntry> invalidKeyPairEntries;
 
@@ -118,27 +117,14 @@ public class KeyPairFactoryTest
 			"invalid_key_pair_algorithms.csv");
 
 		invalidKeyPairEntries = FileInitializerExtension.getKeyPairEntries(invalidCsvFile);
-		completedKeypairEntries = FileInitializerExtension.getKeyPairEntries(validCsvFile);
+		validKeypairEntries = FileInitializerExtension.getKeyPairEntries(validCsvFile);
 		testKeypairEntries = FileInitializerExtension
 			.getKeyPairEntries(testKeypairAlgorithmsCsvFile);
 		testKeypairEntries.removeAll(invalidKeyPairEntries);
-		testKeypairEntries.removeAll(completedKeypairEntries);
+		testKeypairEntries.removeAll(validKeypairEntries);
 
 		// Use the new method to process the key pair entries
 		processKeyPairEntries(testKeypairEntries, validCsvFile, invalidCsvFile, 60);
-
-		validKeyPairEntries.forEach(keyPairEntry -> {
-			try
-			{
-				LineAppender.appendLines(validCsvFile,
-					keyPairEntry.getAlgorithm() + "," + keyPairEntry.getKeySize());
-			}
-			catch (IOException e)
-			{
-				log.log(Level.WARNING, "Entry '" + keyPairEntry.getAlgorithm() + ","
-					+ keyPairEntry.getKeySize() + "' throws IOException", e);
-			}
-		});
 	}
 
 	public void processKeyPairEntries(List<KeyPairEntry> testKeypairEntries, File validCsvFile,
