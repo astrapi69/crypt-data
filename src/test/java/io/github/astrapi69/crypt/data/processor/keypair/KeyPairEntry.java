@@ -22,10 +22,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.crypt.data.factory;
-
-import java.security.PrivateKey;
-import java.security.PublicKey;
+package io.github.astrapi69.crypt.data.processor.keypair;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -36,22 +33,17 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class CertificateAlgorithmEntry
+public class KeyPairEntry
 {
 
 	/**
-	 * The algorithm used for the key pair
+	 * The algorithm used for the key pair.
 	 */
 	@NonNull
-	String keyPairAlgorithm;
+	String algorithm;
 
 	/**
-	 * The signature algorithm used to sign the certificate
+	 * The key size for the key pair.
 	 */
-	@NonNull
-	String signatureAlgorithm;
-
-	PrivateKey privateKey;
-
-	PublicKey publicKey;
+	Integer keySize;
 }

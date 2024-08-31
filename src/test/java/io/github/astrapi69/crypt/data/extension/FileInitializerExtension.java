@@ -31,8 +31,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import io.github.astrapi69.collection.list.ListFactory;
-import io.github.astrapi69.crypt.data.factory.CertificateAlgorithmEntry;
-import io.github.astrapi69.crypt.data.processor.KeyPairEntry;
+import io.github.astrapi69.crypt.data.processor.certificate.CertificateAlgorithmEntry;
+import io.github.astrapi69.crypt.data.processor.keypair.KeyPairEntry;
 
 public class FileInitializerExtension
 {

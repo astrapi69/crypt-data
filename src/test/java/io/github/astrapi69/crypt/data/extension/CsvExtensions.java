@@ -38,8 +38,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import io.github.astrapi69.crypt.data.factory.CertificateAlgorithmEntry;
-import io.github.astrapi69.crypt.data.processor.KeyPairEntry;
+import io.github.astrapi69.crypt.data.processor.certificate.CertificateAlgorithmEntry;
+import io.github.astrapi69.crypt.data.processor.keypair.KeyPairEntry;
 
 public class CsvExtensions
 {

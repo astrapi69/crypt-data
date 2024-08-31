@@ -1,4 +1,4 @@
-package io.github.astrapi69.crypt.data.processor;
+package io.github.astrapi69.crypt.data.processor.keypair;
 
 import java.io.File;
 import java.io.IOException;
