@@ -72,41 +72,6 @@ public class CertificateAlgorithmTest
 		Security.addProvider(new BouncyCastleProvider());
 	}
 
-	/**
-	 * Tests whether a given signature algorithm can be used to successfully create an
-	 * {@link X509Certificate}.
-	 *
-	 * @param certificateInfo
-	 *            the certificate information containing details like issuer, subject, etc.
-	 * @return true if the algorithm is valid and can be used to create the certificate, false
-	 *         otherwise
-	 */
-	public static boolean isAlgorithmValidForCertificate(CertificateInfo certificateInfo)
-	{
-		try
-		{
-			// Attempt to create the certificate using the given signature algorithm
-			X509Certificate certificate = newX509Certificate(certificateInfo);
-
-			// If certificate creation is successful and no exception was thrown, the algorithm is
-			// valid
-			return certificate != null;
-		}
-		catch (IllegalArgumentException e)
-		{
-			// Handle specific cases where the signature type is unknown
-			log.log(Level.WARNING,
-				"Unknown signature type: " + certificateInfo.getSignatureAlgorithm(), e);
-			return false;
-		}
-		catch (OperatorCreationException | CertificateException | CertIOException e)
-		{
-			log.log(Level.WARNING, "Certificate creation failed for algorithm: "
-				+ certificateInfo.getSignatureAlgorithm(), e);
-			return false;
-		}
-	}
-
 	@Test
 	@Disabled
 	public void testAllKeyPairGeneratorAlgorithmsWithSignature()
