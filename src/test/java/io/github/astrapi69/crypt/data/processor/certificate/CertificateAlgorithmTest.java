@@ -24,15 +24,12 @@
  */
 package io.github.astrapi69.crypt.data.processor.certificate;
 
-import static io.github.astrapi69.crypt.data.factory.CertFactory.newX509Certificate;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.KeyPairGenerator;
 import java.security.Security;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,16 +39,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
-import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.operator.OperatorCreationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
 import io.github.astrapi69.crypt.data.extension.FileInitializerExtension;
-import io.github.astrapi69.crypt.data.model.CertificateInfo;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.lang.thread.ThreadExtensions;
