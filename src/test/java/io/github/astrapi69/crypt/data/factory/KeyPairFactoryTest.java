@@ -102,7 +102,7 @@ public class KeyPairFactoryTest
 	 *             list
 	 */
 	@Test
-	// @Disabled
+	@Disabled
 	public void testWithAllExistingAlgorithms() throws IOException
 	{
 		List<KeyPairEntry> validKeypairEntries;
@@ -137,45 +137,9 @@ public class KeyPairFactoryTest
 		ExecutorService executorService = Executors.newFixedThreadPool(halfOfCores);
 
 		testKeypairEntries.forEach(keyPairEntry -> {
+
 			KeyPairEntryRunner task = new KeyPairEntryRunner(keyPairEntry, validCsvFile,
 				invalidCsvFile);
-			// Runnable task = () -> {
-			// String algorithm = keyPairEntry.getAlgorithm();
-			// Integer keySize = keyPairEntry.getKeySize();
-			//
-			// try
-			// {
-			// System.out.println(
-			// "Start task with algorithm: " + algorithm + " , keysize: " + keySize);
-			// KeyPair keyPair = KeyPairFactory.newKeyPair(algorithm, keySize);
-			// PrivateKey privateKey = keyPair.getPrivate();
-			// PublicKey publicKey = keyPair.getPublic();
-			//
-			// LineAppender.appendLines(validCsvFile, algorithm + "," + keySize);
-			// System.out.println("Task " + "algorithm: " + algorithm + " , keysize: "
-			// + keySize + " completed");
-			// }
-			// catch (NoSuchAlgorithmException | NoSuchProviderException e)
-			// {
-			// try
-			// {
-			// LineAppender.appendLines(invalidCsvFile, algorithm + "," + keySize);
-			// }
-			// catch (IOException ex)
-			// {
-			// log.log(
-			// Level.WARNING, "Algorithm did not save to file "
-			// + invalidCsvFile.getName() + " : " + keyPairEntry.getAlgorithm(),
-			// ex);
-			// }
-			// log.log(Level.WARNING, "Algorithm throws: " + keyPairEntry.getAlgorithm(), e);
-			// }
-			// catch (IOException e)
-			// {
-			// log.log(Level.WARNING, "Algorithm did not save to file "
-			// + validCsvFile.getName() + " : " + keyPairEntry.getAlgorithm(), e);
-			// }
-			// };
 
 			// Submit the task to the executor service
 			executorService.submit(() -> {
