@@ -1,4 +1,4 @@
-package io.github.astrapi69.crypt.data.factory;
+package io.github.astrapi69.crypt.data.processor;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,17 +10,24 @@ import java.security.PublicKey;
 import java.util.logging.Level;
 
 import io.github.astrapi69.crypt.data.extension.LineAppender;
+import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.java.Log;
 
 @Log
+@Getter
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class KeyPairEntryRunner implements Runnable
 {
-	final KeyPairEntry keyPairEntry;
-	final File validCsvFile;
-	final File invalidCsvFile;
+	KeyPairEntry keyPairEntry;
+	File validCsvFile;
+	File invalidCsvFile;
 
-	public KeyPairEntryRunner(final KeyPairEntry keyPairEntry, File validCsvFile,
-		File invalidCsvFile)
+	public KeyPairEntryRunner(final @NonNull KeyPairEntry keyPairEntry,
+		final @NonNull File validCsvFile, final @NonNull File invalidCsvFile)
 	{
 		this.keyPairEntry = keyPairEntry;
 		this.validCsvFile = validCsvFile;
