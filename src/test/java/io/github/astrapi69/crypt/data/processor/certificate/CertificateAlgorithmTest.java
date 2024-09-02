@@ -24,7 +24,6 @@
  */
 package io.github.astrapi69.crypt.data.processor.certificate;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -120,24 +119,7 @@ public class CertificateAlgorithmTest
 			});
 		}
 		// Shutdown the executor service and wait for completion
-		shutdownExecutorService(executorService, timeoutSeconds);
-	}
-
-	private void shutdownExecutorService(ExecutorService executorService, long timeoutSeconds)
-	{
-		executorService.shutdown();
-		try
-		{
-			if (!executorService.awaitTermination(timeoutSeconds * 2, TimeUnit.SECONDS))
-			{
-				executorService.shutdownNow();
-			}
-		}
-		catch (InterruptedException e)
-		{
-			executorService.shutdownNow();
-			Thread.currentThread().interrupt();
-		}
+		ThreadExtensions.shutdownExecutorService(executorService, timeoutSeconds);
 	}
 
 }

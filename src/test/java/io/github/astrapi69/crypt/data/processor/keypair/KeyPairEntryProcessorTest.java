@@ -147,20 +147,7 @@ public class KeyPairEntryProcessorTest
 		});
 
 		// Shutdown the executor service after submitting all tasks
-		executorService.shutdown();
-		try
-		{
-			// Wait for all tasks to complete or timeout
-			if (!executorService.awaitTermination(timeoutSeconds * testKeypairEntries.size(),
-				TimeUnit.SECONDS))
-			{
-				executorService.shutdownNow();
-			}
-		}
-		catch (InterruptedException e)
-		{
-			executorService.shutdownNow();
-		}
+		ThreadExtensions.shutdownExecutorService(executorService, timeoutSeconds);
 	}
 
 	/**
