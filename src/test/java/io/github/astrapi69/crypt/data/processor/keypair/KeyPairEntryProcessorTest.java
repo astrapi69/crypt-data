@@ -128,7 +128,8 @@ public class KeyPairEntryProcessorTest
 				}
 				catch (TimeoutException e)
 				{
-					log.log(Level.FINEST, "Algorithm: " + keyPairEntry.getAlgorithm() + " with keysize:" + keyPairEntry.getKeySize(), e);
+					log.log(Level.FINEST, "Algorithm: " + keyPairEntry.getAlgorithm()
+						+ " with keysize:" + keyPairEntry.getKeySize(), e);
 					try
 					{
 						LineAppender.appendLines(invalidCsvFile,
