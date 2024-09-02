@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.security.KeyPairGenerator;
 import java.security.Security;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -44,7 +43,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
-import io.github.astrapi69.crypt.data.extension.FileInitializerExtension;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.lang.thread.ThreadExtensions;
@@ -66,7 +64,7 @@ public class CertificateAlgorithmTest
 	}
 
 	@Test
-	@Disabled
+	@Disabled("For creation for a valid map between keypair algorithm with signature algorithm")
 	public void testAllKeyPairGeneratorAlgorithmsWithSignature()
 		throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException
 	{
@@ -74,12 +72,14 @@ public class CertificateAlgorithmTest
 		File invalidSignatureAlgorithmsCsvFile = FileFactory.newFile(
 			PathFinder.getSrcTestResourcesDir(), "invalid_certificate_signature_algorithms.csv");
 		File validSignatureAlgorithmsCsvFile = FileFactory.newFile(
-			PathFinder.getSrcTestResourcesDir(), "valid_certificate_signature_algorithms.csv");
-
-		List<CertificateAlgorithmEntry> invalidSignatureAlgorithmEntries = FileInitializerExtension
-			.inializeFile(invalidSignatureAlgorithmsCsvFile);
-		List<CertificateAlgorithmEntry> validSignatureAlgorithmEntries = FileInitializerExtension
-			.inializeFile(validSignatureAlgorithmsCsvFile);
+			PathFinder.getSrcTestResourcesDir(),
+			"valid_jdk_17_provider_bc_certificate_signature_algorithms.csv");
+		//
+		// List<CertificateAlgorithmEntry> invalidSignatureAlgorithmEntries =
+		// FileInitializerExtension
+		// .inializeFile(invalidSignatureAlgorithmsCsvFile);
+		// List<CertificateAlgorithmEntry> validSignatureAlgorithmEntries = FileInitializerExtension
+		// .inializeFile(validSignatureAlgorithmsCsvFile);
 
 		Map<String, Set<Integer>> supportedKeySizesForKeyPairGenerator = AlgorithmExtensions
 			.getSupportedAlgorithmsAndKeySizes("KeyPairGenerator", KeyPairGenerator.class,
@@ -97,7 +97,7 @@ public class CertificateAlgorithmTest
 			String keyPairAlgorithm = entry.getKey();
 			Set<Integer> keySizes = entry.getValue();
 
-			CertificateAlgorithmEntryRunner task = new CertificateAlgorithmEntryRunner(null,
+			CertificateAlgorithmEntryRunner task = new CertificateAlgorithmEntryRunner(
 				keyPairAlgorithm, keySizes, validSignatureAlgorithmsCsvFile,
 				invalidSignatureAlgorithmsCsvFile);
 

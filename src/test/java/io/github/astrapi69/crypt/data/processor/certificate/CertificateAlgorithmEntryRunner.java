@@ -58,20 +58,16 @@ import lombok.extern.java.Log;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CertificateAlgorithmEntryRunner implements Runnable
 {
-	CertificateAlgorithmEntry certificateAlgorithmEntry;
 	String keyPairAlgorithm;
 	Set<Integer> keySizes;
 	Set<String> signatureAlgorithms;
 	File validSignatureAlgorithmsCsvFile;
 	File invalidSignatureAlgorithmsCsvFile;
 
-	public CertificateAlgorithmEntryRunner(
-		final @NonNull CertificateAlgorithmEntry certificateAlgorithmEntry,
-		final @NonNull String keyPairAlgorithm, final @NonNull Set<Integer> keySizes,
-		final @NonNull File validSignatureAlgorithmsCsvFile,
+	public CertificateAlgorithmEntryRunner(final @NonNull String keyPairAlgorithm,
+		final @NonNull Set<Integer> keySizes, final @NonNull File validSignatureAlgorithmsCsvFile,
 		final @NonNull File invalidSignatureAlgorithmsCsvFile)
 	{
-		this.certificateAlgorithmEntry = certificateAlgorithmEntry;
 		this.keyPairAlgorithm = keyPairAlgorithm;
 		this.keySizes = keySizes;
 		this.signatureAlgorithms = AlgorithmExtensions.getAlgorithms("Signature");

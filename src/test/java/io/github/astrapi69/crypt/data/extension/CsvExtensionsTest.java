@@ -24,8 +24,6 @@
  */
 package io.github.astrapi69.crypt.data.extension;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -56,7 +54,7 @@ class CsvExtensionsTest
 		File invalidCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
 			"invalid_certificate_signature_algorithms.csv");
 		File validCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
-			"invalid_certificate_signature_algorithms.csv");
+			"valid_jdk_17_provider_bc_certificate_signature_algorithms.csv");
 		// Example usage with a CSV file path
 		Path csvFilePath = validCsvFile.toPath();
 		CsvExtensions.sortCsvByKeypairAndSignatureAlgorithm(csvFilePath);
