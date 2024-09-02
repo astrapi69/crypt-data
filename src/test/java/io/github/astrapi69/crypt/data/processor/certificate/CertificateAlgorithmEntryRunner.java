@@ -24,7 +24,6 @@
  */
 package io.github.astrapi69.crypt.data.processor.certificate;
 
-import static io.github.astrapi69.crypt.data.factory.CertFactory.newX509Certificate;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,13 +32,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
-
-import org.bouncycastle.cert.CertIOException;
-import org.bouncycastle.operator.OperatorCreationException;
 
 import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
 import io.github.astrapi69.crypt.data.extension.LineAppender;
@@ -63,16 +59,18 @@ public class CertificateAlgorithmEntryRunner implements Runnable
 	Set<String> signatureAlgorithms;
 	File validSignatureAlgorithmsCsvFile;
 	File invalidSignatureAlgorithmsCsvFile;
+	boolean allKeysizes;
 
 	public CertificateAlgorithmEntryRunner(final @NonNull String keyPairAlgorithm,
 		final @NonNull Set<Integer> keySizes, final @NonNull File validSignatureAlgorithmsCsvFile,
-		final @NonNull File invalidSignatureAlgorithmsCsvFile)
+		final @NonNull File invalidSignatureAlgorithmsCsvFile, boolean allKeysizes)
 	{
 		this.keyPairAlgorithm = keyPairAlgorithm;
 		this.keySizes = keySizes;
 		this.signatureAlgorithms = AlgorithmExtensions.getAlgorithms("Signature");
 		this.validSignatureAlgorithmsCsvFile = validSignatureAlgorithmsCsvFile;
 		this.invalidSignatureAlgorithmsCsvFile = invalidSignatureAlgorithmsCsvFile;
+		this.allKeysizes = allKeysizes;
 	}
 
 	@Override
@@ -80,17 +78,38 @@ public class CertificateAlgorithmEntryRunner implements Runnable
 	{
 		try
 		{
-			for (Integer keySize : keySizes)
+			if (!keySizes.isEmpty())
 			{
-				KeyPair keyPair = KeyPairFactory.newKeyPair(keyPairAlgorithm, keySize);
-				PrivateKey privateKey = keyPair.getPrivate();
-				PublicKey publicKey = keyPair.getPublic();
-
-				for (String signatureAlgorithm : signatureAlgorithms)
+				if (allKeysizes)
 				{
-					processSignatureAlgorithm(keyPairAlgorithm, signatureAlgorithm, privateKey,
-						publicKey, validSignatureAlgorithmsCsvFile,
-						invalidSignatureAlgorithmsCsvFile);
+					for (Integer keySize : keySizes)
+					{
+						KeyPair keyPair = KeyPairFactory.newKeyPair(keyPairAlgorithm, keySize);
+						PrivateKey privateKey = keyPair.getPrivate();
+						PublicKey publicKey = keyPair.getPublic();
+
+						for (String signatureAlgorithm : signatureAlgorithms)
+						{
+							processSignatureAlgorithm(keyPairAlgorithm, signatureAlgorithm,
+								privateKey, publicKey, validSignatureAlgorithmsCsvFile,
+								invalidSignatureAlgorithmsCsvFile);
+						}
+					}
+				}
+				else
+				{
+					List<Integer> keySizesCopy = new ArrayList<>(keySizes);
+					Integer keySize = keySizesCopy.get(0);
+					KeyPair keyPair = KeyPairFactory.newKeyPair(keyPairAlgorithm, keySize);
+					PrivateKey privateKey = keyPair.getPrivate();
+					PublicKey publicKey = keyPair.getPublic();
+
+					for (String signatureAlgorithm : signatureAlgorithms)
+					{
+						processSignatureAlgorithm(keyPairAlgorithm, signatureAlgorithm, privateKey,
+							publicKey, validSignatureAlgorithmsCsvFile,
+							invalidSignatureAlgorithmsCsvFile);
+					}
 				}
 			}
 		}
@@ -119,7 +138,7 @@ public class CertificateAlgorithmEntryRunner implements Runnable
 			.signatureAlgorithm(signatureAlgorithm).version(3)
 			.extensions(CertificateTestDataFactory.newExtensionInfos()).build();
 
-		if (isAlgorithmValidForCertificate(certificateInfo))
+		if (CertificateVerifier.isAlgorithmValidForCertificate(certificateInfo))
 		{
 			appendToFile(validSignatureAlgorithmsCsvFile, certificateAlgorithmEntry);
 		}
@@ -143,38 +162,4 @@ public class CertificateAlgorithmEntryRunner implements Runnable
 		}
 	}
 
-	/**
-	 * Tests whether a given signature algorithm can be used to successfully create an
-	 * {@link X509Certificate}.
-	 *
-	 * @param certificateInfo
-	 *            the certificate information containing details like issuer, subject, etc.
-	 * @return true if the algorithm is valid and can be used to create the certificate, false
-	 *         otherwise
-	 */
-	public static boolean isAlgorithmValidForCertificate(CertificateInfo certificateInfo)
-	{
-		try
-		{
-			// Attempt to create the certificate using the given signature algorithm
-			X509Certificate certificate = newX509Certificate(certificateInfo);
-
-			// If certificate creation is successful and no exception was thrown, the algorithm is
-			// valid
-			return certificate != null;
-		}
-		catch (IllegalArgumentException e)
-		{
-			// Handle specific cases where the signature type is unknown
-			log.log(Level.WARNING,
-				"Unknown signature type: " + certificateInfo.getSignatureAlgorithm(), e);
-			return false;
-		}
-		catch (OperatorCreationException | CertificateException | CertIOException e)
-		{
-			log.log(Level.WARNING, "Certificate creation failed for algorithm: "
-				+ certificateInfo.getSignatureAlgorithm(), e);
-			return false;
-		}
-	}
 }
