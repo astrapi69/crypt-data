@@ -102,7 +102,7 @@ public class KeyPairEntryProcessorTest
 		testKeypairEntries.removeAll(validKeypairEntries);
 
 		// Use the new method to process the key pair entries
-		processKeyPairEntries(testKeypairEntries, validCsvFile, invalidCsvFile, 60);
+		processKeyPairEntries(testKeypairEntries, validCsvFile, invalidCsvFile, 90);
 	}
 
 	public void processKeyPairEntries(List<KeyPairEntry> testKeypairEntries, File validCsvFile,
