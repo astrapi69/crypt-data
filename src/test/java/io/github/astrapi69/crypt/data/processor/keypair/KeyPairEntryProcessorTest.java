@@ -128,7 +128,7 @@ public class KeyPairEntryProcessorTest
 				}
 				catch (TimeoutException e)
 				{
-					log.log(Level.WARNING, "Algorithm throws: " + keyPairEntry.getAlgorithm(), e);
+					log.log(Level.FINEST, "Algorithm: " + keyPairEntry.getAlgorithm() + " with keysize:" + keyPairEntry.getKeySize(), e);
 					try
 					{
 						LineAppender.appendLines(invalidCsvFile,
@@ -137,7 +137,7 @@ public class KeyPairEntryProcessorTest
 					catch (IOException ex)
 					{
 						log.log(
-							Level.WARNING, "Algorithm did not save to file "
+							Level.FINEST, "Algorithm did not save to file "
 								+ invalidCsvFile.getName() + " : " + keyPairEntry.getAlgorithm(),
 							ex);
 					}
