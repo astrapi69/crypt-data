@@ -147,7 +147,36 @@ public class KeyPairEntryProcessorTest
 		});
 
 		// Shutdown the executor service after submitting all tasks
-		ThreadExtensions.shutdownExecutorService(executorService, timeoutSeconds);
+		shutdownExecutorService(executorService, timeoutSeconds, testKeypairEntries.size());
+	}
+
+
+	/**
+	 * Shuts down the given {@link ExecutorService} gracefully and forcefully if necessary
+	 *
+	 * @param executorService
+	 *            the {@link ExecutorService} to be shut down
+	 * @param timeoutSeconds
+	 *            the timeout in seconds to wait for termination
+	 * @param taskSize
+	 *            the task size which will be multiplied with the timeout
+	 */
+	public static void shutdownExecutorService(ExecutorService executorService, long timeoutSeconds,
+		long taskSize)
+	{
+		executorService.shutdown();
+		try
+		{
+			if (!executorService.awaitTermination(timeoutSeconds * taskSize, TimeUnit.SECONDS))
+			{
+				executorService.shutdownNow();
+			}
+		}
+		catch (InterruptedException e)
+		{
+			executorService.shutdownNow();
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	/**
@@ -157,7 +186,7 @@ public class KeyPairEntryProcessorTest
 	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
-	@Disabled
+	// @Disabled
 	public void testWithAllAlgorithms() throws IOException
 	{
 		List<KeyPairEntry> validKeyPairEntries;
