@@ -38,6 +38,7 @@ import java.util.Set;
 import java.util.logging.Level;
 
 import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
+import io.github.astrapi69.crypt.data.algorithm.SignatureAlgorithmResolver;
 import io.github.astrapi69.crypt.data.extension.LineAppender;
 import io.github.astrapi69.crypt.data.factory.CertificateTestDataFactory;
 import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
@@ -138,7 +139,7 @@ public class CertificateAlgorithmEntryRunner implements Runnable
 			.signatureAlgorithm(signatureAlgorithm).version(3)
 			.extensions(CertificateTestDataFactory.newExtensionInfos()).build();
 
-		if (CertificateVerifier.isAlgorithmValidForCertificate(certificateInfo))
+		if (SignatureAlgorithmResolver.isAlgorithmValidForCertificate(certificateInfo))
 		{
 			appendToFile(validSignatureAlgorithmsCsvFile, certificateAlgorithmEntry);
 		}

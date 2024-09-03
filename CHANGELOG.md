@@ -6,6 +6,8 @@ Version 9.7-SNAPSHOT
 
 ADDED:
 
+- new class SignatureAlgorithmResolver that resolves all valid signature algorithms for corresponding key pair
+  algorithm
 - new method in class AlgorithmExtensions that retrieves all appropriate algorithms from a given service name
 - new validation method in class KeyPairInfo for validation of KeyPair creation
 - new method in class AlgorithmExtensions that retrieves all appropriate algorithms from a given service name with the
