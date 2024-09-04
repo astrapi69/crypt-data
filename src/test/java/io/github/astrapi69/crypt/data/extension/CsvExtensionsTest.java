@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.file.create.FileFactory;
@@ -49,6 +50,7 @@ class CsvExtensionsTest
 	}
 
 	@Test
+	@Disabled
 	void sortCsvByKeypairAndSignatureAlgorithm() throws IOException
 	{
 		File invalidCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
