@@ -24,7 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.algorithm;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.BufferedReader;
 import java.io.File;

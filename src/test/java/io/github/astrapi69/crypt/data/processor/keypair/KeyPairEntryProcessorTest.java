@@ -80,7 +80,7 @@ public class KeyPairEntryProcessorTest
 	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
-	@Disabled
+	@Disabled("only for local unit testing")
 	public void testWithAllExistingAlgorithms() throws IOException
 	{
 		List<KeyPairEntry> validKeypairEntries;
@@ -158,7 +158,7 @@ public class KeyPairEntryProcessorTest
 	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
-	@Disabled
+	@Disabled("only for local unit testing")
 	public void testWithAllAlgorithms() throws IOException
 	{
 		List<KeyPairEntry> validKeyPairEntries;

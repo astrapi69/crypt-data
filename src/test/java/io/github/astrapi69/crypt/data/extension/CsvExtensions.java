@@ -24,13 +24,19 @@
  */
 package io.github.astrapi69.crypt.data.extension;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.*;
-import java.util.*;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,11 +47,18 @@ import org.apache.commons.csv.CSVRecord;
 import io.github.astrapi69.crypt.data.processor.certificate.CertificateAlgorithmEntry;
 import io.github.astrapi69.crypt.data.processor.keypair.KeyPairEntry;
 
+/**
+ * The {@code CsvExtensions} class provides utility methods to read data from CSV files, map the
+ * data to objects, and generate maps of data from lists of objects. This class supports reading CSV
+ * files using Apache Commons CSV and creating data structures like lists and maps from the parsed
+ * CSV data
+ */
 public class CsvExtensions
 {
 
 	/**
-	 * Sorts a CSV file by keypair-algorithm and signature-algorithm and removes duplicates.
+	 * Sorts a CSV file by 'keypair-algorithm' and 'signature-algorithm', removes duplicates, and
+	 * rewrites the sorted data back to the CSV file
 	 *
 	 * @param csvFilePath
 	 *            the path to the CSV file to be sorted
@@ -54,33 +67,22 @@ public class CsvExtensions
 	 */
 	public static void sortCsvByKeypairAndSignatureAlgorithm(Path csvFilePath) throws IOException
 	{
-		// Read the CSV file lines
 		List<String> lines = Files.readAllLines(csvFilePath);
-
-		// Extract header
 		String header = lines.get(0);
 
-		// Sort the remaining lines based on keypair-algorithm and signature-algorithm,
-		// and remove duplicates by using a LinkedHashSet
-		Set<String> sortedUniqueLines = lines.stream().skip(1) // Skip the header
-			.map(line -> line.split(",")) // Split the line into columns
-			.sorted(Comparator.comparing((String[] columns) -> columns[0]) // First sort by
-																			// keypair-algorithm
-				.thenComparing(columns -> columns[1])) // Then sort by signature-algorithm
-			.map(columns -> String.join(",", columns)) // Join the columns back into a line
-			.collect(Collectors.toCollection(LinkedHashSet::new)); // Remove duplicates and preserve
-																	// order
+		Set<String> sortedUniqueLines = lines.stream().skip(1).map(line -> line.split(","))
+			.sorted(Comparator.comparing((String[] columns) -> columns[0])
+				.thenComparing(columns -> columns[1]))
+			.map(columns -> String.join(",", columns))
+			.collect(Collectors.toCollection(LinkedHashSet::new));
 
-		// Add the header back to the sorted unique lines
 		sortedUniqueLines.add(header);
-
-		// Write the sorted unique lines back to the file
 		Files.write(csvFilePath, sortedUniqueLines);
 	}
 
 	/**
-	 * Reads a CSV file, sorts the data by algorithm and keysize in ascending order, and writes the
-	 * sorted data back to the CSV file.
+	 * Reads a CSV file, sorts its data by 'algorithm' and 'keysize' in ascending order, and writes
+	 * the sorted data back to the file
 	 *
 	 * @param csvFilePath
 	 *            the path to the CSV file to be sorted
@@ -89,28 +91,66 @@ public class CsvExtensions
 	 */
 	public static void sortCsvByAlgorithmAndKeysize(Path csvFilePath) throws IOException
 	{
-		// Read the CSV file lines
 		List<String> lines = Files.readAllLines(csvFilePath);
-
-		// Extract header
 		String header = lines.get(0);
 
-		// Sort the remaining lines based on the algorithm and keysize
-		List<String> sortedLines = lines.stream().skip(1) // Skip the header
-			.map(line -> line.split(",")) // Split the line into columns
-			.sorted(Comparator.comparing((String[] columns) -> columns[0]) // First sort by
-																			// algorithm
-				.thenComparingInt(columns -> Integer.parseInt(columns[1]))) // Then sort by keysize
-			.map(columns -> String.join(",", columns)) // Join the columns back into a line
-			.collect(Collectors.toList());
+		List<String> sortedLines = lines.stream().skip(1).map(line -> line.split(","))
+			.sorted(Comparator.comparing((String[] columns) -> columns[0])
+				.thenComparingInt(columns -> Integer.parseInt(columns[1])))
+			.map(columns -> String.join(",", columns)).collect(Collectors.toList());
 
-		// Add the header back to the sorted lines
 		sortedLines.add(0, header);
-
-		// Write the sorted lines back to the file
 		Files.write(csvFilePath, sortedLines);
 	}
 
+	/**
+	 * Reads entries from a CSV input stream, processes each record using a provided mapper
+	 * function, and returns a list of mapped entries
+	 *
+	 * @param <T>
+	 *            the generic type of the returned entries
+	 * @param csvInputStream
+	 *            the input stream of the CSV file
+	 * @param recordMapper
+	 *            a function that maps each CSV record to an object of type T
+	 * @return a list of mapped entries of type T
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static <T> List<T> readEntriesFromCsv(InputStream csvInputStream,
+		Function<CSVRecord, T> recordMapper) throws IOException
+	{
+		List<T> entries = new ArrayList<>();
+
+		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader().setSkipHeaderRecord(true)
+			.build();
+
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(csvInputStream));
+			CSVParser csvParser = new CSVParser(reader, csvFormat))
+		{
+			for (CSVRecord csvRecord : csvParser)
+			{
+				T entry = recordMapper.apply(csvRecord);
+				entries.add(entry);
+			}
+		}
+		return entries;
+	}
+
+	/**
+	 * Reads entries from a CSV file, processes each record using a provided mapper function, and
+	 * returns a list of mapped entries
+	 *
+	 * @param <T>
+	 *            the generic type of the returned entries
+	 * @param csvFile
+	 *            the CSV file to read from
+	 * @param recordMapper
+	 *            a function that maps each CSV record to an object of type T
+	 * @return a list of mapped entries of type T
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
 	public static <T> List<T> readEntriesFromCsv(File csvFile, Function<CSVRecord, T> recordMapper)
 		throws IOException
 	{
@@ -131,6 +171,15 @@ public class CsvExtensions
 		return entries;
 	}
 
+	/**
+	 * Reads key-pair entries from a CSV file and returns a list of {@link KeyPairEntry}
+	 *
+	 * @param csvFile
+	 *            the CSV file to read from
+	 * @return a list of {@link KeyPairEntry}
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
 	public static List<KeyPairEntry> readKeyPairEntriesFromCsv(File csvFile) throws IOException
 	{
 		return readEntriesFromCsv(csvFile, csvRecord -> {
@@ -142,8 +191,40 @@ public class CsvExtensions
 		});
 	}
 
+	/**
+	 * Reads certificate algorithm entries from a CSV file and returns a list of
+	 * {@link CertificateAlgorithmEntry}
+	 *
+	 * @param csvFile
+	 *            the CSV file to read from
+	 * @return a list of {@link CertificateAlgorithmEntry}
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
 	public static List<CertificateAlgorithmEntry> readCertificateAlgorithmEntryFromCsv(File csvFile)
 		throws IOException
+	{
+		return readEntriesFromCsv(csvFile, csvRecord -> {
+			String algorithm = csvRecord.get("keypair-algorithm");
+			String signatureAlgorithm = csvRecord.get("signature-algorithm");
+
+			return CertificateAlgorithmEntry.builder().keyPairAlgorithm(algorithm)
+				.signatureAlgorithm(signatureAlgorithm).build();
+		});
+	}
+
+	/**
+	 * Reads certificate algorithm entries from a CSV input stream and returns a list of
+	 * {@link CertificateAlgorithmEntry}
+	 *
+	 * @param csvFile
+	 *            the input stream of the CSV file to read from
+	 * @return a list of {@link CertificateAlgorithmEntry}
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static List<CertificateAlgorithmEntry> readCertificateAlgorithmEntryFromCsv(
+		InputStream csvFile) throws IOException
 	{
 		return readEntriesFromCsv(csvFile, csvRecord -> {
 			String algorithm = csvRecord.get("keypair-algorithm");
