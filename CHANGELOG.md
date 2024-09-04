@@ -17,7 +17,7 @@ CHANGED:
 
 - update of gradle-plugin with id 'com.diffplug.spotless' to new beta version 7.0.0.BETA2
 - update of dependency commons-lang3 dependency version to 3.17.0
-- update of test dependency jobj-core to new version 8.4
+- update of test dependency jobj-core to new major version 9
 - update of test dependency mockito-core to new version to 5.13.0
 - update of test dependency mockito-junit-jupiter to new version to 5.13.0
 

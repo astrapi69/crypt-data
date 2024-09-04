@@ -54,6 +54,7 @@ import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
@@ -84,7 +85,7 @@ public class CertificateAlgorithmTest
 	}
 
 	@Test
-	// @Disabled("For creation for a valid map between keypair algorithm with signature algorithm")
+	@Disabled("For creation for a valid map between keypair algorithm with signature algorithm")
 	public void testAllKeyPairGeneratorAlgorithmsWithSignature()
 		throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException
 	{
@@ -133,7 +134,8 @@ public class CertificateAlgorithmTest
 			});
 		}
 		// Shutdown the executor service and wait for completion
-		ThreadExtensions.shutdownExecutorService(executorService, timeoutSeconds);
+		ThreadExtensions.shutdownExecutorService(executorService, timeoutSeconds,
+			supportedKeySizesForKeyPairGenerator.size());
 	}
 
 
