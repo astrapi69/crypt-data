@@ -1,0 +1,5 @@
+serviceName,keyAlgorithm
+Signature,RSA
+Signature,DSA
+Signature,ECDSA
+Signature,NonExistentAlgorithm

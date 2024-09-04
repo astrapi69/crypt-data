@@ -1,6 +1,26 @@
 ## Change log
 ----------------------
 
+Version 9.7
+-------------
+
+ADDED:
+
+- new class SignatureAlgorithmResolver that resolves all valid signature algorithms for corresponding key pair
+  algorithm
+- new method in class AlgorithmExtensions that retrieves all appropriate algorithms from a given service name
+- new validation method in class KeyPairInfo for validation of KeyPair creation
+- new method in class AlgorithmExtensions that retrieves all appropriate algorithms from a given service name with the
+  corresponding possible key sizes
+
+CHANGED:
+
+- update of gradle-plugin with id 'com.diffplug.spotless' to new beta version 7.0.0.BETA2
+- update of dependency commons-lang3 dependency version to 3.17.0
+- update of test dependency jobj-core to new major version 9
+- update of test dependency mockito-core to new version to 5.13.0
+- update of test dependency mockito-junit-jupiter to new version to 5.13.0
+
 Version 9.6
 -------------
 
@@ -65,7 +85,7 @@ Version 9.3
 CHANGED:
 
 - rename of module from crypt.data to io.github.astrapisixtynine.crypt.data
-- update of dependency crypt-api  to the new minor version 9.2
+- update of dependency crypt-api to the new minor version 9.2
 - update of dependency commons-codec to the new patch version 1.17.1
 
 Version 9.2
@@ -262,7 +282,6 @@ CHANGED:
 - renamed package 'io.github.astrapi69.crypto.factories' to 'io.github.astrapi69.crypto.factory'
 - update of dependency crypt-api to new version to 7.7
 
-
 Version 7.10
 -------------
 
@@ -284,7 +303,8 @@ ADDED:
 
 - new method that transform a pem formatted key file to a String
 - new model class for public and private keys
-- improve gradle build performance by adding new gradle parameters for caching, parallel, configure on demand and file watch
+- improve gradle build performance by adding new gradle parameters for caching, parallel, configure on demand and file
+  watch
 
 CHANGED:
 

@@ -24,12 +24,18 @@
  */
 package io.github.astrapi69.crypt.data.key;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import java.util.Set;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -54,11 +60,41 @@ class KeySizeExtensionsTest
 	/**
 	 * Test method for {@link KeySizeExtensions#getSupportedKeySizesForKeyGenerator(String)}
 	 *
+	 * @throws NoSuchMethodException
+	 *             if the specified method cannot be found
+	 * @throws InvocationTargetException
+	 *             if the underlying method throws an exception
+	 * @throws IllegalAccessException
+	 *             if the method is inaccessible
+	 */
+	@Test
+	@Disabled("only for print algorithms and key sizes")
+	public void testGetSupportedKeySizesForKeyGeneratorForKeyPairGenerator()
+		throws InvocationTargetException, NoSuchMethodException, IllegalAccessException
+	{
+		Set<String> keyPairGeneratorAlgorithms = AlgorithmExtensions
+			.getAlgorithms("KeyPairGenerator");
+		assertNotNull(keyPairGeneratorAlgorithms);
+		Map<String, Set<Integer>> supportedKeySizesForKeyPairGenerator = AlgorithmExtensions
+			.getSupportedAlgorithmsAndKeySizes("KeyPairGenerator", KeyPairGenerator.class,
+				KeyPairGenerator::initialize, 1, 32768, 1);
+		assertEquals(keyPairGeneratorAlgorithms.size(),
+			supportedKeySizesForKeyPairGenerator.size());
+		supportedKeySizesForKeyPairGenerator.forEach((algorithm, keySizes) -> {
+			keySizes.forEach(keySize -> {
+				System.out.println(algorithm + "," + keySize);
+			});
+		});
+	}
+
+	/**
+	 * Test method for {@link KeySizeExtensions#getSupportedKeySizesForKeyGenerator(String)}
+	 *
 	 * @throws NoSuchAlgorithmException
 	 *             if the specified algorithm is not available
 	 */
 	@Test
-	public void testGetSupportedKeySizesForKeyGeneratorForKeyPairGenerator()
+	public void testGetSupportedKeySizesForKeyGeneratorForKeyGenerator()
 		throws NoSuchAlgorithmException
 	{
 		Set<String> keyGeneratorAlgorithms = AlgorithmExtensions.getAlgorithms("KeyGenerator");

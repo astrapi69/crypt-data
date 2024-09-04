@@ -52,10 +52,12 @@ import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.crypt.data.model.KeyPairInfo;
 import io.github.astrapi69.file.search.PathFinder;
+import lombok.extern.java.Log;
 
 /**
  * The unit test class for the class {@link KeyPairFactory}
  */
+@Log
 public class KeyPairFactoryTest
 {
 

@@ -36,8 +36,8 @@ import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 
 /**
- * The factory class {@link KeyPairGeneratorFactory} holds methods for creating
- * {@link KeyPairGenerator} objects.
+ * The factory class {@link KeyPairGeneratorFactory} provides methods for creating
+ * {@link KeyPairGenerator} objects
  */
 public final class KeyPairGeneratorFactory
 {
@@ -47,15 +47,14 @@ public final class KeyPairGeneratorFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPairGenerator} from the given parameters.
+	 * Factory method for creating a new {@link KeyPairGenerator} with the specified algorithm
 	 *
 	 * @param algorithm
 	 *            the algorithm
-	 * @return the new {@link KeyPairGenerator} from the given parameters
-	 *
+	 * @return the new {@link KeyPairGenerator} with the specified algorithm
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
+	 *             if no Provider supports a KeyPairGeneratorSpi implementation for the specified
+	 *             algorithm
 	 */
 	public static KeyPairGenerator newKeyPairGenerator(final String algorithm)
 		throws NoSuchAlgorithmException
@@ -64,20 +63,19 @@ public final class KeyPairGeneratorFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPairGenerator} from the given parameters.
+	 * Factory method for creating a new {@link KeyPairGenerator} with the specified algorithm and
+	 * provider
 	 *
 	 * @param algorithm
 	 *            the algorithm
 	 * @param provider
 	 *            the provider
-	 * @return the new {@link KeyPairGenerator} from the given parameters
-	 *
+	 * @return the new {@link KeyPairGenerator} with the specified algorithm and provider
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
+	 *             if no Provider supports a KeyPairGeneratorSpi implementation for the specified
+	 *             algorithm
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 *             if the specified provider is not registered in the security provider list
 	 */
 	public static KeyPairGenerator newKeyPairGenerator(final String algorithm,
 		final String provider) throws NoSuchAlgorithmException, NoSuchProviderException
@@ -86,20 +84,19 @@ public final class KeyPairGeneratorFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPairGenerator} from the given parameters.
+	 * Factory method for creating a new {@link KeyPairGenerator} with the specified algorithm and
+	 * key size
 	 *
 	 * @param algorithm
 	 *            the algorithm
 	 * @param keySize
 	 *            the key size
-	 * @return the new {@link KeyPairGenerator} from the given parameters
-	 *
+	 * @return the new {@link KeyPairGenerator} with the specified algorithm and key size
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
+	 *             if no Provider supports a KeyPairGeneratorSpi implementation for the specified
+	 *             algorithm
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 *             if the specified provider is not registered in the security provider list
 	 */
 	public static KeyPairGenerator newKeyPairGenerator(final String algorithm, final int keySize)
 		throws NoSuchAlgorithmException, NoSuchProviderException
@@ -118,7 +115,8 @@ public final class KeyPairGeneratorFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPairGenerator} from the given parameters
+	 * Factory method for creating a new {@link KeyPairGenerator} with the specified algorithm, key
+	 * size, and {@link SecureRandom}
 	 *
 	 * @param algorithm
 	 *            the algorithm
@@ -126,11 +124,11 @@ public final class KeyPairGeneratorFactory
 	 *            the key size
 	 * @param secureRandom
 	 *            the secure random
-	 * @return the new {@link KeyPairGenerator} from the given parameters
-	 *
+	 * @return the new {@link KeyPairGenerator} with the specified algorithm, key size, and
+	 *         {@link SecureRandom}
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
+	 *             if no Provider supports a KeyPairGeneratorSpi implementation for the specified
+	 *             algorithm
 	 */
 	public static KeyPairGenerator newKeyPairGenerator(final String algorithm, final int keySize,
 		final SecureRandom secureRandom) throws NoSuchAlgorithmException
@@ -141,23 +139,24 @@ public final class KeyPairGeneratorFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPairGenerator} from the given parameters
+	 * Factory method for creating a new {@link KeyPairGenerator} with the specified elliptic curve,
+	 * algorithm, and provider
 	 *
 	 * @param eCNamedCurveParameterSpecName
-	 *            the name of the ecliptic curve requested
+	 *            the name of the elliptic curve
 	 * @param algorithm
 	 *            the algorithm
 	 * @param provider
 	 *            the provider
-	 * @return the new {@link KeyPairGenerator} from the given parameters
+	 * @return the new {@link KeyPairGenerator} with the specified elliptic curve, algorithm, and
+	 *         provider
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
+	 *             if no Provider supports a KeyPairGeneratorSpi implementation for the specified
+	 *             algorithm
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 *             if the specified provider is not registered in the security provider list
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cipher object fails
+	 *             if initialization of the cipher object fails
 	 */
 	public static KeyPairGenerator newKeyPairGenerator(String eCNamedCurveParameterSpecName,
 		final String algorithm, final String provider)
@@ -168,23 +167,24 @@ public final class KeyPairGeneratorFactory
 	}
 
 	/**
-	 * Factory method for creating a new {@link KeyPairGenerator} from the given parameters
+	 * Factory method for creating a new {@link KeyPairGenerator} with the specified elliptic curve
+	 * parameter spec, algorithm, and provider
 	 *
 	 * @param namedCurveParameterSpec
-	 *            the name of the ecliptic curve requested
+	 *            the elliptic curve parameter spec
 	 * @param algorithm
 	 *            the algorithm
 	 * @param provider
 	 *            the provider
-	 * @return the new {@link KeyPairGenerator} from the given parameters
+	 * @return the new {@link KeyPairGenerator} with the specified elliptic curve parameter spec,
+	 *         algorithm, and provider
 	 * @throws NoSuchAlgorithmException
-	 *             is thrown if no Provider supports a KeyPairGeneratorSpi implementation for the
-	 *             specified algorithm
+	 *             if no Provider supports a KeyPairGeneratorSpi implementation for the specified
+	 *             algorithm
 	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 *             if the specified provider is not registered in the security provider list
 	 * @throws InvalidAlgorithmParameterException
-	 *             is thrown if initialization of the cipher object fails
+	 *             if initialization of the cipher object fails
 	 */
 	public static KeyPairGenerator newKeyPairGenerator(
 		ECNamedCurveParameterSpec namedCurveParameterSpec, final String algorithm,
@@ -195,5 +195,4 @@ public final class KeyPairGeneratorFactory
 		generator.initialize(namedCurveParameterSpec);
 		return generator;
 	}
-
 }

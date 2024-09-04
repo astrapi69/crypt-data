@@ -25,6 +25,18 @@
 package io.github.astrapi69.crypt.data.model;
 
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.lang.reflect.InvocationTargetException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 import org.meanbean.test.BeanVerifier;
@@ -36,6 +48,57 @@ import io.github.astrapi69.crypt.api.provider.SecurityProvider;
  */
 class KeyPairInfoTest
 {
+
+	private KeyPairInfo keyPairInfo;
+
+	@BeforeEach
+	void setUp()
+	{
+		keyPairInfo = KeyPairInfo.builder().algorithm("RSA").keySize(2048).build();
+	}
+
+	/**
+	 * Test method for {@link KeyPairInfo#toKeyPair(KeyPairInfo)}
+	 */
+	@Test
+	@DisplayName("Test toKeyPair method with valid data")
+	void testToKeyPair()
+	{
+		assertDoesNotThrow(() -> {
+			KeyPair keyPair = KeyPairInfo.toKeyPair(keyPairInfo);
+			assertNotNull(keyPair);
+		});
+	}
+
+	/**
+	 * Test method for {@link KeyPairInfo#toKeyPairInfo(KeyPair)}
+	 */
+	@Test
+	@DisplayName("Test toKeyPairInfo method with valid data")
+	void testToKeyPairInfo() throws NoSuchAlgorithmException
+	{
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+		keyGen.initialize(2048);
+		KeyPair keyPair = keyGen.generateKeyPair();
+		KeyPairInfo keyPairInfoFromKeyPair = KeyPairInfo.toKeyPairInfo(keyPair);
+
+		assertEquals("RSA", keyPairInfoFromKeyPair.getAlgorithm());
+		assertEquals(2048, keyPairInfoFromKeyPair.getKeySize());
+	}
+
+	/**
+	 * Test method for {@link KeyPairInfo#isValid(KeyPairInfo)} with invalid data
+	 */
+	@Test
+	@DisplayName("Test isValid method with invalid data")
+	void testIsValidWithInvalidData()
+	{
+		KeyPairInfo invalidKeyPairInfo = KeyPairInfo.builder().algorithm("InvalidAlgorithm")
+			.keySize(512).build();
+
+		assertThrows(InvocationTargetException.class,
+			() -> KeyPairInfo.isValid(invalidKeyPairInfo));
+	}
 
 	/**
 	 * Test method for {@link KeyPairInfo} with {@link BeanTester}
