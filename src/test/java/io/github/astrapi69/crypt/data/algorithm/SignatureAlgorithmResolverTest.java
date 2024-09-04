@@ -37,22 +37,28 @@ import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import io.github.astrapi69.collection.list.ListFactory;
+import io.github.astrapi69.crypt.data.extension.LineAppender;
 import io.github.astrapi69.crypt.data.key.KeySizeInitializer;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
+import lombok.extern.java.Log;
 
 /**
  * The class {@code CertificateVerifierTest} provides unit tests for the methods of the
  * {@code CertificateVerifier} class
  */
+@Log
 class SignatureAlgorithmResolverTest
 {
 
@@ -92,7 +98,41 @@ class SignatureAlgorithmResolverTest
 
 		// Assert that the result is not null
 		assertNotNull(supportedSignatureAlgorithms);
+		File validSignatureAlgorithmsCsvFile = FileFactory.newFile(
+			PathFinder.getSrcTestResourcesDir(),
+			"new_valid_jdk_17_provider_bc_certificate_signature_algorithms.csv");
 
+		writeToCsv(validSignatureAlgorithmsCsvFile, supportedSignatureAlgorithms);
+	}
+
+	private static void writeToCsv(File validSignatureAlgorithmsCsvFile,
+		Map<String, Set<String>> supportedSignatureAlgorithms)
+	{
+		try
+		{
+			LineAppender.appendLines(validSignatureAlgorithmsCsvFile,
+				"keypair-algorithm" + "," + "signature-algorithm");
+		}
+		catch (IOException e)
+		{
+			log.log(Level.WARNING, "IOException while appending entry to file: "
+				+ validSignatureAlgorithmsCsvFile.getName(), e);
+		}
+		supportedSignatureAlgorithms.forEach((key, value) -> {
+			List<String> signatureAlgorithms = ListFactory.newSortedUniqueList(value);
+			signatureAlgorithms.forEach(signatureAlgorithm -> {
+				try
+				{
+					LineAppender.appendLines(validSignatureAlgorithmsCsvFile,
+						key + "," + signatureAlgorithm);
+				}
+				catch (IOException e)
+				{
+					log.log(Level.WARNING, "IOException while appending entry to file: "
+						+ validSignatureAlgorithmsCsvFile.getName(), e);
+				}
+			});
+		});
 	}
 
 	/**

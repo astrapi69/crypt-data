@@ -20,8 +20,7 @@
  */
 module io.github.astrapisixtynine.crypt.data
 {
-	requires lombok;
-	requires silly.collection;
+	requires static lombok;
 	requires com.google.common;
 	requires org.apache.commons.codec;
 	requires org.apache.commons.lang3;
@@ -33,6 +32,7 @@ module io.github.astrapisixtynine.crypt.data
 	requires java.xml.bind;
 	requires io.github.astrapisixtynine.crypt.api;
 	requires io.github.astrapisixtynine.throwable;
+	requires io.github.astrapisixtynine.silly.collection;
 	requires org.checkerframework.checker.qual;
 
 	exports io.github.astrapi69.crypt.data.algorithm;
