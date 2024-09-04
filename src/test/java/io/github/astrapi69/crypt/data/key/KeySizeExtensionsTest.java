@@ -35,6 +35,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
@@ -67,7 +68,7 @@ class KeySizeExtensionsTest
 	 *             if the method is inaccessible
 	 */
 	@Test
-	// @Disabled("only for print algorithms and key sizes")
+	@Disabled("only for print algorithms and key sizes")
 	public void testGetSupportedKeySizesForKeyGeneratorForKeyPairGenerator()
 		throws InvocationTargetException, NoSuchMethodException, IllegalAccessException
 	{
