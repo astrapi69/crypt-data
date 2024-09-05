@@ -4,6 +4,9 @@
 Version 10-SNAPSHOT
 -------------
 
+CHANGED:
+
+- update to jdk version 21
 
 Version 9.7
 -------------

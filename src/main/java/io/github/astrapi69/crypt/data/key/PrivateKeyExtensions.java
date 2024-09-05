@@ -233,6 +233,7 @@ public final class PrivateKeyExtensions
 	 */
 	public static String toPemFormat(final PrivateKey privateKey) throws IOException
 	{
+		String algorithm = getAlgorithm(privateKey);
 		if (privateKey instanceof ECPrivateKey)
 		{
 			return PemObjectReader.toPemFormat(
@@ -243,8 +244,13 @@ public final class PrivateKeyExtensions
 			return PemObjectReader.toPemFormat(
 				new PemObject(PemType.DSA_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
 		}
-		return PemObjectReader.toPemFormat(
-			new PemObject(PemType.RSA_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
+		else if (privateKey instanceof RSAPrivateKey)
+		{
+			return PemObjectReader.toPemFormat(
+				new PemObject(PemType.RSA_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
+		}
+		return PemObjectReader
+			.toPemFormat(new PemObject(PemType.PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
 	}
 
 	/**
