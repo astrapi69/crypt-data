@@ -233,7 +233,6 @@ public final class PrivateKeyExtensions
 	 */
 	public static String toPemFormat(final PrivateKey privateKey) throws IOException
 	{
-		String algorithm = getAlgorithm(privateKey);
 		if (privateKey instanceof ECPrivateKey)
 		{
 			return PemObjectReader.toPemFormat(
