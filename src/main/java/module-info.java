@@ -20,7 +20,7 @@
  */
 module io.github.astrapisixtynine.crypt.data
 {
-	requires static lombok;
+	requires lombok;
 	requires com.google.common;
 	requires org.apache.commons.codec;
 	requires org.apache.commons.lang3;

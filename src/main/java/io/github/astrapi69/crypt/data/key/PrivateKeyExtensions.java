@@ -243,8 +243,13 @@ public final class PrivateKeyExtensions
 			return PemObjectReader.toPemFormat(
 				new PemObject(PemType.DSA_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
 		}
-		return PemObjectReader.toPemFormat(
-			new PemObject(PemType.RSA_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
+		else if (privateKey instanceof RSAPrivateKey)
+		{
+			return PemObjectReader.toPemFormat(
+				new PemObject(PemType.RSA_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
+		}
+		return PemObjectReader
+			.toPemFormat(new PemObject(PemType.PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
 	}
 
 	/**
