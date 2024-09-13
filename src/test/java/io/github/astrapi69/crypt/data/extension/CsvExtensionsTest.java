@@ -27,6 +27,8 @@ package io.github.astrapi69.crypt.data.extension;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -36,6 +38,23 @@ import io.github.astrapi69.file.search.PathFinder;
 
 class CsvExtensionsTest
 {
+
+
+	@Test
+	void sortCsvFileWithSupplier() throws IOException
+	{
+		File validCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
+			"invalid_key_pair_algorithms.csv");
+		// Example usage with a CSV file path
+		Path csvFilePath = validCsvFile.toPath();
+
+		// Example usage with algorithm and keysize as sorting criteria
+		Supplier<Comparator<String[]>> comparatorSupplier = () -> Comparator
+			.comparing((String[] columns) -> columns[0]) // Sort by 'algorithm'
+			.thenComparingInt(columns -> Integer.parseInt(columns[1])); // Then by 'keysize'
+
+		CsvExtensions.sortCsv(csvFilePath, comparatorSupplier);
+	}
 
 	@Test
 	void sortCsvByAlgorithmAndKeysize() throws IOException
