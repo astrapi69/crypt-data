@@ -117,16 +117,10 @@ public class CsvExtensions
 	 */
 	public static void sortCsvByAlgorithmAndKeysize(Path csvFilePath) throws IOException
 	{
-		List<String> lines = Files.readAllLines(csvFilePath);
-		String header = lines.get(0);
-
-		List<String> sortedLines = lines.stream().skip(1).map(line -> line.split(","))
-			.sorted(Comparator.comparing((String[] columns) -> columns[0])
-				.thenComparingInt(columns -> Integer.parseInt(columns[1])))
-			.map(columns -> String.join(",", columns)).collect(Collectors.toList());
-
-		sortedLines.add(0, header);
-		Files.write(csvFilePath, sortedLines);
+		Supplier<Comparator<String[]>> comparatorSupplier = () -> Comparator
+			.comparing((String[] columns) -> columns[0]) // Sort by 'algorithm'
+			.thenComparingInt(columns -> Integer.parseInt(columns[1])); // Then by 'keysize'
+		sortCsv(csvFilePath, comparatorSupplier);
 	}
 
 	/**
