@@ -38,6 +38,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.apache.commons.csv.CSVFormat;
@@ -78,6 +79,31 @@ public class CsvExtensions
 
 		sortedUniqueLines.add(header);
 		Files.write(csvFilePath, sortedUniqueLines);
+	}
+
+	/**
+	 * Reads a CSV file, sorts its data based on a supplied comparator, and writes the sorted data
+	 * back to the file.
+	 *
+	 * @param csvFilePath
+	 *            the path to the CSV file to be sorted
+	 * @param comparatorSupplier
+	 *            a supplier that provides a comparator for sorting the rows
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static void sortCsv(Path csvFilePath, Supplier<Comparator<String[]>> comparatorSupplier)
+		throws IOException
+	{
+		List<String> lines = Files.readAllLines(csvFilePath);
+		String header = lines.get(0);
+
+		List<String> sortedLines = lines.stream().skip(1).map(line -> line.split(","))
+			.sorted(comparatorSupplier.get()).map(columns -> String.join(",", columns))
+			.collect(Collectors.toList());
+
+		sortedLines.add(0, header);
+		Files.write(csvFilePath, sortedLines);
 	}
 
 	/**
