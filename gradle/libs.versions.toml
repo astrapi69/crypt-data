@@ -2,10 +2,11 @@
 bcpkix-jdk15on-version = "1.70"
 checksum-up-version = "3.1"
 commons-codec-version = "1.17.1"
-commons-csv-version = "1.11.0"
-commons-io-version = "2.16.1"
+commons-csv-version = "1.12.0"
+commons-io-version = "2.17.0"
 commons-lang3-version = "3.17.0"
 crypt-api-version = "9.3"
+csv-worker-version = "1.0"
 file-worker-version = "17.4"
 gradle-plugin-grgit-version = "5.2.2"
 gradle-plugin-license-version = "0.16.1"
@@ -13,15 +14,15 @@ gradle-plugin-lombok-version = "8.10"
 gradle-plugin-spotless-version = "7.0.0.BETA2"
 gradle-plugin-version-catalog-update-version = "0.8.4"
 gradle-plugin-versions-version = "0.51.0"
-guava-version = "33.3.0-jre"
+guava-version = "33.3.1-jre"
 jaxb-api-version = "2.4.0-b180830.0359"
 jobj-contract-verifier-version = "5.2"
 jobj-core-version = "9"
 jsoup-version = "1.18.1"
 jsr305-version = "3.0.2"
-junit-jupiter-params-version = "5.11.0"
-junit-jupiter-version = "5.11.0"
-junit-platform-launcher-version = "1.11.0"
+junit-jupiter-params-version = "5.11.1"
+junit-jupiter-version = "5.11.1"
+junit-platform-launcher-version = "1.11.1"
 lombok-version = "1.18.34"
 meanbean-factories-version = "3"
 meanbean-version = "3.0.0-M9"
@@ -31,7 +32,7 @@ randomizer-version = "10.2"
 silly-collection-version = "28"
 silly-io-version = "3.1"
 silly-strings-version = "9.1"
-test-object-version = "8.2"
+test-object-version = "9"
 throwable-version = "3"
 time-machine-version = "3"
 vintage-time-version = "6"
@@ -44,6 +45,7 @@ commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "common
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io-version" }
 commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3-version" }
 crypt-api = { module = "io.github.astrapi69:crypt-api", version.ref = "crypt-api-version" }
+csv-worker = { module = "io.github.astrapi69:csv-worker", version.ref = "csv-worker-version" }
 file-worker = { module = "io.github.astrapi69:file-worker", version.ref = "file-worker-version" }
 guava = { module = "com.google.guava:guava", version.ref = "guava-version" }
 jaxb-api = { module = "javax.xml.bind:jaxb-api", version.ref = "jaxb-api-version" }
@@ -72,6 +74,7 @@ vintage-time = { module = "io.github.astrapi69:vintage-time", version.ref = "vin
 [bundles]
 unit-testing = [
     "commons-csv",
+    "csv-worker",
     "jsoup",
     "junit-jupiter",
     "junit-jupiter-params",

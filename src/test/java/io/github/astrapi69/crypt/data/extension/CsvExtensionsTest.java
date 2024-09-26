@@ -35,11 +35,20 @@ import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
+import io.github.astrapisixtynine.csv.CsvExtensions;
 
+/**
+ * The unit test class for the class {@link TestCsvExtensions}
+ */
 class CsvExtensionsTest
 {
 
-
+	/**
+	 * Test method for {@link CsvExtensions#sortCsv(Path, Supplier)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	@Test
 	void sortCsvFileWithSupplier() throws IOException
 	{
@@ -56,6 +65,12 @@ class CsvExtensionsTest
 		CsvExtensions.sortCsv(csvFilePath, comparatorSupplier);
 	}
 
+	/**
+	 * Test method for {@link CsvExtensions#sortCsvByAlgorithmAndKeysize(Path)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	@Test
 	void sortCsvByAlgorithmAndKeysize() throws IOException
 	{
@@ -65,9 +80,14 @@ class CsvExtensionsTest
 		// Example usage with a CSV file path
 		Path csvFilePath = validCsvFile.toPath();
 		CsvExtensions.sortCsvByAlgorithmAndKeysize(csvFilePath);
-		System.out.println("CSV file sorted successfully.");
 	}
 
+	/**
+	 * Test method for {@link CsvExtensions#sortCsvByKeypairAndSignatureAlgorithm(Path)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	@Test
 	@Disabled
 	void sortCsvByKeypairAndSignatureAlgorithm() throws IOException

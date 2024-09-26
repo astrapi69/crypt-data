@@ -47,9 +47,9 @@ import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.crypt.data.algorithm.AlgorithmExtensions;
-import io.github.astrapi69.crypt.data.extension.CsvExtensions;
 import io.github.astrapi69.crypt.data.extension.FileInitializerExtension;
 import io.github.astrapi69.crypt.data.extension.LineAppender;
+import io.github.astrapi69.crypt.data.extension.TestCsvExtensions;
 import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
 import io.github.astrapi69.crypt.data.key.KeySizeExtensions;
 import io.github.astrapi69.file.create.FileFactory;
@@ -174,7 +174,7 @@ public class KeyPairEntryProcessorTest
 		}
 		else
 		{
-			invalidKeyPairEntries = CsvExtensions.readKeyPairEntriesFromCsv(invalidCsvFile);
+			invalidKeyPairEntries = TestCsvExtensions.readKeyPairEntriesFromCsv(invalidCsvFile);
 		}
 
 		if (!validCsvFile.exists())
@@ -184,7 +184,7 @@ public class KeyPairEntryProcessorTest
 		}
 		else
 		{
-			validKeyPairEntries = CsvExtensions.readKeyPairEntriesFromCsv(validCsvFile);
+			validKeyPairEntries = TestCsvExtensions.readKeyPairEntriesFromCsv(validCsvFile);
 		}
 
 		Map<String, List<Integer>> algorithmKeysizeMap = new HashMap<>();

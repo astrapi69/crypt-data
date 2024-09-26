@@ -4,6 +4,18 @@
 Version 10.1-SNAPSHOT
 -------------
 
+ADDED:
+
+- new test dependency csv-worker in version 1.0
+
+CHANGED:
+
+- update gradle to new version 8.10.2
+- update of dependency commons-io dependency version to 2.17.0
+- update of dependency file-worker to new version to 17.3
+- update of dependency guava version to new version 33.3.1-jre
+- update of test dependency junit-jupiter in version 5.11.1
+- update of test dependency junit-platform-launcher in version 1.11.1
 
 Version 10
 -------------
