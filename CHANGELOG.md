@@ -16,6 +16,19 @@ CHANGED:
 - update of dependency guava version to new version 33.3.1-jre
 - update of test dependency junit-jupiter in version 5.11.1
 - update of test dependency junit-platform-launcher in version 1.11.1
+- upgrade Bouncy Castle from bcpkix-jdk15on 1.70 (EOL) to bcpkix-jdk18on 1.80, fixing known BC
+  CVEs (e.g. CVE-2024-29857)
+- enabled the -Xlint:deprecation and -Xlint:unchecked compiler flags
+- upgrade gradle wrapper to new version 9.7.0
+- bumped GitHub Actions to current major versions (checkout@v7, setup-java@v5,
+  setup-gradle@v6, codecov-action@v7) to drop the Node.js 20 deprecation warning
+
+FIXED:
+
+- broadened exception handling in KeySizeExtensions to catch RuntimeException instead of only
+  InvalidParameterException; BC 1.80's ML-KEM and composite-signature algorithms reject
+  plain int-based initialization via UnsupportedOperationException/IllegalArgumentException,
+  which the narrower catch let propagate
 
 Version 10
 -------------
