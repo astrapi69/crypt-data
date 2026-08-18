@@ -242,7 +242,14 @@ public final class CipherFactory
 	 *             if initialization of the cipher object fails
 	 * @throws InvalidKeyException
 	 *             if initialization of the cipher object fails
+	 * @deprecated this overload silently derives the cipher with the fixed, publicly known
+	 *             {@link CompoundAlgorithm#SALT} and the weak
+	 *             {@link CompoundAlgorithm#ITERATIONCOUNT} (19) instead of a caller-chosen
+	 *             salt/iteration count. Use {@link #newPBECipher(char[], int, String, byte[], int)}
+	 *             with an explicit, randomly generated salt and a modern iteration count instead.
+	 *             Will be removed in the next major version.
 	 */
+	@Deprecated
 	public static Cipher newPBECipher(char[] password, int operationMode, String algorithm)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException,
 		InvalidAlgorithmParameterException, InvalidKeyException
