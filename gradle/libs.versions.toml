@@ -1,5 +1,5 @@
 [versions]
-bcpkix-jdk15on-version = "1.70"
+bcpkix-jdk18on-version = "1.80"
 checksum-up-version = "3.1"
 commons-codec-version = "1.17.1"
 commons-csv-version = "1.12.0"
@@ -38,7 +38,7 @@ time-machine-version = "3"
 vintage-time-version = "6"
 
 [libraries]
-bcpkix-jdk15on = { module = "org.bouncycastle:bcpkix-jdk15on", version.ref = "bcpkix-jdk15on-version" }
+bcpkix-jdk18on = { module = "org.bouncycastle:bcpkix-jdk18on", version.ref = "bcpkix-jdk18on-version" }
 checksum-up = { module = "io.github.astrapi69:checksum-up", version.ref = "checksum-up-version" }
 commons-codec = { module = "commons-codec:commons-codec", version.ref = "commons-codec-version" }
 commons-csv = { module = "org.apache.commons:commons-csv", version.ref = "commons-csv-version" }
