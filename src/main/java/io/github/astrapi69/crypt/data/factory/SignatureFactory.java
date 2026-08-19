@@ -81,22 +81,28 @@ public final class SignatureFactory
 	 *            the data that was signed
 	 * @param signatureBytes
 	 *            the signature to verify
-	 * @return true if the signature is valid for the given data and public key
+	 * @return true if the signature is valid for the given data and public key, false if it is
+	 *         invalid or malformed
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the {@link Signature} object fails
 	 * @throws InvalidKeyException
 	 *             is thrown if the given public key is invalid for the given algorithm
-	 * @throws SignatureException
-	 *             is thrown if the {@link Signature} object is not properly initialized
 	 */
 	public static boolean verify(final PublicKey publicKey, final String algorithm,
 		final byte[] data, final byte[] signatureBytes)
-		throws NoSuchAlgorithmException, InvalidKeyException, SignatureException
+		throws NoSuchAlgorithmException, InvalidKeyException
 	{
 		final Signature signature = Signature.getInstance(algorithm);
 		signature.initVerify(publicKey);
-		signature.update(data);
-		return signature.verify(signatureBytes);
+		try
+		{
+			signature.update(data);
+			return signature.verify(signatureBytes);
+		}
+		catch (final SignatureException signatureException)
+		{
+			return false;
+		}
 	}
 
 }

@@ -4,6 +4,38 @@
 Version 10.2-SNAPSHOT
 -------------
 
+ADDED:
+
+- new class HkdfExtensions for HKDF (RFC 5869) key derivation, e.g. to properly derive a
+  symmetric key from a raw X25519/ECDH shared secret instead of using it directly
+- new class SignatureFactory for generic sign/verify with any java.security.Signature
+  algorithm (e.g. Ed25519, natively supported by the JDK since JDK 15)
+- new explicit direct dependency on bcprov-jdk18on (was previously only pulled in
+  transitively via bcpkix-jdk18on)
+
+CHANGED:
+
+- deprecated CipherFactory#newPBECipher(char[], int, String): this overload silently derives
+  the cipher with the fixed, publicly known CompoundAlgorithm.SALT and the weak
+  CompoundAlgorithm.ITERATIONCOUNT (19) instead of a caller-chosen salt/iteration count; use
+  the 5-arg overload with an explicit, randomly generated salt and a modern iteration count
+  instead
+- fixed SignatureFactory#verify to return false instead of throwing SignatureException for
+  malformed/tampered signature bytes that fail to decode to a valid point (JDK's Ed25519
+  verifier throws in that case rather than just returning false)
+- updated dependencies to their latest available versions: bcpkix-jdk18on/bcprov-jdk18on 1.85,
+  commons-codec 1.22.1, commons-csv 1.14.1, commons-io 2.22.0, commons-lang3 3.20.0,
+  file-worker 19.0, guava 33.7.1-jre, jobj-core 9.1, jsoup 1.23.1, junit-jupiter/
+  junit-platform-launcher 6.1.3, lombok 1.18.46, mockito-core 5.23.0, randomizer 10.3,
+  silly-collection 28.1, silly-io 3.6, silly-strings 9.2, plus the grgit, lombok and
+  version-catalog-update Gradle plugins; pinned jacoco to 0.8.15
+- fixed module-info.java: silly-strings/file-worker module names changed with their version
+  bumps (now io.github.astrapisixtynine.silly.strings / io.github.astrapisixtynine.file.worker),
+  and the now-unused org.checkerframework.checker.qual requirement was removed since guava
+  33.7.1-jre no longer depends on checker-qual (it uses jspecify instead)
+- updated FileInfo/FileCreationState imports to their new location
+  (io.github.astrapi69.file.create.model) following the file-worker 19.0 package move
+
 Version 10.1
 -------------
 
