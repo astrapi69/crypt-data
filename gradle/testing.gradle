@@ -1,5 +1,8 @@
 test {
     useJUnitPlatform()
+    // forwarded to Pkcs11FactoryTest, which skips itself when this isn't set: PKCS#11 test
+    // infrastructure (e.g. SoftHSM2) is external and not something the test suite provisions
+    systemProperty 'PKCS11_TEST_CONFIG', System.getProperty('PKCS11_TEST_CONFIG')
 }
 
 jacoco {
