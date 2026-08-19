@@ -1,8 +1,31 @@
 ## Change log
 ----------------------
 
-Version 10.3-SNAPSHOT
+Version 10.3
 -------------
+
+ADDED:
+
+- new class KemFactory for generic key encapsulation, wrapping the JDK-standard
+  javax.crypto.KEM API (JDK 21+); used for ML-KEM (post-quantum key exchange)
+- new class Pkcs11Factory for configuring the JDK's built-in SunPKCS11 provider against a
+  PKCS#11 module (HSM, smart card, or software token) and opening its keystore; verified
+  end-to-end against a real SoftHSM2 test token (provider config, keystore open, on-token EC
+  keypair generation, sign/verify)
+
+CHANGED:
+
+- fixed SignatureFactory#verify to return false instead of throwing SignatureException for
+  malformed/tampered signature bytes that fail to decode to a valid point
+- updated dependencies to their latest available versions (bcpkix/bcprov 1.85, commons-*,
+  file-worker 19.0, guava, junit-jupiter/junit-platform-launcher 6.1.3, lombok, mockito,
+  randomizer, silly-*, plus several Gradle plugins); pinned jacoco to 0.8.15
+- fixed module-info.java for silly-strings/file-worker's renamed JPMS modules and removed the
+  now-unused org.checkerframework.checker.qual requirement (guava 33.7.1-jre dropped that
+  dependency in favor of jspecify)
+- updated FileInfo/FileCreationState imports to their new package following the file-worker
+  19.0 move
+- added PIT mutation testing (opt-in, run via `./gradlew pitest`), not wired into check/build
 
 Version 10.2
 -------------
