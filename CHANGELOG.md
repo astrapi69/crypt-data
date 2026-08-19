@@ -10,6 +10,15 @@ ADDED:
   symmetric key from a raw X25519/ECDH shared secret instead of using it directly
 - new class SignatureFactory for generic sign/verify with any java.security.Signature
   algorithm (e.g. Ed25519, natively supported by the JDK since JDK 15)
+- new class KeyWrapFactory for AES Key Wrap (RFC 3394): wrap/unwrap a key with another key,
+  with an implicit integrity check on unwrap. Natively supported by the JDK (SunJCE), no
+  Bouncy Castle needed.
+- new class ShamirSecretSharingFactory for Shamir's Secret Sharing: split a secret (e.g. a
+  symmetric key) into n shares of which any threshold shares reconstruct it, backed by
+  Bouncy Castle's org.bouncycastle.crypto.threshold.ShamirSecretSplitter. Note the total
+  share count must not exceed the secret length in bytes (a constraint of the underlying BC
+  implementation), and combining fewer than threshold shares silently yields a wrong secret
+  rather than failing (Shamir's scheme has no built-in integrity check)
 - new explicit direct dependency on bcprov-jdk18on (was previously only pulled in
   transitively via bcpkix-jdk18on)
 
