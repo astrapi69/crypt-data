@@ -4,7 +4,7 @@
 [![Coverage Status](https://codecov.io/gh/astrapi69/crypt-data/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/crypt-data)
 [![Mutation Coverage](https://img.shields.io/badge/mutation%20coverage-77%25-green)](https://pitest.org/)
 [![Open Issues](https://img.shields.io/github/issues/astrapi69/crypt-data.svg?style=flat)](https://github.com/astrapi69/crypt-data/issues)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/crypt-data/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/crypt-data)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.astrapi69/crypt-data.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.astrapi69/crypt-data)
 [![Javadocs](http://www.javadoc.io/badge/io.github.astrapi69/crypt-data.svg)](http://www.javadoc.io/doc/io.github.astrapi69/crypt-data)
 [![MIT License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](http://opensource.org/licenses/MIT)
 [![Donate](https://img.shields.io/badge/donate-❤-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
@@ -40,7 +40,7 @@ The source code comes under the liberal MIT License, making crypt-data great for
 ## gradle dependency
 
 Replace the variable ${latestVersion} with the current latest
-version: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/crypt-data/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/crypt-data)
+version: [![Maven Central](https://img.shields.io/maven-central/v/io.github.astrapi69/crypt-data.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.astrapi69/crypt-data)
 
 You can first define the version in the ext section and add than the following gradle dependency to
 your project `build.gradle` if you want to import the core functionality of crypt-data:
