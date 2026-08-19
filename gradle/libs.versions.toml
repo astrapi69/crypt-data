@@ -12,6 +12,7 @@ file-worker-version = "19.0"
 gradle-plugin-grgit-version = "5.3.3"
 gradle-plugin-license-version = "0.16.1"
 gradle-plugin-lombok-version = "9.5.0"
+gradle-plugin-pitest-version = "1.19.0"
 gradle-plugin-spotless-version = "8.10.0"
 gradle-plugin-version-catalog-update-version = "1.1.1"
 gradle-plugin-versions-version = "0.61.0"
@@ -28,6 +29,8 @@ lombok-version = "1.18.46"
 meanbean-factories-version = "3"
 meanbean-version = "3.0.0-M9"
 mockito-core-version = "5.23.0"
+pitest-junit5-plugin-version = "1.2.3"
+pitest-version = "1.25.9"
 random-beans-version = "3.9.0"
 randomizer-version = "10.3"
 silly-collection-version = "28.1"
@@ -92,5 +95,6 @@ gradle-versions-plugin = { id = "io.github.ben-manes.versions", version.ref = "g
 grgit-gradle = { id = "org.ajoberstar.grgit", version.ref = "gradle-plugin-grgit-version" }
 license-gradle-plugin = { id = "com.github.hierynomus.license", version.ref = "gradle-plugin-license-version" }
 lombok-plugin = { id = "io.freefair.lombok", version.ref = "gradle-plugin-lombok-version" }
+pitest-gradle-plugin = { id = "info.solidsoft.pitest", version.ref = "gradle-plugin-pitest-version" }
 spotless-plugin-gradle = { id = "com.diffplug.spotless", version.ref = "gradle-plugin-spotless-version" }
 version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "gradle-plugin-version-catalog-update-version" }
