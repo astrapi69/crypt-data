@@ -45,6 +45,23 @@ public class ObfuscationBiMapRulesTest
 {
 
 	/**
+	 * Test method for {@link ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder#toString()}
+	 */
+	@Test
+	public void testBuilderToString()
+	{
+		BiMap<Character, Character> obfuscationRules = ObfuscationBiMapTestData
+			.getSmallestBiMapObfuscationRules();
+
+		ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder<Character, Character> builder = ObfuscationBiMapRules
+			.<Character, Character> builder().obfuscationRules(obfuscationRules);
+
+		assertEquals("ObfuscationBiMapRules.ObfuscationBiMapRulesBuilder(obfuscationRules="
+			+ obfuscationRules + ")", builder.toString());
+		assertEquals(obfuscationRules, builder.build().getObfuscationRules());
+	}
+
+	/**
 	 * Test method for {@link ObfuscationBiMapRules#equals(Object)} ,
 	 * {@link ObfuscationBiMapRules#hashCode()} and {@link ObfuscationBiMapRules#toString()}
 	 */

@@ -59,7 +59,9 @@ public class Pkcs11FactoryTest
 	static void checkPkcs11Available()
 	{
 		configPath = System.getProperty("PKCS11_TEST_CONFIG");
-		assumeTrue(configPath != null && new File(configPath).exists(),
+		// note: gradle forwards an unset property as an empty string, and new File("").exists()
+		// is true on current JDKs, so require a real, non-blank regular file
+		assumeTrue(configPath != null && !configPath.isBlank() && new File(configPath).isFile(),
 			"No PKCS#11 test config available (set -DPKCS11_TEST_CONFIG=<path>) - skipping");
 	}
 

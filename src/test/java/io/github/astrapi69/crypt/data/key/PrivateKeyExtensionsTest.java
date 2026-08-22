@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -38,7 +39,9 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAPrivateKeySpec;
 import java.util.Base64;
+import java.util.stream.Stream;
 
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
@@ -47,6 +50,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
@@ -368,52 +373,77 @@ public class PrivateKeyExtensionsTest
 	}
 
 	/**
+	 * One key-size mapping case
+	 *
+	 * @param description
+	 *            the key under test
+	 * @param keySupplier
+	 *            produces the private key (null allowed)
+	 * @param expected
+	 *            the expected {@link KeySize}
+	 */
+	record KeySizeCase(String description, KeySupplier keySupplier, KeySize expected) {
+	}
+
+	/**
+	 * Supplier of a private key that may throw
+	 */
+	@FunctionalInterface
+	interface KeySupplier
+	{
+		PrivateKey get() throws Exception;
+	}
+
+	/**
+	 * Builds an RSA private key whose modulus has exactly the given bit length without running a
+	 * (slow) prime search: the key factory only validates the modulus length, not its primality
+	 *
+	 * @param bits
+	 *            the modulus bit length
+	 * @return the RSA private key
+	 * @throws Exception
+	 *             if the key cannot be built
+	 */
+	private static PrivateKey rsaKeyWithModulusBits(final int bits) throws Exception
+	{
+		BigInteger modulus = BigInteger.ONE.shiftLeft(bits - 1).setBit(0);
+		return KeyFactory.getInstance("RSA")
+			.generatePrivate(new RSAPrivateKeySpec(modulus, BigInteger.valueOf(65537)));
+	}
+
+	static Stream<KeySizeCase> keySizeCases()
+	{
+		File pemFile = new File(new File(PathFinder.getSrcTestResourcesDir(), "pem"),
+			"private.pem");
+		return Stream.of(new KeySizeCase("pem RSA 2048",
+			() -> PrivateKeyReader.readPemPrivateKey(pemFile), KeySize.KEYSIZE_2048),
+			new KeySizeCase("null", () -> null, KeySize.UNKNOWN),
+			new KeySizeCase("generated RSA 1024",
+				() -> KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_1024)
+					.getPrivate(),
+				KeySize.KEYSIZE_1024),
+			new KeySizeCase("RSA 4096", () -> rsaKeyWithModulusBits(4096), KeySize.KEYSIZE_4096),
+			new KeySizeCase("RSA 8192", () -> rsaKeyWithModulusBits(8192), KeySize.KEYSIZE_8192),
+			new KeySizeCase("RSA 3072 has no KeySize constant", () -> rsaKeyWithModulusBits(3072),
+				KeySize.UNKNOWN));
+	}
+
+	/**
 	 * Test method for {@link PrivateKeyExtensions#getKeySize(PrivateKey)}
 	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 * @throws NoSuchAlgorithmException
-	 *             is thrown if instantiation of the cypher object fails
-	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails
-	 * @throws NoSuchProviderException
-	 *             is thrown if the specified provider is not registered in the security provider
-	 *             list
+	 * @param testCase
+	 *            the test case
+	 * @throws Exception
+	 *             if the key cannot be produced
 	 */
-	@Test
-	public void testGetKeySize() throws NoSuchAlgorithmException, InvalidKeySpecException,
-		NoSuchProviderException, IOException
+	@ParameterizedTest
+	@MethodSource("keySizeCases")
+	void testGetKeySize(final KeySizeCase testCase) throws Exception
 	{
-		KeySize actual;
-		KeySize expected;
-		// new scenario...
-		privateKey = PrivateKeyReader.readPemPrivateKey(privateKeyPemFile);
+		PrivateKey key = testCase.keySupplier().get();
 
-		actual = PrivateKeyExtensions.getKeySize(privateKey);
-		expected = KeySize.KEYSIZE_2048;
-		assertEquals(expected, actual);
-		// new scenario...
-		actual = PrivateKeyExtensions.getKeySize(null);
-		expected = KeySize.UNKNOWN;
-		assertEquals(expected, actual);
-		// new scenario...
-		privateKey = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_1024)
-			.getPrivate();
-		actual = PrivateKeyExtensions.getKeySize(privateKey);
-		expected = KeySize.KEYSIZE_1024;
-		assertEquals(expected, actual);
-		// new scenario...
-		privateKey = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_4096)
-			.getPrivate();
-		actual = PrivateKeyExtensions.getKeySize(privateKey);
-		expected = KeySize.KEYSIZE_4096;
-		assertEquals(expected, actual);
-		// new scenario...
-		privateKey = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA, KeySize.KEYSIZE_8192)
-			.getPrivate();
-		actual = PrivateKeyExtensions.getKeySize(privateKey);
-		expected = KeySize.KEYSIZE_8192;
-		assertEquals(expected, actual);
+		assertEquals(testCase.expected(), PrivateKeyExtensions.getKeySize(key),
+			testCase.description());
 	}
 
 	/**

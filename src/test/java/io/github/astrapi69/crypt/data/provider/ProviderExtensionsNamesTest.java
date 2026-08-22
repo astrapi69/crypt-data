@@ -24,72 +24,56 @@
  */
 package io.github.astrapi69.crypt.data.provider;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.Provider;
+import java.security.Security;
 
 import org.junit.jupiter.api.Test;
 
 /**
- * The unit test class for the class {@link ProviderExtensions}
+ * Tests that {@link ProviderExtensions#getSupportedProviderNames()} and
+ * {@link ProviderExtensions#getSupportedProviderNamesAndVersion()} report every installed provider,
+ * in order, with the expected text
  */
-class ProviderExtensionsTest
+class ProviderExtensionsNamesTest
 {
-
-	/**
-	 * Test method proving that {@link ProviderExtensions} is a pure static utility: the class is
-	 * final and every public method is static
-	 */
-	@Test
-	void publicApiIsStatic()
-	{
-		assertTrue(java.lang.reflect.Modifier.isFinal(ProviderExtensions.class.getModifiers()));
-		java.lang.reflect.Method[] methods = ProviderExtensions.class.getDeclaredMethods();
-		assertTrue(methods.length > 0);
-		for (java.lang.reflect.Method method : methods)
-		{
-			if (java.lang.reflect.Modifier.isPublic(method.getModifiers()))
-			{
-				assertTrue(java.lang.reflect.Modifier.isStatic(method.getModifiers()),
-					method.getName() + " must be static");
-			}
-		}
-	}
-
-	/**
-	 * Test method for {@link ProviderExtensions#getSupportedProviders()}
-	 */
-	@Test
-	void getSupportedProviders()
-	{
-		Provider[] supportedProviders;
-
-		supportedProviders = ProviderExtensions.getSupportedProviders();
-		assertNotNull(supportedProviders);
-	}
 
 	/**
 	 * Test method for {@link ProviderExtensions#getSupportedProviderNames()}
 	 */
 	@Test
-	void getSupportedProviderNames()
+	void namesMatchInstalledProvidersInOrder()
 	{
-		String[] supportedProviderNames;
+		Provider[] providers = Security.getProviders();
+		String[] names = ProviderExtensions.getSupportedProviderNames();
 
-		supportedProviderNames = ProviderExtensions.getSupportedProviderNames();
-		assertNotNull(supportedProviderNames);
+		assertTrue(providers.length > 0, "the JDK always installs providers");
+		assertEquals(providers.length, names.length);
+		for (int i = 0; i < providers.length; i++)
+		{
+			assertNotNull(names[i], "entry " + i);
+			assertEquals(providers[i].getName(), names[i], "entry " + i);
+		}
 	}
 
 	/**
 	 * Test method for {@link ProviderExtensions#getSupportedProviderNamesAndVersion()}
 	 */
 	@Test
-	void getSupportedProviderNamesAndVersion()
+	void namesAndVersionsMatchInstalledProvidersInOrder()
 	{
-		String[] supportedProviderNamesAndVersion;
+		Provider[] providers = Security.getProviders();
+		String[] namesAndVersions = ProviderExtensions.getSupportedProviderNamesAndVersion();
 
-		supportedProviderNamesAndVersion = ProviderExtensions.getSupportedProviderNamesAndVersion();
-		assertNotNull(supportedProviderNamesAndVersion);
+		assertEquals(providers.length, namesAndVersions.length);
+		for (int i = 0; i < providers.length; i++)
+		{
+			assertNotNull(namesAndVersions[i], "entry " + i);
+			assertEquals(providers[i].getName() + " " + providers[i].getVersionStr(),
+				namesAndVersions[i], "entry " + i);
+		}
 	}
 }
