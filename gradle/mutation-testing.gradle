@@ -3,6 +3,6 @@ pitest {
     pitestVersion = libs.versions.pitest.version.get()
     targetClasses = ["io.github.astrapi69.crypt.data.*"]
     threads = 4
-    outputFormats = ["HTML"]
+    outputFormats = ["HTML", "XML"]
     timestampedReports = false
 }
