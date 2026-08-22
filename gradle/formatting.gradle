@@ -17,5 +17,14 @@ spotless {
         removeUnusedImports()
         // import order file as exported from eclipse
         eclipse("4.21").configFile("src/test/resources/spotless/alpharo-formatter.xml")
+        // Enforces the MIT header. This replaces the com.github.hierynomus.license plugin, whose
+        // License task reads Task.project at execution time and so fails under Gradle 10. Version
+        // 0.16.1 is that plugin's last release, so there is nothing to upgrade to.
+        // The header file is generated from the sources themselves and keeps their javadoc-style
+        // /** */ form. The year is the literal 2015 (projectInceptionYear), not spotless' $YEAR
+        // token: with $YEAR a newly added file would get the current year while every existing
+        // file says 2015, whereas the replaced plugin used ext.year = "$projectInceptionYear" for
+        // every file.
+        licenseHeaderFile(rootProject.file("src/main/resources/license-header.txt"))
     }
 }
