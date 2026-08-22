@@ -1,8 +1,33 @@
 ## Change log
 ----------------------
 
-Version 10.4-SNAPSHOT
+Version 11.0.0
 -------------
+
+CHANGED:
+
+- BREAKING: minimum required JDK raised from 21 to 25 (LTS), matching crypt-api 10.0.0 and
+  mystic-crypt 11.0.0. Published bytecode now targets JDK 25, so consumers on JDK 21-24 can no
+  longer load this artifact - hence the major version bump. CI's setup-java updated to match.
+- requires crypt-api 10.0.0 (itself JDK 25; no API changes)
+- Maven Central publishing switched from AUTOMATIC to USER_MANAGED: CI uploads and validates the
+  deployment, release to Central is approved manually in the Central Portal.
+- test quality: line coverage 90.7% -> 99.05%, branch coverage 71.0% -> 98.28%, PIT mutation
+  score 87% -> 98% (785/797 mutants killed, test strength 99%); every remaining uncovered line and
+  surviving mutant has a stated reason. PIT now also emits mutations.xml. The shared testing
+  strategy is documented in mystic-crypt/docs/TESTING.md.
+
+FIXED:
+
+- KeyPairInfo#isValid(KeyPairInfo) rejected every correctly-named registered algorithm: the
+  registered-KeyPairGenerator check was inverted, so "RSA"/2048 and "EC"/256 were reported
+  invalid while unknown or mis-cased names fell through into key-size probing and escaped as an
+  InvocationTargetException (which the old KeyPairInfoTest had enshrined as expected). Unknown
+  names now simply return false.
+- Pkcs11FactoryTest skipped incorrectly: its guard used new File(configPath).exists(), which is
+  true for the empty string Gradle forwards when PKCS11_TEST_CONFIG is unset, so the tests ran
+  against an empty path and failed instead of skipping. The guard now requires a non-blank path
+  that isFile().
 
 Version 10.3
 -------------

@@ -15,6 +15,6 @@ nmcpSettings {
         // dedicated token pair.
         username = System.getenv("CENTRAL_PORTAL_TOKEN_USERNAME") ?: ""
         password = System.getenv("CENTRAL_PORTAL_TOKEN_PASSWORD") ?: ""
-        publishingType = "AUTOMATIC"
+        publishingType = "USER_MANAGED"
     }
 }
