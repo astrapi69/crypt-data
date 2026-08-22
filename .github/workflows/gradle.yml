@@ -28,8 +28,28 @@ jobs:
           distribution: 'temurin'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
+      - name: Set up SoftHSM2 for the PKCS#11 tests
+        # Without a PKCS#11 module the Pkcs11Factory tests skip themselves via JUnit assumptions,
+        # which silently lowers coverage on CI relative to a developer machine that has SoftHSM2.
+        # Installing it here makes the reported numbers mean the same thing everywhere.
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y softhsm2
+          # SoftHSM2 reads ~/.config/softhsm2/softhsm2.conf before /etc; point the token store at
+          # ~/.config/softhsm2/tokens, which is where Pkcs11FactorySoftHsmTest looks for a token.
+          mkdir -p "$HOME/.config/softhsm2/tokens"
+          printf 'directories.tokendir = %s/.config/softhsm2/tokens\nobjectstore.backend = file\nlog.level = INFO\n' "$HOME" \
+            > "$HOME/.config/softhsm2/softhsm2.conf"
+          softhsm2-util --init-token --free --label mystic-crypt-test --so-pin 654321 --pin 123456
+          softhsm2-util --show-slots | head -20
+          # SunPKCS11 config for Pkcs11FactoryTest, which takes its path from a system property
+          LIBRARY=$(ls /usr/lib/softhsm/libsofthsm2.so /usr/lib/x86_64-linux-gnu/softhsm/libsofthsm2.so 2>/dev/null | head -1)
+          test -n "$LIBRARY"
+          printf 'name = SoftHsmCi\nlibrary = %s\nslotListIndex = 0\n' "$LIBRARY" > "$HOME/softhsm-pkcs11.cfg"
+          echo "PKCS11_TEST_CONFIG=$HOME/softhsm-pkcs11.cfg" >> "$GITHUB_ENV"
       - name: Execute Gradle build
-        run: ./gradlew build
+        run: ./gradlew build -DPKCS11_TEST_CONFIG="$PKCS11_TEST_CONFIG"
         env:
           ossrhUsername: ${{secrets.OSSRHUSERNAME}}
           ossrhPassword: ${{secrets.OSSRHPASSWORD}}
