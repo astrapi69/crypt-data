@@ -107,30 +107,9 @@ public final class PrivateKeyReader
 	 */
 	public static boolean isPrivateKeyPasswordProtected(final File file) throws IOException
 	{
-		boolean passwordProtected = false;
-		if (isPemFormat(file))
-		{
-			try
-			{
-				readPemPrivateKey(file);
-			}
-			catch (Exception e)
-			{
-				passwordProtected = true;
-			}
-		}
-		else
-		{
-			try
-			{
-				passwordProtected = readPrivateKey(file) == null;
-			}
-			catch (Exception e)
-			{
-				passwordProtected = true;
-			}
-		}
-		return passwordProtected;
+		// a private key file that cannot be read without a password is exactly a file that does
+		// not validate as a plain private key, so this is the negation of validatePrivateKey
+		return !validatePrivateKey(file);
 	}
 
 	/**
@@ -490,7 +469,7 @@ public final class PrivateKeyReader
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
-			log.log(Level.WARNING, "Given private key file is stored in an 'RSA' algorithm", e);
+			log.log(Level.WARNING, "Given private key file is not stored in 'RSA' algorithm", e);
 		}
 		return optionalPrivateKey;
 	}

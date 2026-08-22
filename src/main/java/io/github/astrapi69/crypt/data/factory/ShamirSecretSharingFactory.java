@@ -127,7 +127,9 @@ public final class ShamirSecretSharingFactory
 		return decode(splitSecret);
 	}
 
-	private static byte[] encode(final ShamirSplitSecretShare share)
+	// package-private instead of private so that the IOException path, which Bouncy Castle's own
+	// implementations never take but the SecretShare contract allows, can be exercised in a test
+	static byte[] encode(final ShamirSplitSecretShare share)
 	{
 		try
 		{
@@ -139,7 +141,9 @@ public final class ShamirSecretSharingFactory
 		}
 	}
 
-	private static byte[] decode(final ShamirSplitSecret splitSecret)
+	// package-private instead of private so that the IOException path, which Bouncy Castle's own
+	// implementations never take but the SplitSecret contract allows, can be exercised in a test
+	static byte[] decode(final ShamirSplitSecret splitSecret)
 	{
 		try
 		{

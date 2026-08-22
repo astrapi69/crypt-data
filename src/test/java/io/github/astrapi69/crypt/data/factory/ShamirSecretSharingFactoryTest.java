@@ -27,13 +27,18 @@ package io.github.astrapi69.crypt.data.factory;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bouncycastle.crypto.threshold.ShamirSecretSplitter;
+import org.bouncycastle.crypto.threshold.ShamirSplitSecret;
+import org.bouncycastle.crypto.threshold.ShamirSplitSecretShare;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.crypt.data.factory.ShamirSecretSharingFactory.Share;
@@ -152,6 +157,66 @@ public class ShamirSecretSharingFactoryTest
 		final byte[] recovered = ShamirSecretSharingFactory.combine(shares.subList(0, 2));
 
 		assertArrayEquals(secret, recovered);
+	}
+
+	/**
+	 * Test method for the {@link IOException} path of
+	 * {@link ShamirSecretSharingFactory#encode(ShamirSplitSecretShare)}
+	 * <p>
+	 * Bouncy Castle's own {@link ShamirSplitSecretShare#getEncoded()} only clones an array and
+	 * never fails, but {@code SecretShare#getEncoded()} declares {@link IOException} and the class
+	 * is neither final nor has final methods, so an implementation that does throw is legal. The
+	 * factory must translate such a failure into an {@link IllegalStateException} that keeps the
+	 * original cause
+	 */
+	@Test
+	public void testEncodeWrapsIoExceptionInIllegalStateException()
+	{
+		final IOException failure = new IOException("boom");
+		final ShamirSplitSecretShare throwingShare = new ShamirSplitSecretShare(new byte[] { 1 }, 1)
+		{
+			@Override
+			public byte[] getEncoded() throws IOException
+			{
+				throw failure;
+			}
+		};
+
+		final IllegalStateException exception = assertThrows(IllegalStateException.class,
+			() -> ShamirSecretSharingFactory.encode(throwingShare));
+
+		assertEquals("Failed to encode a Shamir secret share", exception.getMessage());
+		assertSame(failure, exception.getCause());
+	}
+
+	/**
+	 * Test method for the {@link IOException} path of
+	 * {@link ShamirSecretSharingFactory#decode(ShamirSplitSecret)}
+	 * <p>
+	 * Same reasoning as for {@link #testEncodeWrapsIoExceptionInIllegalStateException()}:
+	 * {@code SplitSecret#getSecret()} declares {@link IOException} and
+	 * {@link ShamirSplitSecret#getSecret()} is overridable
+	 */
+	@Test
+	public void testDecodeWrapsIoExceptionInIllegalStateException()
+	{
+		final IOException failure = new IOException("bang");
+		final ShamirSplitSecret throwingSecret = new ShamirSplitSecret(
+			ShamirSecretSplitter.Algorithm.AES, ShamirSecretSplitter.Mode.Table,
+			new ShamirSplitSecretShare[] { new ShamirSplitSecretShare(new byte[] { 1 }, 1) })
+		{
+			@Override
+			public byte[] getSecret() throws IOException
+			{
+				throw failure;
+			}
+		};
+
+		final IllegalStateException exception = assertThrows(IllegalStateException.class,
+			() -> ShamirSecretSharingFactory.decode(throwingSecret));
+
+		assertEquals("Failed to reconstruct the secret from its shares", exception.getMessage());
+		assertSame(failure, exception.getCause());
 	}
 
 }
