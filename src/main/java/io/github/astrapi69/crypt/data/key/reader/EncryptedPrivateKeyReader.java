@@ -125,6 +125,11 @@ public final class EncryptedPrivateKeyReader
 					.setProvider(SecurityProvider.BC.name()).build(password.toCharArray())));
 			keyPair = new KeyPair(null, privateKey); // No public key available in this case
 		}
+		else if (pemObject == null)
+		{
+			throw new PEMException(
+				"No PEM object found in file: " + encryptedPrivateKeyFile.getAbsolutePath());
+		}
 		else
 		{
 			throw new PEMException("Invalid PEM object type: " + pemObject.getClass().getName());

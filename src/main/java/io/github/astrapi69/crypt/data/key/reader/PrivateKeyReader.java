@@ -469,7 +469,7 @@ public final class PrivateKeyReader
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
-			log.log(Level.WARNING, "Given private key file is stored in an 'RSA' algorithm", e);
+			log.log(Level.WARNING, "Given private key file is not stored in 'RSA' algorithm", e);
 		}
 		return optionalPrivateKey;
 	}
