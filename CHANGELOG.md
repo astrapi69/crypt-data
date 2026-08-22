@@ -1,8 +1,29 @@
 ## Change log
 ----------------------
 
-Version 11.1-SNAPSHOT
+Version 12.0.0-SNAPSHOT
 -------------
+
+CHANGED:
+
+- BREAKING: three public utility classes now declare an explicit private constructor, removing the
+  implicit public one they had before: SharedSecretExtensions, SignatureAlgorithmResolver (both
+  public non-final, so instantiation AND subclassing break) and ProviderExtensions (already final,
+  so only instantiation breaks). All three hold nothing but static methods; nothing in this repo
+  instantiated them. This is what raises the next release to 12.0.0.
+- test quality: 100% line and 100% branch coverage (also 100% instruction, complexity, method and
+  class), up from 99.05%/98.28%. Reached by deleting dead code - null guards on values that cannot
+  be null, two uncalled methods in a private nested class, a 26-line duplicate of an existing
+  method - rather than by adding exclusions or tests without assertions. See
+  mystic-crypt/docs/TESTING.md for the strategy.
+
+FIXED:
+
+- EncryptedPrivateKeyReader#getKeyPair(File, String) threw a NullPointerException for any file that
+  contains no PEM object, because PEMParser#readObject() returns null and the result was
+  dereferenced. It now throws PEMException naming the file. PEMException was already declared in the
+  method's throws clause and javadoc.
+
 
 Version 11.0.0
 -------------
