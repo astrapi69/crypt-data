@@ -248,7 +248,11 @@ Create your own fork of [astrapi69/crypt-data/fork](https://github.com/astrapi69
 
 To share your changes, [submit a pull request](https://github.com/astrapi69/crypt-data/pull/new/develop).
 
-Don't forget to add new units tests on your changes.
+Don't forget to add new unit tests on your changes. The testing strategy shared across
+`crypt-api`, `crypt-data` and `mystic-crypt` - test layers, current coverage and mutation numbers,
+the independent verification loop behind them and the conventions for a good test here - is
+documented in
+[mystic-crypt/docs/TESTING.md](https://github.com/astrapi69/mystic-crypt/blob/develop/docs/TESTING.md).
 
 ## Contributing
 
