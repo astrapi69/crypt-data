@@ -437,7 +437,9 @@ public final class CertFactory
 
 		JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(issuer,
 			certSerialNumber, startDate, endDate, subject, keyPair.getPublic());
-		if (extensions != null && 0 < extensions.length)
+		// Arrays.stream on an empty array never invokes forEach's consumer, so checking the
+		// length first is redundant - only the null case needs distinguishing
+		if (extensions != null)
 		{
 			Arrays.stream(extensions)
 				.forEach(RuntimeExceptionDecorator.decorate(certBuilder::addExtension));
@@ -651,7 +653,9 @@ public final class CertFactory
 
 		X509v3CertificateBuilder certBuilder = CertificateBuilderFactory
 			.newX509v3CertificateBuilder(issuer, serial, notBefore, notAfter, subject, publicKey);
-		if (extensions != null && 0 < extensions.length)
+		// Arrays.stream on an empty array never invokes forEach's consumer, so checking the
+		// length first is redundant - only the null case needs distinguishing
+		if (extensions != null)
 		{
 			Arrays.stream(extensions)
 				.forEach(RuntimeExceptionDecorator.decorate(certBuilder::addExtension));

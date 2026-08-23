@@ -242,8 +242,9 @@ public final class HashExtensions
 	public static byte[] hash(final byte[] hashIt, final String salt,
 		final HashAlgorithm hashAlgorithm, final Charset charset) throws NoSuchAlgorithmException
 	{
+		// MessageDigest.getInstance always returns a fresh, already-reset instance, so an
+		// immediate reset() here has nothing to reset
 		final MessageDigest messageDigest = MessageDigest.getInstance(hashAlgorithm.getAlgorithm());
-		messageDigest.reset();
 		if (salt != null)
 		{
 			messageDigest.update(salt.getBytes(charset));
@@ -271,8 +272,9 @@ public final class HashExtensions
 	public static String hash(final String hashIt, final String salt,
 		final HashAlgorithm hashAlgorithm, final Charset charset) throws NoSuchAlgorithmException
 	{
+		// MessageDigest.getInstance always returns a fresh, already-reset instance, so an
+		// immediate reset() here has nothing to reset
 		final MessageDigest messageDigest = MessageDigest.getInstance(hashAlgorithm.getAlgorithm());
-		messageDigest.reset();
 		messageDigest.update(salt.getBytes(charset));
 		return new String(messageDigest.digest(hashIt.getBytes(charset)), charset);
 	}
