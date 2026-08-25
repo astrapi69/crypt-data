@@ -1,8 +1,14 @@
 ## Change log
 ----------------------
 
-Version 10.4-SNAPSHOT
+Version 11.2
 -------------
+
+CHANGED:
+
+- module-info.java now exports the io.github.astrapi69.crypt.data.key package
+  (KeyStoreExtensions, CertificateExtensions and the other key helpers), so JPMS consumers
+  such as the mystic-crypt CLI can use it - previously only classpath consumers could
 
 Version 10.3
 -------------
