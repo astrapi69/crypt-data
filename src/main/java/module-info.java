@@ -39,6 +39,7 @@ module io.github.astrapisixtynine.crypt.data
 	exports io.github.astrapi69.crypt.data.factory;
 	exports io.github.astrapi69.crypt.data.hash;
 	exports io.github.astrapi69.crypt.data.hex;
+	exports io.github.astrapi69.crypt.data.key;
 	exports io.github.astrapi69.crypt.data.key.reader;
 	exports io.github.astrapi69.crypt.data.key.writer;
 	exports io.github.astrapi69.crypt.data.model;

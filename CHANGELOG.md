@@ -6,6 +6,10 @@ Version 12.0.0-SNAPSHOT
 
 CHANGED:
 
+- module-info.java now exports the io.github.astrapi69.crypt.data.key package
+  (KeyStoreExtensions, CertificateExtensions and the other key helpers), so JPMS consumers
+  such as the mystic-crypt CLI can use it - previously only classpath consumers could.
+  Also published standalone as release 11.2 (branch release/11.2: 11.1 plus only this export).
 - BREAKING: three public utility classes now declare an explicit private constructor, removing the
   implicit public one they had before: SharedSecretExtensions, SignatureAlgorithmResolver (both
   public non-final, so instantiation AND subclassing break) and ProviderExtensions (already final,
