@@ -412,14 +412,10 @@ public final class PrivateKeyReader
 	 */
 	public static Optional<PrivateKey> getPrivateKey(final byte[] privateKeyBytes)
 	{
-		Optional<PrivateKey> optionalPrivateKey = Optional.empty();
-		PrivateKey privateKey;
 		try
 		{
-			privateKey = PrivateKeyReader.readPrivateKey(privateKeyBytes,
-				KeyPairGeneratorAlgorithm.DIFFIE_HELLMAN.getAlgorithm());
-			optionalPrivateKey = Optional.of(privateKey);
-			return optionalPrivateKey;
+			return Optional.of(PrivateKeyReader.readPrivateKey(privateKeyBytes,
+				KeyPairGeneratorAlgorithm.DIFFIE_HELLMAN.getAlgorithm()));
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
@@ -428,10 +424,8 @@ public final class PrivateKeyReader
 		}
 		try
 		{
-			privateKey = PrivateKeyReader.readPrivateKey(privateKeyBytes,
-				KeyPairGeneratorAlgorithm.DSA.getAlgorithm());
-			optionalPrivateKey = Optional.of(privateKey);
-			return optionalPrivateKey;
+			return Optional.of(PrivateKeyReader.readPrivateKey(privateKeyBytes,
+				KeyPairGeneratorAlgorithm.DSA.getAlgorithm()));
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
@@ -439,10 +433,8 @@ public final class PrivateKeyReader
 		}
 		try
 		{
-			privateKey = PrivateKeyReader.readPrivateKey(privateKeyBytes,
-				KeyPairGeneratorAlgorithm.EC.getAlgorithm());
-			optionalPrivateKey = Optional.of(privateKey);
-			return optionalPrivateKey;
+			return Optional.of(PrivateKeyReader.readPrivateKey(privateKeyBytes,
+				KeyPairGeneratorAlgorithm.EC.getAlgorithm()));
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
@@ -450,10 +442,8 @@ public final class PrivateKeyReader
 		}
 		try
 		{
-			privateKey = PrivateKeyReader.readPrivateKey(privateKeyBytes,
-				KeyPairGeneratorAlgorithm.RSASSA_PSS.getAlgorithm());
-			optionalPrivateKey = Optional.of(privateKey);
-			return optionalPrivateKey;
+			return Optional.of(PrivateKeyReader.readPrivateKey(privateKeyBytes,
+				KeyPairGeneratorAlgorithm.RSASSA_PSS.getAlgorithm()));
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
@@ -462,16 +452,15 @@ public final class PrivateKeyReader
 		}
 		try
 		{
-			privateKey = PrivateKeyReader.readPrivateKey(privateKeyBytes,
-				KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
-			optionalPrivateKey = Optional.of(privateKey);
-			return optionalPrivateKey;
+			return Optional.of(PrivateKeyReader.readPrivateKey(privateKeyBytes,
+				KeyPairGeneratorAlgorithm.RSA.getAlgorithm()));
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
 			log.log(Level.WARNING, "Given private key file is not stored in 'RSA' algorithm", e);
 		}
-		return optionalPrivateKey;
+		// every candidate algorithm failed: the bytes are not a private key this reader can parse
+		return Optional.empty();
 	}
 
 	/**
