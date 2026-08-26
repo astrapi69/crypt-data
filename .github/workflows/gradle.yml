@@ -56,6 +56,39 @@ jobs:
       - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+      - name: Extract test count
+        id: test_count
+        run: |
+          # Gradle's JUnit XML reports: one <testsuite tests="N" .../> root per test class,
+          # sum the tests attribute across all of them. This runs in the same job as the build
+          # above so the count includes the PKCS#11 tests that SoftHSM2 makes runnable.
+          TOTAL=$(grep -ohE 'tests="[0-9]+"' build/test-results/test/*.xml \
+            | grep -oE '[0-9]+' | awk '{sum += $1} END {print sum}')
+
+          if [ -z "$TOTAL" ] || [ "$TOTAL" -eq 0 ]; then
+            TOTAL="0"
+            COLOR="red"
+          elif [ "$TOTAL" -lt 50 ]; then
+            COLOR="yellow"
+          elif [ "$TOTAL" -lt 200 ]; then
+            COLOR="green"
+          else
+            COLOR="brightgreen"
+          fi
+
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+          echo "color=$COLOR" >> $GITHUB_OUTPUT
+          echo "Test cases found: $TOTAL"
+      - name: Update badge
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: 69b2e93dd826ce43cc3f02433a465ae3
+          filename: crypt-data-test-cases.json
+          label: Tested Use Cases
+          message: ${{ steps.test_count.outputs.total }}
+          color: ${{ steps.test_count.outputs.color }}
       - name: Publish to Maven Central
         if: github.event_name == 'push'
         run: |

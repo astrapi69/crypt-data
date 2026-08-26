@@ -3,11 +3,12 @@
 [![Java CI with Gradle](https://github.com/astrapi69/crypt-data/actions/workflows/gradle.yml/badge.svg)](https://github.com/astrapi69/crypt-data/actions/workflows/gradle.yml)
 [![Coverage Status](https://codecov.io/gh/astrapi69/crypt-data/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/crypt-data)
 [![Mutation Coverage](https://img.shields.io/badge/mutation%20coverage-98%25-brightgreen)](https://pitest.org/)
+![Tested Use Cases](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/astrapi69/69b2e93dd826ce43cc3f02433a465ae3/raw/crypt-data-test-cases.json)
 [![Open Issues](https://img.shields.io/github/issues/astrapi69/crypt-data.svg?style=flat)](https://github.com/astrapi69/crypt-data/issues)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.astrapi69/crypt-data.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.astrapi69/crypt-data)
 [![Javadocs](http://www.javadoc.io/badge/io.github.astrapi69/crypt-data.svg)](http://www.javadoc.io/doc/io.github.astrapi69/crypt-data)
 [![MIT License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](http://opensource.org/licenses/MIT)
-[![Donate](https://img.shields.io/badge/donate-❤-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
+[![Donate](https://img.shields.io/badge/donate-PayPal-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
 [![Hits Of Code](https://hitsofcode.com/github/astrapi69/crypt-data?branch=develop)](https://hitsofcode.com/github/astrapi69/crypt-data/view?branch=develop)
 
 </div>
@@ -18,11 +19,11 @@ The crypt-data library is a utility library designed to provide data beans, writ
 decryption processes.
 
 > Please support this project by simply putting a Github <!-- Place this tag where you want the button to render. -->
-<a class="github-button" href="https://github.com/astrapi69/crypt-data" data-icon="octicon-star" aria-label="Star astrapi69/crypt-data on GitHub">Star ⭐</a>
+<a class="github-button" href="https://github.com/astrapi69/crypt-data" data-icon="octicon-star" aria-label="Star astrapi69/crypt-data on GitHub">Star</a>
 >
 > Share this library with friends on Twitter and everywhere else you can
 >
-> If you love this project [![donation](https://img.shields.io/badge/donate-❤-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
+> If you love this project [![donation](https://img.shields.io/badge/donate-PayPal-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
 
 ## Note
 
@@ -131,7 +132,7 @@ Then you can add the dependency to your dependencies:
 <details>
   <summary>Snapshots (click to expand)</summary>
 
-## 📸 Snapshots
+## Snapshots
 
 [![Snapshot](https://img.shields.io/badge/dynamic/xml?url=https://oss.sonatype.org/service/local/repositories/snapshots/content/io/github/astrapi69/crypt-data/maven-metadata.xml&label=snapshot&color=red&query=.//versioning/latest)](https://oss.sonatype.org/content/repositories/snapshots/io/github/astrapi69/crypt-data/)
 
@@ -170,7 +171,7 @@ over paypal:
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=MJ7V43GU2H386" target="_blank">
 <img src="https://www.paypalobjects.com/en_US/GB/i/btn/btn_donateCC_LG.gif"
 alt="PayPal this"
-title="PayPal – The safer, easier way to pay online!"
+title="PayPal - The safer, easier way to pay online!"
 style="border: none" />
 </a>
 <br>
