@@ -292,9 +292,8 @@ class PrivateKeyWriterAlgorithmMatrixTest
 	 * The only thing that finally matters about a written key: it comes back, as the same bytes and
 	 * under the same algorithm.
 	 * <p>
-	 * The reader is handed the algorithm here although a pkcs#8 file names its own. The entry point
-	 * that takes no algorithm assumes rsa and refuses everything else (issue #14), and the writer
-	 * is what this class is about, so it is told rather than left to guess.
+	 * The reader is not told the algorithm, so the file has to carry enough to say what it holds -
+	 * which is exactly what pkcs#8 is for.
 	 *
 	 * @param keyAlgorithm
 	 *            the algorithm under test
@@ -312,7 +311,7 @@ class PrivateKeyWriterAlgorithmMatrixTest
 		File file = new File(tempDir, keyAlgorithm.algorithm() + "-private.pem");
 		Files.write(file.toPath(), written(privateKey, KeyFileFormat.PEM, KeyFormat.PKCS_8));
 
-		PrivateKey readBack = PrivateKeyReader.readPemPrivateKey(file, privateKey.getAlgorithm());
+		PrivateKey readBack = PrivateKeyReader.readPemPrivateKey(file);
 
 		assertArrayEquals(privateKey.getEncoded(), readBack.getEncoded(),
 			keyAlgorithm + " must read back as the key that was written");
