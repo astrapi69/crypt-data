@@ -71,8 +71,14 @@ nmcp {
         // Generate a user token at https://central.sonatype.com/ (Account -> Generate User Token).
         // This is NOT the legacy OSSRH username/password - the Portal Publisher API requires a
         // dedicated token pair.
-        username = System.getenv("CENTRAL_PORTAL_TOKEN_USERNAME") ?: ""
-        password = System.getenv("CENTRAL_PORTAL_TOKEN_PASSWORD") ?: ""
+        //
+        // CI passes the token through the environment. A release prepared by hand reads it from
+        // centralUsername / centralPassword in ~/.gradle/gradle.properties instead, so the token
+        // never has to be exported into a shell or typed onto a command line.
+        username = System.getenv("CENTRAL_PORTAL_TOKEN_USERNAME")
+            ?: project.findProperty("centralUsername") ?: ""
+        password = System.getenv("CENTRAL_PORTAL_TOKEN_PASSWORD")
+            ?: project.findProperty("centralPassword") ?: ""
         publishingType = "USER_MANAGED"
     }
 }
