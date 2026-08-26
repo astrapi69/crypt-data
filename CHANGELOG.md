@@ -41,6 +41,14 @@ FIXED:
   so taking the wrapper off dropped it and left a number no reader could make a key out of again.
   PrivateKeyExtensions#toPKCS1Format now returns the structure OpenSSL writes under the
   DSA PRIVATE KEY header, which carries the group and the matching public value. (#15)
+- PrivateKeyReader#readPemPrivateKey(String) assumed RSA, the sibling of #14 in the overload that
+  takes a string, and refused the PEM format its name and its javadoc promise: only a bare base64
+  body was read, because Base64.decode skips the letters of a BEGIN line and decodes them into the
+  body. A whole PEM document is now read as one, for every algorithm and for both the traditional
+  and the PKCS#8 encoding, and a bare base64 body is read as PKCS#8 first and as the traditional
+  RSA body that readPemFileAsBase64 produces second. RSA passed before only because the Bouncy
+  Castle RSA key factory also accepts a raw PKCS#1 structure through a PKCS#8 key
+  specification. (#19)
 
 
 
