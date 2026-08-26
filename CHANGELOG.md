@@ -42,10 +42,6 @@ FIXED:
   PrivateKeyExtensions#toPKCS1Format now returns the structure OpenSSL writes under the
   DSA PRIVATE KEY header, which carries the group and the matching public value. (#15)
 
-KNOWN ISSUES:
-
-- A DSA key written with KeyFormat.PKCS_1 carries only its private exponent, without p, q and g,
-  so no reader can make a key out of it again. Write DSA keys as PKCS#8. (#15)
 
 
 Version 12.0.0

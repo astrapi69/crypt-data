@@ -361,9 +361,8 @@ class PrivateKeyWriterAlgorithmMatrixTest
 
 	static Stream<Arguments> algorithmsWithATraditionalForm()
 	{
-		// dsa belongs here and is missing on purpose: what it writes under DSA PRIVATE KEY is the
-		// private exponent alone, without p, q and g, so nothing can read it back (issue #15)
-		return Stream.of(Arguments.of("RSA", 2048), Arguments.of("EC", 0));
+		return Stream.of(Arguments.of("RSA", 2048), Arguments.of("DSA", 2048),
+			Arguments.of("EC", 0));
 	}
 
 	/**
