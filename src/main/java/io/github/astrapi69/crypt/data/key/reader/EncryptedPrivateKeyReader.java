@@ -99,9 +99,11 @@ public final class EncryptedPrivateKeyReader
 	public static KeyPair getKeyPair(final File encryptedPrivateKeyFile, final String password)
 		throws FileNotFoundException, IOException, PEMException, PKCSException
 	{
-		PEMParser pemParser = new PEMParser(new FileReader(encryptedPrivateKeyFile));
-		Object pemObject = pemParser.readObject();
-		pemParser.close();
+		Object pemObject;
+		try (PEMParser pemParser = new PEMParser(new FileReader(encryptedPrivateKeyFile)))
+		{
+			pemObject = pemParser.readObject();
+		}
 
 		JcaPEMKeyConverter keyConverter = new JcaPEMKeyConverter()
 			.setProvider(SecurityProvider.BC.name());
@@ -218,14 +220,10 @@ public final class EncryptedPrivateKeyReader
 	public static Optional<PrivateKey> getPrivateKey(final File encryptedPrivateKeyFile,
 		final String password) throws OperatorCreationException, PKCSException
 	{
-		Optional<PrivateKey> optionalPrivateKey = Optional.empty();
-		PrivateKey privateKey;
 		try
 		{
-			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-				KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
-			optionalPrivateKey = Optional.of(privateKey);
-			return optionalPrivateKey;
+			return Optional.of(readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
+				KeyPairGeneratorAlgorithm.RSA.getAlgorithm()));
 		}
 		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
 			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
@@ -235,10 +233,8 @@ public final class EncryptedPrivateKeyReader
 		}
 		try
 		{
-			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-				KeyPairGeneratorAlgorithm.DIFFIE_HELLMAN.getAlgorithm());
-			optionalPrivateKey = Optional.of(privateKey);
-			return optionalPrivateKey;
+			return Optional.of(readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
+				KeyPairGeneratorAlgorithm.DIFFIE_HELLMAN.getAlgorithm()));
 		}
 		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
 			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
@@ -248,10 +244,8 @@ public final class EncryptedPrivateKeyReader
 		}
 		try
 		{
-			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-				KeyPairGeneratorAlgorithm.DSA.getAlgorithm());
-			optionalPrivateKey = Optional.of(privateKey);
-			return optionalPrivateKey;
+			return Optional.of(readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
+				KeyPairGeneratorAlgorithm.DSA.getAlgorithm()));
 		}
 		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
 			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
@@ -261,10 +255,8 @@ public final class EncryptedPrivateKeyReader
 		}
 		try
 		{
-			privateKey = readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-				KeyPairGeneratorAlgorithm.EC.getAlgorithm());
-			optionalPrivateKey = Optional.of(privateKey);
-			return optionalPrivateKey;
+			return Optional.of(readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
+				KeyPairGeneratorAlgorithm.EC.getAlgorithm()));
 		}
 		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
 			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
@@ -272,7 +264,9 @@ public final class EncryptedPrivateKeyReader
 			log.log(Level.WARNING,
 				"Given password protected private key file is not stored in 'EC' algorithm");
 		}
-		return optionalPrivateKey;
+		// every candidate algorithm failed: the file is not a password protected private key this
+		// reader can parse with the given password
+		return Optional.empty();
 	}
 
 	/**
