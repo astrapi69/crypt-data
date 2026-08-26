@@ -132,9 +132,7 @@ class PemPrivateKeyAlgorithmParameterizedTest
 	 *             if writing or reading fails
 	 */
 	@ParameterizedTest
-	// dsa is missing on purpose: what it writes traditionally is its private exponent alone, so
-	// there is nothing to read back yet (issue #15)
-	@ValueSource(strings = { "RSA", "EC" })
+	@ValueSource(strings = { "RSA", "DSA", "EC" })
 	void aTraditionalPemPrivateKeyIsReadWhateverItsAlgorithm(final String algorithm,
 		@TempDir File tempDir) throws Exception
 	{

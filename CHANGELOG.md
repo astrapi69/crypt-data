@@ -36,6 +36,11 @@ FIXED:
   algorithm in its algorithm identifier and a traditional file names it in its header, so the
   algorithm is now read from the file. A file that holds no readable private key is still refused,
   and the refusal now names the file and what was found there instead. (#14)
+- A DSA key written with KeyFormat.PKCS_1 carried its private exponent alone. A DSA key is a number
+  in a group, and the group - p, q and g - lives in the algorithm identifier of the PKCS#8 wrapper,
+  so taking the wrapper off dropped it and left a number no reader could make a key out of again.
+  PrivateKeyExtensions#toPKCS1Format now returns the structure OpenSSL writes under the
+  DSA PRIVATE KEY header, which carries the group and the matching public value. (#15)
 
 
 Version 12.0.0
