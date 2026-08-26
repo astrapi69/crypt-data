@@ -42,6 +42,7 @@ import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1Primitive;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.openssl.jcajce.JcaMiscPEMGenerator;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemWriter;
 
@@ -283,16 +284,29 @@ public final class PrivateKeyExtensions
 	}
 
 	/**
-	 * Transform the given private key to PKCS#1 format and returns it as a byte array
+	 * Transform the given private key to the traditional format of its own algorithm and returns it
+	 * as a byte array
+	 * <p>
+	 * PKCS#1 is the traditional format of an RSA key; an EC key has RFC 5915 and a DSA key has the
+	 * structure OpenSSL writes under the DSA PRIVATE KEY header. For the first two that is the
+	 * PKCS#8 wrapper taken off, which is what this used to do for every key.
 	 *
 	 * @param privateKey
 	 *            the private key
-	 * @return the byte array formatted in PKCS#1
+	 * @return the byte array in the traditional format of the key's algorithm
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
 	public static byte[] toPKCS1Format(final PrivateKey privateKey) throws IOException
 	{
+		if (privateKey instanceof DSAPrivateKey)
+		{
+			// a dsa key is a number in a group, and the group - p, q and g - lives in the
+			// algorithm identifier of the pkcs#8 wrapper. Taking the wrapper off therefore left
+			// the private exponent alone, a number no reader could make a key out of again
+			// (issue #15). Bouncy castle assembles the structure that carries the group with it
+			return new JcaMiscPEMGenerator(privateKey).generate().getContent();
+		}
 		final byte[] encoded = privateKey.getEncoded();
 		final PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(encoded);
 		final ASN1Encodable asn1Encodable = privateKeyInfo.parsePrivateKey();
