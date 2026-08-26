@@ -4,11 +4,33 @@
 Version 12.1-SNAPSHOT
 -------------
 
+ADDED:
+
+- PrivateKeyExtensions#toPkcs8PemFormat(PrivateKey), the counterpart of toPemFormat: the PKCS#8
+  encoding under the PRIVATE KEY header that names it
+
 CHANGED:
 
 - build only: the Central Portal token is read from centralUsername / centralPassword in
   ~/.gradle/gradle.properties when the environment does not carry it, so a release prepared by
   hand no longer needs the token exported into a shell. CI keeps precedence.
+- PrivateKeyExtensions#toPemFormat now says what it does: the traditional form of the key's own
+  algorithm. Its javadoc claimed PKCS#1 for every key, and a key with no traditional form of its
+  own was written under the PRIVATE KEY header - which means PKCS#8 - over content that had the
+  PKCS#8 wrapper stripped. Such a key now keeps its PKCS#8 encoding, so the header and the bytes
+  agree.
+
+FIXED:
+
+- PrivateKeyWriter#write(..., KeyFileFormat.PEM, KeyFormat.PKCS_8) wrote PKCS#1, for every key
+  type. It routed through toPemFormat, which is a PKCS#1 method, so the caller got the traditional
+  form under the traditional header - and for a key with no traditional form, PKCS#1 content under
+  the PKCS#8 header, a file readable as neither. It now writes the PKCS#8 encoding under the
+  PRIVATE KEY header. (#12)
+- PrivateKeyWriter#write(..., KeyFileFormat.PEM, KeyFormat.PKCS_1) labelled every key
+  RSA PRIVATE KEY, because it called fromPKCS1ToPemFormat, which takes bytes rather than a key and
+  so cannot tell the algorithm. An EC or DSA key was written under the wrong header. It now goes
+  through toPemFormat, which has the key and picks the header that belongs to it. (#12)
 
 
 Version 12.0.0

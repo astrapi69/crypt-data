@@ -69,7 +69,8 @@ class PrivateKeyWriterFormatParameterizedTest
 	 * @param expectedPem
 	 *            whether the output is expected in pem format, otherwise der is expected
 	 */
-	record WriteCase(KeyFileFormat fileFormat, KeyFormat keyFormat, boolean expectedPem) {
+	record WriteCase(KeyFileFormat fileFormat, KeyFormat keyFormat, boolean expectedPem,
+		String expectedPemType) {
 	}
 
 	@BeforeAll
@@ -82,15 +83,19 @@ class PrivateKeyWriterFormatParameterizedTest
 
 	static Stream<WriteCase> writeCases()
 	{
-		return Stream.of(new WriteCase(KeyFileFormat.PEM, KeyFormat.PKCS_8, true),
-			new WriteCase(KeyFileFormat.PEM, null, true),
-			new WriteCase(KeyFileFormat.PEM, KeyFormat.PKCS_1, true),
+		// the pem type is the point: what the key format names is what the header has to say, and
+		// PKCS#8 under an RSA PRIVATE KEY header was the defect in issue #12
+		return Stream.of(
+			new WriteCase(KeyFileFormat.PEM, KeyFormat.PKCS_8, true, PemType.PRIVATE_KEY.getName()),
+			new WriteCase(KeyFileFormat.PEM, null, true, PemType.PRIVATE_KEY.getName()),
+			new WriteCase(KeyFileFormat.PEM, KeyFormat.PKCS_1, true,
+				PemType.RSA_PRIVATE_KEY.getName()),
 			// an unknown key format falls back to der although pem was requested
-			new WriteCase(KeyFileFormat.PEM, KeyFormat.UNKNOWN, false),
-			new WriteCase(KeyFileFormat.DER, null, false),
-			new WriteCase(KeyFileFormat.DER, KeyFormat.PKCS_8, false),
-			new WriteCase(KeyFileFormat.P7B, null, false),
-			new WriteCase(KeyFileFormat.UNKNOWN, null, false));
+			new WriteCase(KeyFileFormat.PEM, KeyFormat.UNKNOWN, false, null),
+			new WriteCase(KeyFileFormat.DER, null, false, null),
+			new WriteCase(KeyFileFormat.DER, KeyFormat.PKCS_8, false, null),
+			new WriteCase(KeyFileFormat.P7B, null, false, null),
+			new WriteCase(KeyFileFormat.UNKNOWN, null, false, null));
 	}
 
 	/**
@@ -115,11 +120,14 @@ class PrivateKeyWriterFormatParameterizedTest
 		if (testCase.expectedPem())
 		{
 			String pem = new String(written, StandardCharsets.US_ASCII);
-			assertTrue(pem.startsWith("-----BEGIN RSA PRIVATE KEY-----"), pem);
+			assertTrue(pem.startsWith("-----BEGIN " + testCase.expectedPemType() + "-----"), pem);
 			PemObject pemObject = PemObjectReader.getPemObject(pem);
-			assertEquals(PemType.RSA_PRIVATE_KEY.getName(), pemObject.getType());
-			assertArrayEquals(PrivateKeyExtensions.toPKCS1Format(privateKey),
-				pemObject.getContent());
+			assertEquals(testCase.expectedPemType(), pemObject.getType());
+			byte[] expectedContent = PemType.PRIVATE_KEY.getName()
+				.equals(testCase.expectedPemType())
+					? privateKey.getEncoded()
+					: PrivateKeyExtensions.toPKCS1Format(privateKey);
+			assertArrayEquals(expectedContent, pemObject.getContent());
 		}
 		else
 		{

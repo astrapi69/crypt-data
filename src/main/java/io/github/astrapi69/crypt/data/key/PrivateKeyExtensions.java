@@ -73,6 +73,11 @@ public final class PrivateKeyExtensions
 	 * @return the String in PEM format
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
+	 *             <p>
+	 *             The header is always {@code RSA PRIVATE KEY}: this takes bytes and no key, so it
+	 *             cannot tell which algorithm they belong to, and PKCS#1 names an RSA structure. An
+	 *             EC or DSA key in its traditional form needs its own header - use
+	 *             {@link #toPemFormat(PrivateKey)}, which picks the one that belongs to the key.
 	 */
 	public static String fromPKCS1ToPemFormat(final byte[] privateKeyPKCS1Formatted)
 		throws IOException
@@ -222,8 +227,13 @@ public final class PrivateKeyExtensions
 	}
 
 	/**
-	 * Transform the given private key that is in PKCS1 format and returns a {@link String} object
-	 * in pem format
+	 * Transform the given private key to a {@link String} object in pem format, in the traditional
+	 * form of its algorithm: {@code RSA PRIVATE KEY}, {@code EC PRIVATE KEY} or
+	 * {@code DSA PRIVATE KEY} over the PKCS#1 content, each under the header that names it.
+	 * <p>
+	 * An algorithm with no traditional form of its own keeps its PKCS#8 encoding, under the
+	 * {@code PRIVATE KEY} header - see {@link #toPkcs8PemFormat(PrivateKey)}. Writing stripped
+	 * content under that header would claim a format the bytes are not in.
 	 *
 	 * @param privateKey
 	 *            the private key
@@ -248,8 +258,28 @@ public final class PrivateKeyExtensions
 			return PemObjectReader.toPemFormat(
 				new PemObject(PemType.RSA_PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
 		}
+		// A key with no traditional form of its own - Ed25519, Ed448, the post-quantum families -
+		// has nothing to strip the wrapper for. Writing it under the PRIVATE KEY header, which
+		// means PKCS#8, over PKCS#1 content produced a file that was readable as neither format
+		// (issue #12), so it keeps its PKCS#8 encoding here.
+		return toPkcs8PemFormat(privateKey);
+	}
+
+	/**
+	 * Transform the given private key to a {@link String} object in pem format, in PKCS#8 - the
+	 * encoding {@link PrivateKey#getEncoded()} returns, under the {@code PRIVATE KEY} header that
+	 * names it.
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @return the {@link String} object in pem format generated from the given private key
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	public static String toPkcs8PemFormat(final PrivateKey privateKey) throws IOException
+	{
 		return PemObjectReader
-			.toPemFormat(new PemObject(PemType.PRIVATE_KEY.getName(), toPKCS1Format(privateKey)));
+			.toPemFormat(new PemObject(PemType.PRIVATE_KEY.getName(), privateKey.getEncoded()));
 	}
 
 	/**
