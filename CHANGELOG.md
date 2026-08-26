@@ -32,6 +32,14 @@ FIXED:
   so cannot tell the algorithm. An EC or DSA key was written under the wrong header. It now goes
   through toPemFormat, which has the key and picks the header that belongs to it. (#12)
 
+KNOWN ISSUES:
+
+- Reading a PEM private key of any algorithm other than RSA fails: the entry points that take no
+  algorithm assume RSA, so PrivateKeyReader#validatePrivateKey answers false for a valid EC, DSA
+  or Ed25519 key. Pass the algorithm explicitly until this is fixed. (#14)
+- A DSA key written with KeyFormat.PKCS_1 carries only its private exponent, without p, q and g,
+  so no reader can make a key out of it again. Write DSA keys as PKCS#8. (#15)
+
 
 Version 12.0.0
 -------------
