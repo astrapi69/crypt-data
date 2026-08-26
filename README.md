@@ -2,7 +2,7 @@
 
 [![Java CI with Gradle](https://github.com/astrapi69/crypt-data/actions/workflows/gradle.yml/badge.svg)](https://github.com/astrapi69/crypt-data/actions/workflows/gradle.yml)
 [![Coverage Status](https://codecov.io/gh/astrapi69/crypt-data/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/crypt-data)
-[![Mutation Coverage](https://img.shields.io/badge/mutation%20coverage-98%25-brightgreen)](https://pitest.org/)
+[![Mutation Coverage](https://img.shields.io/badge/mutation%20coverage-100%25-brightgreen)](https://pitest.org/)
 ![Tested Use Cases](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/astrapi69/69b2e93dd826ce43cc3f02433a465ae3/raw/crypt-data-test-cases.json)
 [![Open Issues](https://img.shields.io/github/issues/astrapi69/crypt-data.svg?style=flat)](https://github.com/astrapi69/crypt-data/issues)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.astrapi69/crypt-data.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.astrapi69/crypt-data)
