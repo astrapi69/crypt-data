@@ -1,6 +1,16 @@
 ## Change log
 ----------------------
 
+Version 12.1-SNAPSHOT
+-------------
+
+CHANGED:
+
+- build only: the Central Portal token is read from centralUsername / centralPassword in
+  ~/.gradle/gradle.properties when the environment does not carry it, so a release prepared by
+  hand no longer needs the token exported into a shell. CI keeps precedence.
+
+
 Version 12.0.0
 -------------
 
