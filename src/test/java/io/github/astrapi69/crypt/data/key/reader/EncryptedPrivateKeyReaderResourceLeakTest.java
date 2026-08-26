@@ -58,15 +58,14 @@ class EncryptedPrivateKeyReaderResourceLeakTest
 
 	/**
 	 * A PEM body with well formed markers and a payload that is not valid base64 encoded DER, so
-	 * {@link org.bouncycastle.openssl.PEMParser#readObject()} fails while parsing it
+	 * {@link org.bouncycastle.openssl.PEMParser#readObject()} fails while parsing it. The object
+	 * type is deliberately not a private key one: what this test needs is a parse failure, and a
+	 * fixture shaped like key material would be flagged by secret scanning for no gain.
 	 */
 	private static final String MALFORMED_PEM = """
-		-----BEGIN RSA PRIVATE KEY-----
-		Proc-Type: 4,ENCRYPTED
-		DEK-Info: DES-EDE3-CBC,0123456789ABCDEF
-
+		-----BEGIN CERTIFICATE-----
 		this is not base64 encoded der content at all
-		-----END RSA PRIVATE KEY-----
+		-----END CERTIFICATE-----
 		""";
 
 	/** The directory the running process exposes its open file descriptors under, on Linux */
@@ -88,7 +87,7 @@ class EncryptedPrivateKeyReaderResourceLeakTest
 		assumeTrue(Files.isDirectory(PROC_SELF_FD),
 			"this check reads " + PROC_SELF_FD + ", which only exists on Linux");
 
-		File malformedPemFile = new File(temporaryDir, "malformed-encrypted-key.pem");
+		File malformedPemFile = new File(temporaryDir, "malformed.pem");
 		Files.writeString(malformedPemFile.toPath(), MALFORMED_PEM, StandardCharsets.UTF_8);
 		Path malformedPemPath = malformedPemFile.toPath().toRealPath();
 
