@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -188,7 +189,49 @@ public final class PemObjectReader
 	public static PrivateKey readPemPrivateKey(final @NonNull File keyPemFile) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
-		Object pemKeyObject = readPemKeyObject(keyPemFile);
+		return toPrivateKey(readPemKeyObject(keyPemFile),
+			"The file '" + keyPemFile.getAbsolutePath() + "'");
+	}
+
+	/**
+	 * Reads the given {@link String} in *.pem format and returns the {@link PrivateKey} object, of
+	 * whatever algorithm it was made with
+	 *
+	 * @param privateKeyAsPem
+	 *            the whole pem document, headers included
+	 * @return the {@link PrivateKey} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws InvalidKeySpecException
+	 *             is thrown if the given text holds no private key that can be read without a
+	 *             password
+	 */
+	public static PrivateKey readPemPrivateKey(final @NonNull String privateKeyAsPem)
+		throws IOException, InvalidKeySpecException
+	{
+		try (PEMParser pemParser = new PEMParser(new StringReader(privateKeyAsPem)))
+		{
+			return toPrivateKey(pemParser.readObject(), "The given pem text");
+		}
+	}
+
+	/**
+	 * Builds the {@link PrivateKey} object from what the pem parser made of a document
+	 *
+	 * @param pemKeyObject
+	 *            what the pem parser returned, may be null
+	 * @param source
+	 *            what to call the document in the failure message
+	 * @return the {@link PrivateKey} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws InvalidKeySpecException
+	 *             is thrown if the given object is no private key that can be read without a
+	 *             password
+	 */
+	private static PrivateKey toPrivateKey(final Object pemKeyObject, final String source)
+		throws IOException, InvalidKeySpecException
+	{
 		JcaPEMKeyConverter converter = new JcaPEMKeyConverter()
 			.setProvider(SecurityProvider.BC.name());
 		if (pemKeyObject instanceof PEMKeyPair pemKeyPair)
@@ -199,11 +242,11 @@ public final class PemObjectReader
 		{
 			return converter.getPrivateKey(privateKeyInfo);
 		}
-		throw new InvalidKeySpecException("The file '" + keyPemFile.getAbsolutePath()
-			+ "' holds no private key that can be read without a password, but "
-			+ (pemKeyObject == null
-				? "nothing that the pem parser recognises"
-				: "a " + pemKeyObject.getClass().getSimpleName()));
+		throw new InvalidKeySpecException(
+			source + " holds no private key that can be read without a password, but "
+				+ (pemKeyObject == null
+					? "nothing that the pem parser recognises"
+					: "a " + pemKeyObject.getClass().getSimpleName()));
 	}
 
 	/**

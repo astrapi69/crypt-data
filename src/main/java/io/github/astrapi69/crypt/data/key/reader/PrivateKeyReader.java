@@ -38,12 +38,15 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.bouncycastle.util.io.pem.PemObject;
 
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeyFileFormat;
 import io.github.astrapi69.crypt.api.key.KeyStringEntry;
 import io.github.astrapi69.crypt.api.key.KeyType;
+import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.algorithm.CryptoAlgorithm;
 import io.github.astrapi69.crypt.data.model.KeyInfo;
 import lombok.extern.java.Log;
@@ -55,6 +58,11 @@ import lombok.extern.java.Log;
 @Log
 public final class PrivateKeyReader
 {
+
+	/**
+	 * The five dashes and the word that open every pem document, whatever it holds
+	 */
+	private static final String PEM_HEADER_START = "-----BEGIN";
 
 	private PrivateKeyReader()
 	{
@@ -281,16 +289,26 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Reads the given {@link String}( in *.pem format) with given algorithm and returns the
-	 * {@link PrivateKey} object with the default RSA algorithm
+	 * Reads the given {@link String} and returns the {@link PrivateKey} object it holds, of
+	 * whatever algorithm it was made with
+	 * <p>
+	 * Two shapes are read. A whole pem document, headers included, is taken as one: the header
+	 * names the algorithm of a traditional key and the algorithm identifier names it for a PKCS#8
+	 * one. A bare base64 body without headers is read as PKCS#8, which names its own algorithm, and
+	 * failing that as the traditional RSA body that {@link #readPemFileAsBase64(File)} produces -
+	 * the only headerless shape that can be read at all, because nothing else in it says what it
+	 * is.
+	 * <p>
+	 * The algorithm used to be taken as RSA and a whole pem document was refused, although the
+	 * parameter has always been documented as being in pem format (issue #19).
 	 *
 	 * @param privateKeyAsString
-	 *            the private key as string( in *.pem format)
+	 *            the private key as a whole pem document or as a bare base64 body
 	 * @return the {@link PrivateKey} object
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails
+	 *             is thrown if the given text holds no private key that can be read
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list
@@ -298,7 +316,65 @@ public final class PrivateKeyReader
 	public static PrivateKey readPemPrivateKey(final String privateKeyAsString)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
-		return readPemPrivateKey(privateKeyAsString, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		Objects.requireNonNull(privateKeyAsString);
+		if (privateKeyAsString.contains(PEM_HEADER_START))
+		{
+			try
+			{
+				return PemObjectReader.readPemPrivateKey(privateKeyAsString);
+			}
+			catch (IOException cannotBeParsed)
+			{
+				throw new InvalidKeySpecException(
+					"The given pem text could not be parsed: " + cannotBeParsed.getMessage(),
+					cannotBeParsed);
+			}
+		}
+		final byte[] decoded = new Base64().decode(privateKeyAsString);
+		PrivateKey pkcs8Key = asPkcs8Key(decoded);
+		if (pkcs8Key != null)
+		{
+			return pkcs8Key;
+		}
+		// a body stripped of its header names nothing, and a traditional rsa key is the only shape
+		// this method has ever been able to read without one
+		try
+		{
+			return readPrivateKey(decoded, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		}
+		catch (InvalidKeySpecException noTraditionalRsaKeyEither)
+		{
+			throw new InvalidKeySpecException(
+				"The given text has no pem header, so nothing names its algorithm, and its base64 "
+					+ "is no PKCS#8 structure either. Only a traditional RSA body can be read "
+					+ "without a header, and this is not one",
+				noTraditionalRsaKeyEither);
+		}
+	}
+
+	/**
+	 * Reads the given byte array as a PKCS#8 structure, which is the encoding that names the
+	 * algorithm of the key it wraps, and returns the {@link PrivateKey} object it holds
+	 *
+	 * @param privateKeyBytes
+	 *            the byte array to read
+	 * @return the {@link PrivateKey} object or null if the given bytes are no PKCS#8 key
+	 */
+	private static PrivateKey asPkcs8Key(final byte[] privateKeyBytes)
+	{
+		try
+		{
+			return new JcaPEMKeyConverter().setProvider(SecurityProvider.BC.name())
+				.getPrivateKey(PrivateKeyInfo.getInstance(privateKeyBytes));
+		}
+		catch (IllegalArgumentException | IOException noPkcs8KeyHere)
+		{
+			// whether the bytes are no PKCS#8 structure at all or name an algorithm no key can be
+			// built for, the answer to the caller is the same one: this is not it, try the other
+			// shape. What is thrown when neither shape works is built there, with both attempts
+			// named
+			return null;
+		}
 	}
 
 	/**
