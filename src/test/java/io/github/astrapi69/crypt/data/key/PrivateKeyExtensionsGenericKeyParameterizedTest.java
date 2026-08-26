@@ -91,6 +91,9 @@ class PrivateKeyExtensionsGenericKeyParameterizedTest
 		assertTrue(pem.startsWith("-----BEGIN PRIVATE KEY-----"), pem);
 		PemObject pemObject = PemObjectReader.getPemObject(pem);
 		assertEquals(PemType.PRIVATE_KEY.getName(), pemObject.getType());
-		assertArrayEquals(PrivateKeyExtensions.toPKCS1Format(privateKey), pemObject.getContent());
+		// the PRIVATE KEY header means PKCS#8, so the content has to be the PKCS#8 encoding. It
+		// used to be the stripped PKCS#1 content under that header, which named a format the
+		// bytes were not in (issue #12).
+		assertArrayEquals(privateKey.getEncoded(), pemObject.getContent());
 	}
 }

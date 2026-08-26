@@ -107,18 +107,21 @@ public final class PrivateKeyWriter
 			case PEM :
 				if (keyFormat == null || keyFormat.equals(KeyFormat.PKCS_8))
 				{
-					String privateKeyAsBase64String = PrivateKeyExtensions.toPemFormat(privateKey);
-					outputStream
-						.write(privateKeyAsBase64String.getBytes(StandardCharsets.US_ASCII));
+					// PKCS#8 is the encoding getEncoded returns, under the PRIVATE KEY header.
+					// This used to route through toPemFormat, which is a PKCS#1 method and
+					// stripped the wrapper, so asking for PKCS#8 produced PKCS#1 (issue #12).
+					String pkcs8 = PrivateKeyExtensions.toPkcs8PemFormat(privateKey);
+					outputStream.write(pkcs8.getBytes(StandardCharsets.US_ASCII));
 					break;
 				}
 				else if (keyFormat.equals(KeyFormat.PKCS_1))
 				{
-					final byte[] privateKeyPKCS1Formatted = PrivateKeyExtensions
-						.toPKCS1Format(privateKey);
-					String pemFormat = PrivateKeyExtensions
-						.fromPKCS1ToPemFormat(privateKeyPKCS1Formatted);
-					outputStream.write(pemFormat.getBytes(StandardCharsets.US_ASCII));
+					// toPemFormat picks the traditional header that belongs to the algorithm.
+					// This used to call fromPKCS1ToPemFormat, which takes only bytes and so
+					// labels every key RSA PRIVATE KEY - an EC or DSA key was written under the
+					// wrong header (issue #12).
+					String traditional = PrivateKeyExtensions.toPemFormat(privateKey);
+					outputStream.write(traditional.getBytes(StandardCharsets.US_ASCII));
 					break;
 				}
 			default : // DER is default

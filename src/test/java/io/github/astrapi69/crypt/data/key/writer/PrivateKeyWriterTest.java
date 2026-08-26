@@ -27,9 +27,12 @@ package io.github.astrapi69.crypt.data.key.writer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
@@ -200,7 +203,9 @@ public class PrivateKeyWriterTest
 		assertTrue(createdOrAlreadyExists);
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
-		PrivateKeyWriter.write(privateKey, outputStream, KeyFileFormat.PEM, KeyFormat.PKCS_8);
+		// PKCS_1, not PKCS_8: der/private.pem is a traditional RSA PRIVATE KEY file, so comparing a
+		// PKCS#8 write against it only matched while PKCS_8 wrongly produced PKCS#1 (issue #12)
+		PrivateKeyWriter.write(privateKey, outputStream, KeyFileFormat.PEM, KeyFormat.PKCS_1);
 		expected = FileChecksumExtensions.getChecksum(privatekeyPemFileInDerDir,
 			MdAlgorithm.MD5.getAlgorithm());
 		actual = FileChecksumExtensions.getChecksum(newWrittenPrivatekeyPemFile,
@@ -236,11 +241,13 @@ public class PrivateKeyWriterTest
 
 		outputStream = StreamExtensions.getOutputStream(newWrittenPrivatekeyPemFile);
 		PrivateKeyWriter.write(privateKey, outputStream, KeyFileFormat.PEM, null);
-		expected = FileChecksumExtensions.getChecksum(privatekeyPemFileInDerDir,
-			MdAlgorithm.MD5.getAlgorithm());
-		actual = FileChecksumExtensions.getChecksum(newWrittenPrivatekeyPemFile,
-			MdAlgorithm.MD5.getAlgorithm());
-		assertEquals(expected, actual);
+		// naming no key format means PKCS#8, so this cannot be compared against der/private.pem,
+		// which is a traditional RSA PRIVATE KEY file - it only matched while PKCS#8 wrongly
+		// produced PKCS#1 (issue #12). What it has to equal is the PKCS#8 write.
+		ByteArrayOutputStream asPkcs8 = new ByteArrayOutputStream();
+		PrivateKeyWriter.write(privateKey, asPkcs8, KeyFileFormat.PEM, KeyFormat.PKCS_8);
+		assertEquals(new String(asPkcs8.toByteArray(), StandardCharsets.US_ASCII),
+			Files.readString(newWrittenPrivatekeyPemFile.toPath(), StandardCharsets.US_ASCII));
 
 		DeleteFileExtensions.delete(newWrittenPrivatekeyPemFile);
 		// new scenario...
