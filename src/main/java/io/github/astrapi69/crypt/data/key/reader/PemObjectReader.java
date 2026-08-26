@@ -37,6 +37,7 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.openssl.PEMDecryptorProvider;
 import org.bouncycastle.openssl.PEMEncryptedKeyPair;
 import org.bouncycastle.openssl.PEMKeyPair;
@@ -48,7 +49,6 @@ import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 
 import io.github.astrapi69.crypt.api.algorithm.Algorithm;
-import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.PemType;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import lombok.NonNull;
@@ -163,17 +163,24 @@ public final class PemObjectReader
 	}
 
 	/**
-	 * Reads the given {@link File}( in *.pem format) that contains private key
+	 * Reads the given {@link File}( in *.pem format) that contains private key, of whatever
+	 * algorithm it was made with
+	 * <p>
+	 * A pkcs#8 file names its algorithm in its algorithm identifier and a traditional file names it
+	 * in its header, so the algorithm is read from the file rather than assumed. It used to be
+	 * taken as RSA, which made every ec, dsa or edwards key unreadable and had
+	 * {@code PrivateKeyReader#validatePrivateKey} call a perfectly valid key invalid (issue #14).
 	 *
 	 * @param keyPemFile
 	 *            the file with the private key ( in *.pem format)
-	 * @return the {@link PrivateKey} object or null if the given file is not private key
+	 * @return the {@link PrivateKey} object
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails
+	 *             is thrown if the given file holds no private key that can be read without a
+	 *             password
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list
@@ -181,7 +188,22 @@ public final class PemObjectReader
 	public static PrivateKey readPemPrivateKey(final @NonNull File keyPemFile) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
-		return readPrivateKey(keyPemFile, KeyPairGeneratorAlgorithm.RSA);
+		Object pemKeyObject = readPemKeyObject(keyPemFile);
+		JcaPEMKeyConverter converter = new JcaPEMKeyConverter()
+			.setProvider(SecurityProvider.BC.name());
+		if (pemKeyObject instanceof PEMKeyPair pemKeyPair)
+		{
+			return converter.getKeyPair(pemKeyPair).getPrivate();
+		}
+		if (pemKeyObject instanceof PrivateKeyInfo privateKeyInfo)
+		{
+			return converter.getPrivateKey(privateKeyInfo);
+		}
+		throw new InvalidKeySpecException("The file '" + keyPemFile.getAbsolutePath()
+			+ "' holds no private key that can be read without a password, but "
+			+ (pemKeyObject == null
+				? "nothing that the pem parser recognises"
+				: "a " + pemKeyObject.getClass().getSimpleName()));
 	}
 
 	/**

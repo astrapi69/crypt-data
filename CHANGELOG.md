@@ -31,6 +31,11 @@ FIXED:
   RSA PRIVATE KEY, because it called fromPKCS1ToPemFormat, which takes bytes rather than a key and
   so cannot tell the algorithm. An EC or DSA key was written under the wrong header. It now goes
   through toPemFormat, which has the key and picks the header that belongs to it. (#12)
+- Reading a PEM private key assumed RSA, so a valid EC, DSA, Ed25519, Ed448, X25519 or DH key was
+  refused and PrivateKeyReader#validatePrivateKey called it invalid. A PKCS#8 file names its
+  algorithm in its algorithm identifier and a traditional file names it in its header, so the
+  algorithm is now read from the file. A file that holds no readable private key is still refused,
+  and the refusal now names the file and what was found there instead. (#14)
 
 
 Version 12.0.0
