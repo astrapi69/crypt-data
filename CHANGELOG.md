@@ -1,7 +1,17 @@
 ## Change log
 ----------------------
 
-Version 12.0.0-SNAPSHOT
+Version 12.1-SNAPSHOT
+-------------
+
+CHANGED:
+
+- build only: the Central Portal token is read from centralUsername / centralPassword in
+  ~/.gradle/gradle.properties when the environment does not carry it, so a release prepared by
+  hand no longer needs the token exported into a shell. CI keeps precedence.
+
+
+Version 12.0.0
 -------------
 
 CHANGED:
@@ -14,12 +24,20 @@ CHANGED:
   implicit public one they had before: SharedSecretExtensions, SignatureAlgorithmResolver (both
   public non-final, so instantiation AND subclassing break) and ProviderExtensions (already final,
   so only instantiation breaks). All three hold nothing but static methods; nothing in this repo
-  instantiated them. This is what raises the next release to 12.0.0.
+  instantiated them. This is what raises this release to 12.0.0.
+- PrivateKeyReader#getPrivateKey(byte[]) and EncryptedPrivateKeyReader#getPrivateKey(File, String)
+  no longer route their result through a local Optional variable. Both walk a list of candidate
+  algorithms and returned on the first success, so the local could only ever hold Optional.empty()
+  at the fall-through; each branch now returns Optional.of(...) directly and the method ends in
+  Optional.empty(). Internal only, no behaviour change.
 - test quality: 100% line and 100% branch coverage (also 100% instruction, complexity, method and
-  class), up from 99.05%/98.28%. Reached by deleting dead code - null guards on values that cannot
-  be null, two uncalled methods in a private nested class, a 26-line duplicate of an existing
-  method - rather than by adding exclusions or tests without assertions. See
-  mystic-crypt/docs/TESTING.md for the strategy.
+  class), up from 99.05%/98.28%, and a 100.00% PIT mutation score (779 of 779 mutants killed, no
+  survivors), up from 98%. Coverage was reached by deleting dead code - null guards on values that
+  cannot be null, two uncalled methods in a private nested class, a 26-line duplicate of an
+  existing method - rather than by adding exclusions or tests without assertions. The last three
+  surviving mutants were cleared in the round documented below, not argued away. Measured on the
+  release tree: 1019 tests. See mystic-crypt/docs/TESTING.md for the strategy and
+  mystic-crypt/docs/COVERAGE_EXCEPTIONS.md for the per-mutant reasoning.
 
 FIXED:
 
@@ -27,6 +45,34 @@ FIXED:
   contains no PEM object, because PEMParser#readObject() returns null and the result was
   dereferenced. It now throws PEMException naming the file. PEMException was already declared in the
   method's throws clause and javadoc.
+- EncryptedPrivateKeyReader#getKeyPair(File, String) leaked a file descriptor for every malformed
+  PEM file (issue #7). The parser was closed with a plain call after readObject(), so a body that
+  makes readObject() throw never reached the close and the underlying FileReader stayed open until
+  the garbage collector reclaimed it - a caller validating a batch of key files leaked one
+  descriptor per rejected file. It now uses try-with-resources, matching PemObjectReader, which was
+  already the only other PEM parser site in this library and already did so. The regression test
+  counts the /proc/self/fd entries pointing at the parsed file and skips itself where that
+  directory does not exist.
+
+
+Version 11.2
+-------------
+
+CHANGED:
+
+- module-info.java exports the io.github.astrapi69.crypt.data.key package. Cut from the release/11.2
+  branch as 11.1 plus only this export, so JPMS consumers could pick it up without waiting for the
+  breaking changes queued for 12.0.0.
+
+
+Version 11.1
+-------------
+
+CHANGED:
+
+- build only, no library changes: the signing configuration falls back to the local gpg command
+  when no key is in the environment, so a release can be prepared by hand, and the README points
+  contributors at the shared testing strategy in mystic-crypt/docs/TESTING.md.
 
 
 Version 11.0.0
