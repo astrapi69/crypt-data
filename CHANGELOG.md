@@ -49,6 +49,12 @@ FIXED:
   RSA body that readPemFileAsBase64 produces second. RSA passed before only because the Bouncy
   Castle RSA key factory also accepts a raw PKCS#1 structure through a PKCS#8 key
   specification. (#19)
+- Reading a public key assumed RSA, so a key this library had just written was unreadable for six
+  of seven algorithms - and unlike the private key side, where a fallback list saved the DER path,
+  both PEM and DER failed. PublicKeyReader#readPemPublicKey(File) and #readPublicKey(byte[]) now
+  read the algorithm from the SubjectPublicKeyInfo that carries it. A file that holds no public key
+  is refused by name, and a private key file is refused rather than having its public half taken
+  out of it. (#23)
 - A password protected Ed25519, Ed448, X25519 or DH private key was written but came back as null.
   EncryptedPrivateKeyReader walked a fixed list of four algorithms - RSA, DiffieHellman, DSA, EC -
   and turned running out of guesses into a null, which is also what a wrong password and a file
