@@ -61,6 +61,18 @@ FIXED:
   secp256k1 did not - and prime239v1 is what Bouncy Castle produces when no curve is named at all,
   so the plainest EC key pair could not be certified. The other three signer sites in the class
   named the provider already; this one now does too. (#28)
+
+CHANGED:
+
+- PrivateKeyExtensions#generatePublicKey(PrivateKey) derives the public key for every algorithm
+  this library can generate a key pair for - RSA, DSA, EC on any curve, Ed25519, Ed448, X25519,
+  X448, ML-DSA, ML-KEM and DiffieHellman - instead of answering null for everything but RSA. A null
+  meant three things at once: not supported, generation failed, and there is none. What cannot be
+  derived is now refused with a message that names the algorithm and lists what can. SLH-DSA is
+  among what cannot: its private key parameters hand out the public key as bytes and
+  SLHDSAPublicKeyParameters has no public constructor to make parameters of them again. As a
+  consequence KeyPairFactory#newKeyPair(PrivateKey) no longer returns a key pair whose public half
+  is null. (#25)
 - A password protected Ed25519, Ed448, X25519 or DH private key was written but came back as null.
   EncryptedPrivateKeyReader walked a fixed list of four algorithms - RSA, DiffieHellman, DSA, EC -
   and turned running out of guesses into a null, which is also what a wrong password and a file
