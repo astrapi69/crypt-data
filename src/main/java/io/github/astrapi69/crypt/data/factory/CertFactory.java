@@ -432,8 +432,12 @@ public final class CertFactory
 
 		BigInteger certSerialNumber = new BigInteger(Long.toString(now)); // unique serial number
 
+		// the provider is named here as it is at the other three signer sites in this class. Left
+		// unnamed, the jdk provider answers, and it refuses every ec curve it does not implement -
+		// prime239v1 and secp256k1 among them, and prime239v1 is what bouncy castle produces when
+		// no curve is named at all (issue #28)
 		ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgorithm)
-			.build(keyPair.getPrivate());
+			.setProvider(SecurityProvider.BC.name()).build(keyPair.getPrivate());
 
 		JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(issuer,
 			certSerialNumber, startDate, endDate, subject, keyPair.getPublic());

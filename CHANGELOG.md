@@ -55,6 +55,12 @@ FIXED:
   read the algorithm from the SubjectPublicKeyInfo that carries it. A file that holds no public key
   is refused by name, and a private key file is refused rather than having its public half taken
   out of it. (#23)
+- CertFactory#newX509CertificateV3(KeyPair, X500Name, int, X500Name, String, Extension...) built
+  its content signer without naming Bouncy Castle, so the JDK provider answered and refused every
+  EC curve it does not implement. secp256r1, secp384r1 and secp521r1 passed; prime239v1 and
+  secp256k1 did not - and prime239v1 is what Bouncy Castle produces when no curve is named at all,
+  so the plainest EC key pair could not be certified. The other three signer sites in the class
+  named the provider already; this one now does too. (#28)
 - A password protected Ed25519, Ed448, X25519 or DH private key was written but came back as null.
   EncryptedPrivateKeyReader walked a fixed list of four algorithms - RSA, DiffieHellman, DSA, EC -
   and turned running out of guesses into a null, which is also what a wrong password and a file
