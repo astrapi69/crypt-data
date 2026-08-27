@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.KeyFactory;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
@@ -321,11 +322,14 @@ public class PrivateKeyExtensionsTest
 		actual = PrivateKeyExtensions.generatePublicKey(privateKey);
 		assertEquals(expected, actual);
 		// new scenario...
-		privateKey = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.DSA, KeySize.KEYSIZE_1024)
-			.getPrivate();
+		// a dsa key used to answer null here, which meant three things at once: not supported,
+		// generation failed, and there is none. It derives now, like every other algorithm the
+		// library can generate (issue #25)
+		KeyPair dsaKeyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.DSA,
+			KeySize.KEYSIZE_1024);
 
-		expected = null;
-		actual = PrivateKeyExtensions.generatePublicKey(privateKey);
+		expected = dsaKeyPair.getPublic();
+		actual = PrivateKeyExtensions.generatePublicKey(dsaKeyPair.getPrivate());
 		assertEquals(expected, actual);
 	}
 
