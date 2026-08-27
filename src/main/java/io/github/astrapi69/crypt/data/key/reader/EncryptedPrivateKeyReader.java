@@ -39,14 +39,18 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Optional;
 import java.util.logging.Level;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.EncryptedPrivateKeyInfo;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKeyFactory;
 
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.openssl.PEMDecryptorProvider;
 import org.bouncycastle.openssl.PEMEncryptedKeyPair;
 import org.bouncycastle.openssl.PEMException;
@@ -59,7 +63,6 @@ import org.bouncycastle.pkcs.PKCS8EncryptedPrivateKeyInfo;
 import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcePKCSPBEInputDecryptorProviderBuilder;
 
-import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import io.github.astrapi69.crypt.data.factory.CipherFactory;
 import io.github.astrapi69.crypt.data.factory.KeySpecFactory;
@@ -167,6 +170,80 @@ public final class EncryptedPrivateKeyReader
 		throws IOException, NoSuchAlgorithmException, NoSuchPaddingException,
 		InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException
 	{
+		final KeySpec pkcs8KeySpec = decryptToPkcs8(encryptedPrivateKeyBytes, password);
+		final KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
+		return keyFactory.generatePrivate(pkcs8KeySpec);
+	}
+
+	/**
+	 * Reads the given byte array with a password protected private key and returns the
+	 * {@link PrivateKey} object, of whatever algorithm the key inside it was made with
+	 *
+	 * @param encryptedPrivateKeyBytes
+	 *            the byte array with the password protected private key
+	 * @param password
+	 *            the password
+	 * @return the {@link PrivateKey} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails
+	 * @throws NoSuchPaddingException
+	 *             is thrown if instantiation of the cypher object fails
+	 * @throws InvalidKeySpecException
+	 *             is thrown if the password is wrong or no key can be built from what was decrypted
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails
+	 */
+	public static PrivateKey readPasswordProtectedPrivateKey(final byte[] encryptedPrivateKeyBytes,
+		final String password) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException,
+		InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException
+	{
+		final PKCS8EncodedKeySpec pkcs8KeySpec = decryptToPkcs8(encryptedPrivateKeyBytes, password);
+		try
+		{
+			// what comes out of the decryption is a pkcs#8 structure, which names its own
+			// algorithm. It used to be guessed at instead, from a list of four that left out the
+			// edwards and montgomery families (issue #24)
+			return new JcaPEMKeyConverter().setProvider(SecurityProvider.BC.name())
+				.getPrivateKey(PrivateKeyInfo.getInstance(pkcs8KeySpec.getEncoded()));
+		}
+		catch (IllegalArgumentException | IOException noKeyInThere)
+		{
+			throw new InvalidKeySpecException(
+				"What was decrypted is no private key structure: " + noKeyInThere.getMessage(),
+				noKeyInThere);
+		}
+	}
+
+	/**
+	 * Decrypts the given password protected private key bytes and returns the PKCS#8 structure that
+	 * was sealed in them
+	 *
+	 * @param encryptedPrivateKeyBytes
+	 *            the byte array with the password protected private key
+	 * @param password
+	 *            the password
+	 * @return the {@link PKCS8EncodedKeySpec} object that was decrypted
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails
+	 * @throws NoSuchPaddingException
+	 *             is thrown if instantiation of the cypher object fails
+	 * @throws InvalidKeySpecException
+	 *             is thrown if the password is wrong
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails
+	 */
+	private static PKCS8EncodedKeySpec decryptToPkcs8(final byte[] encryptedPrivateKeyBytes,
+		final String password) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException,
+		InvalidKeySpecException, InvalidKeyException, InvalidAlgorithmParameterException
+	{
 		final EncryptedPrivateKeyInfo encryptedPrivateKeyInfo = new EncryptedPrivateKeyInfo(
 			encryptedPrivateKeyBytes);
 		final String algName = encryptedPrivateKeyInfo.getAlgName();
@@ -177,9 +254,21 @@ public final class EncryptedPrivateKeyReader
 		final Key pbeKey = secretKeyFactory.generateSecret(pbeKeySpec);
 		final AlgorithmParameters algParameters = encryptedPrivateKeyInfo.getAlgParameters();
 		cipher.init(Cipher.DECRYPT_MODE, pbeKey, algParameters);
-		final KeySpec pkcs8KeySpec = encryptedPrivateKeyInfo.getKeySpec(cipher);
-		final KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
-		return keyFactory.generatePrivate(pkcs8KeySpec);
+		try
+		{
+			// the cipher is run here rather than through getKeySpec(Cipher), which checks the
+			// decrypted bytes against what the jdk recognises as a key and refuses a
+			// diffie-hellman key with "Cannot retrieve the PKCS8EncodedKeySpec". Whether the bytes
+			// are a key is decided where the key is built, by whoever asked for it
+			return new PKCS8EncodedKeySpec(
+				cipher.doFinal(encryptedPrivateKeyInfo.getEncryptedData()));
+		}
+		catch (IllegalBlockSizeException | BadPaddingException wrongPassword)
+		{
+			throw new InvalidKeySpecException(
+				"The password does not open this key: " + wrongPassword.getMessage(),
+				wrongPassword);
+		}
 	}
 
 	/**
@@ -197,9 +286,20 @@ public final class EncryptedPrivateKeyReader
 	 *             is thrown if an error occurs on read the key file
 	 */
 	public static PrivateKey readPasswordProtectedPrivateKey(final File encryptedPrivateKeyFile,
-		final String password) throws OperatorCreationException, PKCSException
+		final String password) throws OperatorCreationException, PKCSException, IOException,
+		NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException,
+		InvalidKeyException, InvalidAlgorithmParameterException
 	{
-		return getPrivateKey(encryptedPrivateKeyFile, password).orElse(null);
+		// this used to be getPrivateKey(...).orElse(null): a walk over rsa, diffie-hellman, dsa and
+		// ec that left out the edwards and montgomery families, and turned running out of guesses
+		// into a null - the same answer a wrong password and a file holding no key at all gave, so
+		// the three could not be told apart (issue #24)
+		if (PrivateKeyReader.isPemFormat(encryptedPrivateKeyFile))
+		{
+			return getKeyPair(encryptedPrivateKeyFile, password).getPrivate();
+		}
+		return readPasswordProtectedPrivateKey(Files.readAllBytes(encryptedPrivateKeyFile.toPath()),
+			password);
 	}
 
 	/**
@@ -222,51 +322,18 @@ public final class EncryptedPrivateKeyReader
 	{
 		try
 		{
-			return Optional.of(readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-				KeyPairGeneratorAlgorithm.RSA.getAlgorithm()));
+			return Optional.of(readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password));
 		}
-		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
-			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
+		catch (IOException | NoSuchAlgorithmException | NoSuchPaddingException
+			| InvalidKeySpecException | InvalidKeyException
+			| InvalidAlgorithmParameterException cannotBeOpened)
 		{
-			log.log(Level.WARNING,
-				"Given password protected private key file is not stored in 'RSA' algorithm");
+			// the empty optional is this method's way of saying so; the reason is kept for anyone
+			// who turns the log up rather than thrown, because the caller asked for an optional
+			log.log(Level.FINE, "The file '" + encryptedPrivateKeyFile
+				+ "' could not be opened as a password protected private key", cannotBeOpened);
+			return Optional.empty();
 		}
-		try
-		{
-			return Optional.of(readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-				KeyPairGeneratorAlgorithm.DIFFIE_HELLMAN.getAlgorithm()));
-		}
-		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
-			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
-		{
-			log.log(Level.WARNING,
-				"Given password protected private key file is not stored in 'DiffieHellman' algorithm");
-		}
-		try
-		{
-			return Optional.of(readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-				KeyPairGeneratorAlgorithm.DSA.getAlgorithm()));
-		}
-		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
-			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
-		{
-			log.log(Level.WARNING,
-				"Given password protected private key file is not stored in 'DSA' algorithm");
-		}
-		try
-		{
-			return Optional.of(readPasswordProtectedPrivateKey(encryptedPrivateKeyFile, password,
-				KeyPairGeneratorAlgorithm.EC.getAlgorithm()));
-		}
-		catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException
-			| NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e)
-		{
-			log.log(Level.WARNING,
-				"Given password protected private key file is not stored in 'EC' algorithm");
-		}
-		// every candidate algorithm failed: the file is not a password protected private key this
-		// reader can parse with the given password
-		return Optional.empty();
 	}
 
 	/**

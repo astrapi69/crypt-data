@@ -55,6 +55,14 @@ FIXED:
   read the algorithm from the SubjectPublicKeyInfo that carries it. A file that holds no public key
   is refused by name, and a private key file is refused rather than having its public half taken
   out of it. (#23)
+- A password protected Ed25519, Ed448, X25519 or DH private key was written but came back as null.
+  EncryptedPrivateKeyReader walked a fixed list of four algorithms - RSA, DiffieHellman, DSA, EC -
+  and turned running out of guesses into a null, which is also what a wrong password and a file
+  holding no key at all produced, so the three could not be told apart. The decrypted content is a
+  PKCS#8 structure that names its own algorithm, so it is read from there, and each of the three
+  failures now says which one it is. The decryption no longer goes through
+  EncryptedPrivateKeyInfo#getKeySpec(Cipher), which refuses a DiffieHellman key outright with
+  "Cannot retrieve the PKCS8EncodedKeySpec". (#24)
 
 
 
