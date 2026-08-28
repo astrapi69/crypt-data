@@ -1,6 +1,23 @@
 ## Change log
 ----------------------
 
+Version 12.2-SNAPSHOT
+-------------
+
+FIXED:
+
+- CertFactory could not certify an ML-DSA key: naming Bouncy Castle for the content signer makes it
+  refuse a key the JDK generated, with "unknown private key passed to ML-DSA". No single provider
+  covers the set - Bouncy Castle knows EC curves the JDK does not implement, prime239v1 and
+  secp256k1 among them, and the JDK generates post-quantum keys Bouncy Castle will not sign with -
+  so the signer asks Bouncy Castle first and lets whichever provider does hold the key answer when
+  it cannot. All four signer sites share that one method now. (#33)
+
+  Two of the three overloads had never been able to certify an ML-DSA key; the third could until
+  12.1, where #28 made it match the others in the wrong direction. mystic-crypt's keystore command
+  is the caller that broke.
+
+
 Version 12.1
 -------------
 
