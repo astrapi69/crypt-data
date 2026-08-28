@@ -284,6 +284,15 @@ public final class EncryptedPrivateKeyReader
 	 *             is thrown if an error occurs on the operator creation
 	 * @throws PKCSException
 	 *             is thrown if an error occurs on read the key file
+	 *
+	 * @implNote The throws clause is wider than it was until 12.0.0, which declared only
+	 *           {@code OperatorCreationException} and {@code PKCSException}. Widening it was a
+	 *           source breaking change and it broke mystic-crypt-ui, whose two call sites handled
+	 *           the old pair. It is not narrowed again: the caller adapted, with a single
+	 *           {@code catch (IOException | GeneralSecurityException)}, and a catch for an
+	 *           exception that is no longer declared does not compile - so taking the clause back
+	 *           would break the same caller a second time, in the other direction. Narrow it only
+	 *           together with every known caller, in one step, never on its own.
 	 */
 	public static PrivateKey readPasswordProtectedPrivateKey(final File encryptedPrivateKeyFile,
 		final String password) throws OperatorCreationException, PKCSException, IOException,
