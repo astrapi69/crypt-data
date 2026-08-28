@@ -225,6 +225,37 @@ public final class CertFactory
 	}
 
 	/**
+	 * Builds the {@link ContentSigner} for the given signature algorithm and private key
+	 * <p>
+	 * No single provider covers the set. Bouncy castle knows ec curves the jdk does not implement -
+	 * prime239v1, which is its own default, and secp256k1 (issue #28) - and the jdk generates
+	 * ML-DSA keys bouncy castle refuses to sign with, answering "unknown private key passed to
+	 * ML-DSA" (issue #33). Naming either one unconditionally locks out the other half, so bouncy
+	 * castle is asked first and whichever provider does hold the key answers when it cannot.
+	 *
+	 * @param signatureAlgorithm
+	 *            the signature algorithm
+	 * @param privateKey
+	 *            the key that signs
+	 * @return the content signer
+	 * @throws OperatorCreationException
+	 *             if no provider can sign with this key and algorithm
+	 */
+	private static ContentSigner newSigner(final String signatureAlgorithm,
+		final PrivateKey privateKey) throws OperatorCreationException
+	{
+		try
+		{
+			return new JcaContentSignerBuilder(signatureAlgorithm)
+				.setProvider(SecurityProvider.BC.name()).build(privateKey);
+		}
+		catch (OperatorCreationException bouncyCastleCannotSignWithThisKey)
+		{
+			return new JcaContentSignerBuilder(signatureAlgorithm).build(privateKey);
+		}
+	}
+
+	/**
 	 * Factory method for creating an initial new {@link X509Certificate} object of version 3 of
 	 * type X.509 from the given parameters without an existing certificate.
 	 *
@@ -261,8 +292,7 @@ public final class CertFactory
 		X509v3CertificateBuilder certBuilder = CertificateBuilderFactory
 			.newX509v3CertificateBuilder(new X500Name(issuer), serialNumber, start, end,
 				new X500Name(subject), publicKey);
-		ContentSigner signer = new JcaContentSignerBuilder(signatureAlgorithm)
-			.setProvider(SecurityProvider.BC.name()).build(privateKey);
+		ContentSigner signer = newSigner(signatureAlgorithm, privateKey);
 		return new JcaX509CertificateConverter().setProvider(SecurityProvider.BC.name())
 			.getCertificate(certBuilder.build(signer));
 	}
@@ -323,8 +353,7 @@ public final class CertFactory
 	{
 		X509v1CertificateBuilder certBuilder = new JcaX509v1CertificateBuilder(issuer, serial,
 			notBefore, notAfter, subject, publicKey);
-		ContentSigner signer = new JcaContentSignerBuilder(signatureAlgorithm)
-			.setProvider(SecurityProvider.BC.name()).build(privateKey);
+		ContentSigner signer = newSigner(signatureAlgorithm, privateKey);
 		return new JcaX509CertificateConverter().setProvider(SecurityProvider.BC.name())
 			.getCertificate(certBuilder.build(signer));
 	}
@@ -432,12 +461,7 @@ public final class CertFactory
 
 		BigInteger certSerialNumber = new BigInteger(Long.toString(now)); // unique serial number
 
-		// the provider is named here as it is at the other three signer sites in this class. Left
-		// unnamed, the jdk provider answers, and it refuses every ec curve it does not implement -
-		// prime239v1 and secp256k1 among them, and prime239v1 is what bouncy castle produces when
-		// no curve is named at all (issue #28)
-		ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgorithm)
-			.setProvider(SecurityProvider.BC.name()).build(keyPair.getPrivate());
+		ContentSigner contentSigner = newSigner(signatureAlgorithm, keyPair.getPrivate());
 
 		JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(issuer,
 			certSerialNumber, startDate, endDate, subject, keyPair.getPublic());
@@ -652,8 +676,7 @@ public final class CertFactory
 		Date notAfter, X500Name subject, String signatureAlgorithm, Extension... extensions)
 		throws OperatorCreationException, CertificateException
 	{
-		ContentSigner signer = new JcaContentSignerBuilder(signatureAlgorithm)
-			.setProvider(SecurityProvider.BC.name()).build(privateKey);
+		ContentSigner signer = newSigner(signatureAlgorithm, privateKey);
 
 		X509v3CertificateBuilder certBuilder = CertificateBuilderFactory
 			.newX509v3CertificateBuilder(issuer, serial, notBefore, notAfter, subject, publicKey);
