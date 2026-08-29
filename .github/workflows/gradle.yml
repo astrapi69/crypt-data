@@ -89,13 +89,18 @@ jobs:
           label: Tested Use Cases
           message: ${{ steps.test_count.outputs.total }}
           color: ${{ steps.test_count.outputs.color }}
-      - name: Publish to Maven Central
+      # Snapshots only. A non-SNAPSHOT version on develop is deliberately NOT
+      # published here: the release commit reaches develop when the release pull
+      # request is merged, so publishing from this push uploads a release with
+      # nobody deciding to - and duplicates the deliberate upload that follows.
+      # Releasing this repository is a manual step (#38).
+      - name: Publish snapshot to Maven Central
         if: github.event_name == 'push'
         run: |
           if grep -q -- '-SNAPSHOT' gradle.properties; then
             ./gradlew publishAllPublicationsToCentralSnapshots
           else
-            ./gradlew publishAllPublicationsToCentralPortal
+            echo "non-SNAPSHOT version: releasing this repository is a deliberate manual step"
           fi
         env:
           CENTRAL_PORTAL_TOKEN_USERNAME: ${{ secrets.CENTRAL_PORTAL_TOKEN_USERNAME }}
