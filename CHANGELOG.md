@@ -4,7 +4,25 @@
 Version 12.3-SNAPSHOT
 -------------
 
-(nothing released yet)
+ADDED:
+
+- PrivateKeyExtensions#hasTraditionalForm(PrivateKey): whether asking for KeyFormat.PKCS_1 gives
+  something other than PKCS#8. RSA, DSA and EC have a traditional form of their own; the edwards
+  and montgomery families, DiffieHellman and the post-quantum families do not, and for those the
+  request was answered with the PKCS#8 file byte for byte and nothing said. The bytes were right -
+  PKCS#1 content under a PRIVATE KEY header is the defect #12 fixed - but the only way to find out
+  was to write the key twice and compare. A caller that offers the choice can now ask before
+  offering it. (#40)
+
+CHANGED:
+
+- Every algorithm KeyPairGeneratorAlgorithm names is now driven through PrivateKeyWriter, across
+  both file formats and both key formats - 28 of the 30 the enum lists, the two that cannot
+  generate a key pair here being XDH, which needs a parameter spec to say which curve, and the
+  UNKNOWN placeholder. The set comes from the enum rather than a list written by hand, so an
+  algorithm added later joins the tests by existing, and a test asserts that exactly those two are
+  left out. X448, ML-KEM and ML-DSA had never been written by any test; RSASSA-PSS turned out to
+  have a traditional form and had not been asked. (#40)
 
 
 Version 12.2
