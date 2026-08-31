@@ -36,14 +36,18 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.Security;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeyFileFormat;
 import io.github.astrapi69.crypt.api.key.KeyFormat;
 import io.github.astrapi69.crypt.data.key.writer.PrivateKeyWriter;
@@ -73,20 +77,6 @@ class TraditionalFormParityTest
 		}
 	}
 
-	private static PrivateKey newPrivateKey(final String algorithm) throws Exception
-	{
-		KeyPairGenerator generator = KeyPairGenerator.getInstance(algorithm,
-			BouncyCastleProvider.PROVIDER_NAME);
-		if ("RSA".equals(algorithm) || "DSA".equals(algorithm))
-		{
-			generator.initialize(2048);
-		}
-		if ("DH".equals(algorithm))
-		{
-			generator.initialize(1024);
-		}
-		return generator.generateKeyPair().getPrivate();
-	}
 
 	private static String pem(final PrivateKey privateKey, final KeyFormat keyFormat)
 		throws Exception
@@ -103,23 +93,84 @@ class TraditionalFormParityTest
 	}
 
 	/**
-	 * The question the caller could not ask. Every algorithm this library can generate is answered,
-	 * the three that no test used to write among them.
+	 * Every algorithm this library names, taken from the enum rather than from a list written by
+	 * hand, so one added later joins these tests by existing.
+	 *
+	 * @return the algorithms that can generate a key pair here
+	 */
+	static Stream<KeyPairGeneratorAlgorithm> generatableAlgorithms()
+	{
+		return Arrays.stream(KeyPairGeneratorAlgorithm.values())
+			.filter(TraditionalFormParityTest::canGenerate);
+	}
+
+	private static boolean canGenerate(final KeyPairGeneratorAlgorithm algorithm)
+	{
+		try
+		{
+			newPrivateKey(algorithm);
+			return true;
+		}
+		catch (Exception cannotGenerate)
+		{
+			return false;
+		}
+	}
+
+	private static PrivateKey newPrivateKey(final KeyPairGeneratorAlgorithm algorithm)
+		throws Exception
+	{
+		String name = algorithm.getAlgorithm();
+		KeyPairGenerator generator = KeyPairGenerator.getInstance(name,
+			BouncyCastleProvider.PROVIDER_NAME);
+		if ("RSA".equals(name) || "DSA".equals(name) || "RSASSA-PSS".equals(name))
+		{
+			generator.initialize(2048);
+		}
+		if ("DiffieHellman".equals(name) || "DH".equals(name))
+		{
+			generator.initialize(1024);
+		}
+		return generator.generateKeyPair().getPrivate();
+	}
+
+	/**
+	 * The two the enum names that cannot generate a key pair here, asserted so that neither becomes
+	 * three without anyone noticing.
+	 * <p>
+	 * XDH is the umbrella name for the montgomery curves and needs a parameter spec to say which;
+	 * UNKNOWN is the enum's placeholder and is not an algorithm at all. Everything else is driven
+	 * by the tests below.
+	 */
+	@Test
+	void exactlyTwoOfTheNamedAlgorithmsCannotGenerateAKeyPair()
+	{
+		List<String> cannot = Arrays.stream(KeyPairGeneratorAlgorithm.values())
+			.filter(algorithm -> !canGenerate(algorithm)).map(Enum::name).sorted().toList();
+
+		assertEquals(List.of("UNKNOWN", "XDH"), cannot,
+			"a newly named algorithm must be driven by these tests, not quietly join this list");
+	}
+
+	/**
+	 * The question the caller could not ask, for every algorithm that can be generated.
 	 *
 	 * @param algorithm
 	 *            the algorithm under test
-	 * @param expected
-	 *            whether that algorithm has a traditional form of its own
 	 * @throws Exception
 	 *             if key generation fails
 	 */
 	@ParameterizedTest
-	@CsvSource({ "RSA, true", "DSA, true", "EC, true", "Ed25519, false", "Ed448, false",
-			"X25519, false", "X448, false", "DH, false", "ML-KEM-768, false", "ML-DSA-65, false" })
-	void everyAlgorithmSaysWhetherItHasATraditionalForm(final String algorithm,
-		final boolean expected) throws Exception
+	@MethodSource("generatableAlgorithms")
+	void everyAlgorithmSaysWhetherItHasATraditionalForm(final KeyPairGeneratorAlgorithm algorithm)
+		throws Exception
 	{
-		assertEquals(expected, PrivateKeyExtensions.hasTraditionalForm(newPrivateKey(algorithm)),
+		PrivateKey privateKey = newPrivateKey(algorithm);
+		boolean expected = privateKey instanceof java.security.interfaces.RSAPrivateKey
+			|| privateKey instanceof java.security.interfaces.DSAPrivateKey
+			|| privateKey instanceof java.security.interfaces.ECPrivateKey;
+
+		assertEquals(expected, PrivateKeyExtensions.hasTraditionalForm(privateKey),
 			algorithm + " must answer whether it has a traditional form of its own");
 	}
 
@@ -133,9 +184,9 @@ class TraditionalFormParityTest
 	 *             if key generation or writing fails
 	 */
 	@ParameterizedTest
-	@ValueSource(strings = { "RSA", "DSA", "EC", "Ed25519", "Ed448", "X25519", "X448", "DH",
-			"ML-KEM-768", "ML-DSA-65" })
-	void theAnswerIsTrueExactlyWhenTheTwoFormatsDiffer(final String algorithm) throws Exception
+	@MethodSource("generatableAlgorithms")
+	void theAnswerIsTrueExactlyWhenTheTwoFormatsDiffer(final KeyPairGeneratorAlgorithm algorithm)
+		throws Exception
 	{
 		PrivateKey privateKey = newPrivateKey(algorithm);
 
@@ -160,45 +211,50 @@ class TraditionalFormParityTest
 	}
 
 	/**
-	 * The three algorithms no test used to write. They work; that was never asserted.
+	 * The whole cross product, for every algorithm: both file formats and both key formats. Der
+	 * ignores the key format by design, pem carries what the algorithm has.
 	 *
 	 * @param algorithm
 	 *            the algorithm under test
-	 * @param keyFileFormat
-	 *            the file format to write in
-	 * @param keyFormat
-	 *            the key format to ask for
 	 * @throws Exception
 	 *             if key generation or writing fails
 	 */
 	@ParameterizedTest
-	@CsvSource({ "X448, PEM, PKCS_8", "X448, PEM, PKCS_1", "X448, DER, PKCS_8", "X448, DER, PKCS_1",
-			"ML-KEM-768, PEM, PKCS_8", "ML-KEM-768, PEM, PKCS_1", "ML-KEM-768, DER, PKCS_8",
-			"ML-KEM-768, DER, PKCS_1", "ML-DSA-65, PEM, PKCS_8", "ML-DSA-65, PEM, PKCS_1",
-			"ML-DSA-65, DER, PKCS_8", "ML-DSA-65, DER, PKCS_1" })
-	void theAlgorithmsThatWereNeverWrittenAreWrittenNow(final String algorithm,
-		final KeyFileFormat keyFileFormat, final KeyFormat keyFormat) throws Exception
+	@MethodSource("generatableAlgorithms")
+	void everyCombinationOfFileFormatAndKeyFormatIsWritten(
+		final KeyPairGeneratorAlgorithm algorithm) throws Exception
 	{
 		PrivateKey privateKey = newPrivateKey(algorithm);
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		boolean traditional = PrivateKeyExtensions.hasTraditionalForm(privateKey);
 
-		PrivateKeyWriter.write(privateKey, out, keyFileFormat, keyFormat);
-		byte[] written = out.toByteArray();
-
-		if (keyFileFormat == KeyFileFormat.DER)
+		for (KeyFormat keyFormat : new KeyFormat[] { KeyFormat.PKCS_8, KeyFormat.PKCS_1 })
 		{
-			assertArrayEquals(privateKey.getEncoded(), written,
-				algorithm + " as der is the encoding unchanged, whatever key format is named");
-			return;
+			ByteArrayOutputStream der = new ByteArrayOutputStream();
+			PrivateKeyWriter.write(privateKey, der, KeyFileFormat.DER, keyFormat);
+			assertArrayEquals(privateKey.getEncoded(), der.toByteArray(),
+				algorithm + " as der with " + keyFormat + " is the encoding unchanged");
+
+			String text = pem(privateKey, keyFormat);
+			boolean pkcs8Header = text.startsWith("-----BEGIN PRIVATE KEY-----");
+			if (keyFormat == KeyFormat.PKCS_8 || !traditional)
+			{
+				assertTrue(pkcs8Header,
+					algorithm + " with " + keyFormat + " must carry the pkcs#8 header, but was: "
+						+ text.lines().findFirst().orElse(""));
+				assertArrayEquals(privateKey.getEncoded(), bodyOf(text));
+			}
+			else
+			{
+				assertFalse(pkcs8Header,
+					algorithm + " with " + keyFormat
+						+ " must carry its own traditional header, but was: "
+						+ text.lines().findFirst().orElse(""));
+			}
 		}
-		String text = new String(written, StandardCharsets.US_ASCII);
-		assertTrue(text.startsWith("-----BEGIN PRIVATE KEY-----"),
-			algorithm + " has no traditional form, so both formats carry the pkcs#8 header");
-		assertArrayEquals(privateKey.getEncoded(), bodyOf(text));
 	}
 
 	/** Nothing is not a key. */
-	@org.junit.jupiter.api.Test
+	@Test
 	void aMissingKeyIsRefusedOutright()
 	{
 		assertThrows(NullPointerException.class,

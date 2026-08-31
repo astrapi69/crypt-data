@@ -16,8 +16,13 @@ ADDED:
 
 CHANGED:
 
-- X448, ML-KEM and ML-DSA are driven through PrivateKeyWriter by a test for the first time. They
-  always worked; nothing asserted it, which is how the silence above went unnoticed. (#40)
+- Every algorithm KeyPairGeneratorAlgorithm names is now driven through PrivateKeyWriter, across
+  both file formats and both key formats - 28 of the 30 the enum lists, the two that cannot
+  generate a key pair here being XDH, which needs a parameter spec to say which curve, and the
+  UNKNOWN placeholder. The set comes from the enum rather than a list written by hand, so an
+  algorithm added later joins the tests by existing, and a test asserts that exactly those two are
+  left out. X448, ML-KEM and ML-DSA had never been written by any test; RSASSA-PSS turned out to
+  have a traditional form and had not been asked. (#40)
 
 
 Version 12.2
