@@ -4,7 +4,20 @@
 Version 12.3-SNAPSHOT
 -------------
 
-(nothing released yet)
+ADDED:
+
+- PrivateKeyExtensions#hasTraditionalForm(PrivateKey): whether asking for KeyFormat.PKCS_1 gives
+  something other than PKCS#8. RSA, DSA and EC have a traditional form of their own; the edwards
+  and montgomery families, DiffieHellman and the post-quantum families do not, and for those the
+  request was answered with the PKCS#8 file byte for byte and nothing said. The bytes were right -
+  PKCS#1 content under a PRIVATE KEY header is the defect #12 fixed - but the only way to find out
+  was to write the key twice and compare. A caller that offers the choice can now ask before
+  offering it. (#40)
+
+CHANGED:
+
+- X448, ML-KEM and ML-DSA are driven through PrivateKeyWriter by a test for the first time. They
+  always worked; nothing asserted it, which is how the silence above went unnoticed. (#40)
 
 
 Version 12.2

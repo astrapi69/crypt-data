@@ -455,6 +455,32 @@ public final class PrivateKeyExtensions
 	}
 
 	/**
+	 * Answers whether the given private key has a traditional format of its own
+	 * <p>
+	 * PKCS#1 is the traditional format of an RSA key; an EC key has RFC 5915 and a DSA key has the
+	 * structure OpenSSL writes under the DSA PRIVATE KEY header. The edwards and montgomery
+	 * families, diffie-hellman and the post-quantum families have none: their private key is the
+	 * PKCS#8 structure and there is nothing to strip a wrapper for.
+	 * <p>
+	 * Asking for {@link io.github.astrapi69.crypt.api.key.KeyFormat#PKCS_1} for one of those yields
+	 * the PKCS#8 file, byte for byte, because that is the only correct encoding there - writing
+	 * PKCS#1 content under a PRIVATE KEY header produced a file readable as neither format, which
+	 * is the defect issue #12 fixed. What was missing is a way to know beforehand: a caller that
+	 * offers the choice can ask here and stop offering what it cannot deliver, instead of the
+	 * request being answered with a different format and nothing said (issue #40).
+	 *
+	 * @param privateKey
+	 *            the private key
+	 * @return true if asking for the traditional format gives something other than PKCS#8
+	 */
+	public static boolean hasTraditionalForm(final PrivateKey privateKey)
+	{
+		Objects.requireNonNull(privateKey);
+		return privateKey instanceof RSAPrivateKey || privateKey instanceof DSAPrivateKey
+			|| privateKey instanceof ECPrivateKey;
+	}
+
+	/**
 	 * Transform the given private key to the traditional format of its own algorithm and returns it
 	 * as a byte array
 	 * <p>
