@@ -16,6 +16,8 @@ ADDED:
 
 CHANGED:
 
+- update of dependency crypt-api to the new minor version 10.1
+
 - Every algorithm KeyPairGeneratorAlgorithm names is now driven through PrivateKeyWriter, across
   both file formats and both key formats - 28 of the 30 the enum lists, the two that cannot
   generate a key pair here being XDH, which needs a parameter spec to say which curve, and the
