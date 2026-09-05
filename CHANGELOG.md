@@ -6,6 +6,12 @@ Version 12.3-SNAPSHOT
 
 CHANGED:
 
+- dependency and plugin versions raised through the version catalog, catching up with mystic-crypt:
+  checksum-up 3.1 to 3.2, randomizer 10.3 to 10.4, silly-collection 28.1 to 28.2, test-object 9 to
+  9.1, jsoup 1.23.1 to 1.23.2, lombok 1.18.46 to 1.18.48, and the build plugins nmcp 1.6.1 to 1.6.2,
+  spotless 8.10.0 to 8.10.2 and the PIT engine 1.25.9 to 1.30.0. guava stays on 33.7.1-jre: the
+  update tool proposed '999.0.0-HEAD-jre-SNAPSHOT', which is guava's placeholder and not a release
+- the changelog gained the section for 7.11 that it never had, reconstructed from the commits
 - build only: tagRelease no longer comes from the grgit plugin. It is a plain 'git tag' Exec task
   in gradle/tagging.gradle, the same one mystic-crypt uses, and the org.ajoberstar.grgit plugin is
   dropped from build.gradle and the version catalog. The file had been sitting in the working tree
@@ -610,6 +616,25 @@ CHANGED:
 - update of test dependency randomizer to new version 8.5
 - renamed package 'io.github.astrapi69.crypto.factories' to 'io.github.astrapi69.crypto.factory'
 - update of dependency crypt-api to new version to 7.7
+
+Version 7.11
+-------------
+
+ADDED:
+
+- new github workflow 'Java CI with Gradle' for build and test on push and pull request
+
+CHANGED:
+
+- update of dependency crypt-api to the new version 7.7
+- javadoc warnings resolved and imports organized
+
+Note: this section was written after the fact. 7.11 was released and is on Maven Central, but the
+changelog was never given an entry for it; the content above is reconstructed from the commits
+between RELEASE-7.11-SNAPSHOT and RELEASE-7.11. The crypt-api 7.7 bullet also appears under 7.11.1
+below, where it was recorded at the time - the commit is contained in both tags, but it shipped
+first in 7.11. The older entry is left as it stands rather than rewritten.
+
 
 Version 7.10
 -------------
