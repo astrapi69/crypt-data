@@ -37,6 +37,7 @@ import java.nio.file.Files;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.Security;
+import java.security.spec.InvalidKeySpecException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -159,7 +160,7 @@ class PrivateKeyWriterAlgorithmMatrixTest
 	}
 
 	private static byte[] written(final PrivateKey privateKey, final KeyFileFormat fileFormat,
-		final KeyFormat keyFormat) throws IOException
+		final KeyFormat keyFormat) throws IOException, InvalidKeySpecException
 	{
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		PrivateKeyWriter.write(privateKey, outputStream, fileFormat, keyFormat);
@@ -199,6 +200,17 @@ class PrivateKeyWriterAlgorithmMatrixTest
 	{
 		PrivateKey privateKey = keyOf(testCase.keyAlgorithm());
 
+		if (KeyFileFormat.PEM.equals(testCase.fileFormat())
+			&& KeyFormat.PKCS_1.equals(testCase.keyFormat())
+			&& !PrivateKeyExtensions.hasTraditionalForm(privateKey))
+		{
+			// the traditional format is the one thing this algorithm cannot be written in, and
+			// answering with the PKCS#8 file instead is what issue #42 removed
+			assertThrows(InvalidKeySpecException.class,
+				() -> written(privateKey, testCase.fileFormat(), testCase.keyFormat()),
+				testCase + ", but a key with no traditional form was written anyway");
+			return;
+		}
 		byte[] writtenBytes = written(privateKey, testCase.fileFormat(), testCase.keyFormat());
 
 		if (testCase.expectedPemType() == null)
@@ -266,6 +278,13 @@ class PrivateKeyWriterAlgorithmMatrixTest
 	{
 		for (KeyFormat keyFormat : List.of(KeyFormat.PKCS_8, KeyFormat.PKCS_1))
 		{
+			if (KeyFormat.PKCS_1.equals(keyFormat)
+				&& !PrivateKeyExtensions.hasTraditionalForm(keyOf(keyAlgorithm)))
+			{
+				// there is no such file to wrap for this algorithm any more: asking for it is
+				// refused rather than answered with the PKCS#8 one (issue #42)
+				continue;
+			}
 			String pem = new String(written(keyOf(keyAlgorithm), KeyFileFormat.PEM, keyFormat),
 				StandardCharsets.US_ASCII);
 			List<String> lines = pem.lines().toList();

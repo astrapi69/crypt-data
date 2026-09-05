@@ -36,6 +36,7 @@ import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
+import java.security.spec.InvalidKeySpecException;
 import java.util.stream.Stream;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -225,12 +226,25 @@ class PrivateKeyExtensionsPemFormatParameterizedTest
 
 		ByteArrayOutputStream asPkcs8 = new ByteArrayOutputStream();
 		PrivateKeyWriter.write(privateKey, asPkcs8, KeyFileFormat.PEM, KeyFormat.PKCS_8);
-		ByteArrayOutputStream asTraditional = new ByteArrayOutputStream();
-		PrivateKeyWriter.write(privateKey, asTraditional, KeyFileFormat.PEM, KeyFormat.PKCS_1);
 
 		assertEquals(PrivateKeyExtensions.toPkcs8PemFormat(privateKey),
 			asPkcs8.toString("US-ASCII"),
 			algorithm + " as pkcs#8 must be what toPkcs8PemFormat produces");
+
+		if (!PrivateKeyExtensions.hasTraditionalForm(privateKey))
+		{
+			// toPemFormat still answers with the pkcs#8 text here - it is the only correct
+			// encoding for such a key - but the writer no longer accepts the request that cannot
+			// be met, instead of writing a file the caller did not ask for (issue #42)
+			assertThrows(InvalidKeySpecException.class,
+				() -> PrivateKeyWriter.write(privateKey, new ByteArrayOutputStream(),
+					KeyFileFormat.PEM, KeyFormat.PKCS_1),
+				algorithm + " has no traditional form, so asking for pkcs#1 must be refused");
+			return;
+		}
+		ByteArrayOutputStream asTraditional = new ByteArrayOutputStream();
+		PrivateKeyWriter.write(privateKey, asTraditional, KeyFileFormat.PEM, KeyFormat.PKCS_1);
+
 		assertEquals(PrivateKeyExtensions.toPemFormat(privateKey),
 			asTraditional.toString("US-ASCII"),
 			algorithm + " as pkcs#1 must be what toPemFormat produces");
