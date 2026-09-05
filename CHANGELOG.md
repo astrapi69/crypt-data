@@ -4,6 +4,15 @@
 Version 12.3-SNAPSHOT
 -------------
 
+CHANGED:
+
+- build only: tagRelease no longer comes from the grgit plugin. It is a plain 'git tag' Exec task
+  in gradle/tagging.gradle, the same one mystic-crypt uses, and the org.ajoberstar.grgit plugin is
+  dropped from build.gradle and the version catalog. The file had been sitting in the working tree
+  uncommitted; wiring it without removing grgit fails, because both register a task named
+  tagRelease
+
+
 ADDED:
 
 - PrivateKeyExtensions#hasTraditionalForm(PrivateKey): whether asking for KeyFormat.PKCS_1 gives
