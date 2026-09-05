@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Objects;
 
@@ -96,9 +97,13 @@ public final class PrivateKeyWriter
 	 *            the private key format
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @throws InvalidKeySpecException
+	 *             if {@link KeyFormat#PKCS_1} is asked for a key that has no traditional form of
+	 *             its own, so the request could only be answered with a different format
 	 */
 	public static void write(final PrivateKey privateKey, final OutputStream outputStream,
-		final KeyFileFormat fileFormat, final KeyFormat keyFormat) throws IOException
+		final KeyFileFormat fileFormat, final KeyFormat keyFormat)
+		throws IOException, InvalidKeySpecException
 	{
 		Objects.requireNonNull(outputStream);
 		final byte[] privateKeyBytes = privateKey.getEncoded();
@@ -116,6 +121,15 @@ public final class PrivateKeyWriter
 				}
 				else if (keyFormat.equals(KeyFormat.PKCS_1))
 				{
+					if (!PrivateKeyExtensions.hasTraditionalForm(privateKey))
+					{
+						// asking for the traditional format used to be answered with the PKCS#8
+						// file, byte for byte, and nothing said - the caller got a format it had
+						// not asked for and could not tell (issue #42)
+						throw new InvalidKeySpecException("No traditional format exists for a "
+							+ privateKey.getAlgorithm() + " private key; it has only PKCS#8. "
+							+ "Ask hasTraditionalForm before offering the choice.");
+					}
 					// toPemFormat picks the traditional header that belongs to the algorithm.
 					// This used to call fromPKCS1ToPemFormat, which takes only bytes and so
 					// labels every key RSA PRIVATE KEY - an EC or DSA key was written under the
