@@ -138,7 +138,7 @@ public final class TestObjectFactory
 		}
 		if ("DiffieHellman".equals(name) || "DH".equals(name))
 		{
-			generator.initialize(1024);
+			generator.initialize(2048);
 		}
 		return generator.generateKeyPair().getPrivate();
 	}

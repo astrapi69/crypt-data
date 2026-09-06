@@ -130,7 +130,7 @@ class KeyWriterStreamContractParameterizedTest
 	{
 		Security.addProvider(new BouncyCastleProvider());
 		KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-		generator.initialize(1024);
+		generator.initialize(2048);
 		keyPair = generator.generateKeyPair();
 		X500Name name = new X500Name("CN=Writer Test");
 		certificate = CertFactory.newX509CertificateV3(keyPair, name, 1, name, "SHA256withRSA");

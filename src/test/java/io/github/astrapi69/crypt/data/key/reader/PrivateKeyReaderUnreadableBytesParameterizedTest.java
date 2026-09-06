@@ -100,7 +100,7 @@ class PrivateKeyReaderUnreadableBytesParameterizedTest
 	void rsaBytesAreReadAsLastProbedAlgorithm() throws Exception
 	{
 		KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-		generator.initialize(1024);
+		generator.initialize(2048);
 		PrivateKey expected = generator.generateKeyPair().getPrivate();
 
 		Optional<PrivateKey> actual = PrivateKeyReader.getPrivateKey(expected.getEncoded());
