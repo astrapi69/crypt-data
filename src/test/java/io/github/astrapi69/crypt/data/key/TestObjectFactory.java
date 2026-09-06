@@ -27,6 +27,7 @@ package io.github.astrapi69.crypt.data.key;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -40,9 +41,11 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.OperatorCreationException;
 
 import io.github.astrapi69.crypt.api.algorithm.compound.CompoundAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.data.factory.CertFactory;
 import io.github.astrapi69.random.number.RandomBigIntegerFactory;
 
@@ -109,5 +112,60 @@ public final class TestObjectFactory
 		throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
 		return new KeyPair(PrivateKeyExtensions.generatePublicKey(privateKey), privateKey);
+	}
+
+	/**
+	 * Generates a private key for the given algorithm through Bouncy Castle, giving a size to the
+	 * ones that need one told. Two tests had a byte-identical copy of this; the copies are gone and
+	 * both call here, so a change to how a test key is made cannot apply to one of them and not the
+	 * other.
+	 *
+	 * @param algorithm
+	 *            the algorithm to generate for
+	 * @return the generated private key
+	 * @throws Exception
+	 *             if the provider will not generate for that algorithm
+	 */
+	public static PrivateKey newPrivateKeyForTests(final KeyPairGeneratorAlgorithm algorithm)
+		throws Exception
+	{
+		String name = algorithm.getAlgorithm();
+		KeyPairGenerator generator = KeyPairGenerator.getInstance(name,
+			BouncyCastleProvider.PROVIDER_NAME);
+		if ("RSA".equals(name) || "DSA".equals(name) || "RSASSA-PSS".equals(name))
+		{
+			generator.initialize(2048);
+		}
+		if ("DiffieHellman".equals(name) || "DH".equals(name))
+		{
+			generator.initialize(1024);
+		}
+		return generator.generateKeyPair().getPrivate();
+	}
+
+	/**
+	 * Whether the provider will generate a key pair for the given algorithm at all, which is how
+	 * the enum driven tests separate the constants they can drive from the ones they cannot.
+	 * <p>
+	 * A filter like this loses coverage quietly: an algorithm that stops generating drops out of
+	 * every matrix that uses it and the run still passes. The tests that filter with it pin the set
+	 * it produces, so the set shrinking is a failure - see
+	 * {@code TraditionalFormParityTest#exactlyTwoOfTheNamedAlgorithmsCannotGenerateAKeyPair}.
+	 *
+	 * @param algorithm
+	 *            the algorithm to try
+	 * @return whether a key pair could be generated
+	 */
+	public static boolean canGenerateForTests(final KeyPairGeneratorAlgorithm algorithm)
+	{
+		try
+		{
+			newPrivateKeyForTests(algorithm);
+			return true;
+		}
+		catch (Exception cannotGenerate)
+		{
+			return false;
+		}
 	}
 }

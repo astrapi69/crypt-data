@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
-import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
@@ -47,6 +46,7 @@ import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeyFileFormat;
 import io.github.astrapi69.crypt.api.key.KeyFormat;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
+import io.github.astrapi69.crypt.data.key.TestObjectFactory;
 
 /**
  * Asking for {@link KeyFormat#PKCS_1} used to be answered with the PKCS#8 file for every algorithm
@@ -73,38 +73,9 @@ class PrivateKeyWriterRefusesPkcs1Test
 	static Stream<KeyPairGeneratorAlgorithm> generatableAlgorithms()
 	{
 		return Arrays.stream(KeyPairGeneratorAlgorithm.values())
-			.filter(PrivateKeyWriterRefusesPkcs1Test::canGenerate);
+			.filter(TestObjectFactory::canGenerateForTests);
 	}
 
-	private static boolean canGenerate(final KeyPairGeneratorAlgorithm algorithm)
-	{
-		try
-		{
-			newPrivateKey(algorithm);
-			return true;
-		}
-		catch (Exception cannotGenerate)
-		{
-			return false;
-		}
-	}
-
-	private static PrivateKey newPrivateKey(final KeyPairGeneratorAlgorithm algorithm)
-		throws Exception
-	{
-		String name = algorithm.getAlgorithm();
-		KeyPairGenerator generator = KeyPairGenerator.getInstance(name,
-			BouncyCastleProvider.PROVIDER_NAME);
-		if ("RSA".equals(name) || "DSA".equals(name) || "RSASSA-PSS".equals(name))
-		{
-			generator.initialize(2048);
-		}
-		if ("DiffieHellman".equals(name) || "DH".equals(name))
-		{
-			generator.initialize(1024);
-		}
-		return generator.generateKeyPair().getPrivate();
-	}
 
 	private static void writePem(final PrivateKey privateKey, final KeyFormat keyFormat)
 		throws Exception
@@ -118,7 +89,7 @@ class PrivateKeyWriterRefusesPkcs1Test
 	@DisplayName("PKCS#1 is written or refused, never silently answered with PKCS#8")
 	void pkcs1IsWrittenOrRefused(final KeyPairGeneratorAlgorithm algorithm) throws Exception
 	{
-		PrivateKey privateKey = newPrivateKey(algorithm);
+		PrivateKey privateKey = TestObjectFactory.newPrivateKeyForTests(algorithm);
 
 		if (PrivateKeyExtensions.hasTraditionalForm(privateKey))
 		{
@@ -147,7 +118,7 @@ class PrivateKeyWriterRefusesPkcs1Test
 	void pkcs8StaysWritableForEveryAlgorithm(final KeyPairGeneratorAlgorithm algorithm)
 		throws Exception
 	{
-		PrivateKey privateKey = newPrivateKey(algorithm);
+		PrivateKey privateKey = TestObjectFactory.newPrivateKeyForTests(algorithm);
 
 		assertDoesNotThrow(() -> writePem(privateKey, KeyFormat.PKCS_8));
 		assertDoesNotThrow(() -> writePem(privateKey, null));
@@ -166,7 +137,7 @@ class PrivateKeyWriterRefusesPkcs1Test
 	@MethodSource("generatableAlgorithms")
 	void derIgnoresTheKeyFormatAsBefore(final KeyPairGeneratorAlgorithm algorithm) throws Exception
 	{
-		PrivateKey privateKey = newPrivateKey(algorithm);
+		PrivateKey privateKey = TestObjectFactory.newPrivateKeyForTests(algorithm);
 		ByteArrayOutputStream written = new ByteArrayOutputStream();
 
 		assertDoesNotThrow(

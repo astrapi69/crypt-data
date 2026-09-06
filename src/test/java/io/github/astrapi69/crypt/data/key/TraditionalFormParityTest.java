@@ -33,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
@@ -102,38 +101,9 @@ class TraditionalFormParityTest
 	static Stream<KeyPairGeneratorAlgorithm> generatableAlgorithms()
 	{
 		return Arrays.stream(KeyPairGeneratorAlgorithm.values())
-			.filter(TraditionalFormParityTest::canGenerate);
+			.filter(TestObjectFactory::canGenerateForTests);
 	}
 
-	private static boolean canGenerate(final KeyPairGeneratorAlgorithm algorithm)
-	{
-		try
-		{
-			newPrivateKey(algorithm);
-			return true;
-		}
-		catch (Exception cannotGenerate)
-		{
-			return false;
-		}
-	}
-
-	private static PrivateKey newPrivateKey(final KeyPairGeneratorAlgorithm algorithm)
-		throws Exception
-	{
-		String name = algorithm.getAlgorithm();
-		KeyPairGenerator generator = KeyPairGenerator.getInstance(name,
-			BouncyCastleProvider.PROVIDER_NAME);
-		if ("RSA".equals(name) || "DSA".equals(name) || "RSASSA-PSS".equals(name))
-		{
-			generator.initialize(2048);
-		}
-		if ("DiffieHellman".equals(name) || "DH".equals(name))
-		{
-			generator.initialize(1024);
-		}
-		return generator.generateKeyPair().getPrivate();
-	}
 
 	/**
 	 * The two the enum names that cannot generate a key pair here, asserted so that neither becomes
@@ -147,7 +117,8 @@ class TraditionalFormParityTest
 	void exactlyTwoOfTheNamedAlgorithmsCannotGenerateAKeyPair()
 	{
 		List<String> cannot = Arrays.stream(KeyPairGeneratorAlgorithm.values())
-			.filter(algorithm -> !canGenerate(algorithm)).map(Enum::name).sorted().toList();
+			.filter(algorithm -> !TestObjectFactory.canGenerateForTests(algorithm)).map(Enum::name)
+			.sorted().toList();
 
 		assertEquals(List.of("UNKNOWN", "XDH"), cannot,
 			"a newly named algorithm must be driven by these tests, not quietly join this list");
@@ -166,7 +137,7 @@ class TraditionalFormParityTest
 	void everyAlgorithmSaysWhetherItHasATraditionalForm(final KeyPairGeneratorAlgorithm algorithm)
 		throws Exception
 	{
-		PrivateKey privateKey = newPrivateKey(algorithm);
+		PrivateKey privateKey = TestObjectFactory.newPrivateKeyForTests(algorithm);
 		boolean expected = privateKey instanceof java.security.interfaces.RSAPrivateKey
 			|| privateKey instanceof java.security.interfaces.DSAPrivateKey
 			|| privateKey instanceof java.security.interfaces.ECPrivateKey;
@@ -189,7 +160,7 @@ class TraditionalFormParityTest
 	void theAnswerIsTrueExactlyWhenTheTwoFormatsDiffer(final KeyPairGeneratorAlgorithm algorithm)
 		throws Exception
 	{
-		PrivateKey privateKey = newPrivateKey(algorithm);
+		PrivateKey privateKey = TestObjectFactory.newPrivateKeyForTests(algorithm);
 
 		String pkcs8 = pem(privateKey, KeyFormat.PKCS_8);
 
@@ -227,7 +198,7 @@ class TraditionalFormParityTest
 	void everyCombinationOfFileFormatAndKeyFormatIsWritten(
 		final KeyPairGeneratorAlgorithm algorithm) throws Exception
 	{
-		PrivateKey privateKey = newPrivateKey(algorithm);
+		PrivateKey privateKey = TestObjectFactory.newPrivateKeyForTests(algorithm);
 		boolean traditional = PrivateKeyExtensions.hasTraditionalForm(privateKey);
 
 		for (KeyFormat keyFormat : new KeyFormat[] { KeyFormat.PKCS_8, KeyFormat.PKCS_1 })
