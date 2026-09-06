@@ -36,6 +36,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.Security;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -190,11 +191,11 @@ class TraditionalFormParityTest
 	{
 		PrivateKey privateKey = newPrivateKey(algorithm);
 
-		String traditional = pem(privateKey, KeyFormat.PKCS_1);
 		String pkcs8 = pem(privateKey, KeyFormat.PKCS_8);
 
 		if (PrivateKeyExtensions.hasTraditionalForm(privateKey))
 		{
+			String traditional = pem(privateKey, KeyFormat.PKCS_1);
 			assertNotEquals(pkcs8, traditional,
 				algorithm + " says it has a traditional form, so the two must differ");
 			assertFalse(traditional.startsWith("-----BEGIN PRIVATE KEY-----"),
@@ -203,10 +204,12 @@ class TraditionalFormParityTest
 		}
 		else
 		{
-			assertEquals(pkcs8, traditional,
-				algorithm + " has no traditional form, so asking for one gives the pkcs#8 file");
-			assertArrayEquals(privateKey.getEncoded(), bodyOf(traditional),
-				algorithm + " must hold its pkcs#8 encoding, not a stripped wrapper");
+			// answering the request with the pkcs#8 file is what issue #42 removed: the caller
+			// asked for a format this algorithm does not have, and is now told so
+			assertThrows(InvalidKeySpecException.class, () -> pem(privateKey, KeyFormat.PKCS_1),
+				algorithm + " has no traditional form, so asking for one must be refused");
+			assertArrayEquals(privateKey.getEncoded(), bodyOf(pkcs8),
+				algorithm + " must still hold its pkcs#8 encoding");
 		}
 	}
 
@@ -234,9 +237,15 @@ class TraditionalFormParityTest
 			assertArrayEquals(privateKey.getEncoded(), der.toByteArray(),
 				algorithm + " as der with " + keyFormat + " is the encoding unchanged");
 
+			if (keyFormat == KeyFormat.PKCS_1 && !traditional)
+			{
+				assertThrows(InvalidKeySpecException.class, () -> pem(privateKey, keyFormat),
+					algorithm + " with " + keyFormat + " has no such file to write (#42)");
+				continue;
+			}
 			String text = pem(privateKey, keyFormat);
 			boolean pkcs8Header = text.startsWith("-----BEGIN PRIVATE KEY-----");
-			if (keyFormat == KeyFormat.PKCS_8 || !traditional)
+			if (keyFormat == KeyFormat.PKCS_8)
 			{
 				assertTrue(pkcs8Header,
 					algorithm + " with " + keyFormat + " must carry the pkcs#8 header, but was: "
