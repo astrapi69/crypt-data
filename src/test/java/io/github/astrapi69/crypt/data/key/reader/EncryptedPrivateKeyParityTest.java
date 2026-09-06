@@ -87,7 +87,7 @@ class EncryptedPrivateKeyParityTest
 		}
 		if ("DH".equals(algorithm))
 		{
-			generator.initialize(1024);
+			generator.initialize(2048);
 		}
 		return generator.generateKeyPair().getPrivate();
 	}

@@ -84,7 +84,7 @@ class CertificateExtensionsSubjectFieldsParameterizedTest
 	{
 		Security.addProvider(new BouncyCastleProvider());
 		KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-		generator.initialize(1024);
+		generator.initialize(2048);
 		KeyPair keyPair = generator.generateKeyPair();
 		certificate = CertFactory.newX509CertificateV3(keyPair, ISSUER, 1, SUBJECT,
 			"SHA256withRSA");

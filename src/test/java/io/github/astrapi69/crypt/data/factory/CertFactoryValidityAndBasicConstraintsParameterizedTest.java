@@ -67,7 +67,7 @@ class CertFactoryValidityAndBasicConstraintsParameterizedTest
 	{
 		Security.addProvider(new BouncyCastleProvider());
 		KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-		generator.initialize(1024);
+		generator.initialize(2048);
 		keyPair = generator.generateKeyPair();
 		caCertificate = CertFactory.newX509CertificateV3(keyPair, ISSUER, 1, ISSUER,
 			SIGNATURE_ALGORITHM);
