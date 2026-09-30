@@ -26,7 +26,6 @@ package io.github.astrapi69.crypt.data.hex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.commons.codec.DecoderException;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
@@ -43,12 +42,10 @@ public class HexExtensionsParameterizedTest
 	 *            the secret message
 	 * @param hexString
 	 *            the hexadecimal string representation of the message
-	 * @throws DecoderException
-	 *             is thrown if an odd number or illegal of characters is supplied
 	 */
 	@ParameterizedTest
 	@CsvFileSource(resources = "/hex_extensions_test_data.csv", numLinesToSkip = 1)
-	public void testWithCsvSource(String secretMessage, String hexString) throws DecoderException
+	public void testWithCsvSource(String secretMessage, String hexString)
 	{
 		String actual;
 

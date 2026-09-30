@@ -26,7 +26,6 @@ package io.github.astrapi69.crypt.data.key;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-import org.apache.commons.codec.DecoderException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -49,7 +48,7 @@ class KeyExtensionsParameterizedTest
 	@ParameterizedTest
 	@CsvFileSource(resources = "/key_data.csv", numLinesToSkip = 1)
 	@DisplayName("Parameterized test for base64 encoding and decoding with CSV data")
-	void testBase64EncodingDecodingWithCsv(String originalKeyHex) throws DecoderException
+	void testBase64EncodingDecodingWithCsv(String originalKeyHex)
 	{
 		byte[] originalKey = HexExtensions.decodeHex(originalKeyHex.toCharArray());
 		String base64Encoded = KeyExtensions.toBase64(originalKey);

@@ -4,6 +4,17 @@
 Version 12.3-SNAPSHOT
 -------------
 
+BREAKING:
+
+- HexExtensions no longer declares org.apache.commons.codec.DecoderException. decodeHex(char[]),
+  decodeHex(String) and decodeHexToString(char[]) are built on java.util.HexFormat and refuse input
+  that is not hexadecimal with an IllegalArgumentException naming the reason ("string length not
+  even: 3", "not a hexadecimal digit: "z" = 122"). commons-codec is an implementation dependency,
+  so a consumer could neither catch the old type nor compile a call without adding commons-codec
+  itself at a guessed version. Source-incompatible for a caller that catches DecoderException
+  explicitly: that catch no longer compiles and goes. The encoding methods produce the same
+  output as before, through HexFormat as well (#51)
+
 FIXED:
 
 - Block.data was outside the block hash: setData left getHash() where it was, so two blocks that
