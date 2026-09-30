@@ -15,6 +15,18 @@ BREAKING:
   explicitly: that catch no longer compiles and goes. The encoding methods produce the same
   output as before, through HexFormat as well (#51)
 
+FIXED:
+
+- Block.data was outside the block hash: setData left getHash() where it was, so two blocks that
+  differed only in their data had the same hash. The hash now covers the data, and setData
+  recomputes it. A block without data keeps exactly the hash it had before (the data is appended
+  after a marker byte only when present), so existing chains without data stay valid; a block
+  with data hashes differently than before, which is the fix. equals now compares the data too;
+  hashCode is unchanged. A new constructor Block(previousBlockHash, transactions, tries,
+  timestamp, data) takes the timestamp as a parameter, so two blocks with the same content have
+  the same hash and a third party can recompute it. getLeadingZerosCount() keeps counting zero
+  BYTES - one difficulty step is a factor of 256 - and now says so in its Javadoc. (#55)
+
 CHANGED:
 
 - dependency and plugin versions raised through the version catalog, catching up with mystic-crypt:
