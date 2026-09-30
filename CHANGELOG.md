@@ -21,6 +21,14 @@ BREAKING:
   explicitly: that catch no longer compiles and goes. The encoding methods produce the same
   output as before, through HexFormat as well (#51)
 
+CHANGED:
+
+- build only: an API compatibility gate (apiCompatibility, part of check). japicmp compares the
+  jar with the last release on Maven Central (apiBaselineVersion in gradle.properties); within the
+  same major a binary or source incompatibility fails the build, with a higher major it is
+  reported in build/reports/japicmp. It names exactly the #42 and #51 changes when this code is
+  built as 12.4-SNAPSHOT (#70)
+
 FIXED:
 
 - Block.data was outside the block hash: setData left getHash() where it was, so two blocks that
