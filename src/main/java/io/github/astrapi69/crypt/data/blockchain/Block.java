@@ -24,9 +24,15 @@
  */
 package io.github.astrapi69.crypt.data.blockchain;
 
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.ArrayUtils;
+
+import com.google.common.primitives.Longs;
 
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 import io.github.astrapi69.crypt.api.blockchain.IBlock;
@@ -37,13 +43,20 @@ import io.github.astrapi69.crypt.data.hash.HashExtensions;
  * The class {@link Block} represents a block in a blockchain. It contains the current block's hash,
  * the previous block's hash, the Merkle root of the transactions, a timestamp, a list of
  * transactions, a data field, and the number of attempts (tries) to find a valid hash.
+ * <p>
+ * The hash is SHA-256 over the previous block hash, the Merkle root, the tries and the timestamp
+ * (both as eight big-endian bytes), followed - only when data is present - by one marker byte
+ * {@code 0x01} and the data as UTF-8. A block without data therefore has the same hash it had
+ * before data was covered, and a block with empty data differs from one without. The content
+ * constructors and {@link #setData(String)} compute it; the other setters set a field and leave the
+ * hash alone, as they always did.
  */
 public class Block implements IBlock
 {
 
 	/**
-	 * The hash of the block, generated from the previous block hash, Merkle root, tries, and
-	 * timestamp.
+	 * The hash of the block, generated from the previous block hash, Merkle root, tries, timestamp
+	 * and data.
 	 */
 	private byte[] hash;
 
@@ -62,8 +75,11 @@ public class Block implements IBlock
 	/** The number of attempts to find a valid hash. */
 	private long tries;
 
-	/** The data field for additional information in the block. */
+	/** The data field for additional information in the block, covered by the hash. */
 	private String data;
+
+	/** Separates the data from the fixed-size fields in the hashed content, see the class doc. */
+	private static final byte[] DATA_MARKER = { 1 };
 
 	/**
 	 * Instantiates a new {@link Block} with no parameters.
@@ -74,8 +90,8 @@ public class Block implements IBlock
 
 	/**
 	 * Instantiates a new {@link Block} with the specified previous block hash, list of
-	 * transactions, and tries. The Merkle root and hash are automatically generated using the
-	 * SHA-256 algorithm.
+	 * transactions, and tries, the current time as timestamp and no data. The Merkle root and hash
+	 * are automatically generated using the SHA-256 algorithm.
 	 *
 	 * @param previousBlockHash
 	 *            the hash of the previous block
@@ -86,16 +102,54 @@ public class Block implements IBlock
 	 */
 	public Block(byte[] previousBlockHash, List<ITransaction> transactions, long tries)
 	{
+		this(previousBlockHash, transactions, tries, System.currentTimeMillis(), null);
+	}
+
+	/**
+	 * Instantiates a new {@link Block} from its complete content. The timestamp is a parameter so
+	 * that two blocks with the same content have the same hash and anybody holding the content can
+	 * recompute it. The Merkle root and the hash are generated using the SHA-256 algorithm.
+	 *
+	 * @param previousBlockHash
+	 *            the hash of the previous block
+	 * @param transactions
+	 *            the list of transactions included in the block
+	 * @param tries
+	 *            the number of attempts to find a valid hash
+	 * @param timestamp
+	 *            the timestamp of the block
+	 * @param data
+	 *            the data of the block, covered by the hash, or null for none
+	 */
+	public Block(byte[] previousBlockHash, List<ITransaction> transactions, long tries,
+		long timestamp, String data)
+	{
 		this.previousBlockHash = previousBlockHash;
 		this.transactions = transactions;
 		this.tries = tries;
-		this.timestamp = System.currentTimeMillis();
+		this.timestamp = timestamp;
+		this.data = data;
 		this.merkleRoot = HashExtensions.getMerkleRootHash(
 			new LinkedList<>(
 				transactions.stream().map(ITransaction::getHash).collect(Collectors.toList())),
 			HashAlgorithm.SHA256);
-		this.hash = HashExtensions.hash(previousBlockHash, merkleRoot, tries, timestamp,
-			HashAlgorithm.SHA256);
+		recalculateHash();
+	}
+
+	/**
+	 * Computes the hash over the content of this block as described in the class documentation
+	 */
+	private void recalculateHash()
+	{
+		byte[] content = ArrayUtils.addAll(previousBlockHash, merkleRoot);
+		content = ArrayUtils.addAll(content, Longs.toByteArray(tries));
+		content = ArrayUtils.addAll(content, Longs.toByteArray(timestamp));
+		if (data != null)
+		{
+			content = ArrayUtils.addAll(content, DATA_MARKER);
+			content = ArrayUtils.addAll(content, data.getBytes(StandardCharsets.UTF_8));
+		}
+		this.hash = DigestUtils.sha256(content);
 	}
 
 	/** {@inheritDoc} */
@@ -121,7 +175,9 @@ public class Block implements IBlock
 			? other$transactions != null
 			: !this$transactions.equals(other$transactions))
 			return false;
-		return this.getTries() == other.getTries();
+		if (this.getTries() != other.getTries())
+			return false;
+		return java.util.Objects.equals(this.getData(), other.getData());
 	}
 
 	/** {@inheritDoc} */
@@ -138,7 +194,14 @@ public class Block implements IBlock
 		this.hash = hash;
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * Counts leading zero BYTES, not bits: one step of difficulty measured with this count is a
+	 * factor of 256 in expected work. That is kept as it is, because changing the unit would
+	 * silently change the difficulty every existing caller measures. A caller that needs a finer
+	 * difficulty counts bits over {@link #getHash()} itself.
+	 */
 	@Override
 	public int getLeadingZerosCount()
 	{
@@ -229,11 +292,16 @@ public class Block implements IBlock
 		return this.data;
 	}
 
-	/** {@inheritDoc} */
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * Recomputes the hash, because the data is part of it.
+	 */
 	@Override
 	public void setData(String data)
 	{
 		this.data = data;
+		recalculateHash();
 	}
 
 	/** {@inheritDoc} */

@@ -24,22 +24,34 @@
  */
 package io.github.astrapi69.crypt.data.blockchain;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 import java.security.Security;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.meanbean.test.BeanTester;
+import org.meanbean.test.BeanVerifier;
 
 import io.github.astrapi69.collection.list.ListFactory;
+import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypt.api.blockchain.ITransaction;
+import io.github.astrapi69.crypt.data.hash.HashExtensions;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.file.search.PathFinder;
@@ -125,11 +137,19 @@ public class BlockTest
 
 	/**
 	 * Test method for {@link Block} with {@link BeanTester}
+	 * <p>
+	 * The getter/setter check leaves out {@code data}, because setting it recomputes the hash by
+	 * design (#55) - which the bean tester reports as a side effect. Its round trip is covered by
+	 * {@link #testSetGetDataBoundary()}, the effect on the hash by the #55 tests below. In equals
+	 * and hashCode, data is significant.
 	 */
 	@Test
 	public void testWithBeanTester()
 	{
-		MeanBeanExtensions.testWithAllTester(Block.class, "data");
+		BeanVerifier.forClass(Block.class).editSettings().addIgnoredPropertyName("data").edited()
+			.verifyGettersAndSetters();
+		MeanBeanExtensions.testWithHashCodeMethodTester(Block.class);
+		MeanBeanExtensions.testWithEqualsMethodTester(Block.class);
 	}
 
 	/**
@@ -139,12 +159,13 @@ public class BlockTest
 	public void testGettersAndSetters()
 	{
 		Block block = new Block();
+		// data first: setting it recomputes the hash (#55), which would overwrite the one set below
+		block.setData("Some data");
 		block.setHash(new byte[] { 1, 2, 3 });
 		block.setMerkleRoot(new byte[] { 4, 5, 6 });
 		block.setPreviousBlockHash(new byte[] { 7, 8, 9 });
 		block.setTimestamp(123456789L);
 		block.setTries(10L);
-		block.setData("Some data");
 
 		assertNotNull(block.getHash());
 		assertNotNull(block.getMerkleRoot());
@@ -276,5 +297,118 @@ public class BlockTest
 		String longString = new String(new char[256]).replace('\0', 'a');
 		block.setData(longString);
 		assertEquals(longString, block.getData());
+	}
+
+	private static final byte[] PREVIOUS_BLOCK_HASH = "previous-block"
+		.getBytes(StandardCharsets.UTF_8);
+
+	private static final long TIMESTAMP = 1_727_654_400_000L;
+
+	private static Block blockWithData(String data)
+	{
+		return new Block(PREVIOUS_BLOCK_HASH, new ArrayList<ITransaction>(), 7L, TIMESTAMP, data);
+	}
+
+	/**
+	 * Reproduction of #55: the data of a block used to lie outside its hash, so changing it left
+	 * the hash where it was
+	 */
+	@Test
+	public void setDataMovesTheHash()
+	{
+		Block block = new Block(PREVIOUS_BLOCK_HASH, new ArrayList<ITransaction>(), 1L);
+		byte[] hashBefore = block.getHash().clone();
+
+		block.setData("pun: the panopticon is a poor joke");
+
+		assertFalse(Arrays.equals(hashBefore, block.getHash()));
+	}
+
+	/**
+	 * Two blocks built from the same content, the timestamp included, have the same hash and are
+	 * equal - which is what lets a third party recompute a hash it was given
+	 */
+	@Test
+	public void sameContentGivesTheSameHash()
+	{
+		Block first = blockWithData("the same pun");
+		Block second = blockWithData("the same pun");
+
+		assertArrayEquals(first.getHash(), second.getHash());
+		assertEquals(first, second);
+	}
+
+	/**
+	 * A block whose data is set afterwards ends up with the same hash as one that received the data
+	 * in its constructor: the hash describes the content, not the order it arrived in
+	 */
+	@Test
+	public void dataFromTheSetterAndFromTheConstructorGiveTheSameHash()
+	{
+		Block fromConstructor = blockWithData("late pun");
+		Block fromSetter = blockWithData(null);
+
+		fromSetter.setData("late pun");
+
+		assertArrayEquals(fromConstructor.getHash(), fromSetter.getHash());
+	}
+
+	/**
+	 * A block without data keeps the hash it had before data was covered, so existing chains are
+	 * not invalidated by the fix
+	 */
+	@Test
+	public void blockWithoutDataKeepsTheHashOverTheOtherFourFields()
+	{
+		Block block = blockWithData(null);
+
+		byte[] expected = HashExtensions.hash(PREVIOUS_BLOCK_HASH, block.getMerkleRoot(), 7L,
+			TIMESTAMP, HashAlgorithm.SHA256);
+
+		assertArrayEquals(expected, block.getHash());
+	}
+
+	/**
+	 * Equality looks at the data itself, not only at the hash: a block whose hash was set by hand
+	 * to that of another block is still not equal to it when the data differs
+	 */
+	@Test
+	public void blocksWithTheSameHashButDifferentDataAreNotEqual()
+	{
+		Block block = blockWithData("original pun");
+		Block forged = blockWithData("forged pun");
+		forged.setHash(block.getHash().clone());
+
+		assertFalse(block.equals(forged));
+	}
+
+	static Stream<Arguments> differentData()
+	{
+		return Stream.of(Arguments.of("no data against empty data", null, ""),
+			Arguments.of("empty data against one character", "", "a"),
+			Arguments.of("one character changed", "pun a", "pun b"), Arguments
+				.of("data against the same data plus a trailing zero character", "pun", "pun\0"),
+			Arguments.of("non ASCII characters", "\u00e4", "\u00f6"));
+	}
+
+	/**
+	 * Blocks that differ only in their data differ in their hash and are not equal
+	 *
+	 * @param caseName
+	 *            the name of the case, shown in the report
+	 * @param data
+	 *            the data of the first block
+	 * @param otherData
+	 *            the data of the second block
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("differentData")
+	public void differentDataGivesADifferentHash(String caseName, String data, String otherData)
+	{
+		Block block = blockWithData(data);
+		Block other = blockWithData(otherData);
+
+		assertFalse(Arrays.equals(block.getHash(), other.getHash()));
+		assertFalse(block.equals(other));
 	}
 }
