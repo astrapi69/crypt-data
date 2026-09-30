@@ -16,6 +16,7 @@ gradle-plugin-spotless-version = "8.10.2"
 gradle-plugin-version-catalog-update-version = "1.1.1"
 gradle-plugin-versions-version = "0.61.0"
 guava-version = "33.7.1-jre"
+japicmp-version = "0.26.2"
 jaxb-api-version = "2.4.0-b180830.0359"
 jobj-contract-verifier-version = "5.2"
 jobj-core-version = "9.1"
@@ -52,6 +53,7 @@ crypt-api = { module = "io.github.astrapi69:crypt-api", version.ref = "crypt-api
 csv-worker = { module = "io.github.astrapi69:csv-worker", version.ref = "csv-worker-version" }
 file-worker = { module = "io.github.astrapi69:file-worker", version.ref = "file-worker-version" }
 guava = { module = "com.google.guava:guava", version.ref = "guava-version" }
+japicmp = { module = "com.github.siom79.japicmp:japicmp", version.ref = "japicmp-version" }
 jaxb-api = { module = "javax.xml.bind:jaxb-api", version.ref = "jaxb-api-version" }
 jobj-contract-verifier = { module = "io.github.astrapi69:jobj-contract-verifier", version.ref = "jobj-contract-verifier-version" }
 jobj-core = { module = "io.github.astrapi69:jobj-core", version.ref = "jobj-core-version" }

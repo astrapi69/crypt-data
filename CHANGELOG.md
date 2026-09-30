@@ -35,6 +35,14 @@ DEPRECATED:
   caller's queue is consumed. Kept unchanged, because changing it would change every existing
   Block hash - whether Block moves to merkleTreeHash is a decision of its own (#68)
 
+CHANGED:
+
+- build only: an API compatibility gate (apiCompatibility, part of check). japicmp compares the
+  jar with the last release on Maven Central (apiBaselineVersion in gradle.properties); within the
+  same major a binary or source incompatibility fails the build, with a higher major it is
+  reported in build/reports/japicmp. It names exactly the #42 and #51 changes when this code is
+  built as 12.4-SNAPSHOT (#70)
+
 FIXED:
 
 - Block.data was outside the block hash: setData left getHash() where it was, so two blocks that
