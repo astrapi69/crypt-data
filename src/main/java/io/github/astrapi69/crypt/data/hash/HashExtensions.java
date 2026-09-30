@@ -27,6 +27,7 @@ package io.github.astrapi69.crypt.data.hash;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 
@@ -44,8 +45,74 @@ import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 public final class HashExtensions
 {
 
+	/** RFC 6962: the byte in front of a leaf's data */
+	private static final byte[] MERKLE_LEAF_PREFIX = { 0x00 };
+
+	/** RFC 6962: the byte in front of an inner node's two children */
+	private static final byte[] MERKLE_NODE_PREFIX = { 0x01 };
+
 	private HashExtensions()
 	{
+	}
+
+	/**
+	 * The Merkle Tree Hash of RFC 6962, section 2.1, over the given leaves.
+	 * <p>
+	 * {@code MTH({}) = HASH()}, {@code MTH({d}) = HASH(0x00 || d)} and, for more than one leaf,
+	 * {@code MTH(D[n]) = HASH(0x01 || MTH(D[0:k]) || MTH(D[k:n]))} with {@code k} the largest power
+	 * of two below {@code n}. The two prefixes keep a leaf from ever hashing like an inner node, so
+	 * a list of inner nodes is no second preimage of the leaves below them. The result matches the
+	 * Certificate Transparency reference implementation. The leaves are read, not modified.
+	 *
+	 * @param leaves
+	 *            the leaf data, in order
+	 * @param algorithm
+	 *            the hash algorithm, e.g. {@link HashAlgorithm#SHA_256}
+	 * @return the root hash
+	 * @throws IllegalArgumentException
+	 *             if the platform has no message digest for the given algorithm
+	 */
+	public static byte[] merkleTreeHash(final List<byte[]> leaves, final HashAlgorithm algorithm)
+	{
+		Objects.requireNonNull(leaves);
+		MessageDigest digest = messageDigest(algorithm);
+		if (leaves.isEmpty())
+		{
+			return digest.digest();
+		}
+		return subtreeHash(leaves, digest);
+	}
+
+	private static byte[] subtreeHash(final List<byte[]> leaves, final MessageDigest digest)
+	{
+		if (leaves.size() == 1)
+		{
+			digest.update(MERKLE_LEAF_PREFIX);
+			return digest.digest(leaves.get(0));
+		}
+		int split = Integer.highestOneBit(leaves.size() - 1);
+		byte[] left = subtreeHash(leaves.subList(0, split), digest);
+		byte[] right = subtreeHash(leaves.subList(split, leaves.size()), digest);
+		digest.update(MERKLE_NODE_PREFIX);
+		digest.update(left);
+		return digest.digest(right);
+	}
+
+	private static MessageDigest messageDigest(final HashAlgorithm algorithm)
+	{
+		Objects.requireNonNull(algorithm);
+		// the enum spells each algorithm twice, SHA_256 as "SHA-256" and SHA256 as "SHA256"; the
+		// JDK knows the first spelling
+		String name = algorithm.getAlgorithm().replaceFirst("^SHA(\\d)", "SHA-$1");
+		try
+		{
+			return MessageDigest.getInstance(name);
+		}
+		catch (NoSuchAlgorithmException missing)
+		{
+			throw new IllegalArgumentException("no message digest for hash algorithm "
+				+ algorithm.name() + " ('" + name + "') on this platform", missing);
+		}
 	}
 
 	/**
@@ -58,7 +125,12 @@ public final class HashExtensions
 	 * @param algorithm
 	 *            the algorithm
 	 * @return the merkle root tree
+	 * @deprecated leaves and inner nodes are hashed alike, so a list of inner nodes is a second
+	 *             preimage of the leaves below them; an empty queue gives {@code null}; and the
+	 *             caller's queue is consumed. Kept unchanged because changing it would change every
+	 *             existing block hash. Use {@link #merkleTreeHash(List, HashAlgorithm)} (#68)
 	 */
+	@Deprecated
 	public static byte[] getMerkleRootHash(Queue<byte[]> hashQueue, HashAlgorithm algorithm)
 	{
 		Objects.requireNonNull(algorithm);

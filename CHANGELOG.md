@@ -21,6 +21,20 @@ BREAKING:
   explicitly: that catch no longer compiles and goes. The encoding methods produce the same
   output as before, through HexFormat as well (#51)
 
+ADDED:
+
+- HashExtensions#merkleTreeHash(List<byte[]>, HashAlgorithm): the Merkle Tree Hash of RFC 6962
+  section 2.1, with 0x00 in front of every leaf and 0x01 in front of every inner node, and the hash
+  of nothing for an empty list. Matches the Certificate Transparency reference vectors for one to
+  eight leaves. It reads its input without consuming it (#68)
+
+DEPRECATED:
+
+- HashExtensions#getMerkleRootHash: leaves and inner nodes hash alike, so a list of concatenated
+  child hashes is a second preimage of the leaves below it; an empty queue gives null; and the
+  caller's queue is consumed. Kept unchanged, because changing it would change every existing
+  Block hash - whether Block moves to merkleTreeHash is a decision of its own (#68)
+
 CHANGED:
 
 - build only: an API compatibility gate (apiCompatibility, part of check). japicmp compares the
