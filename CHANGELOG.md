@@ -1,11 +1,17 @@
 ## Change log
 ----------------------
 
-Version 12.3-SNAPSHOT
+Version 13.0-SNAPSHOT
 -------------
 
 BREAKING:
 
+- PrivateKeyWriter refuses KeyFormat.PKCS_1 for a private key that has no traditional form of
+  its own - the edwards and montgomery families, Diffie-Hellman and the post-quantum families -
+  with an InvalidKeySpecException naming the algorithm, before anything is written. It used to
+  write the PKCS#8 file byte for byte and return normally, so a caller got a format it had not
+  asked for and could not tell. Merged to develop on 2026-09-06 and deliberately left out of the
+  12.3 release (release/12.3 reverts it), which is why this is 13.0 (#42)
 - HexExtensions no longer declares org.apache.commons.codec.DecoderException. decodeHex(char[]),
   decodeHex(String) and decodeHexToString(char[]) are built on java.util.HexFormat and refuse input
   that is not hexadecimal with an IllegalArgumentException naming the reason ("string length not
@@ -26,6 +32,10 @@ FIXED:
   timestamp, data) takes the timestamp as a parameter, so two blocks with the same content have
   the same hash and a third party can recompute it. getLeadingZerosCount() keeps counting zero
   BYTES - one difficulty step is a factor of 256 - and now says so in its Javadoc. (#55)
+
+
+Version 12.3
+-------------
 
 CHANGED:
 
