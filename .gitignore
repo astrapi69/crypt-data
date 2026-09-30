@@ -86,3 +86,7 @@
 /.gradle
 /pom.xml.bak
 /.attach_pid*
+
+# local conversions of the 8192 bit test key, never fixtures (#63)
+src/test/resources/pem/8192-ssh-key-pkcs8.pkcs1
+src/test/resources/pem/8192-ssh-key.der
