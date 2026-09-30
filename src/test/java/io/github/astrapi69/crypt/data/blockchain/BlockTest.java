@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -36,6 +37,7 @@ import java.security.PublicKey;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -45,8 +47,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.meanbean.test.BeanTester;
-import org.meanbean.test.BeanVerifier;
 
 import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
@@ -136,18 +136,18 @@ public class BlockTest
 	}
 
 	/**
-	 * Test method for {@link Block} with {@link BeanTester}
+	 * Test method for {@link Block} with the MeanBean hashCode and equals testers
 	 * <p>
-	 * The getter/setter check leaves out {@code data}, because setting it recomputes the hash by
-	 * design (#55) - which the bean tester reports as a side effect. Its round trip is covered by
-	 * {@link #testSetGetDataBoundary()}, the effect on the hash by the #55 tests below. In equals
-	 * and hashCode, data is significant.
+	 * The getter/setter tester is not run on this class: setting {@code data} recomputes the hash
+	 * by design (#55), which that tester reports as a side effect, and ignoring the property would
+	 * need a fresh MeanBean tester - which breaks the shared MeanBean context of every later class
+	 * on the same thread (#61). The round trip of every property is asserted directly in
+	 * {@link #testGettersAndSetters()} and the boundary tests below, the effect on the hash by the
+	 * #55 tests. In equals, data is significant.
 	 */
 	@Test
 	public void testWithBeanTester()
 	{
-		BeanVerifier.forClass(Block.class).editSettings().addIgnoredPropertyName("data").edited()
-			.verifyGettersAndSetters();
 		MeanBeanExtensions.testWithHashCodeMethodTester(Block.class);
 		MeanBeanExtensions.testWithEqualsMethodTester(Block.class);
 	}
@@ -166,7 +166,10 @@ public class BlockTest
 		block.setPreviousBlockHash(new byte[] { 7, 8, 9 });
 		block.setTimestamp(123456789L);
 		block.setTries(10L);
+		List<ITransaction> transactions = new ArrayList<>();
+		block.setTransactions(transactions);
 
+		assertSame(transactions, block.getTransactions());
 		assertNotNull(block.getHash());
 		assertNotNull(block.getMerkleRoot());
 		assertNotNull(block.getPreviousBlockHash());
