@@ -24,15 +24,24 @@
  */
 package io.github.astrapi69.crypt.data.hex;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.StringUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.meanbean.test.BeanTester;
 
 /**
@@ -44,11 +53,9 @@ public class HexExtensionsTest
 	/**
 	 * Test method for {@link HexExtensions#decodeHex(char[])}
 	 *
-	 * @throws DecoderException
-	 *             is thrown if an odd number or illegal of characters is supplied
 	 */
 	@Test
-	public void testDecodeHex() throws DecoderException
+	public void testDecodeHex()
 	{
 		String expected;
 		String actual;
@@ -65,11 +72,9 @@ public class HexExtensionsTest
 	/**
 	 * Test method for {@link HexExtensions#decodeHex(byte[])}
 	 *
-	 * @throws DecoderException
-	 *             is thrown if an odd number or illegal of characters is supplied
 	 */
 	@Test
-	public void testDecodeHexCharacterArray() throws DecoderException
+	public void testDecodeHexCharacterArray()
 	{
 		String expected;
 		String actual;
@@ -86,11 +91,9 @@ public class HexExtensionsTest
 	/**
 	 * Test method for {@link HexExtensions#decodeHex(String)}
 	 *
-	 * @throws DecoderException
-	 *             is thrown if an odd number or illegal of characters is supplied
 	 */
 	@Test
-	public void testDecodeHexString() throws DecoderException
+	public void testDecodeHexString()
 	{
 		String actual;
 		String expected;
@@ -107,11 +110,9 @@ public class HexExtensionsTest
 	/**
 	 * Test method for {@link HexExtensions#decodeHexToString(char[])}
 	 *
-	 * @throws DecoderException
-	 *             is thrown if an odd number or illegal of characters is supplied
 	 */
 	@Test
-	public void testDecodeHexToString() throws DecoderException
+	public void testDecodeHexToString()
 	{
 		String expected;
 		String actual;
@@ -234,4 +235,66 @@ public class HexExtensionsTest
 		beanTester.testBean(HexExtensions.class);
 	}
 
+	/**
+	 * Reproduction of #51: no public method of {@link HexExtensions} may declare an exception type
+	 * from commons-codec. That dependency is an implementation detail, so a consumer cannot see the
+	 * type - it can neither catch it nor compile a call that declares it
+	 */
+	@Test
+	public void noPublicMethodDeclaresAnExceptionFromCommonsCodec()
+	{
+		List<String> leaking = Arrays.stream(HexExtensions.class.getDeclaredMethods())
+			.filter(method -> Modifier.isPublic(method.getModifiers()))
+			.filter(method -> Arrays.stream(method.getExceptionTypes())
+				.anyMatch(type -> type.getName().startsWith("org.apache.commons.codec.")))
+			.map(Method::toGenericString).collect(Collectors.toList());
+
+		assertEquals(List.of(), leaking);
+	}
+
+	/**
+	 * Input that is not hexadecimal is refused with an {@link IllegalArgumentException} that says
+	 * why, by every decoding method
+	 *
+	 * @param caseName
+	 *            the name of the case, shown in the report
+	 * @param input
+	 *            the input that is not hexadecimal
+	 * @param reason
+	 *            a part of the message that names the reason
+	 */
+	@ParameterizedTest(name = "{0}")
+	@CsvSource(delimiter = '|', value = { "odd number of digits | abc | length not even: 3",
+			"a character that is no hex digit | zz | not a hexadecimal digit: \"z\"",
+			"a valid digit followed by an invalid one | 0g | not a hexadecimal digit: \"g\"",
+			"a blank between digits | 0a 1 | not a hexadecimal digit: \" \"" })
+	public void inputThatIsNotHexadecimalIsRefusedWithTheReason(String caseName, String input,
+		String reason)
+	{
+		List<Function<String, Object>> decoders = List.of(
+			value -> HexExtensions.decodeHex(value.toCharArray()),
+			value -> HexExtensions.decodeHex(value),
+			value -> HexExtensions.decodeHexToString(value.toCharArray()));
+
+		for (Function<String, Object> decoder : decoders)
+		{
+			IllegalArgumentException refusal = assertThrows(IllegalArgumentException.class,
+				() -> decoder.apply(input));
+			assertTrue(refusal.getMessage().contains(reason), refusal.getMessage());
+		}
+	}
+
+	/**
+	 * Boundary: the empty input decodes to nothing, and upper and lower case digits decode alike
+	 */
+	@Test
+	public void emptyInputDecodesToNothingAndCaseDoesNotMatter()
+	{
+		assertArrayEquals(new byte[0], HexExtensions.decodeHex(new char[0]));
+		assertEquals("", HexExtensions.decodeHex(""));
+		assertArrayEquals(new byte[] { (byte)0xAB, (byte)0xCD },
+			HexExtensions.decodeHex("abCD".toCharArray()));
+		assertArrayEquals(HexExtensions.decodeHex("ABCD".toCharArray()),
+			HexExtensions.decodeHex("abcd".toCharArray()));
+	}
 }
