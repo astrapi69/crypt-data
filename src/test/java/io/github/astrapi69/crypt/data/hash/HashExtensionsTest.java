@@ -47,6 +47,7 @@ import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 /**
  * The unit test class for the class {@link HashExtensions}
  */
+@SuppressWarnings("deprecation") // pins getMerkleRootHash, deprecated in #68
 public class HashExtensionsTest
 {
 

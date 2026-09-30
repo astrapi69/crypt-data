@@ -121,6 +121,9 @@ public class Block implements IBlock
 	 * @param data
 	 *            the data of the block, covered by the hash, or null for none
 	 */
+	// the deprecated Merkle root stays: moving to HashExtensions.merkleTreeHash would change the
+	// hash of every existing block, a breaking decision of its own (#68)
+	@SuppressWarnings("deprecation")
 	public Block(byte[] previousBlockHash, List<ITransaction> transactions, long tries,
 		long timestamp, String data)
 	{
