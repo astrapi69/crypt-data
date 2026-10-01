@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 13.0-SNAPSHOT
+Version 13.0
 -------------
 
 BREAKING:
@@ -54,6 +54,15 @@ FIXED:
   timestamp, data) takes the timestamp as a parameter, so two blocks with the same content have
   the same hash and a third party can recompute it. getLeadingZerosCount() keeps counting zero
   BYTES - one difficulty step is a factor of 256 - and now says so in its Javadoc. (#55)
+- BlockTest, AddressTest and TransactionTest register Bouncy Castle themselves. They read a PEM
+  key in their setup and relied on another test class having registered the provider first: run
+  alone, 23 of their tests failed with "no such provider: BC" while CI was green on the same
+  commit. A result that depends on the order the JVM runs classes in is not a result about the
+  code (#56)
+- two key files that reached develop through #58 are removed and ignored. They were test output
+  left in a working tree - the same key pair this repository has published as a fixture since
+  2019, in two other formats - and they are what the coverage upload and a scanner both reacted
+  to (#63)
 
 
 Version 12.3
