@@ -48,6 +48,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
@@ -71,6 +72,14 @@ public class CertificateWriterTest
 	PrivateKey actual;
 
 	X509Certificate cert;
+
+	/**
+	 * Where this test writes. A test that writes beside its fixtures leaves its output in the
+	 * working tree whenever it fails before its own delete line, which is how two key files reached
+	 * a pull request (#54). JUnit gives each test its own directory and removes it.
+	 */
+	@TempDir
+	File temporaryDirectory;
 
 	File derDir;
 
@@ -146,7 +155,7 @@ public class CertificateWriterTest
 		File certificateFile;
 		File certificateDerFile;
 
-		certificateFile = new File(pemDir, "certificate.cert");
+		certificateFile = new File(temporaryDirectory, "certificate.cert");
 		// save it ...
 		CertificateWriter.write(cert, certificateFile, KeyFileFormat.PEM);
 
@@ -157,7 +166,7 @@ public class CertificateWriterTest
 
 		// ======================================================================================
 
-		certificateDerFile = new File(derDir, "certificate.der");
+		certificateDerFile = new File(temporaryDirectory, "certificate.der");
 		// save it ...
 		CertificateWriter.write(cert, certificateDerFile, KeyFileFormat.DER);
 
@@ -182,7 +191,7 @@ public class CertificateWriterTest
 		X509Certificate certificate;
 		File certificateDerFile;
 
-		certificateDerFile = new File(derDir, "certificate.der");
+		certificateDerFile = new File(temporaryDirectory, "certificate.der");
 		// save it ...
 		CertificateWriter.writeInDerFormat(cert, certificateDerFile);
 
@@ -207,7 +216,7 @@ public class CertificateWriterTest
 		X509Certificate certificate;
 		File certificateFile;
 
-		certificateFile = new File(pemDir, "certificate.cert");
+		certificateFile = new File(temporaryDirectory, "certificate.cert");
 		// save it ...
 		CertificateWriter.writeInPemFormat(cert, certificateFile);
 
