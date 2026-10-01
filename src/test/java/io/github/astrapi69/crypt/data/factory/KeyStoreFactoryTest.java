@@ -46,7 +46,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.ZonedDateTime;
 
-import org.apache.commons.io.FileUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -208,12 +207,13 @@ public class KeyStoreFactoryTest
 	public void testNewKeyStore() throws NoSuchAlgorithmException, CertificateException,
 		FileNotFoundException, KeyStoreException, IOException
 	{
-		File publickeyDerDir;
 		File keystoreJksFile;
 		KeyStore keystore;
 
-		publickeyDerDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
-		keystoreJksFile = new File(publickeyDerDir, "keystore.jks");
+		// created by this test rather than read: it belongs in the temporary directory, not beside
+		// the fixtures. Written next to them it stayed behind whenever the test failed before the
+		// delete below, where it is indistinguishable from a fixture (#54)
+		keystoreJksFile = new File(tempDir.toFile(), "keystore.jks");
 
 		keystore = KeyStoreFactory.newKeyStore(keystoreJksFile, KeystoreType.JKS.name(),
 			"foobar-secret-pw");
@@ -226,7 +226,7 @@ public class KeyStoreFactoryTest
 		keystore = KeyStoreFactory.loadKeyStore(keystoreJksFile, KeystoreType.JKS.name(),
 			"foobar-secret-pw");
 		assertNotNull(keystore);
-		FileUtils.deleteQuietly(keystoreJksFile);
+		// no delete: JUnit removes the temporary directory, whether this test passed or not
 	}
 
 	/**
