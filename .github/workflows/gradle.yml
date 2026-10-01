@@ -104,7 +104,7 @@ jobs:
         if: github.event_name == 'push'
         run: |
           if grep -q -- '-SNAPSHOT' gradle.properties; then
-            ./gradlew publishAllPublicationsToCentralSnapshots
+            ./gradlew nmcpPublishAllPublicationsToCentralPortalSnapshots
           else
             echo "non-SNAPSHOT version: releasing this repository is a deliberate manual step"
           fi
