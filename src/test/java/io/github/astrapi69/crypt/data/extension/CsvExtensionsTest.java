@@ -24,16 +24,22 @@
  */
 package io.github.astrapi69.crypt.data.extension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
-import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapisixtynine.csv.CsvExtensions;
 
@@ -44,6 +50,34 @@ class CsvExtensionsTest
 {
 
 	/**
+	 * Where this test writes. The sorting methods sort a file in place, and these tests used to
+	 * hand them the committed fixtures, so every run rewrote tracked files in the working tree
+	 * (#54). They now sort a copy here, which JUnit removes with the test's own directory.
+	 */
+	@TempDir
+	Path temporaryDirectory;
+
+	/**
+	 * A copy of a committed, sorted fixture with its data rows in reverse order, so that sorting it
+	 * has something to do and the result can be compared with the fixture itself
+	 */
+	private Path reversedCopyOf(final String fixtureName) throws IOException
+	{
+		List<String> lines = Files.readAllLines(fixture(fixtureName).toPath());
+		List<String> reversed = new ArrayList<>(lines.subList(1, lines.size()));
+		Collections.reverse(reversed);
+		reversed.add(0, lines.get(0));
+		Path copy = temporaryDirectory.resolve(fixtureName);
+		Files.write(copy, reversed);
+		return copy;
+	}
+
+	private static File fixture(final String fixtureName)
+	{
+		return new File(PathFinder.getSrcTestResourcesDir(), fixtureName);
+	}
+
+	/**
 	 * Test method for {@link CsvExtensions#sortCsv(Path, Supplier)}
 	 *
 	 * @throws IOException
@@ -52,10 +86,7 @@ class CsvExtensionsTest
 	@Test
 	void sortCsvFileWithSupplier() throws IOException
 	{
-		File validCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
-			"invalid_key_pair_algorithms.csv");
-		// Example usage with a CSV file path
-		Path csvFilePath = validCsvFile.toPath();
+		Path csvFilePath = reversedCopyOf("invalid_key_pair_algorithms.csv");
 
 		// Example usage with algorithm and keysize as sorting criteria
 		Supplier<Comparator<String[]>> comparatorSupplier = () -> Comparator
@@ -63,6 +94,9 @@ class CsvExtensionsTest
 			.thenComparingInt(columns -> Integer.parseInt(columns[1])); // Then by 'keysize'
 
 		CsvExtensions.sortCsv(csvFilePath, comparatorSupplier);
+
+		assertEquals(Files.readAllLines(fixture("invalid_key_pair_algorithms.csv").toPath()),
+			Files.readAllLines(csvFilePath));
 	}
 
 	/**
@@ -75,11 +109,12 @@ class CsvExtensionsTest
 	void sortCsvByAlgorithmAndKeysize() throws IOException
 	{
 
-		File validCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
-			"new_valid_key_pair_algorithms.csv");
-		// Example usage with a CSV file path
-		Path csvFilePath = validCsvFile.toPath();
+		Path csvFilePath = reversedCopyOf("new_valid_key_pair_algorithms.csv");
+
 		CsvExtensions.sortCsvByAlgorithmAndKeysize(csvFilePath);
+
+		assertEquals(Files.readAllLines(fixture("new_valid_key_pair_algorithms.csv").toPath()),
+			Files.readAllLines(csvFilePath));
 	}
 
 	/**
@@ -92,14 +127,10 @@ class CsvExtensionsTest
 	@Disabled
 	void sortCsvByKeypairAndSignatureAlgorithm() throws IOException
 	{
-		File invalidCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
-			"invalid_certificate_signature_algorithms.csv");
-		File validCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
+		Path csvFilePath = reversedCopyOf(
 			"valid_jdk_17_provider_bc_certificate_signature_algorithms.csv");
-		// Example usage with a CSV file path
-		Path csvFilePath = validCsvFile.toPath();
 		CsvExtensions.sortCsvByKeypairAndSignatureAlgorithm(csvFilePath);
-		csvFilePath = invalidCsvFile.toPath();
+		csvFilePath = reversedCopyOf("invalid_certificate_signature_algorithms.csv");
 		CsvExtensions.sortCsvByKeypairAndSignatureAlgorithm(csvFilePath);
 		System.out.println("CSV file sorted successfully.");
 	}
