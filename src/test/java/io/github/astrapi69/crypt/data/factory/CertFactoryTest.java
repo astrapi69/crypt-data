@@ -59,6 +59,7 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
@@ -77,7 +78,6 @@ import io.github.astrapi69.crypt.data.model.ExtensionInfo;
 import io.github.astrapi69.crypt.data.model.ExtensionInfoCSVReader;
 import io.github.astrapi69.crypt.data.model.Validity;
 import io.github.astrapi69.crypt.data.model.X509CertificateV1Info;
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.lang.ClassExtensions;
 import io.github.astrapi69.random.number.RandomBigIntegerFactory;
@@ -94,6 +94,14 @@ public class CertFactoryTest
 	byte[] certificateData;
 	File pemDir;
 	File certificatePemFile;
+
+	/**
+	 * Where this test writes. A test that writes beside its fixtures leaves its output in the
+	 * working tree whenever it fails before its own delete line, which is how two key files reached
+	 * a pull request (#54). JUnit gives each test its own directory and removes it.
+	 */
+	@TempDir
+	File temporaryDirectory;
 	String base64EncodedCertificate;
 
 	/**
@@ -282,8 +290,7 @@ public class CertFactoryTest
 			signatureAlgorithm, start, end);
 		assertNotNull(cert);
 
-		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
-		certificateFile = new File(pemDir, "certificate.cer");
+		certificateFile = new File(temporaryDirectory, "certificate.cer");
 		// save it ...
 		CertificateWriter.writeInPemFormat(cert, certificateFile);
 		// read it ...
@@ -292,8 +299,6 @@ public class CertFactoryTest
 		assertNotNull(certificate);
 		// check equal
 		assertEquals(cert, certificate);
-
-		DeleteFileExtensions.delete(certificateFile);
 	}
 
 	/**

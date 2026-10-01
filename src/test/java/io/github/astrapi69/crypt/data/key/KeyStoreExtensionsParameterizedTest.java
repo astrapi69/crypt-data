@@ -38,6 +38,7 @@ import java.security.cert.X509Certificate;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
@@ -59,7 +60,13 @@ public class KeyStoreExtensionsParameterizedTest
 	String alias = "alias-for-delete";
 	/** The certificate for tests */
 	X509Certificate certificate;
-	File derDir;
+	/**
+	 * Where this test writes. A test that writes beside its fixtures leaves its output in the
+	 * working tree whenever it fails before its own delete line, which is how two key files reached
+	 * a pull request (#54). JUnit gives each test its own directory and removes it.
+	 */
+	@TempDir
+	File temporaryDirectory;
 	File keystoreFile;
 
 	String newAlias = "new-alias";
@@ -83,13 +90,15 @@ public class KeyStoreExtensionsParameterizedTest
 			assertNotNull(certificate);
 		}
 
-		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
-		keystoreFile = new File(derDir, "keystore.jks");
+		keystoreFile = new File(temporaryDirectory, "keystore.jks");
 		KeyStore keyStore = KeyStoreFactory.newKeyStore(keystoreFile, KeystoreType.JKS.name(),
 			password);
 		assertNotNull(keyStore);
 		keyStore.setCertificateEntry(alias, certificate);
-		keyStore.store(new FileOutputStream(keystoreFile), password.toCharArray());
+		try (FileOutputStream output = new FileOutputStream(keystoreFile))
+		{
+			keyStore.store(output, password.toCharArray());
+		}
 	}
 
 	/**

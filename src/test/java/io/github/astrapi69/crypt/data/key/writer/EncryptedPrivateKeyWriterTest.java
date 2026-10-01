@@ -43,15 +43,14 @@ import javax.crypto.NoSuchPaddingException;
 
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.pkcs.PKCSException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.data.key.reader.EncryptedPrivateKeyReader;
 import io.github.astrapi69.crypt.data.key.reader.PrivateKeyReader;
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
@@ -60,7 +59,14 @@ import io.github.astrapi69.file.search.PathFinder;
 public class EncryptedPrivateKeyWriterTest
 {
 	PrivateKey actual;
-	File derDir;
+
+	/**
+	 * Where this test writes. A test that writes beside its fixtures leaves its output in the
+	 * working tree whenever it fails before its own delete line, which is how two key files reached
+	 * a pull request (#54). JUnit gives each test its own directory and removes it.
+	 */
+	@TempDir
+	File temporaryDirectory;
 
 	File encryptedPrivateKeyFile;
 	PrivateKey expected;
@@ -73,23 +79,7 @@ public class EncryptedPrivateKeyWriterTest
 	@BeforeEach
 	protected void setUp()
 	{
-		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
-		encryptedPrivateKeyFile = new File(derDir, "encryptedPrivate.der");
-	}
-
-	/**
-	 * Tear down method will be invoked after every unit test method in this class.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@AfterEach
-	protected void tearDown() throws IOException
-	{
-		if (encryptedPrivateKeyFile.exists())
-		{
-			DeleteFileExtensions.delete(encryptedPrivateKeyFile);
-		}
+		encryptedPrivateKeyFile = new File(temporaryDirectory, "encryptedPrivate.der");
 	}
 
 	/**
