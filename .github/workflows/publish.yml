@@ -31,7 +31,7 @@ jobs:
       # nmcp uploads and validates the bundle directly - no separate manual staging-upload step
       # needed (unlike the plain maven-publish + OSSRH-staging-api repos in this family).
       - name: Publish to the Central Portal
-        run: ./gradlew publishAllPublicationsToCentralPortal
+        run: ./gradlew nmcpPublishAllPublicationsToCentralPortal
         env:
           CENTRAL_PORTAL_TOKEN_USERNAME: ${{ secrets.CENTRAL_PORTAL_TOKEN_USERNAME }}
           CENTRAL_PORTAL_TOKEN_PASSWORD: ${{ secrets.CENTRAL_PORTAL_TOKEN_PASSWORD }}
