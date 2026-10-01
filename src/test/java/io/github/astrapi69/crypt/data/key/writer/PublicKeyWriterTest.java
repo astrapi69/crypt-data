@@ -41,6 +41,7 @@ import org.apache.commons.io.FileUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
@@ -56,6 +57,14 @@ import io.github.astrapi69.file.search.PathFinder;
  */
 public class PublicKeyWriterTest
 {
+
+	/**
+	 * Where this test writes. A test that writes beside its fixtures leaves its output in the
+	 * working tree whenever it fails before its own delete line, which is how two key files reached
+	 * a pull request (#54). JUnit gives each test its own directory and removes it.
+	 */
+	@TempDir
+	File temporaryDirectory;
 
 	File derDir;
 	File pemDir;
@@ -117,7 +126,7 @@ public class PublicKeyWriterTest
 		File writtenPublickeyDerFile;
 		// new scenario...
 		publicKey = PublicKeyReader.readPublicKey(publicKeyDerFile);
-		writtenPublickeyDerFile = new File(derDir, "written-public.der");
+		writtenPublickeyDerFile = new File(temporaryDirectory, "written-public.der");
 		PublicKeyWriter.write(publicKey, writtenPublickeyDerFile);
 		Checksum checksum = new CRC32();
 		expected = FileUtils.checksum(publicKeyDerFile, checksum);
@@ -141,7 +150,7 @@ public class PublicKeyWriterTest
 		// new scenario...
 		privateKey = PrivateKeyReader.readPemPrivateKey(privateKeyPemFile);
 		publicKey = PrivateKeyExtensions.generatePublicKey(privateKey);
-		convertedPublickeyPemFile = new File(pemDir, "converted-public.pem");
+		convertedPublickeyPemFile = new File(temporaryDirectory, "converted-public.pem");
 		PublicKeyWriter.writeInPemFormat(publicKey, convertedPublickeyPemFile);
 		expected = FileChecksumExtensions.getChecksum(publicKeyPemFile,
 			MdAlgorithm.MD5.getAlgorithm());
