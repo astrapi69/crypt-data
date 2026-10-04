@@ -39,6 +39,7 @@ import java.security.spec.InvalidKeySpecException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.meanbean.test.BeanTester;
@@ -49,7 +50,6 @@ import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeySize;
 import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
 import io.github.astrapi69.crypt.data.key.reader.PublicKeyReader;
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
@@ -83,6 +83,14 @@ public class PublicKeyExtensionsTest
 	File derDir;
 
 	File pemDir;
+
+	/**
+	 * Where this test writes. A test that writes beside its fixtures leaves its output in the
+	 * working tree whenever it fails before its own delete line, which is how two key files reached
+	 * a pull request (#54). JUnit gives each test its own directory and removes it.
+	 */
+	@TempDir
+	File temporaryDirectory;
 
 	File privateKeyDerFile;
 	File privateKeyPemFile;
@@ -209,14 +217,13 @@ public class PublicKeyExtensionsTest
 		File convertedPublickeyPemFile;
 		// new scenario...
 		publicKey = PublicKeyReader.readPemPublicKey(publicKeyPemFile);
-		convertedPublickeyPemFile = new File(pemDir, "converted-public.pem");
+		convertedPublickeyPemFile = new File(temporaryDirectory, "converted-public.pem");
 		PublicKeyExtensions.toPemFile(publicKey, convertedPublickeyPemFile);
 		expected = FileChecksumExtensions.getChecksum(publicKeyPemFile,
 			MdAlgorithm.MD5.getAlgorithm());
 		actual = FileChecksumExtensions.getChecksum(convertedPublickeyPemFile,
 			MdAlgorithm.MD5.getAlgorithm());
 		assertEquals(expected, actual);
-		DeleteFileExtensions.delete(convertedPublickeyPemFile);
 	}
 
 	/**

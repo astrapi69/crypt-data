@@ -1,6 +1,28 @@
 ## Change log
 ----------------------
 
+Version 13.1
+-------------
+
+ADDED:
+
+- AnyKeyFileReader: reads a private key, a public key or a certificate out of a file without being
+  told its shape first - PKCS#8 and the traditional openssl PEM forms, a file holding both halves of
+  a pair, the same again as DER, and a public key that arrives inside a certificate. It decodes with
+  Bouncy Castle, so keys on curves the JDK's default provider cannot decode read too, and it says
+  which file it could not read instead of returning null. Moved here from mystic-crypt-ui, where
+  three plugins read their key files through it (#83)
+
+CHANGED:
+
+- mavenLocal() is consulted only when the build is run with -PuseMavenLocal; without it a build no
+  longer depends on whatever happens to sit in ~/.m2 (astrapi69/mystic-crypt-ui#475)
+- publishing: the release calls nmcp's publish task instead of its deprecated alias (#78), a
+  snapshot rehearsal signs exactly like a release, and a release refuses to go out unsigned (#80)
+- test classes that wrote into the source tree write into a temporary directory instead; the
+  remaining ones are tracked in #54
+- meanbean-factories 3.1 for the bean tests, which no longer loses the MeanBean context (#61)
+
 Version 13.0
 -------------
 

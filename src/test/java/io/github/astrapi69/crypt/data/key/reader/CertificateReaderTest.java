@@ -40,6 +40,7 @@ import java.util.Date;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
@@ -48,7 +49,6 @@ import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeyFileFormat;
 import io.github.astrapi69.crypt.data.factory.CertFactory;
 import io.github.astrapi69.crypt.data.key.writer.CertificateWriter;
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.random.number.RandomBigIntegerFactory;
 
@@ -57,7 +57,13 @@ import io.github.astrapi69.random.number.RandomBigIntegerFactory;
  */
 public class CertificateReaderTest
 {
-	File derDir;
+	/**
+	 * Where this test writes. A test that writes beside its fixtures leaves its output in the
+	 * working tree whenever it fails before its own delete line, which is how two key files reached
+	 * a pull request (#54). JUnit gives each test its own directory and removes it.
+	 */
+	@TempDir
+	File temporaryDirectory;
 	File certificateDerFile;
 	File privatekeyPemDir;
 	File privatekeyPemFile;
@@ -74,7 +80,6 @@ public class CertificateReaderTest
 	BigInteger serialNumber;
 	X509Certificate cert;
 	X509Certificate certificate;
-	File pemDir;
 
 	/**
 	 * Sets up method will be invoked before every unit test method in this class
@@ -87,10 +92,7 @@ public class CertificateReaderTest
 	{
 		Security.addProvider(new BouncyCastleProvider());
 
-		derDir = new File(PathFinder.getSrcTestResourcesDir(), "der");
-		certificateDerFile = new File(derDir, "certificate.der");
-
-		pemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
+		certificateDerFile = new File(temporaryDirectory, "certificate.der");
 
 		privatekeyPemDir = new File(PathFinder.getSrcTestResourcesDir(), "pem");
 		privatekeyPemFile = new File(privatekeyPemDir, "private.pem");
@@ -135,8 +137,6 @@ public class CertificateReaderTest
 
 		certificate = CertificateReader.readCertificate(certificateDerFile);
 		assertNotNull(certificate);
-
-		DeleteFileExtensions.delete(certificateDerFile);
 	}
 
 	/**
@@ -149,14 +149,12 @@ public class CertificateReaderTest
 	public void testReadPemCertificateFile() throws Exception
 	{
 
-		certificateFile = new File(pemDir, "certificate.cert");
+		certificateFile = new File(temporaryDirectory, "certificate.cert");
 		// save it ...
 		CertificateWriter.write(cert, certificateFile, KeyFileFormat.PEM);
 
 		certificate = CertificateReader.readPemCertificate(certificateFile);
 		assertNotNull(certificate);
-
-		DeleteFileExtensions.delete(certificateFile);
 	}
 
 	/**

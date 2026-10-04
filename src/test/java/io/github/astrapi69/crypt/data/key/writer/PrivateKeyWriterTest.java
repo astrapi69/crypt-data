@@ -42,6 +42,7 @@ import java.security.spec.InvalidKeySpecException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
@@ -62,6 +63,14 @@ public class PrivateKeyWriterTest
 {
 
 	PrivateKey actual;
+	/**
+	 * Where this test writes. A test that writes beside its fixtures leaves its output in the
+	 * working tree whenever it fails before its own delete line, which is how two key files reached
+	 * a pull request (#54). JUnit gives each test its own directory and removes it.
+	 */
+	@TempDir
+	File temporaryDirectory;
+
 	File derDir;
 
 	File pemDir;
@@ -120,7 +129,7 @@ public class PrivateKeyWriterTest
 		// new scenario...
 		privateKey = PrivateKeyReader.readPrivateKey(privateKeyDerFile);
 
-		writtenPrivatekeyDerFile = new File(derDir, "written-private.der");
+		writtenPrivatekeyDerFile = new File(temporaryDirectory, "written-private.der");
 		PrivateKeyWriter.write(privateKey, writtenPrivatekeyDerFile);
 		expected = FileChecksumExtensions.getChecksum(privateKeyDerFile,
 			MdAlgorithm.MD5.getAlgorithm());
@@ -155,7 +164,7 @@ public class PrivateKeyWriterTest
 		// new scenario...
 		privateKey = PrivateKeyReader.readPrivateKey(privateKeyDerFile);
 
-		convertedPrivatekeyPemFile = new File(pemDir, "converted-private.pem");
+		convertedPrivatekeyPemFile = new File(temporaryDirectory, "converted-private.pem");
 		PrivateKeyWriter.writeInPemFormat(privateKey, convertedPrivatekeyPemFile);
 
 		privatekeyPemFileInDerDir = new File(derDir, "private.pem");
@@ -196,7 +205,7 @@ public class PrivateKeyWriterTest
 		privatekeyPemFileInDerDir = new File(derDir, "private.pem");
 		privateKey = PrivateKeyReader.readPrivateKey(privateKeyDerFile);
 
-		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
+		newWrittenPrivatekeyPemFile = new File(temporaryDirectory, "new-written-private.pem");
 		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
 		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED
 			|| fileCreationState == FileCreationState.ALREADY_EXISTS;
@@ -214,7 +223,7 @@ public class PrivateKeyWriterTest
 
 		DeleteFileExtensions.delete(newWrittenPrivatekeyPemFile);
 		// new scenario...
-		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
+		newWrittenPrivatekeyPemFile = new File(temporaryDirectory, "new-written-private.pem");
 		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
 		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED
 			|| fileCreationState == FileCreationState.ALREADY_EXISTS;
@@ -233,7 +242,7 @@ public class PrivateKeyWriterTest
 		privatekeyPemFileInDerDir = new File(derDir, "private.pem");
 		privateKey = PrivateKeyReader.readPrivateKey(privateKeyDerFile);
 
-		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
+		newWrittenPrivatekeyPemFile = new File(temporaryDirectory, "new-written-private.pem");
 		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
 		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED
 			|| fileCreationState == FileCreationState.ALREADY_EXISTS;
@@ -251,7 +260,7 @@ public class PrivateKeyWriterTest
 
 		DeleteFileExtensions.delete(newWrittenPrivatekeyPemFile);
 		// new scenario...
-		newWrittenPrivatekeyPemFile = new File(pemDir, "new-written-private.pem");
+		newWrittenPrivatekeyPemFile = new File(temporaryDirectory, "new-written-private.pem");
 		fileCreationState = FileFactory.newFile(newWrittenPrivatekeyPemFile);
 		createdOrAlreadyExists = fileCreationState == FileCreationState.CREATED
 			|| fileCreationState == FileCreationState.ALREADY_EXISTS;
