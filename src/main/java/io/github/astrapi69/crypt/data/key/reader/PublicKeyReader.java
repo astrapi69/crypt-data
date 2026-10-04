@@ -35,9 +35,11 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.bouncycastle.util.io.pem.PemObject;
 
-import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
+import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 
 
 /**
@@ -93,7 +95,10 @@ public final class PublicKeyReader
 	public static PublicKey readPemPublicKey(final File file) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
-		return readPemPublicKey(file, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		// a SubjectPublicKeyInfo names its own algorithm, so nothing has to be assumed here. This
+		// used to pass RSA to a key factory, which refused every other algorithm although this
+		// library had just written it (issue #23)
+		return PemObjectReader.readPemPublicKey(file);
 	}
 
 	/**
@@ -140,7 +145,21 @@ public final class PublicKeyReader
 	public static PublicKey readPublicKey(final byte[] publicKeyBytes)
 		throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
-		return readPublicKey(publicKeyBytes, KeyPairGeneratorAlgorithm.RSA.getAlgorithm());
+		// same as the pem entry point: the algorithm identifier is in the structure, so it is read
+		// rather than assumed to be RSA (issue #23). Unlike the private key side there is no list
+		// of algorithms to fall back on, so der was as broken as pem
+		try
+		{
+			return new JcaPEMKeyConverter().setProvider(SecurityProvider.BC.name())
+				.getPublicKey(SubjectPublicKeyInfo.getInstance(publicKeyBytes));
+		}
+		catch (IllegalArgumentException | IOException noPublicKeyHere)
+		{
+			throw new InvalidKeySpecException(
+				"The given bytes hold no public key that could be read: "
+					+ noPublicKeyHere.getMessage(),
+				noPublicKeyHere);
+		}
 	}
 
 	/**

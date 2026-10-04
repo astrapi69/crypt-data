@@ -42,7 +42,7 @@ import io.github.astrapi69.crypt.data.key.KeyInfoExtensions;
 import io.github.astrapi69.crypt.data.key.KeyStoreExtensions;
 import io.github.astrapi69.crypt.data.model.KeyInfo;
 import io.github.astrapi69.crypt.data.model.KeyStoreInfo;
-import io.github.astrapi69.file.create.FileInfo;
+import io.github.astrapi69.file.create.model.FileInfo;
 
 /**
  * The factory class {@link KeyStoreFactory} holds methods for creating {@link KeyStore} objects

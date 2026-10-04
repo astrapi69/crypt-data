@@ -27,6 +27,7 @@ package io.github.astrapi69.crypt.data.key;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -46,6 +47,24 @@ import io.github.astrapi69.crypt.data.model.SharedSecretModel;
 class SharedSecretExtensionsTest
 {
 
+	/**
+	 * Test method proving that {@link SharedSecretExtensions} is a pure static utility: every
+	 * public method is static and none of them is an instance-bound accessor
+	 */
+	@Test
+	void publicApiIsStatic()
+	{
+		java.lang.reflect.Method[] methods = SharedSecretExtensions.class.getDeclaredMethods();
+		assertTrue(methods.length > 0);
+		for (java.lang.reflect.Method method : methods)
+		{
+			if (java.lang.reflect.Modifier.isPublic(method.getModifiers()))
+			{
+				assertTrue(java.lang.reflect.Modifier.isStatic(method.getModifiers()),
+					method.getName() + " must be static");
+			}
+		}
+	}
 
 	/**
 	 * Test method for {@link SharedSecretExtensions#toModel(SharedSecretInfo)}.

@@ -80,11 +80,7 @@ public class ObfuscationBiMapRules<K, V>
 		if (!(o instanceof ObfuscationBiMapRules))
 			return false;
 		final ObfuscationBiMapRules<?, ?> other = (ObfuscationBiMapRules<?, ?>)o;
-		final Object this$obfuscationRules = this.getObfuscationRules();
-		final Object other$obfuscationRules = other.getObfuscationRules();
-		return this$obfuscationRules == null
-			? other$obfuscationRules == null
-			: this$obfuscationRules.equals(other$obfuscationRules);
+		return Objects.equals(this.getObfuscationRules(), other.getObfuscationRules());
 	}
 
 	/**
@@ -102,8 +98,8 @@ public class ObfuscationBiMapRules<K, V>
 	{
 		final int PRIME = 59;
 		int result = 1;
-		final Object $obfuscationRules = this.getObfuscationRules();
-		result = result * PRIME + ($obfuscationRules == null ? 43 : $obfuscationRules.hashCode());
+		// no null check needed: the constructor rejects a null obfuscation rules map
+		result = result * PRIME + this.getObfuscationRules().hashCode();
 		return result;
 	}
 

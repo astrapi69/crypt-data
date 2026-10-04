@@ -33,6 +33,10 @@ import java.security.Security;
 public final class ProviderExtensions
 {
 
+	private ProviderExtensions()
+	{
+	}
+
 	/**
 	 * Gets an array with all the installed providers
 	 * 

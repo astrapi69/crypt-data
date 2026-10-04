@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         maven {
-            url projectRepositoriesMavenUrl
+            url = projectRepositoriesMavenUrl
         }
     }
 }
@@ -13,9 +13,9 @@ plugins {
     id 'maven-publish'
     id 'signing'
     alias(libs.plugins.gradle.versions.plugin)
-    alias(libs.plugins.grgit.gradle)
-    alias(libs.plugins.license.gradle.plugin)
     alias(libs.plugins.lombok.plugin)
+    alias(libs.plugins.nmcp.gradle.plugin)
+    alias(libs.plugins.pitest.gradle.plugin)
     alias(libs.plugins.spotless.plugin.gradle)
     alias(libs.plugins.version.catalog.update)
 }
@@ -36,10 +36,8 @@ java {
 
 tasks.withType(JavaCompile).configureEach { javaCompiler ->
     options.encoding = "UTF-8"
-    // uncomment the next line for build with compiler argument -Xlint:deprecation
-    // options.compilerArgs << "-Xlint:deprecation"
-    // uncomment the next line for build with compiler argument -Xlint:unchecked
-    // options.compilerArgs << "-Xlint:unchecked"
+    options.compilerArgs << "-Xlint:deprecation"
+    options.compilerArgs << "-Xlint:unchecked"
 }
 
 tasks.named("test") {

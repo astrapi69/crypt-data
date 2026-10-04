@@ -80,14 +80,14 @@ public class FileInitializerExtension
 	public static List<KeyPairEntry> getKeyPairEntries(File invalidCsvFile) throws IOException
 	{
 		return initializeFile(invalidCsvFile, ListFactory::newArrayList,
-			wrapCsvReader(CsvExtensions::readKeyPairEntriesFromCsv), "algorithm,keysize");
+			wrapCsvReader(TestCsvExtensions::readKeyPairEntriesFromCsv), "algorithm,keysize");
 	}
 
 	public static List<CertificateAlgorithmEntry> inializeFile(File validSignatureAlgorithmsCsvFile)
 		throws IOException
 	{
 		return initializeFile(validSignatureAlgorithmsCsvFile, ListFactory::newArrayList,
-			wrapCsvReader(CsvExtensions::readCertificateAlgorithmEntryFromCsv),
+			wrapCsvReader(TestCsvExtensions::readCertificateAlgorithmEntryFromCsv),
 			"keypair-algorithm,signature-algorithm");
 	}
 }

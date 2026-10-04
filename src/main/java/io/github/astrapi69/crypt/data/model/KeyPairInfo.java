@@ -128,8 +128,11 @@ public class KeyPairInfo
 		String keyGeneratorAlgorithm = keyPairInfo.getAlgorithm();
 		boolean keyPairGenerator = AlgorithmExtensions.isValid("KeyPairGenerator",
 			keyGeneratorAlgorithm);
-		if (keyPairGenerator)
+		if (!keyPairGenerator)
 		{
+			// not a registered KeyPairGenerator algorithm name - nothing to probe key sizes for.
+			// (Registered names are the upper-case forms reported by Security.getAlgorithms, e.g.
+			// "RSA", "EC"; a mis-cased "rsa" is not recognised here.)
 			return false;
 		}
 		Set<Integer> supportedKeySizes = KeySizeExtensions.getSupportedKeySizes(

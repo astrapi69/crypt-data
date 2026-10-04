@@ -183,7 +183,7 @@ public final class CertificateExtensions
 	{
 		final X500Name x500name = new JcaX509CertificateHolder(certificate).getSubject();
 		final RDN[] rdns = x500name.getRDNs(style);
-		if (rdns != null && 0 < rdns.length)
+		if (0 < rdns.length)
 		{
 			final RDN rdn = rdns[0];
 			return IETFUtils.valueToString(rdn.getFirst().getValue());

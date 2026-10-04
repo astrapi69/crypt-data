@@ -32,7 +32,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
 import io.github.astrapi69.crypt.data.factory.KeyStoreFactory;
-import io.github.astrapi69.file.create.FileInfo;
+import io.github.astrapi69.file.create.model.FileInfo;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;

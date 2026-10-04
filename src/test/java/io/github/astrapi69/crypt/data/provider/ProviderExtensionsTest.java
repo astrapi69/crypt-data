@@ -25,6 +25,7 @@
 package io.github.astrapi69.crypt.data.provider;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.Provider;
 
@@ -35,6 +36,26 @@ import org.junit.jupiter.api.Test;
  */
 class ProviderExtensionsTest
 {
+
+	/**
+	 * Test method proving that {@link ProviderExtensions} is a pure static utility: the class is
+	 * final and every public method is static
+	 */
+	@Test
+	void publicApiIsStatic()
+	{
+		assertTrue(java.lang.reflect.Modifier.isFinal(ProviderExtensions.class.getModifiers()));
+		java.lang.reflect.Method[] methods = ProviderExtensions.class.getDeclaredMethods();
+		assertTrue(methods.length > 0);
+		for (java.lang.reflect.Method method : methods)
+		{
+			if (java.lang.reflect.Modifier.isPublic(method.getModifiers()))
+			{
+				assertTrue(java.lang.reflect.Modifier.isStatic(method.getModifiers()),
+					method.getName() + " must be static");
+			}
+		}
+	}
 
 	/**
 	 * Test method for {@link ProviderExtensions#getSupportedProviders()}

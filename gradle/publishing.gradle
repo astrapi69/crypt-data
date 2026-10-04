@@ -60,21 +60,40 @@ publishing {
             }
         }
     }
-    repositories {
-        maven {
-            credentials {
-                username System.getenv("$projectRepositoriesUserNameKey") ?: project.property("$projectRepositoriesUserNameKey")
-                password System.getenv("$projectRepositoriesPasswordKey") ?: project.property("$projectRepositoriesPasswordKey")
-            }
-            def releasesRepoUrl = "$projectRepositoriesReleasesRepoUrl" as Object
-            def snapshotsRepoUrl = "$projectRepositoriesSnapshotsRepoUrl" as Object
-            url = releaseVersion ? releasesRepoUrl : snapshotsRepoUrl
-        }
+}
+
+// Central Portal publishing. This uses the per-project "com.gradleup.nmcp" plugin rather than the
+// "com.gradleup.nmcp.settings" one: crypt-data is a single-project build, so there is nothing to
+// aggregate, and the settings plugin's aggregation wiring passes a Project as a dependency notation
+// (DefaultNmcpSettings.kt:37), which Gradle 10 removes.
+nmcp {
+    publishAllPublicationsToCentralPortal {
+        // Generate a user token at https://central.sonatype.com/ (Account -> Generate User Token).
+        // This is NOT the legacy OSSRH username/password - the Portal Publisher API requires a
+        // dedicated token pair.
+        //
+        // CI passes the token through the environment. A release prepared by hand reads it from
+        // centralUsername / centralPassword in ~/.gradle/gradle.properties instead, so the token
+        // never has to be exported into a shell or typed onto a command line.
+        username = System.getenv("CENTRAL_PORTAL_TOKEN_USERNAME")
+            ?: project.findProperty("centralUsername") ?: ""
+        password = System.getenv("CENTRAL_PORTAL_TOKEN_PASSWORD")
+            ?: project.findProperty("centralPassword") ?: ""
+        publishingType = "USER_MANAGED"
     }
 }
 
 signing {
     if (releaseVersion) {
+        def signingKey = System.getenv("GPG_PRIVATE_KEY")
+        def signingPassphrase = System.getenv("GPG_PASSPHRASE")
+        if (signingKey && signingPassphrase) {
+            useInMemoryPgpKeys(signingKey, signingPassphrase)
+        }
+        else if (!project.hasProperty("signing.keyId")) {
+            // fall back to the local gpg command with the key from signing.gnupg.keyName
+            useGpgCmd()
+        }
         sign publishing.publications.mavenJava
     }
 }

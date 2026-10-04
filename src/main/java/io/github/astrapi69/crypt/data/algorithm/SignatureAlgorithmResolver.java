@@ -44,7 +44,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Level;
 
-import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.operator.OperatorCreationException;
 
@@ -66,6 +65,10 @@ import lombok.extern.java.Log;
 @Log
 public class SignatureAlgorithmResolver
 {
+
+	private SignatureAlgorithmResolver()
+	{
+	}
 
 	/**
 	 * Retrieves a map of supported signature algorithms for a specified cryptographic service The
@@ -176,11 +179,11 @@ public class SignatureAlgorithmResolver
 		try
 		{
 			// Attempt to create the certificate using the given signature algorithm
-			X509Certificate certificate = newX509Certificate(certificateInfo);
+			newX509Certificate(certificateInfo);
 
 			// If certificate creation is successful and no exception was thrown, the algorithm is
 			// valid
-			return certificate != null;
+			return true;
 		}
 		catch (IllegalArgumentException e)
 		{
@@ -202,26 +205,6 @@ public class SignatureAlgorithmResolver
 	 */
 	private static class CertificateTestDataFactory
 	{
-
-		/**
-		 * Generates a new {@link X500Name} for the issuer with a common name of "Test Issuer"
-		 *
-		 * @return a new {@link X500Name} instance representing the issuer
-		 */
-		public static X500Name newIssuerX500Name()
-		{
-			return new X500Name("CN=Test Issuer");
-		}
-
-		/**
-		 * Generates a new {@link X500Name} for the subject with a common name of "Test Subject"
-		 *
-		 * @return a new {@link X500Name} instance representing the subject
-		 */
-		public static X500Name newSubjectX500Name()
-		{
-			return new X500Name("CN=Test Subject");
-		}
 
 		/**
 		 * Creates a new {@link DistinguishedNameInfo} for the issuer with predefined attributes

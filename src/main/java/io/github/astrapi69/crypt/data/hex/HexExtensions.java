@@ -24,21 +24,31 @@
  */
 package io.github.astrapi69.crypt.data.hex;
 
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.util.HexFormat;
 import java.util.Objects;
-
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 
 /**
  * The class {@link HexExtensions} provides methods for encode and decode hex encoded byte or char
  * arrays and {@link String} objects
+ * <p>
+ * Built on {@link HexFormat} from the JDK. Decoding accepts upper and lower case digits and refuses
+ * anything else - an odd number of digits or a character that is no hex digit - with an
+ * {@link IllegalArgumentException} that says why. No type of a third-party library appears on this
+ * API (#51).
  */
 public final class HexExtensions
 {
 	/** A char array from the hexadecimal digits */
 	private static final char[] HEXADECIMAL_DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
 			'9', 'A', 'B', 'C', 'D', 'E', 'F' };
+
+	/** Lower case hex digits, no delimiter - also used for decoding, which ignores the case */
+	private static final HexFormat LOWER_CASE = HexFormat.of();
+
+	/** Upper case hex digits, no delimiter */
+	private static final HexFormat UPPER_CASE = LOWER_CASE.withUpperCase();
 
 	private HexExtensions()
 	{
@@ -65,12 +75,12 @@ public final class HexExtensions
 	 *            the array of characters
 	 * @return A byte array that contains the binary data decoded from the given char array
 	 *
-	 * @throws DecoderException
+	 * @throws IllegalArgumentException
 	 *             is thrown if an odd number or illegal of characters is supplied
 	 */
-	public static byte[] decodeHex(final char[] data) throws DecoderException
+	public static byte[] decodeHex(final char[] data)
 	{
-		return Hex.decodeHex(data);
+		return LOWER_CASE.parseHex(CharBuffer.wrap(data));
 	}
 
 	/**
@@ -80,10 +90,10 @@ public final class HexExtensions
 	 *            the hexadecimal {@link String} object
 	 * @return the decoded {@link String}
 	 *
-	 * @throws DecoderException
+	 * @throws IllegalArgumentException
 	 *             is thrown if an odd number or illegal of characters is supplied
 	 */
-	public static String decodeHex(final String hexString) throws DecoderException
+	public static String decodeHex(final String hexString)
 	{
 		byte[] decodedBytes = HexExtensions.decodeHex(hexString.toCharArray());
 		String decodedString = HexExtensions.decodeHex(decodedBytes);
@@ -96,12 +106,12 @@ public final class HexExtensions
 	 * @param data
 	 *            the array of characters
 	 * @return the decoded string
-	 * @throws DecoderException
+	 * @throws IllegalArgumentException
 	 *             is thrown if an odd number or illegal of characters is supplied
 	 */
-	public static String decodeHexToString(final char[] data) throws DecoderException
+	public static String decodeHexToString(final char[] data)
 	{
-		return new String(Hex.decodeHex(data));
+		return new String(decodeHex(data));
 	}
 
 	/**
@@ -130,7 +140,7 @@ public final class HexExtensions
 	 */
 	public static char[] encodeHex(final byte[] data, final boolean lowerCase)
 	{
-		return Hex.encodeHex(data, lowerCase);
+		return (lowerCase ? LOWER_CASE : UPPER_CASE).formatHex(data).toCharArray();
 	}
 
 	/**

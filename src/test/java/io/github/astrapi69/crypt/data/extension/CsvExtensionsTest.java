@@ -27,16 +27,50 @@ package io.github.astrapi69.crypt.data.extension;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
+import io.github.astrapisixtynine.csv.CsvExtensions;
 
+/**
+ * The unit test class for the class {@link TestCsvExtensions}
+ */
 class CsvExtensionsTest
 {
 
+	/**
+	 * Test method for {@link CsvExtensions#sortCsv(Path, Supplier)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	void sortCsvFileWithSupplier() throws IOException
+	{
+		File validCsvFile = FileFactory.newFile(PathFinder.getSrcTestResourcesDir(),
+			"invalid_key_pair_algorithms.csv");
+		// Example usage with a CSV file path
+		Path csvFilePath = validCsvFile.toPath();
+
+		// Example usage with algorithm and keysize as sorting criteria
+		Supplier<Comparator<String[]>> comparatorSupplier = () -> Comparator
+			.comparing((String[] columns) -> columns[0]) // Sort by 'algorithm'
+			.thenComparingInt(columns -> Integer.parseInt(columns[1])); // Then by 'keysize'
+
+		CsvExtensions.sortCsv(csvFilePath, comparatorSupplier);
+	}
+
+	/**
+	 * Test method for {@link CsvExtensions#sortCsvByAlgorithmAndKeysize(Path)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	@Test
 	void sortCsvByAlgorithmAndKeysize() throws IOException
 	{
@@ -46,9 +80,14 @@ class CsvExtensionsTest
 		// Example usage with a CSV file path
 		Path csvFilePath = validCsvFile.toPath();
 		CsvExtensions.sortCsvByAlgorithmAndKeysize(csvFilePath);
-		System.out.println("CSV file sorted successfully.");
 	}
 
+	/**
+	 * Test method for {@link CsvExtensions#sortCsvByKeypairAndSignatureAlgorithm(Path)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	@Test
 	@Disabled
 	void sortCsvByKeypairAndSignatureAlgorithm() throws IOException

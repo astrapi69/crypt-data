@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.Security;
@@ -137,6 +138,37 @@ public class EncryptedPrivateKeyReaderTest
 		Security.addProvider(new BouncyCastleProvider());
 		assertThrows(PEMException.class,
 			() -> EncryptedPrivateKeyReader.getKeyPair(nonEncryptedPemFile, password));
+	}
+
+	/**
+	 * Test method for {@link EncryptedPrivateKeyReader#getKeyPair(File, String)} with a file that
+	 * holds no pem object at all
+	 * <p>
+	 * The {@code PEMParser} returns null for such a file. The method is declared to signal an
+	 * unusable file with a {@link PEMException} and must not fail with a
+	 * {@link NullPointerException} while composing the message of that exception
+	 */
+	@Test
+	public void testGetKeyPairWithFileThatHoldsNoPemObject() throws IOException
+	{
+		File temporaryDirectory;
+		File noPemObjectFile;
+		PEMException exception;
+
+		Security.addProvider(new BouncyCastleProvider());
+		temporaryDirectory = Files.createTempDirectory("no-pem-object").toFile();
+		noPemObjectFile = new File(temporaryDirectory, "not-a-pem-file.txt");
+		Files.writeString(noPemObjectFile.toPath(), "this is definitely not a pem object");
+
+		exception = assertThrows(PEMException.class,
+			() -> EncryptedPrivateKeyReader.getKeyPair(noPemObjectFile, password));
+
+		assertTrue(exception.getMessage().contains("No PEM object found"),
+			"expected the message to name the missing pem object but was: "
+				+ exception.getMessage());
+
+		assertTrue(noPemObjectFile.delete());
+		assertTrue(temporaryDirectory.delete());
 	}
 
 	/**

@@ -27,8 +27,8 @@ package io.github.astrapi69.crypt.data.model;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.InvocationTargetException;
 import java.security.KeyPair;
@@ -87,17 +87,20 @@ class KeyPairInfoTest
 	}
 
 	/**
-	 * Test method for {@link KeyPairInfo#isValid(KeyPairInfo)} with invalid data
+	 * Test method for {@link KeyPairInfo#isValid(KeyPairInfo)} with invalid data: an unknown
+	 * algorithm name is simply not valid for creation - it must be reported as {@code false}, not
+	 * escape as an exception from the key-size probing. (This test used to expect an
+	 * {@link InvocationTargetException} here, which was the symptom of the inverted registered
+	 * algorithm check in {@code isValid}, not the contract.)
 	 */
 	@Test
 	@DisplayName("Test isValid method with invalid data")
-	void testIsValidWithInvalidData()
+	void testIsValidWithInvalidData() throws Exception
 	{
 		KeyPairInfo invalidKeyPairInfo = KeyPairInfo.builder().algorithm("InvalidAlgorithm")
 			.keySize(512).build();
 
-		assertThrows(InvocationTargetException.class,
-			() -> KeyPairInfo.isValid(invalidKeyPairInfo));
+		assertFalse(KeyPairInfo.isValid(invalidKeyPairInfo));
 	}
 
 	/**

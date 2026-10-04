@@ -43,11 +43,15 @@ public class CryptoAlgorithm implements Algorithm
 
 	/**
 	 * Private constructor
-	 * 
+	 * <p>
+	 * No null check on the parameter here on purpose: the only caller is the factory method
+	 * {@link #newAlgorithm(String)}, whose {@code @NonNull} parameter already rejects null with the
+	 * very same {@link NullPointerException} message
+	 *
 	 * @param algorithm
 	 *            the algorithm
 	 */
-	private CryptoAlgorithm(@NonNull final String algorithm)
+	private CryptoAlgorithm(final String algorithm)
 	{
 		this.algorithm = algorithm;
 	}

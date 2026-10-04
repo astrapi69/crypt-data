@@ -89,7 +89,7 @@ class KeyExtensionsTest
 		System.out.println(formatKey);
 
 		KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA");
-		kpg.initialize(512); // 512 is the keysize
+		kpg.initialize(2048); // 2048 is the keysize; 512 was below the brute force floor
 		KeyPair kp = kpg.generateKeyPair();
 		PublicKey pubk = kp.getPublic();
 		PrivateKey prvk = kp.getPrivate();
@@ -131,7 +131,7 @@ class KeyExtensionsTest
 	void testKeyAttributes() throws NoSuchAlgorithmException
 	{
 		KeyPairGenerator kpg = KeyPairGenerator.getInstance("DSA");
-		kpg.initialize(512); // 512 is the keysize
+		kpg.initialize(2048); // 2048 is the keysize; 512 was below the brute force floor
 		KeyPair kp = kpg.generateKeyPair();
 		PublicKey pubk = kp.getPublic();
 		PrivateKey prvk = kp.getPrivate();

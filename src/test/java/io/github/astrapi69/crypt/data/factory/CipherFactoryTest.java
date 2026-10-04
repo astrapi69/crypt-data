@@ -219,6 +219,7 @@ public class CipherFactoryTest
 	 *             if initialization of the cipher object fails
 	 */
 	@Test
+	@SuppressWarnings("deprecation")
 	public void testNewPBECipher() throws NoSuchAlgorithmException, InvalidKeySpecException,
 		NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException
 	{

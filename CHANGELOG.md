@@ -1,6 +1,398 @@
 ## Change log
 ----------------------
 
+Version 13.0
+-------------
+
+BREAKING:
+
+- PrivateKeyWriter refuses KeyFormat.PKCS_1 for a private key that has no traditional form of
+  its own - the edwards and montgomery families, Diffie-Hellman and the post-quantum families -
+  with an InvalidKeySpecException naming the algorithm, before anything is written. It used to
+  write the PKCS#8 file byte for byte and return normally, so a caller got a format it had not
+  asked for and could not tell. Merged to develop on 2026-09-06 and deliberately left out of the
+  12.3 release (release/12.3 reverts it), which is why this is 13.0 (#42)
+- HexExtensions no longer declares org.apache.commons.codec.DecoderException. decodeHex(char[]),
+  decodeHex(String) and decodeHexToString(char[]) are built on java.util.HexFormat and refuse input
+  that is not hexadecimal with an IllegalArgumentException naming the reason ("string length not
+  even: 3", "not a hexadecimal digit: "z" = 122"). commons-codec is an implementation dependency,
+  so a consumer could neither catch the old type nor compile a call without adding commons-codec
+  itself at a guessed version. Source-incompatible for a caller that catches DecoderException
+  explicitly: that catch no longer compiles and goes. The encoding methods produce the same
+  output as before, through HexFormat as well (#51)
+
+ADDED:
+
+- HashExtensions#merkleTreeHash(List<byte[]>, HashAlgorithm): the Merkle Tree Hash of RFC 6962
+  section 2.1, with 0x00 in front of every leaf and 0x01 in front of every inner node, and the hash
+  of nothing for an empty list. Matches the Certificate Transparency reference vectors for one to
+  eight leaves. It reads its input without consuming it (#68)
+
+DEPRECATED:
+
+- HashExtensions#getMerkleRootHash: leaves and inner nodes hash alike, so a list of concatenated
+  child hashes is a second preimage of the leaves below it; an empty queue gives null; and the
+  caller's queue is consumed. Kept unchanged, because changing it would change every existing
+  Block hash - whether Block moves to merkleTreeHash is a decision of its own (#68)
+
+CHANGED:
+
+- build only: an API compatibility gate (apiCompatibility, part of check). japicmp compares the
+  jar with the last release on Maven Central (apiBaselineVersion in gradle.properties); within the
+  same major a binary or source incompatibility fails the build, with a higher major it is
+  reported in build/reports/japicmp. It names exactly the #42 and #51 changes when this code is
+  built as 12.4-SNAPSHOT (#70)
+
+FIXED:
+
+- Block.data was outside the block hash: setData left getHash() where it was, so two blocks that
+  differed only in their data had the same hash. The hash now covers the data, and setData
+  recomputes it. A block without data keeps exactly the hash it had before (the data is appended
+  after a marker byte only when present), so existing chains without data stay valid; a block
+  with data hashes differently than before, which is the fix. equals now compares the data too;
+  hashCode is unchanged. A new constructor Block(previousBlockHash, transactions, tries,
+  timestamp, data) takes the timestamp as a parameter, so two blocks with the same content have
+  the same hash and a third party can recompute it. getLeadingZerosCount() keeps counting zero
+  BYTES - one difficulty step is a factor of 256 - and now says so in its Javadoc. (#55)
+- BlockTest, AddressTest and TransactionTest register Bouncy Castle themselves. They read a PEM
+  key in their setup and relied on another test class having registered the provider first: run
+  alone, 23 of their tests failed with "no such provider: BC" while CI was green on the same
+  commit. A result that depends on the order the JVM runs classes in is not a result about the
+  code (#56)
+- two key files that reached develop through #58 are removed and ignored. They were test output
+  left in a working tree - the same key pair this repository has published as a fixture since
+  2019, in two other formats - and they are what the coverage upload and a scanner both reacted
+  to (#63)
+
+
+Version 12.3
+-------------
+
+CHANGED:
+
+- dependency and plugin versions raised through the version catalog, catching up with mystic-crypt:
+  checksum-up 3.1 to 3.2, randomizer 10.3 to 10.4, silly-collection 28.1 to 28.2, test-object 9 to
+  9.1, jsoup 1.23.1 to 1.23.2, lombok 1.18.46 to 1.18.48, and the build plugins nmcp 1.6.1 to 1.6.2,
+  spotless 8.10.0 to 8.10.2 and the PIT engine 1.25.9 to 1.30.0. guava stays on 33.7.1-jre: the
+  update tool proposed '999.0.0-HEAD-jre-SNAPSHOT', which is guava's placeholder and not a release
+- the changelog gained the section for 7.11 that it never had, reconstructed from the commits
+- build only: tagRelease no longer comes from the grgit plugin. It is a plain 'git tag' Exec task
+  in gradle/tagging.gradle, the same one mystic-crypt uses, and the org.ajoberstar.grgit plugin is
+  dropped from build.gradle and the version catalog. The file had been sitting in the working tree
+  uncommitted; wiring it without removing grgit fails, because both register a task named
+  tagRelease
+
+
+ADDED:
+
+- PrivateKeyExtensions#hasTraditionalForm(PrivateKey): whether asking for KeyFormat.PKCS_1 gives
+  something other than PKCS#8. RSA, DSA and EC have a traditional form of their own; the edwards
+  and montgomery families, DiffieHellman and the post-quantum families do not, and for those the
+  request was answered with the PKCS#8 file byte for byte and nothing said. The bytes were right -
+  PKCS#1 content under a PRIVATE KEY header is the defect #12 fixed - but the only way to find out
+  was to write the key twice and compare. A caller that offers the choice can now ask before
+  offering it. (#40)
+
+CHANGED:
+
+- update of dependency crypt-api to the new minor version 10.1
+
+- Every algorithm KeyPairGeneratorAlgorithm names is now driven through PrivateKeyWriter, across
+  both file formats and both key formats - 28 of the 30 the enum lists, the two that cannot
+  generate a key pair here being XDH, which needs a parameter spec to say which curve, and the
+  UNKNOWN placeholder. The set comes from the enum rather than a list written by hand, so an
+  algorithm added later joins the tests by existing, and a test asserts that exactly those two are
+  left out. X448, ML-KEM and ML-DSA had never been written by any test; RSASSA-PSS turned out to
+  have a traditional form and had not been asked. (#40)
+
+
+Version 12.2
+-------------
+
+FIXED:
+
+- CertFactory could not certify an ML-DSA key: naming Bouncy Castle for the content signer makes it
+  refuse a key the JDK generated, with "unknown private key passed to ML-DSA". No single provider
+  covers the set - Bouncy Castle knows EC curves the JDK does not implement, prime239v1 and
+  secp256k1 among them, and the JDK generates post-quantum keys Bouncy Castle will not sign with -
+  so the signer asks Bouncy Castle first and lets whichever provider does hold the key answer when
+  it cannot. All four signer sites share that one method now. (#33)
+
+  Two of the three overloads had never been able to certify an ML-DSA key; the third could until
+  12.1, where #28 made it match the others in the wrong direction. mystic-crypt's keystore command
+  is the caller that broke.
+
+
+Version 12.1
+-------------
+
+ADDED:
+
+- PrivateKeyExtensions#toPkcs8PemFormat(PrivateKey), the counterpart of toPemFormat: the PKCS#8
+  encoding under the PRIVATE KEY header that names it
+
+CHANGED:
+
+- build only: the Central Portal token is read from centralUsername / centralPassword in
+  ~/.gradle/gradle.properties when the environment does not carry it, so a release prepared by
+  hand no longer needs the token exported into a shell. CI keeps precedence.
+- PrivateKeyExtensions#toPemFormat now says what it does: the traditional form of the key's own
+  algorithm. Its javadoc claimed PKCS#1 for every key, and a key with no traditional form of its
+  own was written under the PRIVATE KEY header - which means PKCS#8 - over content that had the
+  PKCS#8 wrapper stripped. Such a key now keeps its PKCS#8 encoding, so the header and the bytes
+  agree.
+- PrivateKeyExtensions#generatePublicKey(PrivateKey) derives the public key for every algorithm
+  this library can generate a key pair for - RSA, DSA, EC on any curve, Ed25519, Ed448, X25519,
+  X448, ML-DSA, ML-KEM and DiffieHellman - instead of answering null for everything but RSA. A null
+  meant three things at once: not supported, generation failed, and there is none. What cannot be
+  derived is now refused with a message that names the algorithm and lists what can. SLH-DSA is
+  among what cannot: its private key parameters hand out the public key as bytes and
+  SLHDSAPublicKeyParameters has no public constructor to make parameters of them again. As a
+  consequence KeyPairFactory#newKeyPair(PrivateKey) no longer returns a key pair whose public half
+  is null. (#25)
+
+FIXED:
+
+- PrivateKeyWriter#write(..., KeyFileFormat.PEM, KeyFormat.PKCS_8) wrote PKCS#1, for every key
+  type. It routed through toPemFormat, which is a PKCS#1 method, so the caller got the traditional
+  form under the traditional header - and for a key with no traditional form, PKCS#1 content under
+  the PKCS#8 header, a file readable as neither. It now writes the PKCS#8 encoding under the
+  PRIVATE KEY header. (#12)
+- PrivateKeyWriter#write(..., KeyFileFormat.PEM, KeyFormat.PKCS_1) labelled every key
+  RSA PRIVATE KEY, because it called fromPKCS1ToPemFormat, which takes bytes rather than a key and
+  so cannot tell the algorithm. An EC or DSA key was written under the wrong header. It now goes
+  through toPemFormat, which has the key and picks the header that belongs to it. (#12)
+- Reading a PEM private key assumed RSA, so a valid EC, DSA, Ed25519, Ed448, X25519 or DH key was
+  refused and PrivateKeyReader#validatePrivateKey called it invalid. A PKCS#8 file names its
+  algorithm in its algorithm identifier and a traditional file names it in its header, so the
+  algorithm is now read from the file. A file that holds no readable private key is still refused,
+  and the refusal now names the file and what was found there instead. (#14)
+- A DSA key written with KeyFormat.PKCS_1 carried its private exponent alone. A DSA key is a number
+  in a group, and the group - p, q and g - lives in the algorithm identifier of the PKCS#8 wrapper,
+  so taking the wrapper off dropped it and left a number no reader could make a key out of again.
+  PrivateKeyExtensions#toPKCS1Format now returns the structure OpenSSL writes under the
+  DSA PRIVATE KEY header, which carries the group and the matching public value. (#15)
+- PrivateKeyReader#readPemPrivateKey(String) assumed RSA, the sibling of #14 in the overload that
+  takes a string, and refused the PEM format its name and its javadoc promise: only a bare base64
+  body was read, because Base64.decode skips the letters of a BEGIN line and decodes them into the
+  body. A whole PEM document is now read as one, for every algorithm and for both the traditional
+  and the PKCS#8 encoding, and a bare base64 body is read as PKCS#8 first and as the traditional
+  RSA body that readPemFileAsBase64 produces second. RSA passed before only because the Bouncy
+  Castle RSA key factory also accepts a raw PKCS#1 structure through a PKCS#8 key
+  specification. (#19)
+- Reading a public key assumed RSA, so a key this library had just written was unreadable for six
+  of seven algorithms - and unlike the private key side, where a fallback list saved the DER path,
+  both PEM and DER failed. PublicKeyReader#readPemPublicKey(File) and #readPublicKey(byte[]) now
+  read the algorithm from the SubjectPublicKeyInfo that carries it. A file that holds no public key
+  is refused by name, and a private key file is refused rather than having its public half taken
+  out of it. (#23)
+- CertFactory#newX509CertificateV3(KeyPair, X500Name, int, X500Name, String, Extension...) built
+  its content signer without naming Bouncy Castle, so the JDK provider answered and refused every
+  EC curve it does not implement. secp256r1, secp384r1 and secp521r1 passed; prime239v1 and
+  secp256k1 did not - and prime239v1 is what Bouncy Castle produces when no curve is named at all,
+  so the plainest EC key pair could not be certified. The other three signer sites in the class
+  named the provider already; this one now does too. (#28)
+- A password protected Ed25519, Ed448, X25519 or DH private key was written but came back as null.
+  EncryptedPrivateKeyReader walked a fixed list of four algorithms - RSA, DiffieHellman, DSA, EC -
+  and turned running out of guesses into a null, which is also what a wrong password and a file
+  holding no key at all produced, so the three could not be told apart. The decrypted content is a
+  PKCS#8 structure that names its own algorithm, so it is read from there, and each of the three
+  failures now says which one it is. The decryption no longer goes through
+  EncryptedPrivateKeyInfo#getKeySpec(Cipher), which refuses a DiffieHellman key outright with
+  "Cannot retrieve the PKCS8EncodedKeySpec". (#24)
+
+
+Version 12.0.0
+-------------
+
+CHANGED:
+
+- module-info.java now exports the io.github.astrapi69.crypt.data.key package
+  (KeyStoreExtensions, CertificateExtensions and the other key helpers), so JPMS consumers
+  such as the mystic-crypt CLI can use it - previously only classpath consumers could.
+  Also published standalone as release 11.2 (branch release/11.2: 11.1 plus only this export).
+- BREAKING: three public utility classes now declare an explicit private constructor, removing the
+  implicit public one they had before: SharedSecretExtensions, SignatureAlgorithmResolver (both
+  public non-final, so instantiation AND subclassing break) and ProviderExtensions (already final,
+  so only instantiation breaks). All three hold nothing but static methods; nothing in this repo
+  instantiated them. This is what raises this release to 12.0.0.
+- PrivateKeyReader#getPrivateKey(byte[]) and EncryptedPrivateKeyReader#getPrivateKey(File, String)
+  no longer route their result through a local Optional variable. Both walk a list of candidate
+  algorithms and returned on the first success, so the local could only ever hold Optional.empty()
+  at the fall-through; each branch now returns Optional.of(...) directly and the method ends in
+  Optional.empty(). Internal only, no behaviour change.
+- test quality: 100% line and 100% branch coverage (also 100% instruction, complexity, method and
+  class), up from 99.05%/98.28%, and a 100.00% PIT mutation score (779 of 779 mutants killed, no
+  survivors), up from 98%. Coverage was reached by deleting dead code - null guards on values that
+  cannot be null, two uncalled methods in a private nested class, a 26-line duplicate of an
+  existing method - rather than by adding exclusions or tests without assertions. The last three
+  surviving mutants were cleared in the round documented below, not argued away. Measured on the
+  release tree: 1019 tests. See mystic-crypt/docs/TESTING.md for the strategy and
+  mystic-crypt/docs/COVERAGE_EXCEPTIONS.md for the per-mutant reasoning.
+
+FIXED:
+
+- EncryptedPrivateKeyReader#getKeyPair(File, String) threw a NullPointerException for any file that
+  contains no PEM object, because PEMParser#readObject() returns null and the result was
+  dereferenced. It now throws PEMException naming the file. PEMException was already declared in the
+  method's throws clause and javadoc.
+- EncryptedPrivateKeyReader#getKeyPair(File, String) leaked a file descriptor for every malformed
+  PEM file (issue #7). The parser was closed with a plain call after readObject(), so a body that
+  makes readObject() throw never reached the close and the underlying FileReader stayed open until
+  the garbage collector reclaimed it - a caller validating a batch of key files leaked one
+  descriptor per rejected file. It now uses try-with-resources, matching PemObjectReader, which was
+  already the only other PEM parser site in this library and already did so. The regression test
+  counts the /proc/self/fd entries pointing at the parsed file and skips itself where that
+  directory does not exist.
+
+
+Version 11.2
+-------------
+
+CHANGED:
+
+- module-info.java exports the io.github.astrapi69.crypt.data.key package. Cut from the release/11.2
+  branch as 11.1 plus only this export, so JPMS consumers could pick it up without waiting for the
+  breaking changes queued for 12.0.0.
+
+
+Version 11.1
+-------------
+
+CHANGED:
+
+- build only, no library changes: the signing configuration falls back to the local gpg command
+  when no key is in the environment, so a release can be prepared by hand, and the README points
+  contributors at the shared testing strategy in mystic-crypt/docs/TESTING.md.
+
+
+Version 11.0.0
+-------------
+
+CHANGED:
+
+- BREAKING: minimum required JDK raised from 21 to 25 (LTS), matching crypt-api 10.0.0 and
+  mystic-crypt 11.0.0. Published bytecode now targets JDK 25, so consumers on JDK 21-24 can no
+  longer load this artifact - hence the major version bump. CI's setup-java updated to match.
+- requires crypt-api 10.0.0 (itself JDK 25; no API changes)
+- Maven Central publishing switched from AUTOMATIC to USER_MANAGED: CI uploads and validates the
+  deployment, release to Central is approved manually in the Central Portal.
+- test quality: line coverage 90.7% -> 99.05%, branch coverage 71.0% -> 98.28%, PIT mutation
+  score 87% -> 98% (785/797 mutants killed, test strength 99%); every remaining uncovered line and
+  surviving mutant has a stated reason. PIT now also emits mutations.xml. The shared testing
+  strategy is documented in mystic-crypt/docs/TESTING.md.
+
+FIXED:
+
+- KeyPairInfo#isValid(KeyPairInfo) rejected every correctly-named registered algorithm: the
+  registered-KeyPairGenerator check was inverted, so "RSA"/2048 and "EC"/256 were reported
+  invalid while unknown or mis-cased names fell through into key-size probing and escaped as an
+  InvocationTargetException (which the old KeyPairInfoTest had enshrined as expected). Unknown
+  names now simply return false.
+- Pkcs11FactoryTest skipped incorrectly: its guard used new File(configPath).exists(), which is
+  true for the empty string Gradle forwards when PKCS11_TEST_CONFIG is unset, so the tests ran
+  against an empty path and failed instead of skipping. The guard now requires a non-blank path
+  that isFile().
+
+Version 10.3
+-------------
+
+ADDED:
+
+- new class KemFactory for generic key encapsulation, wrapping the JDK-standard
+  javax.crypto.KEM API (JDK 21+); used for ML-KEM (post-quantum key exchange)
+- new class Pkcs11Factory for configuring the JDK's built-in SunPKCS11 provider against a
+  PKCS#11 module (HSM, smart card, or software token) and opening its keystore; verified
+  end-to-end against a real SoftHSM2 test token (provider config, keystore open, on-token EC
+  keypair generation, sign/verify)
+
+CHANGED:
+
+- fixed SignatureFactory#verify to return false instead of throwing SignatureException for
+  malformed/tampered signature bytes that fail to decode to a valid point
+- updated dependencies to their latest available versions (bcpkix/bcprov 1.85, commons-*,
+  file-worker 19.0, guava, junit-jupiter/junit-platform-launcher 6.1.3, lombok, mockito,
+  randomizer, silly-*, plus several Gradle plugins); pinned jacoco to 0.8.15
+- fixed module-info.java for silly-strings/file-worker's renamed JPMS modules and removed the
+  now-unused org.checkerframework.checker.qual requirement (guava 33.7.1-jre dropped that
+  dependency in favor of jspecify)
+- updated FileInfo/FileCreationState imports to their new package following the file-worker
+  19.0 move
+- added PIT mutation testing (opt-in, run via `./gradlew pitest`), not wired into check/build
+
+Version 10.2
+-------------
+
+ADDED:
+
+- new class HkdfExtensions for HKDF (RFC 5869) key derivation, e.g. to properly derive a
+  symmetric key from a raw X25519/ECDH shared secret instead of using it directly
+- new class SignatureFactory for generic sign/verify with any java.security.Signature
+  algorithm (e.g. Ed25519, natively supported by the JDK since JDK 15)
+- new class KeyWrapFactory for AES Key Wrap (RFC 3394): wrap/unwrap a key with another key,
+  with an implicit integrity check on unwrap. Natively supported by the JDK (SunJCE), no
+  Bouncy Castle needed.
+- new class ShamirSecretSharingFactory for Shamir's Secret Sharing: split a secret (e.g. a
+  symmetric key) into n shares of which any threshold shares reconstruct it, backed by
+  Bouncy Castle's org.bouncycastle.crypto.threshold.ShamirSecretSplitter. Note the total
+  share count must not exceed the secret length in bytes (a constraint of the underlying BC
+  implementation), and combining fewer than threshold shares silently yields a wrong secret
+  rather than failing (Shamir's scheme has no built-in integrity check)
+- new explicit direct dependency on bcprov-jdk18on (was previously only pulled in
+  transitively via bcpkix-jdk18on)
+
+CHANGED:
+
+- deprecated CipherFactory#newPBECipher(char[], int, String): this overload silently derives
+  the cipher with the fixed, publicly known CompoundAlgorithm.SALT and the weak
+  CompoundAlgorithm.ITERATIONCOUNT (19) instead of a caller-chosen salt/iteration count; use
+  the 5-arg overload with an explicit, randomly generated salt and a modern iteration count
+  instead
+- fixed SignatureFactory#verify to return false instead of throwing SignatureException for
+  malformed/tampered signature bytes that fail to decode to a valid point (JDK's Ed25519
+  verifier throws in that case rather than just returning false)
+- updated dependencies to their latest available versions: bcpkix-jdk18on/bcprov-jdk18on 1.85,
+  commons-codec 1.22.1, commons-csv 1.14.1, commons-io 2.22.0, commons-lang3 3.20.0,
+  file-worker 19.0, guava 33.7.1-jre, jobj-core 9.1, jsoup 1.23.1, junit-jupiter/
+  junit-platform-launcher 6.1.3, lombok 1.18.46, mockito-core 5.23.0, randomizer 10.3,
+  silly-collection 28.1, silly-io 3.6, silly-strings 9.2, plus the grgit, lombok and
+  version-catalog-update Gradle plugins; pinned jacoco to 0.8.15
+- fixed module-info.java: silly-strings/file-worker module names changed with their version
+  bumps (now io.github.astrapisixtynine.silly.strings / io.github.astrapisixtynine.file.worker),
+  and the now-unused org.checkerframework.checker.qual requirement was removed since guava
+  33.7.1-jre no longer depends on checker-qual (it uses jspecify instead)
+- updated FileInfo/FileCreationState imports to their new location
+  (io.github.astrapi69.file.create.model) following the file-worker 19.0 package move
+
+Version 10.1
+-------------
+
+ADDED:
+
+- new test dependency csv-worker in version 1.0
+
+CHANGED:
+
+- update gradle to new version 8.10.2
+- update of dependency commons-io dependency version to 2.17.0
+- update of dependency file-worker to new version to 17.3
+- update of dependency guava version to new version 33.3.1-jre
+- update of test dependency junit-jupiter in version 5.11.1
+- update of test dependency junit-platform-launcher in version 1.11.1
+- upgrade Bouncy Castle from bcpkix-jdk15on 1.70 (EOL) to bcpkix-jdk18on 1.80, fixing known BC
+  CVEs (e.g. CVE-2024-29857)
+- enabled the -Xlint:deprecation and -Xlint:unchecked compiler flags
+- upgrade gradle wrapper to new version 9.7.0
+- bumped GitHub Actions to current major versions (checkout@v7, setup-java@v5,
+  setup-gradle@v6, codecov-action@v7) to drop the Node.js 20 deprecation warning
+
+FIXED:
+
+- broadened exception handling in KeySizeExtensions to catch RuntimeException instead of only
+  InvalidParameterException; BC 1.80's ML-KEM and composite-signature algorithms reject
+  plain int-based initialization via UnsupportedOperationException/IllegalArgumentException,
+  which the narrower catch let propagate
+
 Version 10
 -------------
 
@@ -288,6 +680,25 @@ CHANGED:
 - update of test dependency randomizer to new version 8.5
 - renamed package 'io.github.astrapi69.crypto.factories' to 'io.github.astrapi69.crypto.factory'
 - update of dependency crypt-api to new version to 7.7
+
+Version 7.11
+-------------
+
+ADDED:
+
+- new github workflow 'Java CI with Gradle' for build and test on push and pull request
+
+CHANGED:
+
+- update of dependency crypt-api to the new version 7.7
+- javadoc warnings resolved and imports organized
+
+Note: this section was written after the fact. 7.11 was released and is on Maven Central, but the
+changelog was never given an entry for it; the content above is reconstructed from the commits
+between RELEASE-7.11-SNAPSHOT and RELEASE-7.11. The crypt-api 7.7 bullet also appears under 7.11.1
+below, where it was recorded at the time - the commit is contained in both tags, but it shipped
+first in 7.11. The older entry is left as it stands rather than rewritten.
+
 
 Version 7.10
 -------------

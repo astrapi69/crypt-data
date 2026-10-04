@@ -34,6 +34,10 @@ import io.github.astrapi69.crypt.data.model.SharedSecretModel;
 public class SharedSecretExtensions
 {
 
+	private SharedSecretExtensions()
+	{
+	}
+
 
 	/**
 	 * Converts a {@link SharedSecretInfo} object to a {@link SharedSecretModel} object.

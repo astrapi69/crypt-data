@@ -64,12 +64,13 @@ public class BlockParameterizedTest
 		long tries, String data)
 	{
 		Block block = new Block();
+		// data first: setting it recomputes the hash (#55), which would overwrite the one set below
+		block.setData(data);
 		block.setHash(hash);
 		block.setMerkleRoot(merkleRoot);
 		block.setPreviousBlockHash(previousBlockHash);
 		block.setTimestamp(timestamp);
 		block.setTries(tries);
-		block.setData(data);
 
 		assertNotNull(block.getHash());
 		assertNotNull(block.getMerkleRoot());

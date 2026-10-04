@@ -48,6 +48,24 @@ public class CharacterObfuscationRulesTest
 {
 
 	/**
+	 * Test method for {@link CharacterObfuscationRules.CharacterObfuscationRulesBuilder#toString()}
+	 */
+	@Test
+	public void testRulesBuilderToString()
+	{
+		final Map<Character, Character> charmap = new HashMap<>();
+		charmap.put(Character.valueOf('1'), Character.valueOf('I'));
+		BiMap<Character, Character> obfuscationRules = HashBiMap.create(charmap);
+
+		CharacterObfuscationRules.CharacterObfuscationRulesBuilder builder = CharacterObfuscationRules
+			.rulesBuilder().obfuscationRules(obfuscationRules);
+
+		assertEquals("CharacterObfuscationRules.CharacterObfuscationRulesBuilder(obfuscationRules="
+			+ obfuscationRules + ")", builder.toString());
+		assertEquals(obfuscationRules, builder.build().getObfuscationRules());
+	}
+
+	/**
 	 * Test method for {@link CharacterObfuscationRules} constructors and builders
 	 */
 	@Test

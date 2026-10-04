@@ -35,9 +35,12 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
+import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
@@ -54,6 +57,22 @@ import io.github.astrapi69.meanbean.extension.MeanBeanExtensions;
  */
 public class AddressTest
 {
+
+	/**
+	 * Registers Bouncy Castle before this class reads a PEM key.
+	 * <p>
+	 * It used to rely on another test class having done it first: run alone, all of these tests
+	 * failed with "no such provider: BC", and whether they passed depended on the order the JVM
+	 * happened to run classes in (#56). Idempotent, so it does not matter how many classes do it.
+	 */
+	@BeforeAll
+	static void ensureBouncyCastle()
+	{
+		if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null)
+		{
+			Security.addProvider(new BouncyCastleProvider());
+		}
+	}
 
 	private File publickeyPemFile;
 	private PublicKey publicKey;

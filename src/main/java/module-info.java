@@ -27,19 +27,19 @@ module io.github.astrapisixtynine.crypt.data
 	requires org.bouncycastle.provider;
 	requires java.logging;
 	requires org.bouncycastle.pkix;
-	requires silly.strings;
-	requires file.worker;
+	requires io.github.astrapisixtynine.silly.strings;
+	requires io.github.astrapisixtynine.file.worker;
 	requires java.xml.bind;
-	requires io.github.astrapisixtynine.crypt.api;
+	requires io.github.astrapi69.crypt.api;
 	requires io.github.astrapisixtynine.throwable;
 	requires io.github.astrapisixtynine.silly.collection;
-	requires org.checkerframework.checker.qual;
 
 	exports io.github.astrapi69.crypt.data.algorithm;
 	exports io.github.astrapi69.crypt.data.blockchain;
 	exports io.github.astrapi69.crypt.data.factory;
 	exports io.github.astrapi69.crypt.data.hash;
 	exports io.github.astrapi69.crypt.data.hex;
+	exports io.github.astrapi69.crypt.data.key;
 	exports io.github.astrapi69.crypt.data.key.reader;
 	exports io.github.astrapi69.crypt.data.key.writer;
 	exports io.github.astrapi69.crypt.data.model;

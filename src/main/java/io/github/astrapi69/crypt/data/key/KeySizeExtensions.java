@@ -81,9 +81,11 @@ public class KeySizeExtensions
 				initializer.initialize(generator, i);
 				supportedKeySizes.add(i);
 			}
-			catch (InvalidParameterException e)
+			catch (RuntimeException e)
 			{
-				// Key size not supported
+				// Key size not supported, or the algorithm rejects plain int-based
+				// initialization altogether (e.g. algorithms that require an
+				// AlgorithmParameterSpec)
 			}
 		}
 		return supportedKeySizes;
@@ -96,8 +98,10 @@ public class KeySizeExtensions
 	 * This method initializes a {@link KeyGenerator} instance for the given algorithm and attempts
 	 * to initialize it with key sizes from 112 bits to 8192 bits in increments of 64 bits. If the
 	 * initialization succeeds, the key size is considered supported and is added to the set of
-	 * supported key sizes. If the initialization fails with an {@link InvalidParameterException},
-	 * the key size is considered unsupported and is not added to the set
+	 * supported key sizes. If the initialization fails with a {@link RuntimeException} (e.g.
+	 * {@link InvalidParameterException} for an unsupported size, or another exception type for
+	 * algorithms that reject plain int-based initialization altogether), the key size is considered
+	 * unsupported and is not added to the set
 	 *
 	 * @param algorithm
 	 *            the name of the cryptographic algorithm (e.g., "AES", "DES")
@@ -124,9 +128,10 @@ public class KeySizeExtensions
 	 * This method initializes a {@link KeyPairGenerator} instance for the given algorithm and
 	 * attempts to initialize it with key sizes from 512 bits to 8192 bits in increments of 64 bits.
 	 * If the initialization succeeds, the key size is considered supported and is added to the set
-	 * of supported key sizes. If the initialization fails with an
-	 * {@link InvalidParameterException}, the key size is considered unsupported and is not added to
-	 * the set
+	 * of supported key sizes. If the initialization fails with a {@link RuntimeException} (e.g.
+	 * {@link InvalidParameterException} for an unsupported size, or another exception type for
+	 * algorithms that reject plain int-based initialization altogether), the key size is considered
+	 * unsupported and is not added to the set
 	 *
 	 * @param algorithm
 	 *            the name of the cryptographic algorithm (e.g., "RSA", "DSA")
@@ -152,8 +157,10 @@ public class KeySizeExtensions
 	 * This method initializes a {@link KeyGenerator} instance for the given algorithm and attempts
 	 * to initialize it with key sizes from 112 bits to 8192 bits in increments of 64 bits. If the
 	 * initialization succeeds, the key size is considered supported and is added to the set of
-	 * supported key sizes. If the initialization fails with an {@link InvalidParameterException},
-	 * the key size is considered unsupported and is not added to the set
+	 * supported key sizes. If the initialization fails with a {@link RuntimeException} (e.g.
+	 * {@link InvalidParameterException} for an unsupported size, or another exception type for
+	 * algorithms that reject plain int-based initialization altogether), the key size is considered
+	 * unsupported and is not added to the set
 	 *
 	 * @param algorithm
 	 *            the name of the cryptographic algorithm (e.g., "AES", "DES")
@@ -174,9 +181,11 @@ public class KeySizeExtensions
 				keyGenerator.generateKey();
 				supportedKeySizes.add(i);
 			}
-			catch (InvalidParameterException e)
+			catch (RuntimeException e)
 			{
-				// Key size not supported
+				// Key size not supported, or the algorithm rejects plain int-based
+				// initialization altogether (e.g. algorithms that require an
+				// AlgorithmParameterSpec)
 			}
 		}
 		return supportedKeySizes;

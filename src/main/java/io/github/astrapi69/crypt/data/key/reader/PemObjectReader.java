@@ -29,14 +29,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Optional;
 
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.openssl.PEMDecryptorProvider;
 import org.bouncycastle.openssl.PEMEncryptedKeyPair;
 import org.bouncycastle.openssl.PEMKeyPair;
@@ -48,7 +52,6 @@ import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 
 import io.github.astrapi69.crypt.api.algorithm.Algorithm;
-import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.PemType;
 import io.github.astrapi69.crypt.api.provider.SecurityProvider;
 import lombok.NonNull;
@@ -163,17 +166,24 @@ public final class PemObjectReader
 	}
 
 	/**
-	 * Reads the given {@link File}( in *.pem format) that contains private key
+	 * Reads the given {@link File}( in *.pem format) that contains private key, of whatever
+	 * algorithm it was made with
+	 * <p>
+	 * A pkcs#8 file names its algorithm in its algorithm identifier and a traditional file names it
+	 * in its header, so the algorithm is read from the file rather than assumed. It used to be
+	 * taken as RSA, which made every ec, dsa or edwards key unreadable and had
+	 * {@code PrivateKeyReader#validatePrivateKey} call a perfectly valid key invalid (issue #14).
 	 *
 	 * @param keyPemFile
 	 *            the file with the private key ( in *.pem format)
-	 * @return the {@link PrivateKey} object or null if the given file is not private key
+	 * @return the {@link PrivateKey} object
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the cypher object fails
 	 * @throws InvalidKeySpecException
-	 *             is thrown if generation of the SecretKey object fails
+	 *             is thrown if the given file holds no private key that can be read without a
+	 *             password
 	 * @throws NoSuchProviderException
 	 *             is thrown if the specified provider is not registered in the security provider
 	 *             list
@@ -181,7 +191,119 @@ public final class PemObjectReader
 	public static PrivateKey readPemPrivateKey(final @NonNull File keyPemFile) throws IOException,
 		NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException
 	{
-		return readPrivateKey(keyPemFile, KeyPairGeneratorAlgorithm.RSA);
+		return toPrivateKey(readPemKeyObject(keyPemFile),
+			"The file '" + keyPemFile.getAbsolutePath() + "'");
+	}
+
+	/**
+	 * Reads the given {@link String} in *.pem format and returns the {@link PrivateKey} object, of
+	 * whatever algorithm it was made with
+	 *
+	 * @param privateKeyAsPem
+	 *            the whole pem document, headers included
+	 * @return the {@link PrivateKey} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws InvalidKeySpecException
+	 *             is thrown if the given text holds no private key that can be read without a
+	 *             password
+	 */
+	public static PrivateKey readPemPrivateKey(final @NonNull String privateKeyAsPem)
+		throws IOException, InvalidKeySpecException
+	{
+		try (PEMParser pemParser = new PEMParser(new StringReader(privateKeyAsPem)))
+		{
+			return toPrivateKey(pemParser.readObject(), "The given pem text");
+		}
+	}
+
+	/**
+	 * Builds the {@link PrivateKey} object from what the pem parser made of a document
+	 *
+	 * @param pemKeyObject
+	 *            what the pem parser returned, may be null
+	 * @param source
+	 *            what to call the document in the failure message
+	 * @return the {@link PrivateKey} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws InvalidKeySpecException
+	 *             is thrown if the given object is no private key that can be read without a
+	 *             password
+	 */
+	private static PrivateKey toPrivateKey(final Object pemKeyObject, final String source)
+		throws IOException, InvalidKeySpecException
+	{
+		JcaPEMKeyConverter converter = new JcaPEMKeyConverter()
+			.setProvider(SecurityProvider.BC.name());
+		if (pemKeyObject instanceof PEMKeyPair pemKeyPair)
+		{
+			return converter.getKeyPair(pemKeyPair).getPrivate();
+		}
+		if (pemKeyObject instanceof PrivateKeyInfo privateKeyInfo)
+		{
+			return converter.getPrivateKey(privateKeyInfo);
+		}
+		throw new InvalidKeySpecException(
+			source + " holds no private key that can be read without a password, but "
+				+ (pemKeyObject == null
+					? "nothing that the pem parser recognises"
+					: "a " + pemKeyObject.getClass().getSimpleName()));
+	}
+
+	/**
+	 * Reads the given {@link File}( in *.pem format) that contains a public key, of whatever
+	 * algorithm it was made with
+	 * <p>
+	 * A SubjectPublicKeyInfo names its algorithm in its algorithm identifier, so the algorithm is
+	 * read from the file rather than assumed. It used to be taken as RSA, which made every ec, dsa,
+	 * edwards, montgomery or diffie-hellman public key unreadable although this library had just
+	 * written it (issue #23).
+	 *
+	 * @param keyPemFile
+	 *            the file with the public key ( in *.pem format)
+	 * @return the {@link PublicKey} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws InvalidKeySpecException
+	 *             is thrown if the given file holds no public key
+	 */
+	public static PublicKey readPemPublicKey(final @NonNull File keyPemFile)
+		throws IOException, InvalidKeySpecException
+	{
+		return toPublicKey(readPemKeyObject(keyPemFile),
+			"The file '" + keyPemFile.getAbsolutePath() + "'");
+	}
+
+	/**
+	 * Builds the {@link PublicKey} object from what the pem parser made of a document
+	 *
+	 * @param pemKeyObject
+	 *            what the pem parser returned, may be null
+	 * @param source
+	 *            what to call the document in the failure message
+	 * @return the {@link PublicKey} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws InvalidKeySpecException
+	 *             is thrown if the given object is no public key
+	 */
+	private static PublicKey toPublicKey(final Object pemKeyObject, final String source)
+		throws IOException, InvalidKeySpecException
+	{
+		JcaPEMKeyConverter converter = new JcaPEMKeyConverter()
+			.setProvider(SecurityProvider.BC.name());
+		if (pemKeyObject instanceof SubjectPublicKeyInfo publicKeyInfo)
+		{
+			return converter.getPublicKey(publicKeyInfo);
+		}
+		// a traditional private key file carries the public values too, so the public half could be
+		// taken out of it. It is not: a caller that asks for a public key and hands over a private
+		// key file has made a mistake worth hearing about, not one worth papering over
+		throw new InvalidKeySpecException(source + " holds no public key, but "
+			+ (pemKeyObject == null
+				? "nothing that the pem parser recognises"
+				: "a " + pemKeyObject.getClass().getSimpleName()));
 	}
 
 	/**

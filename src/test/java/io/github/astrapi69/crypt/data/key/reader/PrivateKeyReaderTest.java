@@ -24,6 +24,7 @@
  */
 package io.github.astrapi69.crypt.data.key.reader;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,6 +35,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
@@ -48,6 +50,7 @@ import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeyFileFormat;
+import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
 import io.github.astrapi69.crypt.data.key.PrivateKeyExtensions;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.PathFinder;
@@ -266,6 +269,126 @@ public class PrivateKeyReaderTest
 		// new scenario
 		actual = PrivateKeyReader.validatePrivateKey(privateKeyPemFile);
 		assertTrue(actual);
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyReader#validatePrivateKey(File)} when the file disappears
+	 * between the pem format probe and the read of the key bytes
+	 * <p>
+	 * {@code validatePrivateKey} opens the file twice: once through {@code isPemFormat} and once
+	 * through {@code getPrivateKey}. If the file is removed by another process in between, the
+	 * second read fails with an {@link IOException}. The method must answer {@code false} in that
+	 * case instead of letting the exception escape. {@link VanishingFile} reproduces exactly that
+	 * race deterministically by deleting itself when its {@link java.nio.file.Path} is requested,
+	 * which is the last thing that happens before the bytes are read
+	 */
+	@Test
+	public void testValidatePrivateKeyWithFileThatDisappearsWhileReading() throws Exception
+	{
+		File temporaryDirectory;
+		File vanishingDerFile;
+		VanishingFile vanishingFile;
+
+		temporaryDirectory = Files.createTempDirectory("vanishing-private-key").toFile();
+		vanishingDerFile = new File(temporaryDirectory, "private.der");
+		Files.copy(privateKeyDerFile.toPath(), vanishingDerFile.toPath());
+		vanishingFile = new VanishingFile(vanishingDerFile.getAbsolutePath());
+
+		// sanity check: the very same content validates as a private key while the file is there
+		assertTrue(PrivateKeyReader.validatePrivateKey(vanishingDerFile));
+
+		assertFalse(PrivateKeyReader.validatePrivateKey(vanishingFile));
+		assertFalse(vanishingDerFile.exists());
+
+		assertTrue(temporaryDirectory.delete());
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyReader#isPrivateKeyPasswordProtected(File)} when the file
+	 * disappears while it is read, see
+	 * {@link #testValidatePrivateKeyWithFileThatDisappearsWhileReading()}. An unreadable file is
+	 * reported as password protected rather than propagating the {@link IOException}
+	 */
+	@Test
+	public void testIsPrivateKeyPasswordProtectedWithFileThatDisappearsWhileReading()
+		throws Exception
+	{
+		File temporaryDirectory;
+		File vanishingDerFile;
+		VanishingFile vanishingFile;
+
+		temporaryDirectory = Files.createTempDirectory("vanishing-private-key").toFile();
+		vanishingDerFile = new File(temporaryDirectory, "private.der");
+		Files.copy(privateKeyDerFile.toPath(), vanishingDerFile.toPath());
+		vanishingFile = new VanishingFile(vanishingDerFile.getAbsolutePath());
+
+		// sanity check: the very same content is not password protected while the file is there
+		assertFalse(PrivateKeyReader.isPrivateKeyPasswordProtected(vanishingDerFile));
+
+		assertTrue(PrivateKeyReader.isPrivateKeyPasswordProtected(vanishingFile));
+		assertFalse(vanishingDerFile.exists());
+
+		assertTrue(temporaryDirectory.delete());
+	}
+
+	/**
+	 * Test method for {@link PrivateKeyReader#getPrivateKey(byte[])} with an RSA private key while
+	 * the Bouncy Castle provider is not registered
+	 * <p>
+	 * {@code getPrivateKey} probes the algorithms in the order DiffieHellman, DSA, EC, RSASSA-PSS
+	 * and finally RSA. With Bouncy Castle registered, its RSASSA-PSS key factory already accepts a
+	 * plain {@code rsaEncryption} key, so the RSA attempt is never reached. Without Bouncy Castle
+	 * the JDK providers reject the key for every algorithm but RSA, which is a supported way to use
+	 * this library and exercises the final RSA branch
+	 */
+	@Test
+	public void testGetPrivateKeyWithRsaKeyAndWithoutBouncyCastleProvider() throws Exception
+	{
+		KeyPair keyPair;
+		byte[] encodedPrivateKey;
+		Optional<PrivateKey> optionalPrivateKey;
+
+		keyPair = KeyPairFactory.newKeyPair(KeyPairGeneratorAlgorithm.RSA.getAlgorithm(), 2048);
+		encodedPrivateKey = keyPair.getPrivate().getEncoded();
+
+		Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME);
+		try
+		{
+			optionalPrivateKey = PrivateKeyReader.getPrivateKey(encodedPrivateKey);
+
+			assertTrue(optionalPrivateKey.isPresent());
+			assertEquals("RSA", optionalPrivateKey.get().getAlgorithm());
+			assertArrayEquals(encodedPrivateKey, optionalPrivateKey.get().getEncoded());
+		}
+		finally
+		{
+			Security.addProvider(new BouncyCastleProvider());
+		}
+	}
+
+	/**
+	 * A {@link File} that deletes the file it points to as soon as its {@link java.nio.file.Path}
+	 * is requested. {@link PrivateKeyReader} probes the format with a
+	 * {@link java.io.FileInputStream} built from {@link File#getPath()} and only afterwards reads
+	 * the bytes through {@code Files.readAllBytes(file.toPath())}, so this makes the file vanish
+	 * exactly in between
+	 */
+	private static final class VanishingFile extends File
+	{
+		private static final long serialVersionUID = 1L;
+
+		private VanishingFile(final String pathname)
+		{
+			super(pathname);
+		}
+
+		@Override
+		public java.nio.file.Path toPath()
+		{
+			final java.nio.file.Path path = super.toPath();
+			super.delete();
+			return path;
+		}
 	}
 
 	/**

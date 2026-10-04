@@ -30,7 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.security.PublicKey;
+import java.security.Security;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
@@ -45,6 +48,23 @@ import io.github.astrapi69.meanbean.extension.MeanBeanExtensions;
  */
 public class TransactionTest
 {
+
+	/**
+	 * Registers Bouncy Castle before this class reads a PEM key.
+	 * <p>
+	 * It used to rely on another test class having done it first: run alone, all of these tests
+	 * failed with "no such provider: BC", and whether they passed depended on the order the JVM
+	 * happened to run classes in (#56). Idempotent, so it does not matter how many classes do it.
+	 */
+	@BeforeAll
+	static void ensureBouncyCastle()
+	{
+		if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null)
+		{
+			Security.addProvider(new BouncyCastleProvider());
+		}
+	}
+
 	private final static byte[] fixedSignature = new byte[] { 48, 44, 2, 20, 89, 48, -114, -49, 36,
 			65, 116, -5, 88, 6, -38, -110, -30, -73, 59, -53, 19, -49, 122, 90, 2, 20, 111, 38, 55,
 			-120, -125, 17, -66, -8, -121, 85, 31, -82, -80, -31, -33, 116, 121, -90, 123, -113 };
