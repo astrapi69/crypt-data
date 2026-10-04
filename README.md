@@ -237,6 +237,24 @@ Release version numbers will be incremented in the following format:
 For detailed information on versioning you can visit
 the [wiki page](https://github.com/lightblueseas/mvn-parent-projects/wiki/Semantic-Versioning).
 
+## Releasing
+
+What a release consists of, in the order it is run (#87):
+
+1. **One pull request** with the CHANGELOG entry and `projectVersion` without `-SNAPSHOT`
+   (`docs: changelog for X.Y, and the version that carries it`), the full build green on it.
+2. **Tag the merge commit** with `./gradlew tagRelease`, which names it `RELEASE-X.Y`, and push the
+   tag. The publish workflow uploads to the Central Portal, where the maintainer releases it. A
+   pushed tag is never moved or deleted; a failed run is fixed on the branch and re-run.
+3. **Verify on Central**, with the artifacts downloaded inside the command that checks them: the
+   jar, pom, `.module`, `-sources.jar`, `-javadoc.jar`, and `gpg --verify` on the `.asc`.
+4. **GitHub release** from the CHANGELOG entry.
+5. **`master` follows the release**: `git merge --no-ff "RELEASE-X.Y^{commit}"` on `master`, never
+   a force push. Afterwards `git diff RELEASE-X.Y master` is empty - `master` is always the latest
+   release, nothing else.
+6. **Open the next cycle**: `projectVersion` to the next `-SNAPSHOT`, and `apiBaselineVersion` to the
+   release just made, so the compatibility gate compares against what is actually out.
+
 ## What can i do to support this project
 
 You can donate or contribute solve issues or pull request. Every support are welcome.
