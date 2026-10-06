@@ -1,0 +1,9 @@
+# Codecov refuses a coverage report older than 12 hours (max_report_age). With Gradle's build cache
+# the JaCoCo report of an unchanged build comes from the cache and carries the time of the run that
+# first produced it - correct coverage for this commit, since the cache key covers sources and tests,
+# but "expired" as soon as the cache entry is older than that. Codecov then processes nothing, posts no
+# status, and a pull request that requires codecov/patch and codecov/project waits forever
+# (astrapi69/mystic-crypt-ui#503, found on astrapi69/crypt-api#25). The workflow names the report
+# explicitly (files, disable_search), so the stale-file case the age check guards against cannot occur.
+codecov:
+  max_report_age: off
