@@ -53,6 +53,9 @@ jobs:
         env:
           ossrhUsername: ${{secrets.OSSRHUSERNAME}}
           ossrhPassword: ${{secrets.OSSRHPASSWORD}}
+      - name: Mutation testing (PIT, fails below mutationThreshold in build.gradle)
+        run: |
+          ./gradlew pitest
       - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
