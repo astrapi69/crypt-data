@@ -237,6 +237,53 @@ Release version numbers will be incremented in the following format:
 For detailed information on versioning you can visit
 the [wiki page](https://github.com/lightblueseas/mvn-parent-projects/wiki/Semantic-Versioning).
 
+## Verifying the release signatures
+
+The releases on Maven Central are signed with the OpenPGP key
+
+```text
+5B2F A6B1 1E29 8BC0 9287  F423 D8C4 0351 8C49 CA75
+```
+
+Releases after 13.1 are signed by its signing subkey
+
+```text
+6D67 F844 2A6F CC96 BD7C  1B5E 9FCF 7C97 10E2 BD8D
+```
+
+valid until 2028-10-09; 13.1 and earlier were signed by the primary key itself. The key, with the subkey, is on keyserver.ubuntu.com and keys.openpgp.org.
+
+To check a download, fetch the key once, then verify the signature that lies next to each file on
+Maven Central:
+
+```sh
+gpg --keyserver hkps://keys.openpgp.org --recv-keys 5B2FA6B11E298BC09287F423D8C403518C49CA75
+gpg --verify crypt-data-13.1.jar.asc crypt-data-13.1.jar
+```
+
+gpg answers `Good signature` and prints the `Primary key fingerprint`, for a release signed by the
+subkey also the `Subkey fingerprint`. Both have to be the ones above. The warning that the key "is
+not certified with a trusted signature" only says that you have not marked the key as trusted in your
+own keyring; the fingerprints are what to compare.
+
+## Releasing
+
+What a release consists of, in the order it is run (#87):
+
+1. **One pull request** with the CHANGELOG entry and `projectVersion` without `-SNAPSHOT`
+   (`docs: changelog for X.Y, and the version that carries it`), the full build green on it.
+2. **Tag the merge commit** with `./gradlew tagRelease`, which names it `RELEASE-X.Y`, and push the
+   tag. The publish workflow uploads to the Central Portal, where the maintainer releases it. A
+   pushed tag is never moved or deleted; a failed run is fixed on the branch and re-run.
+3. **Verify on Central**, with the artifacts downloaded inside the command that checks them: the
+   jar, pom, `.module`, `-sources.jar`, `-javadoc.jar`, and `gpg --verify` on the `.asc`.
+4. **GitHub release** from the CHANGELOG entry.
+5. **`master` follows the release**: `git merge --no-ff "RELEASE-X.Y^{commit}"` on `master`, never
+   a force push. Afterwards `git diff RELEASE-X.Y master` is empty - `master` is always the latest
+   release, nothing else.
+6. **Open the next cycle**: `projectVersion` to the next `-SNAPSHOT`, and `apiBaselineVersion` to the
+   release just made, so the compatibility gate compares against what is actually out.
+
 ## What can i do to support this project
 
 You can donate or contribute solve issues or pull request. Every support are welcome.
@@ -287,3 +334,12 @@ feature requests.
 | [![Javadocs](http://www.javadoc.io/badge/io.github.astrapi69/crypt-data.svg)](http://www.javadoc.io/doc/io.github.astrapi69/crypt-data) |
 |        Special thanks to [javadoc.io](http://www.javadoc.io) for providing a free javadoc documentation for open source projects        |
 |                                                            <img width=1000/>                                                            |
+
+## Git hooks
+
+The repository's git hooks live in `.githooks`: `commit-msg` where present, and `pre-commit`, which refuses a
+commit whose files Spotless would format. Activate them once per clone or worktree:
+
+```bash
+git config core.hooksPath .githooks
+```

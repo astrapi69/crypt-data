@@ -13,14 +13,16 @@ could not keep.
 
 | Version | Supported          | Required JDK | Needs crypt-api |
 |---------|--------------------|--------------|-----------------|
-| 12.x    | :white_check_mark: | 25 and above | 10.0.0 or newer |
+| 13.x    | :white_check_mark: | 25 and above | 10.1 or newer   |
+| 12.x    | :x:                | 25 and above | 10.0.0 or newer |
 | 11.x    | :x:                | 21 and above | 9.5             |
 | 10.x    | :x:                | 21 and above | 9.3 - 9.5       |
 | < 10    | :x:                | 17 and above | 9 - 9.3         |
 
-The current release is **12.2**. If you are on an older line, the fix for a
-reported vulnerability will be an upgrade to the current one rather than a
-backport.
+The current release is the latest one on the
+[releases page](https://github.com/astrapi69/crypt-data/releases) and on Maven
+Central. If you are on an older line, the fix for a reported vulnerability will
+be an upgrade to the current one rather than a backport.
 
 ## Reporting a Vulnerability
 
