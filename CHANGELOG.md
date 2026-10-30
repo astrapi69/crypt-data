@@ -1,6 +1,22 @@
 ## Change log
 ----------------------
 
+Version 13.2 (unreleased)
+-------------
+
+SECURITY:
+
+- guava 33.7.2-jre, from 33.7.1-jre, and commons-beanutils, which the runtime class path now resolves to
+  1.11.0: both had open high alerts on the runtime class path that 13.1 ships (#106)
+
+CHANGED:
+
+- dependencies are raised by `versionCatalogUpdate`, stable versions only (#106): Bouncy Castle 1.86 (bcprov
+  from 1.85.2, bcpkix from 1.85), commons-codec 1.23.0, commons-lang3 3.21.0, crypt-api 10.3, file-worker 19.1,
+  mockito 5.24.0, randomizer 10.6, and the plugins lombok 9.8.2, spotless 8.10.4, version-catalog-update 1.1.2,
+  versions 0.66.0. version-catalog-update 1.x chooses versions itself; its default took the `-jre` of guava for
+  unstable and proposed 999.0.0-HEAD-jre-SNAPSHOT, so the configuration names its own selector
+
 Version 13.1
 -------------
 
