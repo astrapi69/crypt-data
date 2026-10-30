@@ -9,6 +9,9 @@ CHANGED:
 - build only: an upload refuses a half-configured signing key: GPG_PRIVATE_KEY without GPG_PASSPHRASE,
   or the reverse, used to sign nothing and send a snapshot up without its .asc files while CI stayed
   green (#105)
+- build only: the API gate compares across a major that swapped a dependency: the reporting branch
+  ignores classes the baseline needs and the new classpath no longer has, instead of refusing to
+  compare at all (#103)
 
 Version 13.2
 -------------
