@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 13.2 (unreleased)
+Version 13.2
 -------------
 
 SECURITY:
