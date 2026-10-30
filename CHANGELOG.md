@@ -4,6 +4,12 @@
 Version 13.3-SNAPSHOT
 -------------
 
+CHANGED:
+
+- build only: an upload refuses a half-configured signing key: GPG_PRIVATE_KEY without GPG_PASSPHRASE,
+  or the reverse, used to sign nothing and send a snapshot up without its .asc files while CI stayed
+  green (#105)
+
 Version 13.2
 -------------
 

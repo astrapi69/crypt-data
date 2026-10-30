@@ -93,6 +93,8 @@ nmcp {
 //   snapshot, no key    skip - a local build needs no signature
 //   release,  no key    the publish task REFUSES; publishing a release unsigned is worse than
 //                       not publishing it
+//   half a key          every upload REFUSES: a key without its passphrase, or the reverse, is a
+//                       misconfiguration, not "no key" (#105)
 def signingKey = System.getenv("GPG_PRIVATE_KEY")
 def signingPassphrase = System.getenv("GPG_PASSPHRASE")
 // The signing subkey's short id, its last 8 hex digits, when GPG_PRIVATE_KEY is an export of that
@@ -121,10 +123,21 @@ signing {
     }
 }
 
+// Half a key is a misconfiguration, not "no key": GPG_PRIVATE_KEY with an empty GPG_PASSPHRASE (a secret
+// created without a value) signed nothing, and the snapshot went up without its .asc files while CI was green
+// (#105, measured in lightblueseas/email-tails and astrapi69/message-mail-data). Every upload refuses it.
+// Read now, not when the task runs: Task.project at execution time is deprecated and Gradle 10 removes it.
+def refusedVersion = version.toString()
+def halfKey = (signingKey && !signingPassphrase) ? "GPG_PASSPHRASE is empty"
+    : (!signingKey && signingPassphrase) ? "GPG_PRIVATE_KEY is empty" : null
 tasks.matching { it.name.startsWith("nmcpPublishAllPublicationsToCentralPortal") }.configureEach {
     doFirst {
+        if (halfKey) {
+            throw new GradleException("GPG_PRIVATE_KEY and GPG_PASSPHRASE must be set together: ${halfKey}, "
+                + "so ${refusedVersion} would go up unsigned. Set the missing secret, or neither.")
+        }
         if (releaseVersion && !hasInMemoryKey && !hasLocalKey) {
-            throw new GradleException("Refusing to publish ${project.version} unsigned. "
+            throw new GradleException("Refusing to publish ${refusedVersion} unsigned. "
                 + "Set GPG_PRIVATE_KEY and GPG_PASSPHRASE, or a local signing.keyId / "
                 + "signing.gnupg.keyName / signing.secretKeyRingFile property.")
         }
