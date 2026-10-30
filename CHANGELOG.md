@@ -4,6 +4,12 @@
 Version 13.3-SNAPSHOT
 -------------
 
+CHANGED:
+
+- build only: the API gate compares across a major that swapped a dependency: the reporting branch
+  ignores classes the baseline needs and the new classpath no longer has, instead of refusing to
+  compare at all (#103)
+
 Version 13.2
 -------------
 
