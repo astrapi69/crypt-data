@@ -132,9 +132,10 @@ class CertFactoryValidityAndBasicConstraintsParameterizedTest
 			(notAfter - notBefore) / 1000, testCase.toString());
 		assertTrue(before / 1000 <= notBefore / 1000 && notBefore / 1000 <= after / 1000,
 			"notBefore must be now");
-		assertEquals(new BigInteger(Long.toString(notBefore)).divide(BigInteger.valueOf(1000)),
-			certificate.getSerialNumber().divide(BigInteger.valueOf(1000)),
-			"serial is the creation timestamp");
+		// up to 13.2 the serial number was the creation timestamp, which two certificates made in
+		// one millisecond shared (#118); now it is drawn, positive and 159 bits long
+		assertEquals(1, certificate.getSerialNumber().signum(), "serial is positive");
+		assertEquals(159, certificate.getSerialNumber().bitLength(), "serial is drawn");
 	}
 
 	/**
