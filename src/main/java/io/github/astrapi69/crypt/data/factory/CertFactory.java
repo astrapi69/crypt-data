@@ -32,6 +32,7 @@ import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -74,6 +75,15 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
  */
 public final class CertFactory
 {
+
+	/**
+	 * The length of a drawn serial number: 159 bits fill the 20 octets RFC 5280 allows with the top
+	 * bit of the first octet clear, so the DER encoding needs no sign byte
+	 */
+	private static final int SERIAL_NUMBER_BITS = 159;
+
+	/** The source of the drawn serial numbers, which seeds itself from the operating system */
+	private static final SecureRandom SERIAL_NUMBER_SOURCE = new SecureRandom();
 
 	private CertFactory()
 	{
@@ -431,6 +441,11 @@ public final class CertFactory
 	/**
 	 * Factory method for creating a new intermediate {@link X509Certificate} object of version 3 of
 	 * X.509 from the given parameters that can be used as an end entity certificate.
+	 * <p>
+	 * The serial number is drawn from {@link SecureRandom}: 158 random bits below a set 159th bit,
+	 * so it is positive and its DER encoding takes the 20 octets RFC 5280 section 4.1.2.2 allows.
+	 * Up to 13.2 it was the current time in milliseconds, which two certificates made in the same
+	 * millisecond shared and which anyone could predict (#118).
 	 *
 	 * @param keyPair
 	 *            the key pair
@@ -450,7 +465,10 @@ public final class CertFactory
 	 *             is thrown if a security error occur on creation of {@link ContentSigner}
 	 * @throws CertificateException
 	 *             if the conversion is unable to be made
+	 * @deprecated the caller should choose the serial number: use
+	 *             {@link #newX509CertificateV3(KeyPair, X500Name, BigInteger, Date, Date, X500Name, String, Extension...)}
 	 */
+	@Deprecated(since = "13.3")
 	public static X509Certificate newX509CertificateV3(KeyPair keyPair, X500Name issuer,
 		int daysToBeValid, X500Name subject, String signatureAlgorithm, Extension... extensions)
 		throws OperatorCreationException, CertificateException
@@ -459,7 +477,7 @@ public final class CertFactory
 		Date startDate = new Date(now);
 		Date endDate = new Date(now + daysToBeValid * 86400000L);
 
-		BigInteger certSerialNumber = new BigInteger(Long.toString(now)); // unique serial number
+		BigInteger certSerialNumber = newRandomSerialNumber();
 
 		ContentSigner contentSigner = newSigner(signatureAlgorithm, keyPair.getPrivate());
 
@@ -474,6 +492,20 @@ public final class CertFactory
 		}
 		return new JcaX509CertificateConverter().setProvider(SecurityProvider.BC.name())
 			.getCertificate(certBuilder.build(contentSigner));
+	}
+
+	/**
+	 * A serial number as RFC 5280 section 4.1.2.2 and the CA/Browser Forum baseline ask for it: 158
+	 * bits from {@link SecureRandom}, far above the 64 the baseline requires, below a set 159th
+	 * bit. The number is therefore positive, never 0, and needs no sign byte, so its DER encoding
+	 * is always 20 octets, the most RFC 5280 allows.
+	 *
+	 * @return the serial number
+	 */
+	private static BigInteger newRandomSerialNumber()
+	{
+		return new BigInteger(SERIAL_NUMBER_BITS - 1, SERIAL_NUMBER_SOURCE)
+			.setBit(SERIAL_NUMBER_BITS - 1);
 	}
 
 	/**

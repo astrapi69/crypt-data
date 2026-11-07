@@ -25,6 +25,7 @@
 package io.github.astrapi69.crypt.data.factory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
@@ -32,6 +33,8 @@ import java.security.KeyPairGenerator;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.security.spec.ECGenParameterSpec;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -108,19 +111,43 @@ class CertFactorySerialNumberTest
 	}
 
 	/**
-	 * Today two certificates made in one millisecond get the same serial number, and it is that
+	 * Two certificates made in one millisecond get different serial numbers, and neither is that
 	 * millisecond
 	 *
 	 * @throws Exception
 	 *             if a certificate cannot be made
 	 */
 	@Test
-	void twoCertificatesMadeInOneMillisecond_getTheSameSerialNumber_theMillisecond()
-		throws Exception
+	void twoCertificatesMadeInOneMillisecond_getDifferentSerialNumbers() throws Exception
 	{
 		SameMillisecond made = twoCertificatesInOneMillisecond();
 
-		assertEquals(BigInteger.valueOf(made.millisecond()), made.first().getSerialNumber());
-		assertEquals(made.first().getSerialNumber(), made.second().getSerialNumber());
+		assertNotEquals(BigInteger.valueOf(made.millisecond()), made.first().getSerialNumber());
+		assertNotEquals(made.first().getSerialNumber(), made.second().getSerialNumber());
+	}
+
+	/**
+	 * Every serial number is positive, has 159 bits, far above the 64 random bits the CA/Browser
+	 * Forum baseline requires, and fits into the 20 octets RFC 5280 allows; and over 200
+	 * certificates no two share one
+	 *
+	 * @throws Exception
+	 *             if a certificate cannot be made
+	 */
+	@Test
+	void everySerialNumber_isPositive_has159Bits_fitsInto20Octets_andIsDistinct() throws Exception
+	{
+		Set<BigInteger> serialNumbers = new HashSet<>();
+		for (int i = 0; i < 200; i++)
+		{
+			BigInteger serialNumber = newCertificate().getSerialNumber();
+			assertEquals(1, serialNumber.signum(), "positive: " + serialNumber);
+			assertEquals(159, serialNumber.bitLength(), "159 bits: " + serialNumber);
+			// toByteArray is the content of the DER INTEGER, sign byte included
+			assertEquals(20, serialNumber.toByteArray().length, "20 octets: " + serialNumber);
+			serialNumbers.add(serialNumber);
+		}
+
+		assertEquals(200, serialNumbers.size(), "200 certificates, 200 serial numbers");
 	}
 }
