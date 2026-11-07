@@ -24,7 +24,23 @@
  */
 package io.github.astrapi69.crypt.data.key.writer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.io.TempDir;
 import org.meanbean.test.BeanTester;
 
 /**
@@ -32,6 +48,65 @@ import org.meanbean.test.BeanTester;
  */
 public class KeyWriterTest
 {
+
+	/** On Linux every write to this device fails with "No space left on device" */
+	private static final Path DEV_FULL = Path.of("/dev/full");
+
+	private static KeyPair keyPair;
+
+	@BeforeAll
+	static void setUpKeyPair() throws Exception
+	{
+		KeyPairGenerator generator = KeyPairGenerator.getInstance("EC");
+		generator.initialize(256);
+		keyPair = generator.generateKeyPair();
+	}
+
+	/**
+	 * Test method for {@link KeyWriter#writeInPemFormat(java.security.Key, File)}: the file holds
+	 * the key in PEM, with line feeds as line ends
+	 *
+	 * @param temporaryDirectory
+	 *            the temporary directory of this test
+	 * @throws Exception
+	 *             is thrown if an error occurs
+	 */
+	@Test
+	public void writeInPemFormat_writesTheKeyInPemWithLineFeeds(@TempDir Path temporaryDirectory)
+		throws Exception
+	{
+		File pemFile = temporaryDirectory.resolve("public.pem").toFile();
+
+		KeyWriter.writeInPemFormat(keyPair.getPublic(), pemFile);
+
+		String pem = Files.readString(pemFile.toPath(), StandardCharsets.US_ASCII);
+		assertTrue(pem.startsWith("-----BEGIN PUBLIC KEY-----\n"), pem);
+		assertTrue(pem.endsWith("-----END PUBLIC KEY-----\n"), pem);
+		assertEquals(-1, pem.indexOf('\r'), pem);
+	}
+
+	/**
+	 * Test method for {@link KeyWriter#writeInPemFormat(java.security.Key, File)} with a file that
+	 * is a link to /dev/full, where the file opens and every write fails: the method throws the
+	 * {@link IOException} of the failed write instead of returning as if the key had been written
+	 * (#125)
+	 *
+	 * @param temporaryDirectory
+	 *            the temporary directory of this test
+	 * @throws Exception
+	 *             is thrown if an error occurs
+	 */
+	@Test
+	@EnabledOnOs(OS.LINUX)
+	public void writeInPemFormat_whenTheWriteFails_throws(@TempDir Path temporaryDirectory)
+		throws Exception
+	{
+		File fullDisk = Files.createSymbolicLink(temporaryDirectory.resolve("full.pem"), DEV_FULL)
+			.toFile();
+
+		assertThrows(IOException.class,
+			() -> KeyWriter.writeInPemFormat(keyPair.getPublic(), fullDisk));
+	}
 
 	/**
 	 * Test method for {@link KeyWriter} with {@link BeanTester}
