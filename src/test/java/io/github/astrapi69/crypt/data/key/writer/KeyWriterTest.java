@@ -24,11 +24,12 @@
  */
 package io.github.astrapi69.crypt.data.key.writer;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -86,8 +87,9 @@ public class KeyWriterTest
 
 	/**
 	 * Test method for {@link KeyWriter#writeInPemFormat(java.security.Key, File)} with a file that
-	 * is a link to /dev/full, where the file opens and every write fails: today the method returns
-	 * normally, as if the key had been written (#125)
+	 * is a link to /dev/full, where the file opens and every write fails: the method throws the
+	 * {@link IOException} of the failed write instead of returning as if the key had been written
+	 * (#125)
 	 *
 	 * @param temporaryDirectory
 	 *            the temporary directory of this test
@@ -96,13 +98,14 @@ public class KeyWriterTest
 	 */
 	@Test
 	@EnabledOnOs(OS.LINUX)
-	public void writeInPemFormat_whenTheWriteFails_returnsNormally(@TempDir Path temporaryDirectory)
+	public void writeInPemFormat_whenTheWriteFails_throws(@TempDir Path temporaryDirectory)
 		throws Exception
 	{
 		File fullDisk = Files.createSymbolicLink(temporaryDirectory.resolve("full.pem"), DEV_FULL)
 			.toFile();
 
-		assertDoesNotThrow(() -> KeyWriter.writeInPemFormat(keyPair.getPublic(), fullDisk));
+		assertThrows(IOException.class,
+			() -> KeyWriter.writeInPemFormat(keyPair.getPublic(), fullDisk));
 	}
 
 	/**
