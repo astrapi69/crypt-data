@@ -78,10 +78,13 @@ public final class PrivateKeyWriter
 		throws IOException
 	{
 		Objects.requireNonNull(outputStream);
-		final byte[] privateKeyBytes = privateKey.getEncoded();
-		final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-		outputStream.write(keySpec.getEncoded());
-		outputStream.close();
+		// closed also when the write fails, where it used to stay open (#130)
+		try (outputStream)
+		{
+			final byte[] privateKeyBytes = privateKey.getEncoded();
+			final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+			outputStream.write(keySpec.getEncoded());
+		}
 	}
 
 	/**
@@ -106,6 +109,18 @@ public final class PrivateKeyWriter
 		throws IOException, InvalidKeySpecException
 	{
 		Objects.requireNonNull(outputStream);
+		// closed also when the write fails or the format is refused, where it used to stay open
+		// (#130)
+		try (outputStream)
+		{
+			writeInFormat(privateKey, outputStream, fileFormat, keyFormat);
+		}
+	}
+
+	private static void writeInFormat(final PrivateKey privateKey, final OutputStream outputStream,
+		final KeyFileFormat fileFormat, final KeyFormat keyFormat)
+		throws IOException, InvalidKeySpecException
+	{
 		final byte[] privateKeyBytes = privateKey.getEncoded();
 		switch (fileFormat)
 		{
@@ -143,7 +158,6 @@ public final class PrivateKeyWriter
 				outputStream.write(keySpec.getEncoded());
 				break;
 		}
-		outputStream.close();
 	}
 
 	/**

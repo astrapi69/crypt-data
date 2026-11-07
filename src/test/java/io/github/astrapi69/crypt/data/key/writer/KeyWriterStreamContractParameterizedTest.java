@@ -27,6 +27,7 @@ package io.github.astrapi69.crypt.data.key.writer;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -54,6 +55,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import io.github.astrapi69.crypt.api.key.KeyFileFormat;
+import io.github.astrapi69.crypt.api.key.KeyFormat;
 import io.github.astrapi69.crypt.data.factory.CertFactory;
 import io.github.astrapi69.crypt.data.key.reader.CertificateReader;
 import io.github.astrapi69.crypt.data.key.reader.EncryptedPrivateKeyReader;
@@ -123,6 +125,11 @@ class KeyWriterStreamContractParameterizedTest
 	 *            the check of the written bytes
 	 */
 	record WriterCase(String description, WriteAction action, WrittenBytesCheck check) {
+		@Override
+		public String toString()
+		{
+			return description;
+		}
 	}
 
 	@BeforeAll
@@ -196,6 +203,91 @@ class KeyWriterStreamContractParameterizedTest
 
 		assertTrue(outputStream.size() > 0, testCase.description());
 		testCase.check().check(outputStream.toByteArray());
+		assertTrue(outputStream.isClosed(), testCase.description() + " must close the stream");
+	}
+
+	/**
+	 * An {@link OutputStream} whose every write fails the way a full disk makes it fail, and which
+	 * remembers whether it was closed
+	 */
+	static final class FailingOutputStream extends OutputStream
+	{
+		private boolean closed;
+
+		@Override
+		public void write(final int oneByte) throws IOException
+		{
+			throw new IOException("No space left on device");
+		}
+
+		@Override
+		public void write(final byte[] bytes, final int offset, final int length) throws IOException
+		{
+			throw new IOException("No space left on device");
+		}
+
+		@Override
+		public void close()
+		{
+			closed = true;
+		}
+
+		boolean isClosed()
+		{
+			return closed;
+		}
+	}
+
+	/**
+	 * One writer call that fails
+	 *
+	 * @param description
+	 *            the writer call
+	 * @param action
+	 *            the write operation
+	 */
+	record FailingCase(String description, WriteAction action) {
+		@Override
+		public String toString()
+		{
+			return description;
+		}
+	}
+
+	static Stream<FailingCase> failingCases() throws Exception
+	{
+		KeyPairGenerator generator = KeyPairGenerator.getInstance("Ed25519");
+		PrivateKey withoutTraditionalForm = generator.generateKeyPair().getPrivate();
+		return Stream.concat(
+			writerCases()
+				.map(testCase -> new FailingCase(testCase.description(), testCase.action())),
+			Stream.of(
+				new FailingCase("PrivateKeyWriter.write(..., PEM, PKCS_8)",
+					outputStream -> PrivateKeyWriter.write(keyPair.getPrivate(), outputStream,
+						KeyFileFormat.PEM, KeyFormat.PKCS_8)),
+				new FailingCase("PrivateKeyWriter.write(..., DER, null)",
+					outputStream -> PrivateKeyWriter.write(keyPair.getPrivate(), outputStream,
+						KeyFileFormat.DER, null)),
+				new FailingCase("PrivateKeyWriter.write(..., PEM, PKCS_1) refused for Ed25519",
+					outputStream -> PrivateKeyWriter.write(withoutTraditionalForm, outputStream,
+						KeyFileFormat.PEM, KeyFormat.PKCS_1))));
+	}
+
+	/**
+	 * Test method for the stream based writer methods when the write fails or is refused: the
+	 * stream is closed all the same, where it used to stay open (#130)
+	 *
+	 * @param testCase
+	 *            the test case
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("failingCases")
+	void writerClosesTheStreamWhenTheWriteFails(final FailingCase testCase)
+	{
+		FailingOutputStream outputStream = new FailingOutputStream();
+
+		assertThrows(Exception.class, () -> testCase.action().write(outputStream),
+			testCase.description());
 		assertTrue(outputStream.isClosed(), testCase.description() + " must close the stream");
 	}
 

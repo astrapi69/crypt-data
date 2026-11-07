@@ -90,21 +90,24 @@ public final class CertificateWriter
 		KeyFileFormat fileFormat) throws IOException, CertificateEncodingException
 	{
 		Objects.requireNonNull(outputStream);
-		final byte[] certificateBytes = certificate.getEncoded();
-		switch (fileFormat)
+		// closed also when the encoding or a write fails, where it used to stay open (#130)
+		try (outputStream)
 		{
-			case PEM :
-				outputStream.write(
-					CertificateReader.BEGIN_CERTIFICATE_PREFIX.getBytes(StandardCharsets.US_ASCII));
-				outputStream.write(Base64.encodeBase64(certificateBytes, true));
-				outputStream.write(
-					CertificateReader.END_CERTIFICATE_SUFFIX.getBytes(StandardCharsets.US_ASCII));
-				break;
-			default :
-				outputStream.write(certificateBytes);
-				break;
+			final byte[] certificateBytes = certificate.getEncoded();
+			switch (fileFormat)
+			{
+				case PEM :
+					outputStream.write(CertificateReader.BEGIN_CERTIFICATE_PREFIX
+						.getBytes(StandardCharsets.US_ASCII));
+					outputStream.write(Base64.encodeBase64(certificateBytes, true));
+					outputStream.write(CertificateReader.END_CERTIFICATE_SUFFIX
+						.getBytes(StandardCharsets.US_ASCII));
+					break;
+				default :
+					outputStream.write(certificateBytes);
+					break;
+			}
 		}
-		outputStream.close();
 	}
 
 	/**

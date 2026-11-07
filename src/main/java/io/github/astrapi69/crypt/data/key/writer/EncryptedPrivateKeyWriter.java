@@ -144,10 +144,13 @@ public final class EncryptedPrivateKeyWriter
 		BadPaddingException, InvalidParameterSpecException, IOException
 	{
 		Objects.requireNonNull(outputStream);
-		final byte[] encryptedPrivateKeyWithPasswordBytes = encryptPrivateKeyWithPassword(
-			privateKey, password);
-		outputStream.write(encryptedPrivateKeyWithPasswordBytes);
-		outputStream.close();
+		// closed also when the encryption or the write fails, where it used to stay open (#130)
+		try (outputStream)
+		{
+			final byte[] encryptedPrivateKeyWithPasswordBytes = encryptPrivateKeyWithPassword(
+				privateKey, password);
+			outputStream.write(encryptedPrivateKeyWithPasswordBytes);
+		}
 	}
 
 	/**
