@@ -242,9 +242,10 @@ public class SignatureAlgorithmResolver
 		}
 
 		/**
-		 * Generates a new random {@link BigInteger} to be used as a serial number
+		 * The serial number of the probe certificates: a fixed one, not a random one, because a
+		 * probe certificate only shows whether a signature algorithm can sign and is thrown away
 		 *
-		 * @return a random {@link BigInteger} instance
+		 * @return the fixed serial number 10
 		 */
 		public static BigInteger newSerialNumber()
 		{

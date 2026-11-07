@@ -272,27 +272,39 @@ public final class EncryptedPrivateKeyReader
 	}
 
 	/**
-	 * Reads the given {@link File} that contains a password protected private key, if fails null
-	 * will be returned
+	 * Reads the given {@link File} that contains a password protected private key, in PEM or in
+	 * DER, and returns the {@link PrivateKey} object; it never returns null (#24)
+	 * <p>
+	 * Implementation note: the throws clause is wider than it was until 12.0.0, which declared only
+	 * {@code OperatorCreationException} and {@code PKCSException}. Widening it was a source
+	 * breaking change and it broke mystic-crypt-ui, whose two call sites handled the old pair. It
+	 * is not narrowed again: the caller adapted, with a single
+	 * {@code catch (IOException | GeneralSecurityException)}, and a catch for an exception that is
+	 * no longer declared does not compile - so taking the clause back would break the same caller a
+	 * second time, in the other direction. Narrow it only together with every known caller, in one
+	 * step, never on its own.
 	 *
 	 * @param encryptedPrivateKeyFile
 	 *            the file that contains the password protected private key
 	 * @param password
 	 *            the password
-	 * @return the {@link PrivateKey} object or null if it fails
+	 * @return the {@link PrivateKey} object
 	 * @throws OperatorCreationException
 	 *             is thrown if an error occurs on the operator creation
 	 * @throws PKCSException
 	 *             is thrown if an error occurs on read the key file
-	 *
-	 * @implNote The throws clause is wider than it was until 12.0.0, which declared only
-	 *           {@code OperatorCreationException} and {@code PKCSException}. Widening it was a
-	 *           source breaking change and it broke mystic-crypt-ui, whose two call sites handled
-	 *           the old pair. It is not narrowed again: the caller adapted, with a single
-	 *           {@code catch (IOException | GeneralSecurityException)}, and a catch for an
-	 *           exception that is no longer declared does not compile - so taking the clause back
-	 *           would break the same caller a second time, in the other direction. Narrow it only
-	 *           together with every known caller, in one step, never on its own.
+	 * @throws IOException
+	 *             is thrown if the file cannot be read
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if instantiation of the cypher object fails
+	 * @throws NoSuchPaddingException
+	 *             is thrown if instantiation of the cypher object fails
+	 * @throws InvalidKeySpecException
+	 *             is thrown if the password is wrong or no key can be built from what was decrypted
+	 * @throws InvalidKeyException
+	 *             is thrown if initialization of the cipher object fails
+	 * @throws InvalidAlgorithmParameterException
+	 *             is thrown if initialization of the cipher object fails
 	 */
 	public static PrivateKey readPasswordProtectedPrivateKey(final File encryptedPrivateKeyFile,
 		final String password) throws OperatorCreationException, PKCSException, IOException,
