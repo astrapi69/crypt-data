@@ -125,6 +125,11 @@ class KeyWriterStreamContractParameterizedTest
 	 *            the check of the written bytes
 	 */
 	record WriterCase(String description, WriteAction action, WrittenBytesCheck check) {
+		@Override
+		public String toString()
+		{
+			return description;
+		}
 	}
 
 	@BeforeAll
@@ -269,22 +274,21 @@ class KeyWriterStreamContractParameterizedTest
 	}
 
 	/**
-	 * Test method for the stream based writer methods when the write fails or is refused: today the
-	 * stream stays open (#130)
+	 * Test method for the stream based writer methods when the write fails or is refused: the
+	 * stream is closed all the same, where it used to stay open (#130)
 	 *
 	 * @param testCase
 	 *            the test case
 	 */
 	@ParameterizedTest(name = "{0}")
 	@MethodSource("failingCases")
-	void writerLeavesTheStreamOpenWhenTheWriteFails(final FailingCase testCase)
+	void writerClosesTheStreamWhenTheWriteFails(final FailingCase testCase)
 	{
 		FailingOutputStream outputStream = new FailingOutputStream();
 
 		assertThrows(Exception.class, () -> testCase.action().write(outputStream),
 			testCase.description());
-		assertFalse(outputStream.isClosed(),
-			testCase.description() + " leaves the stream open today");
+		assertTrue(outputStream.isClosed(), testCase.description() + " must close the stream");
 	}
 
 	/**
