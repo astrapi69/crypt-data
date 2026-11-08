@@ -26,8 +26,6 @@ package io.github.astrapi69.crypt.data.key;
 
 import java.security.Key;
 
-import javax.xml.bind.DatatypeConverter;
-
 import org.apache.commons.codec.binary.Base64;
 
 import lombok.NonNull;
@@ -55,7 +53,11 @@ public final class KeyExtensions
 	}
 
 	/**
-	 * Transform the given encoded key as byte array to a base64 binary encoded {@link String} value
+	 * Transform the given encoded key as byte array to a base64 binary encoded {@link String}
+	 * value: RFC 4648 base64 with padding and no line breaks, as
+	 * {@code DatatypeConverter.printBase64Binary} wrote it before jaxb-api left the dependencies
+	 * (#133). {@code java.util.Base64} is fully qualified because the commons-codec {@code Base64}
+	 * of {@link #toBase64(byte[])} is imported
 	 *
 	 * @param encodedKey
 	 *            the encoded key
@@ -63,7 +65,7 @@ public final class KeyExtensions
 	 */
 	public static String toBase64Binary(final byte[] encodedKey)
 	{
-		return DatatypeConverter.printBase64Binary(encodedKey);
+		return java.util.Base64.getEncoder().encodeToString(encodedKey);
 	}
 
 	/**

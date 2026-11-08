@@ -124,6 +124,21 @@ class KeyExtensionsTest
 	}
 
 	/**
+	 * Pins the exact base64 binary form (#133): replacing the encoder underneath must not change
+	 * one character of the output, RFC 4648 base64 with padding and no line breaks
+	 */
+	@Test
+	@DisplayName("toBase64Binary encodes to the standard base64 alphabet with padding")
+	void toBase64Binary_encodesToTheKnownForm()
+	{
+		assertEquals("AQIDBAU=", KeyExtensions.toBase64Binary(new byte[] { 1, 2, 3, 4, 5 }));
+		assertEquals("", KeyExtensions.toBase64Binary(new byte[0]));
+		assertEquals("/+4=", KeyExtensions.toBase64Binary(new byte[] { (byte)0xFF, (byte)0xEE }));
+		assertEquals("TWFu", KeyExtensions
+			.toBase64Binary("Man".getBytes(java.nio.charset.StandardCharsets.US_ASCII)));
+	}
+
+	/**
 	 * Test method for getting algorithm, format, and encoded key
 	 */
 	@Test
