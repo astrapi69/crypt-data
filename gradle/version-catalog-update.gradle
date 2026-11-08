@@ -51,7 +51,7 @@ tasks.named("dependencyUpdates").configure {
 // version-catalog-update 1.x chooses its versions itself and no longer asks dependencyUpdates; its default,
 // PREFER_STABLE, takes a -jre version for unstable and then offered guava 999.0.0-HEAD-jre-SNAPSHOT. The
 // rule above decides instead: a stable version moves only to a stable one, a pre-release may move to a
-// newer pre-release (so jaxb-api 2.4.0-b180830.0359 is not set back to 2.3.1), and never to a snapshot.
+// newer pre-release, and never to a snapshot.
 versionCatalogUpdate {
     versionSelector { candidate ->
         def version = candidate.candidate.version

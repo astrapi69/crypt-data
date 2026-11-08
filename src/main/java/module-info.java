@@ -29,7 +29,6 @@ module io.github.astrapisixtynine.crypt.data
 	requires org.bouncycastle.pkix;
 	requires io.github.astrapisixtynine.silly.strings;
 	requires io.github.astrapisixtynine.file.worker;
-	requires java.xml.bind;
 	requires io.github.astrapi69.crypt.api;
 	requires io.github.astrapisixtynine.throwable;
 	requires io.github.astrapisixtynine.silly.collection;

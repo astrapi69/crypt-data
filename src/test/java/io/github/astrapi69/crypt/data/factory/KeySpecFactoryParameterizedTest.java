@@ -69,7 +69,7 @@ public class KeySpecFactoryParameterizedTest
 	public void testNewPBEKeySpecStringByteArrayInt(String password, String saltHex,
 		int iterationCount)
 	{
-		byte[] salt = javax.xml.bind.DatatypeConverter.parseHexBinary(saltHex);
+		byte[] salt = java.util.HexFormat.of().parseHex(saltHex);
 		KeySpec actual = KeySpecFactory.newPBEKeySpec(password, salt, iterationCount);
 		assertNotNull(actual);
 	}
