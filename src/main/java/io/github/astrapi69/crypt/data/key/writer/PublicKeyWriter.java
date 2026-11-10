@@ -72,10 +72,13 @@ public final class PublicKeyWriter
 		throws IOException
 	{
 		Objects.requireNonNull(outputStream);
-		final byte[] publicKeyBytes = publicKey.getEncoded();
-		final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
-		outputStream.write(keySpec.getEncoded());
-		outputStream.close();
+		// closed also when the write fails, where it used to stay open (#130)
+		try (outputStream)
+		{
+			final byte[] publicKeyBytes = publicKey.getEncoded();
+			final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+			outputStream.write(keySpec.getEncoded());
+		}
 	}
 
 	/**

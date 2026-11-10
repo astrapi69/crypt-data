@@ -78,7 +78,13 @@ tasks.register('apiCompatibility', JavaExec) {
                 '--new-classpath', dependencyClasspath,
                 '--only-modified',
                 '--html-file', report.get().asFile.absolutePath]
-        if (!breakingIsAllowed) {
+        if (breakingIsAllowed) {
+            // a major may swap a dependency, as lightblueseas/email-tails 7 swapped javax.mail for
+            // jakarta.mail: the baseline then references classes the new classpath no longer has, and
+            // japicmp refuses to compare at all (#103). Within a major the classpath is the same and a
+            // missing class is a finding, so this is only for the reporting case
+            args += ['--ignore-missing-classes']
+        } else {
             args += ['--error-on-binary-incompatibility', '--error-on-source-incompatibility']
         }
         logger.lifecycle("apiCompatibility: $projectVersion against release $apiBaselineVersion - " +

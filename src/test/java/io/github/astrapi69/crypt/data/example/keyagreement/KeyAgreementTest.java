@@ -24,13 +24,13 @@
  */
 package io.github.astrapi69.crypt.data.example.keyagreement;
 
-import static javax.xml.bind.DatatypeConverter.printHexBinary;
 
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.HexFormat;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyAgreement;
@@ -48,6 +48,9 @@ import io.github.astrapi69.crypt.data.factory.SecretKeyFactoryExtensions;
  */
 public class KeyAgreementTest
 {
+
+	/** Upper case hex, as DatatypeConverter.printHexBinary wrote it (crypt-data#133) */
+	private static final HexFormat HEX = HexFormat.of().withUpperCase();
 
 	/**
 	 * Test method for KeyAgreement communication
@@ -79,7 +82,7 @@ public class KeyAgreementTest
 		byte[] alicePk = aliceKeyPair.getPublic().getEncoded();
 
 		// Display public key from Alice
-		System.out.format("Alice Public Key: %s%n", printHexBinary(alicePk));
+		System.out.format("Alice Public Key: %s%n", HEX.formatHex(alicePk));
 
 		// 2. The other(Bob in our case) party generates its own key pair(public and private) using
 		// the algorithm specification and sends the public key to the initiator(Alice in our case).
@@ -90,7 +93,7 @@ public class KeyAgreementTest
 
 		byte[] bobPk = bobKeyPair.getPublic().getEncoded();
 		// Display public key from Bob
-		System.out.format("Bob Public Key: %s%n", printHexBinary(bobPk));
+		System.out.format("Bob Public Key: %s%n", HEX.formatHex(bobPk));
 
 		KeyFactory keyFactory = KeyFactory.getInstance(keyFactoryAlgorithm);
 		X509EncodedKeySpec bobPkSpec = new X509EncodedKeySpec(bobPk);
@@ -104,7 +107,7 @@ public class KeyAgreementTest
 
 		// Read shared secret from Alice
 		byte[] aliceSharedSecret = aliceKeyAgreement.generateSecret();
-		System.out.format("Alice Shared secret: %s%n", printHexBinary(aliceSharedSecret));
+		System.out.format("Alice Shared secret: %s%n", HEX.formatHex(aliceSharedSecret));
 
 		// 4. The other party also generates the secret key using its private key and the
 		// initiator's public key. Diffie-Hellamn algorithm ensures that both parties generate the
@@ -116,7 +119,7 @@ public class KeyAgreementTest
 
 		// Read shared secret from Bob
 		byte[] bobSharedSecret = bobKeyAgreement.generateSecret();
-		System.out.format("Bob Shared secret: %s%n", printHexBinary(bobSharedSecret));
+		System.out.format("Bob Shared secret: %s%n", HEX.formatHex(bobSharedSecret));
 
 		// 5. generate key from Alice shared secret
 		SecretKey aliceSecretKey = SecretKeyFactoryExtensions.newSecretKey(aliceSharedSecret,

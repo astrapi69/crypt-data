@@ -6,7 +6,6 @@ dependencies {
     testAnnotationProcessor libs.lombok
 
     implementation libs.crypt.api
-    implementation libs.jaxb.api
     implementation libs.commons.codec
     implementation libs.commons.lang3
     implementation libs.commons.io

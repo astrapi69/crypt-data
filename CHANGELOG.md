@@ -1,6 +1,56 @@
 ## Change log
 ----------------------
 
+Version 13.3
+-------------
+
+CHANGED:
+
+- the runtime class path resolves commons-collections4 4.6.0 instead of the milestone 4.5.0-M2: silly-collection
+  28.2, which declared the milestone, is raised to 29.1, which declares the release. Of silly-collection this
+  library calls exactly ListFactory.newArrayList and SetFactory.newHashSet, both unchanged in 29.1; the rest of
+  the jump is the Java target, class major 61 to 69, which this build already is (#135)
+- build only: an upload refuses a half-configured signing key: GPG_PRIVATE_KEY without GPG_PASSPHRASE,
+  or the reverse, used to sign nothing and send a snapshot up without its .asc files while CI stayed
+  green (#105)
+- build only: the API gate compares across a major that swapped a dependency: the reporting branch
+  ignores classes the baseline needs and the new classpath no longer has, instead of refusing to
+  compare at all (#103)
+
+DEPRECATED:
+
+- CertFactory.newX509CertificateV3(KeyPair, X500Name, int daysToBeValid, X500Name, String, Extension...): the
+  caller should choose the serial number, with the overload that takes a BigInteger serial and the validity
+  dates (#118)
+
+FIXED:
+
+- KeyExtensions.toBase64Binary encodes with java.util.Base64 instead of JAXB's DatatypeConverter, with the
+  output unchanged character for character (pinned on four vectors, and measured identical over 12020 random
+  inputs before the change). With the one call gone, javax.xml.bind:jaxb-api:2.4.0-b180830.0359 - a numbered
+  build of a 2.4.0 that was never released - leaves the dependencies, the catalog and the module, and with it
+  the runtime class path of every consumer: lethenon shipped the jar in its distribution and mystic-crypt-ui in
+  its installer (#133)
+- KeyWriter.writeInPemFormat(Key, File), and with it PrivateKeyWriter.writeInPemFormat(PrivateKey, File) and
+  PublicKeyWriter.writeInPemFormat(PublicKey, File), returned normally when the key could not be written, for
+  example on a full disk: file-worker's StoreFileExtensions.toFile writes through a PrintWriter, which swallows
+  the IOException, so the caller believed the key was stored while the file was empty or cut short. The PEM text
+  is now written with Files.writeString (US-ASCII), which throws the IOException the method declares; the bytes
+  written are the same as before (#125)
+- CertFactory.newX509CertificateV3(KeyPair, X500Name, int daysToBeValid, X500Name, String, Extension...) took
+  the current time in milliseconds as serial number: two certificates made in one millisecond shared it, and
+  anyone who knew roughly when a certificate was made could predict it. It now draws the serial number from
+  SecureRandom, 158 random bits below a set 159th bit, so it is positive and takes the 20 octets RFC 5280
+  allows (#118)
+- the stream methods of CertificateWriter, PrivateKeyWriter, PublicKeyWriter and EncryptedPrivateKeyWriter
+  closed the stream only after a successful write: when the write failed, or PrivateKeyWriter refused PKCS_1
+  for a key without a traditional form, the stream stayed open, and the File variants left their
+  FileOutputStream to the garbage collector. The stream is now closed in every case (#130)
+- the Javadoc of EncryptedPrivateKeyReader.readPasswordProtectedPrivateKey(File, String) said it returns null
+  when it fails; it throws and has never returned null since #24, and now says so and names every exception it
+  declares. The javadoc run has no errors any more (three before: an unknown @implNote tag and two
+  {@link byte[]}) (#132)
+
 Version 13.2
 -------------
 

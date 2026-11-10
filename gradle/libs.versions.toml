@@ -13,11 +13,11 @@ gradle-plugin-lombok-version = "9.8.2"
 gradle-plugin-nmcp-version = "1.6.2"
 gradle-plugin-pitest-version = "1.19.0"
 gradle-plugin-spotless-version = "8.10.4"
+gradle-plugin-test-results-complete-version = "1.0"
 gradle-plugin-version-catalog-update-version = "1.1.2"
 gradle-plugin-versions-version = "0.66.0"
 guava-version = "33.7.2-jre"
 japicmp-version = "0.26.5"
-jaxb-api-version = "2.4.0-b180830.0359"
 jobj-contract-verifier-version = "5.2"
 jobj-core-version = "9.1"
 jsoup-version = "1.23.2"
@@ -33,7 +33,7 @@ pitest-junit5-plugin-version = "1.2.3"
 pitest-version = "1.30.0"
 random-beans-version = "3.9.0"
 randomizer-version = "10.6"
-silly-collection-version = "28.2"
+silly-collection-version = "29.1"
 silly-io-version = "3.6"
 silly-strings-version = "9.2"
 test-object-version = "9.1"
@@ -54,7 +54,6 @@ csv-worker = { module = "io.github.astrapi69:csv-worker", version.ref = "csv-wor
 file-worker = { module = "io.github.astrapi69:file-worker", version.ref = "file-worker-version" }
 guava = { module = "com.google.guava:guava", version.ref = "guava-version" }
 japicmp = { module = "com.github.siom79.japicmp:japicmp", version.ref = "japicmp-version" }
-jaxb-api = { module = "javax.xml.bind:jaxb-api", version.ref = "jaxb-api-version" }
 jobj-contract-verifier = { module = "io.github.astrapi69:jobj-contract-verifier", version.ref = "jobj-contract-verifier-version" }
 jobj-core = { module = "io.github.astrapi69:jobj-core", version.ref = "jobj-core-version" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup-version" }
@@ -97,4 +96,5 @@ lombok-plugin = { id = "io.freefair.lombok", version.ref = "gradle-plugin-lombok
 nmcp-gradle-plugin = { id = "com.gradleup.nmcp", version.ref = "gradle-plugin-nmcp-version" }
 pitest-gradle-plugin = { id = "info.solidsoft.pitest", version.ref = "gradle-plugin-pitest-version" }
 spotless-plugin-gradle = { id = "com.diffplug.spotless", version.ref = "gradle-plugin-spotless-version" }
+test-results-complete = { id = "io.github.astrapi69.test-results-complete", version.ref = "gradle-plugin-test-results-complete-version" }
 version-catalog-update = { id = "nl.littlerobots.version-catalog-update", version.ref = "gradle-plugin-version-catalog-update-version" }

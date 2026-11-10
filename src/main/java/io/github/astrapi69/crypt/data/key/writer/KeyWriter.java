@@ -27,12 +27,12 @@ package io.github.astrapi69.crypt.data.key.writer;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.Key;
 import java.util.Objects;
 
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
-
-import io.github.astrapi69.file.write.StoreFileExtensions;
 
 /**
  * The class {@link KeyWriter} is a utility class for write security keys in files.
@@ -52,7 +52,7 @@ public final class KeyWriter
 	 * @param file
 	 *            the file to write in
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             if the file cannot be opened or written
 	 */
 	public static void writeInPemFormat(final Key key, final File file) throws IOException
 	{
@@ -63,7 +63,10 @@ public final class KeyWriter
 		pemWriter.close();
 		String pemFormat = stringWriter.toString();
 		pemFormat = pemFormat.replaceAll("\\r\\n", "\\\n");
-		StoreFileExtensions.toFile(file, pemFormat);
+		// The JDK write throws the IOException this method declares when the write fails.
+		// StoreFileExtensions.toFile from file-worker wrote through a PrintWriter, which swallows
+		// it, so a full disk left an empty or cut off key file unreported (#125). PEM is ASCII.
+		Files.writeString(file.toPath(), pemFormat, StandardCharsets.US_ASCII);
 	}
 
 }

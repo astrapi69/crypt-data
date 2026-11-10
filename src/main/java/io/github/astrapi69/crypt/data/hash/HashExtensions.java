@@ -280,7 +280,7 @@ public final class HashExtensions
 	}
 
 	/**
-	 * Hashes the given {@link byte[]} object with the given parameters
+	 * Hashes the given {@code byte[]} object with the given parameters
 	 *
 	 * @param hashIt
 	 *            the byte array to hash
@@ -297,7 +297,7 @@ public final class HashExtensions
 	}
 
 	/**
-	 * Hashes the given {@link byte[]} object with the given parameters
+	 * Hashes the given {@code byte[]} object with the given parameters
 	 *
 	 * @param hashIt
 	 *            the byte array to hash
