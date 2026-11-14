@@ -1,6 +1,18 @@
 ## Change log
 ----------------------
 
+Version 13.4-SNAPSHOT
+-------------
+
+FIXED:
+
+- PrivateKeyReader.getPrivateKey(byte[]), and readPrivateKey(File) for a DER file, no longer write a warning with a
+  stack trace for every algorithm that does not fit while a later one reads the key: such a probe is logged at FINE,
+  with its exception. An RSA key wrote three stack traces to standard error and now writes nothing. When no
+  algorithm fits, one warning without a stack trace names all five with the reason each gave, where five stack
+  traces stood before; the result is unchanged, an empty Optional respectively null (#144,
+  astrapi69/mystic-crypt-ui#968)
+
 Version 13.3
 -------------
 
