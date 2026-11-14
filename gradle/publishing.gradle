@@ -8,17 +8,29 @@ task sourcesJar(type: Jar) {
 task javadocJar(type: Jar) {
     from javadoc
     archiveClassifier.set("javadoc")
-    javadoc {
-        failOnError = false
-    }
 }
 
 javadoc {
-    failOnError = false
+    // A javadoc error breaks the build instead of being silently packaged into the published
+    // -javadoc.jar. The family's -Werror (silly-strings#65) does not fit yet: the delombok'd
+    // sources carry "use of default constructor" warnings that lombok generates; -Werror follows
+    // when they are gone (#142).
+    failOnError = true
+    // The generated HTML takes its interface language from the JVM's default locale, so the 13.3
+    // -javadoc.jar built on a German machine differed from Maven Central's English one in 120 of
+    // 166 files, every difference a translated interface string, and the published jar could not
+    // be verified byte for byte against a local build (RL-094; family standard silly-strings#14,
+    // same fix as mystic-crypt#304). -locale alone is not enough: javadoc honours it fully only
+    // ahead of the doclet options, where Gradle does not put it, so the tool JVM's own locale is
+    // pinned as well.
+    options.locale = "en"
+    options.jFlags("-Duser.language=en", "-Duser.country=US")
     if (JavaVersion.current().isJava9Compatible()) {
         options.addBooleanOption("html5", true)
     }
 }
+
+check.dependsOn javadoc
 
 publishing {
     publications {

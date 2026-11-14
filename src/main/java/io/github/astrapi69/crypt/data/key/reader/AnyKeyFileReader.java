@@ -66,7 +66,10 @@ public final class AnyKeyFileReader
 	 * (#102)
 	 */
 	private static final List<String> KEY_ALGORITHMS = List.of("RSA", "EC", "DSA", "EdDSA",
-		"Ed25519", "X25519", "X448", "ML-KEM-768", "ML-DSA-65");
+		"Ed25519", "X25519", "X448", "ML-KEM-768", "ML-DSA-65",
+		// the family factories read every parameter set out of the encoding's own OID, so
+		// ML-DSA-44 and ML-DSA-87 and each SLH-DSA set come back readable (#141)
+		"ML-DSA", "SLH-DSA");
 
 	private AnyKeyFileReader()
 	{

@@ -52,6 +52,7 @@ import io.github.astrapi69.crypt.api.algorithm.key.KeyPairGeneratorAlgorithm;
 import io.github.astrapi69.crypt.api.key.KeyFileFormat;
 import io.github.astrapi69.crypt.api.key.KeyFormat;
 import io.github.astrapi69.crypt.data.factory.KeyPairFactory;
+import io.github.astrapi69.crypt.data.key.PublicKeyExtensions;
 import io.github.astrapi69.crypt.data.key.writer.PrivateKeyWriter;
 import io.github.astrapi69.file.search.PathFinder;
 
@@ -138,6 +139,24 @@ class AnyKeyFileReaderTest
 
 		assertTrue(refused.getMessage() != null && refused.getMessage().contains("decrypted.txt"),
 			"a reader that cannot read says WHICH file it could not read: " + refused.getMessage());
+	}
+
+	@ParameterizedTest(name = "{0} as PEM")
+	@EnumSource(value = KeyPairGeneratorAlgorithm.class, names = { "RSA", "ML_DSA_44", "ML_DSA_65",
+			"ML_DSA_87", "SLH_DSA_SHA2_128S", "SLH_DSA_SHAKE_128F" })
+	@DisplayName("a PEM public key reads back for every signature algorithm the window saves")
+	void readsBackAPublicKeySavedAsPemForEverySignatureAlgorithm(
+		KeyPairGeneratorAlgorithm algorithm, @TempDir File directory) throws Exception
+	{
+		// the signatures window generates and saves all of these as PEM (#141); ML-DSA-65 read,
+		// its siblings and every SLH-DSA parameter set did not, while the DER shape read for all
+		KeyPair keyPair = KeyPairFactory.newKeyPair(algorithm);
+		File file = new File(directory, "public-" + algorithm + ".pem");
+		Files.writeString(file.toPath(), PublicKeyExtensions.toPemFormat(keyPair.getPublic()));
+
+		assertEquals(keyPair.getPublic(), AnyKeyFileReader.readPublicKey(file),
+			"a " + algorithm + " public key saved as PEM must read back as the key that was "
+				+ "generated, not throw");
 	}
 
 	@Test

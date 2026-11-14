@@ -33,6 +33,8 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -63,6 +65,14 @@ public final class PrivateKeyReader
 	 * The five dashes and the word that open every pem document, whatever it holds
 	 */
 	private static final String PEM_HEADER_START = "-----BEGIN";
+
+	/**
+	 * The algorithms {@link #getPrivateKey(byte[])} tries the bytes as, in this order
+	 */
+	private static final List<KeyPairGeneratorAlgorithm> PROBED_ALGORITHMS = List.of(
+		KeyPairGeneratorAlgorithm.DIFFIE_HELLMAN, KeyPairGeneratorAlgorithm.DSA,
+		KeyPairGeneratorAlgorithm.EC, KeyPairGeneratorAlgorithm.RSASSA_PSS,
+		KeyPairGeneratorAlgorithm.RSA);
 
 	private PrivateKeyReader()
 	{
@@ -478,8 +488,14 @@ public final class PrivateKeyReader
 	}
 
 	/**
-	 * Gets an {@link Optional} with the private key from the given file. If it does not match, the
-	 * optional is empty
+	 * Gets an {@link Optional} with the private key from the given bytes. If it does not match, the
+	 * optional is empty.
+	 * <p>
+	 * The bytes are tried as a PKCS#8 encoding of DiffieHellman, DSA, EC, RSASSA-PSS and RSA, in
+	 * this order. An algorithm that does not fit is the expected path while the next one is tried:
+	 * it is logged at {@link Level#FINE} with its exception, and the first one that fits gives the
+	 * key without anything at a higher level. Only when none fits, one {@link Level#WARNING}
+	 * without a stack trace names every algorithm with the reason it gave (#144).
 	 *
 	 * @param privateKeyBytes
 	 *            the byte array that contains the private key bytes
@@ -488,54 +504,24 @@ public final class PrivateKeyReader
 	 */
 	public static Optional<PrivateKey> getPrivateKey(final byte[] privateKeyBytes)
 	{
-		try
+		List<String> refusals = new ArrayList<>();
+		for (KeyPairGeneratorAlgorithm candidate : PROBED_ALGORITHMS)
 		{
-			return Optional.of(PrivateKeyReader.readPrivateKey(privateKeyBytes,
-				KeyPairGeneratorAlgorithm.DIFFIE_HELLMAN.getAlgorithm()));
+			String algorithm = candidate.getAlgorithm();
+			try
+			{
+				return Optional.of(PrivateKeyReader.readPrivateKey(privateKeyBytes, algorithm));
+			}
+			catch (NoSuchAlgorithmException | InvalidKeySpecException e)
+			{
+				log.log(Level.FINE,
+					"the private key bytes are not in the '" + algorithm + "' format", e);
+				refusals.add(algorithm + " ("
+					+ Objects.toString(e.getMessage(), e.getClass().getName()) + ")");
+			}
 		}
-		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
-		{
-			log.log(Level.WARNING,
-				"Given private key file is not stored in 'DiffieHellman' algorithm", e);
-		}
-		try
-		{
-			return Optional.of(PrivateKeyReader.readPrivateKey(privateKeyBytes,
-				KeyPairGeneratorAlgorithm.DSA.getAlgorithm()));
-		}
-		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
-		{
-			log.log(Level.WARNING, "Given private key file is not stored in 'DSA' algorithm", e);
-		}
-		try
-		{
-			return Optional.of(PrivateKeyReader.readPrivateKey(privateKeyBytes,
-				KeyPairGeneratorAlgorithm.EC.getAlgorithm()));
-		}
-		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
-		{
-			log.log(Level.WARNING, "Given private key file is not stored in 'EC' algorithm", e);
-		}
-		try
-		{
-			return Optional.of(PrivateKeyReader.readPrivateKey(privateKeyBytes,
-				KeyPairGeneratorAlgorithm.RSASSA_PSS.getAlgorithm()));
-		}
-		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
-		{
-			log.log(Level.WARNING, "Given private key file is not stored in 'RSASSA-PSS' algorithm",
-				e);
-		}
-		try
-		{
-			return Optional.of(PrivateKeyReader.readPrivateKey(privateKeyBytes,
-				KeyPairGeneratorAlgorithm.RSA.getAlgorithm()));
-		}
-		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
-		{
-			log.log(Level.WARNING, "Given private key file is not stored in 'RSA' algorithm", e);
-		}
-		// every candidate algorithm failed: the bytes are not a private key this reader can parse
+		log.warning(
+			"the private key bytes are in none of the formats " + String.join(", ", refusals));
 		return Optional.empty();
 	}
 

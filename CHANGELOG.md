@@ -1,6 +1,37 @@
 ## Change log
 ----------------------
 
+Version 13.3.1
+-------------
+
+A patch release: two reader fixes mystic-crypt-ui waits for, a build that produces the same bytes on every machine,
+and the dependency updates that were due. No API change.
+
+CHANGED:
+
+- the runtime class path resolves silly-collection 29.2 instead of 29.1, a minor of the family; nothing else on the
+  runtime class path changes (measured with `dependencies --configuration runtimeClasspath` before and after, here
+  and in mystic-crypt). Build and test only: jacoco 0.8.16, the lombok Gradle plugin 9.8.3, the versions plugin
+  0.67.0, randomizer 10.7, and silly-io 5.0 for the tests - the runtime class path keeps silly-io 3.6, which
+  file-worker 19.1 brings
+- build only: the jar's manifest and archive entries are written the same on every machine (#139), and the javadoc
+  jar builds the same bytes whatever the machine's language, a javadoc error fails the build, and `check` runs the
+  javadoc (#143)
+
+FIXED:
+
+- PrivateKeyReader.getPrivateKey(byte[]), and readPrivateKey(File) for a DER file, no longer write a warning with a
+  stack trace for every algorithm that does not fit while a later one reads the key: such a probe is logged at FINE,
+  with its exception. An RSA key wrote three stack traces to standard error and now writes nothing. When no
+  algorithm fits, one warning without a stack trace names all five with the reason each gave, where five stack
+  traces stood before; the result is unchanged, an empty Optional respectively null (#144,
+  astrapi69/mystic-crypt-ui#968)
+- AnyKeyFileReader.readPublicKey reads a PEM public key of ML-DSA-44, ML-DSA-87 and every SLH-DSA parameter set; it
+  read ML-DSA-65 alone of them, while the DER shape of the same keys read, so a public key the signatures window of
+  mystic-crypt-ui saved could not be loaded back for verifying (#141)
+- tests only: the probe output test forks its JVM in English, so it passes on a machine whose language is not
+  English (#147)
+
 Version 13.3
 -------------
 
