@@ -237,8 +237,11 @@ class PrivateKeyReaderProbeOutputTest
 			.collect(Collectors.joining(File.pathSeparator));
 		Path standardOutput = tempDir.resolve(keyFile.getFileName() + ".out");
 		Path standardError = tempDir.resolve(keyFile.getFileName() + ".err");
-		ProcessBuilder builder = new ProcessBuilder(java, "-cp", classPath,
-			PrivateKeyReaderProbeOutputTest.class.getName(), keyFile.toString())
+		// java.util.logging names the level in the JVM's language ("WARNUNG" on a German machine),
+		// and this test asserts the shape of the output, not its translation: the forked JVM runs
+		// in English, as the family's javadoc builds do
+		ProcessBuilder builder = new ProcessBuilder(java, "-Duser.language=en", "-Duser.country=US",
+			"-cp", classPath, PrivateKeyReaderProbeOutputTest.class.getName(), keyFile.toString())
 				.redirectOutput(standardOutput.toFile()).redirectError(standardError.toFile());
 		// options a machine sets for every JVM make it say so on standard error, which is not the
 		// reader's output
