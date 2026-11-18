@@ -23,8 +23,13 @@ dependencies {
     testImplementation libs.vintage.time
     testImplementation libs.time.machine
     testImplementation libs.test.object
-    testImplementation libs.random.beans
     testImplementation libs.randomizer
+    // csv-worker 1.0, its only release, asks for file-worker 17.4, whose own dependencies (jobj-compare 11.1 with
+    // commons-beanutils 1.9.4, commons-lang3 3.16.0) the submitted dependency graph reports although file-worker 19.1
+    // of the implementation above wins every resolution here; csv-worker runs on that 19.1
+    testImplementation(libs.csv.worker) {
+        exclude group: 'io.github.astrapi69', module: 'file-worker'
+    }
     testImplementation libs.checksum.up
     testImplementation libs.meanbean
     testImplementation libs.jobj.contract.verifier
