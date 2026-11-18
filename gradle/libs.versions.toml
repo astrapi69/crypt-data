@@ -31,7 +31,6 @@ meanbean-version = "3.0.0-M9"
 mockito-core-version = "5.24.0"
 pitest-junit5-plugin-version = "1.2.3"
 pitest-version = "1.30.0"
-random-beans-version = "3.9.0"
 randomizer-version = "10.7"
 silly-collection-version = "30.0"
 silly-io-version = "5.0"
@@ -66,7 +65,6 @@ meanbean = { module = "com.github.meanbeanlib:meanbean", version.ref = "meanbean
 meanbean-factories = { module = "io.github.astrapi69:meanbean-factories", version.ref = "meanbean-factories-version" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core-version" }
 mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito-core-version" }
-random-beans = { module = "io.github.benas:random-beans", version.ref = "random-beans-version" }
 randomizer = { module = "io.github.astrapi69:randomizer", version.ref = "randomizer-version" }
 silly-collection = { module = "io.github.astrapi69:silly-collection", version.ref = "silly-collection-version" }
 silly-io = { module = "io.github.astrapi69:silly-io", version.ref = "silly-io-version" }
@@ -79,7 +77,6 @@ vintage-time = { module = "io.github.astrapi69:vintage-time", version.ref = "vin
 [bundles]
 unit-testing = [
     "commons-csv",
-    "csv-worker",
     "jsoup",
     "junit-jupiter",
     "junit-jupiter-params",
