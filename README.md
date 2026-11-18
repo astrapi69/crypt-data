@@ -222,6 +222,10 @@ What a release consists of, in the order it is run (#87):
    release, nothing else.
 6. **Open the next cycle**: `projectVersion` to the next `-SNAPSHOT`, and `apiBaselineVersion` to the
    release just made, so the compatibility gate compares against what is actually out.
+7. **Bump drafts in the consumers** (RL-127): in every repository of the family that declares
+   crypt-data, a draft pull request that raises it to the release and shows the build before and
+   after it, so that a break shows the day the release appears; each is merged by RL-065, a runtime
+   major in a session of its own.
 
 ## What can i do to support this project
 
