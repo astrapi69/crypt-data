@@ -41,7 +41,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import io.github.astrapi69.file.search.PathFinder;
-import io.github.astrapisixtynine.csv.CsvExtensions;
 
 /**
  * The unit test class for the class {@link TestCsvExtensions}
@@ -93,7 +92,7 @@ class CsvExtensionsTest
 			.comparing((String[] columns) -> columns[0]) // Sort by 'algorithm'
 			.thenComparingInt(columns -> Integer.parseInt(columns[1])); // Then by 'keysize'
 
-		CsvExtensions.sortCsv(csvFilePath, comparatorSupplier);
+		TestCsvExtensions.sortCsv(csvFilePath, comparatorSupplier);
 
 		assertEquals(Files.readAllLines(fixture("invalid_key_pair_algorithms.csv").toPath()),
 			Files.readAllLines(csvFilePath));
@@ -111,7 +110,7 @@ class CsvExtensionsTest
 
 		Path csvFilePath = reversedCopyOf("new_valid_key_pair_algorithms.csv");
 
-		CsvExtensions.sortCsvByAlgorithmAndKeysize(csvFilePath);
+		TestCsvExtensions.sortCsvByAlgorithmAndKeysize(csvFilePath);
 
 		assertEquals(Files.readAllLines(fixture("new_valid_key_pair_algorithms.csv").toPath()),
 			Files.readAllLines(csvFilePath));
@@ -129,9 +128,9 @@ class CsvExtensionsTest
 	{
 		Path csvFilePath = reversedCopyOf(
 			"valid_jdk_17_provider_bc_certificate_signature_algorithms.csv");
-		CsvExtensions.sortCsvByKeypairAndSignatureAlgorithm(csvFilePath);
+		TestCsvExtensions.sortCsvByKeypairAndSignatureAlgorithm(csvFilePath);
 		csvFilePath = reversedCopyOf("invalid_certificate_signature_algorithms.csv");
-		CsvExtensions.sortCsvByKeypairAndSignatureAlgorithm(csvFilePath);
+		TestCsvExtensions.sortCsvByKeypairAndSignatureAlgorithm(csvFilePath);
 		System.out.println("CSV file sorted successfully.");
 	}
 }
