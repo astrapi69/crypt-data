@@ -483,6 +483,19 @@ CHANGED:
 - updated FileInfo/FileCreationState imports to their new location
   (io.github.astrapi69.file.create.model) following the file-worker 19.0 package move
 
+KNOWN ISSUES:
+
+- not binary compatible with 10.1: KeyStoreInfo#getFileInfo() now returns, and
+  KeyStoreInfo.KeyStoreInfoBuilder#fileInfo(FileInfo) now takes,
+  io.github.astrapi69.file.create.model.FileInfo instead of
+  io.github.astrapi69.file.create.FileInfo, because file-worker 19.0, which this version
+  brings, moved that class. Code compiled against 10.1 that calls either method fails at run
+  time on 10.2 with NoSuchMethodError, and code that still creates the old FileInfo fails with
+  NoClassDefFoundError, since file-worker 19.0 no longer has that class. Recompile against 10.2
+  or later with the import changed to io.github.astrapi69.file.create.model.FileInfo. No
+  family repository is affected: no published POM of the family declares crypt-data 10 or
+  10.1 (measured 2026-11-18).
+
 Version 10.1
 -------------
 
