@@ -1,18 +1,26 @@
 /**
- * The API compatibility gate (#70): the public API of this build against the last release on
- * Maven Central, by japicmp.
+ * The API compatibility gate: the public API of this build against the last release on Maven
+ * Central, by japicmp. The family's one pattern (RL-128): this file is the same in every
+ * repository, the origin is crypt-data's gradle/api-compatibility.gradle.
  *
  * Semantic versioning decides whether a difference is an error: with the same major version as the
  * baseline, a binary or source incompatible change fails the build, because a minor or patch
  * release must not break a consumer. With a higher major it is written to the report and the build
- * goes on, because a major is where breaking changes belong. develop carried two breaking changes
- * under 12.3-SNAPSHOT for weeks (#42, #51) without anything saying so; this is what says so.
+ * goes on, because a major is where breaking changes belong.
+ *
+ * A break in a minor or patch is accepted only through a documented entry in
+ * gradle/api-compatibility-exclusions.gradle, the one file that differs per repository. Each entry
+ * names the element in the japicmp exclude form (package.Class#member, * as wildcard, ; is added
+ * between the entries here), the reason the break is accepted and the issue that decided it; an
+ * entry without a reason or an issue fails the build. The syntax is that of the japicmp option
+ * -e / --exclude (java -jar japicmp-jar-with-dependencies.jar --help). An entry is removed when
+ * the next major version is released.
  *
  * apiBaselineVersion in gradle.properties is the last release and moves with every release,
  * in the same commit that opens the next development cycle.
  *
  * The japicmp core runs through JavaExec rather than the Gradle plugin me.champeau.gradle.japicmp,
- * whose last release is from 2025-02; the core is maintained (0.26.2, 2026-09).
+ * whose last release is from 2025-02; the core is maintained.
  */
 configurations {
     japicmpTool {
@@ -24,6 +32,8 @@ configurations {
 dependencies {
     japicmpTool(variantOf(libs.japicmp) { classifier('jar-with-dependencies') })
 }
+
+apply from: "${rootDir}/gradle/api-compatibility-exclusions.gradle"
 
 def majorOf = { String version -> Integer.parseInt(version.tokenize('.-')[0]) }
 
@@ -54,11 +64,18 @@ tasks.register('apiCompatibility', JavaExec) {
     description = "Compares the public API with release $apiBaselineVersion; breaking it fails within the same major"
     def newJar = tasks.named('jar').flatMap { it.archiveFile }
     def report = layout.buildDirectory.file('reports/japicmp/api-compatibility.html')
-    def breakingIsAllowed = majorOf(projectVersion) > majorOf(apiBaselineVersion)
+    // everything the task action reads is taken here, not from the project in doFirst, so the task
+    // also runs with the configuration cache
+    def baselineVersion = apiBaselineVersion
+    def currentVersion = projectVersion
+    def dependencyClasspath = configurations.runtimeClasspath
+    def breakingIsAllowed = majorOf(currentVersion) > majorOf(baselineVersion)
+    def exclusions = apiCompatibilityExclusions
     dependsOn 'apiBaselineJar'
     inputs.file(baselineFile)
     inputs.file(newJar)
     inputs.property('breakingIsAllowed', breakingIsAllowed)
+    inputs.property('exclusions', exclusions.toString())
     outputs.file(report)
     classpath = configurations.japicmpTool
     mainClass = 'japicmp.JApiCmp'
@@ -66,30 +83,44 @@ tasks.register('apiCompatibility', JavaExec) {
         def baselineJar = baselineFile.get().asFile
         // fail closed: a baseline that is not the release, or is the jar under test, compares
         // nothing and would report green
-        if (!baselineJar.name.contains("-${apiBaselineVersion}.") ||
+        if (!baselineJar.name.contains("-${baselineVersion}.") ||
             baselineJar.canonicalPath == newJar.get().asFile.canonicalPath) {
             throw new GradleException("apiCompatibility: the baseline resolved to " +
-                "${baselineJar}, not release $apiBaselineVersion - refusing to compare")
+                "${baselineJar}, not release $baselineVersion - refusing to compare")
         }
-        def dependencyClasspath = configurations.runtimeClasspath.asPath
+        // an accepted break is documented or it is not accepted
+        exclusions.eachWithIndex { entry, index ->
+            ['element', 'reason', 'issue'].each { key ->
+                if (!entry[key]?.toString()?.trim()) {
+                    throw new GradleException("apiCompatibility: entry ${index + 1} of " +
+                        "gradle/api-compatibility-exclusions.gradle has no '$key'; every accepted " +
+                        "break names its element, its reason and its issue: $entry")
+                }
+            }
+        }
+        def classpathAsPath = dependencyClasspath.asPath
         args = ['--old', baselineJar.absolutePath,
                 '--new', newJar.get().asFile.absolutePath,
-                '--old-classpath', dependencyClasspath,
-                '--new-classpath', dependencyClasspath,
+                '--old-classpath', classpathAsPath,
+                '--new-classpath', classpathAsPath,
                 '--only-modified',
                 '--html-file', report.get().asFile.absolutePath]
+        if (exclusions) {
+            args += ['--exclude', exclusions.collect { it.element.toString().trim() }.join(';')]
+        }
         if (breakingIsAllowed) {
             // a major may swap a dependency, as lightblueseas/email-tails 7 swapped javax.mail for
             // jakarta.mail: the baseline then references classes the new classpath no longer has, and
-            // japicmp refuses to compare at all (#103). Within a major the classpath is the same and a
+            // japicmp refuses to compare at all. Within a major the classpath is the same and a
             // missing class is a finding, so this is only for the reporting case
             args += ['--ignore-missing-classes']
         } else {
             args += ['--error-on-binary-incompatibility', '--error-on-source-incompatibility']
         }
-        logger.lifecycle("apiCompatibility: $projectVersion against release $apiBaselineVersion - " +
+        logger.lifecycle("apiCompatibility: $currentVersion against release $baselineVersion - " +
             (breakingIsAllowed ? 'a higher major, incompatibilities are reported, not refused'
-                               : 'the same major, an incompatibility fails the build'))
+                               : 'the same major, an incompatibility fails the build') +
+            (exclusions ? "; ${exclusions.size()} documented exclusion(s)" : ''))
     }
 }
 

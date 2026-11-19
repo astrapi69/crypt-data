@@ -1,0 +1,16 @@
+/**
+ * The breaks of the public API that this repository accepts in a minor or patch release, read by
+ * gradle/api-compatibility.gradle (RL-128). Empty is the normal state.
+ *
+ * One entry per accepted break:
+ *
+ *   [element: 'io.github.astrapi69.example.Foo#bar(int)',
+ *    reason : 'why the break is accepted',
+ *    issue  : 'astrapi69/<repo>#NN']
+ *
+ * element is the japicmp exclude form package.Class#member, * as wildcard (japicmp --exclude).
+ * An entry without a reason or an issue fails the build. Remove the entry when the next major
+ * version is released.
+ */
+ext.apiCompatibilityExclusions = [
+]
