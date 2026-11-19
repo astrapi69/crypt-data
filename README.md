@@ -222,6 +222,11 @@ What a release consists of, in the order it is run (#87):
    release, nothing else.
 6. **Open the next cycle**: `projectVersion` to the next `-SNAPSHOT`, and `apiBaselineVersion` to the
    release just made, so the compatibility gate compares against what is actually out.
+
+`./gradlew build` runs `apiCompatibility`, which compares the public API with the last release on
+Maven Central and, within the same major version, fails on a binary or source incompatible change
+unless a documented entry (element, reason, issue) in `gradle/api-compatibility-exclusions.gradle`
+accepts it; a higher major only reports it.
 7. **Bump drafts in the consumers** (RL-127): in every repository of the family that declares
    crypt-data, a draft pull request that raises it to the release and shows the build before and
    after it, so that a break shows the day the release appears; each is merged by RL-065, a runtime
