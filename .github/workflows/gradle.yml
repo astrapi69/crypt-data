@@ -53,6 +53,18 @@ jobs:
         env:
           ossrhUsername: ${{secrets.OSSRHUSERNAME}}
           ossrhPassword: ${{secrets.OSSRHPASSWORD}}
+      - name: Upload the test reports
+        # always, not only on failure: a green run whose results are thrown away with the job
+        # cannot be checked afterwards, and how many tests ran then has no answer but a local run
+        # (the maintainer, 2026-11-20, after astrapi69/mystic-crypt-ui#1070)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: test-reports
+          path: |
+            build/test-results
+            build/reports/tests
+          retention-days: 14
       - name: Mutation testing (PIT, fails below mutationThreshold in build.gradle)
         run: |
           ./gradlew pitest
