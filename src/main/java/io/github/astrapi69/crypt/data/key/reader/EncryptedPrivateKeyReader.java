@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.security.AlgorithmParameters;
 import java.security.InvalidAlgorithmParameterException;
@@ -41,6 +42,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 
 import javax.crypto.BadPaddingException;
@@ -50,7 +52,15 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKeyFactory;
 
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.pkcs.KeyDerivationFunc;
+import org.bouncycastle.asn1.pkcs.PBEParameter;
+import org.bouncycastle.asn1.pkcs.PBES2Parameters;
+import org.bouncycastle.asn1.pkcs.PBKDF2Params;
+import org.bouncycastle.asn1.pkcs.PKCS12PBEParams;
+import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.openssl.PEMDecryptorProvider;
 import org.bouncycastle.openssl.PEMEncryptedKeyPair;
 import org.bouncycastle.openssl.PEMException;
@@ -76,6 +86,24 @@ import lombok.extern.java.Log;
 @Log
 public final class EncryptedPrivateKeyReader
 {
+
+	/**
+	 * The most iterations of its password-based encryption a key file in DER form may name. The
+	 * file names its own count and the key is derived with it before the password can be checked,
+	 * so the count is bounded, whichever provider serves the scheme. The bound is the one Bouncy
+	 * Castle 1.87 sets for its own password-based schemes
+	 * ({@code org.bouncycastle.pbe.max_iteration_count}), far above the counts key files are
+	 * written with
+	 */
+	public static final int MAXIMUM_ITERATION_COUNT = 10_000_000;
+
+	/**
+	 * The PBES1 schemes of PKCS#5, whose parameters are a salt and an iteration count
+	 */
+	private static final Set<ASN1ObjectIdentifier> PBES1_SCHEMES = Set.of(
+		PKCSObjectIdentifiers.pbeWithMD2AndDES_CBC, PKCSObjectIdentifiers.pbeWithMD2AndRC2_CBC,
+		PKCSObjectIdentifiers.pbeWithMD5AndDES_CBC, PKCSObjectIdentifiers.pbeWithMD5AndRC2_CBC,
+		PKCSObjectIdentifiers.pbeWithSHA1AndDES_CBC, PKCSObjectIdentifiers.pbeWithSHA1AndRC2_CBC);
 
 	private EncryptedPrivateKeyReader()
 	{
@@ -246,6 +274,7 @@ public final class EncryptedPrivateKeyReader
 	{
 		final EncryptedPrivateKeyInfo encryptedPrivateKeyInfo = new EncryptedPrivateKeyInfo(
 			encryptedPrivateKeyBytes);
+		requireBoundedIterationCount(encryptedPrivateKeyBytes);
 		final String algName = encryptedPrivateKeyInfo.getAlgName();
 		final Cipher cipher = CipherFactory.newCipher(algName);
 		final KeySpec pbeKeySpec = KeySpecFactory.newPBEKeySpec(password);
@@ -269,6 +298,80 @@ public final class EncryptedPrivateKeyReader
 				"The password does not open this key: " + wrongPassword.getMessage(),
 				wrongPassword);
 		}
+	}
+
+	/**
+	 * Refuses a key file whose password-based encryption names an iteration count outside 1 to
+	 * {@link #MAXIMUM_ITERATION_COUNT}, or a scheme whose count this reader cannot read
+	 *
+	 * @param encryptedPrivateKeyBytes
+	 *            the DER encoded EncryptedPrivateKeyInfo
+	 * @throws InvalidAlgorithmParameterException
+	 *             if the count is outside the bound, or the scheme or its parameters cannot be read
+	 */
+	private static void requireBoundedIterationCount(final byte[] encryptedPrivateKeyBytes)
+		throws InvalidAlgorithmParameterException
+	{
+		final BigInteger iterationCount = iterationCountOf(encryptedPrivateKeyBytes);
+		if (iterationCount.signum() <= 0
+			|| iterationCount.compareTo(BigInteger.valueOf(MAXIMUM_ITERATION_COUNT)) > 0)
+		{
+			throw new InvalidAlgorithmParameterException("The key file asks for " + iterationCount
+				+ " iterations of its password-based encryption; 1 to " + MAXIMUM_ITERATION_COUNT
+				+ " are allowed");
+		}
+	}
+
+	/**
+	 * The iteration count a DER encoded EncryptedPrivateKeyInfo names, read from its algorithm
+	 * identifier for the PKCS#12 schemes, the PBES1 schemes and PBES2 with PBKDF2
+	 *
+	 * @param encryptedPrivateKeyBytes
+	 *            the DER encoded EncryptedPrivateKeyInfo
+	 * @return the iteration count the file names
+	 * @throws InvalidAlgorithmParameterException
+	 *             if the scheme is none of these, or its parameters cannot be read
+	 */
+	static BigInteger iterationCountOf(final byte[] encryptedPrivateKeyBytes)
+		throws InvalidAlgorithmParameterException
+	{
+		final AlgorithmIdentifier scheme;
+		try
+		{
+			scheme = org.bouncycastle.asn1.pkcs.EncryptedPrivateKeyInfo
+				.getInstance(encryptedPrivateKeyBytes).getEncryptionAlgorithm();
+			final ASN1ObjectIdentifier schemeId = scheme.getAlgorithm();
+			if (schemeId.on(PKCSObjectIdentifiers.pkcs_12PbeIds))
+			{
+				return PKCS12PBEParams.getInstance(scheme.getParameters()).getIterations();
+			}
+			if (PBES1_SCHEMES.contains(schemeId))
+			{
+				return PBEParameter.getInstance(scheme.getParameters()).getIterationCount();
+			}
+			if (PKCSObjectIdentifiers.id_PBES2.equals(schemeId))
+			{
+				final KeyDerivationFunc keyDerivation = PBES2Parameters
+					.getInstance(scheme.getParameters()).getKeyDerivationFunc();
+				if (PKCSObjectIdentifiers.id_PBKDF2.equals(keyDerivation.getAlgorithm()))
+				{
+					return PBKDF2Params.getInstance(keyDerivation.getParameters())
+						.getIterationCount();
+				}
+				throw new InvalidAlgorithmParameterException(
+					"The key file derives its key with " + keyDerivation.getAlgorithm()
+						+ ", whose iteration count this reader does not read");
+			}
+		}
+		catch (IllegalArgumentException | IllegalStateException unreadable)
+		{
+			throw new InvalidAlgorithmParameterException(
+				"The parameters of the key file's password-based encryption cannot be read: "
+					+ unreadable.getMessage(),
+				unreadable);
+		}
+		throw new InvalidAlgorithmParameterException("The key file is encrypted with "
+			+ scheme.getAlgorithm() + ", a scheme whose iteration count this reader does not read");
 	}
 
 	/**
