@@ -332,7 +332,7 @@ public final class EncryptedPrivateKeyReader
 	 * @throws InvalidAlgorithmParameterException
 	 *             if the scheme is none of these, or its parameters cannot be read
 	 */
-	private static BigInteger iterationCountOf(final byte[] encryptedPrivateKeyBytes)
+	static BigInteger iterationCountOf(final byte[] encryptedPrivateKeyBytes)
 		throws InvalidAlgorithmParameterException
 	{
 		final AlgorithmIdentifier scheme;
