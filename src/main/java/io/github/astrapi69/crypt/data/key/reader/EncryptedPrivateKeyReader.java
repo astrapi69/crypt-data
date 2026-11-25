@@ -53,7 +53,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKeyFactory;
 
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.pkcs.KeyDerivationFunc;
 import org.bouncycastle.asn1.pkcs.PBEParameter;
 import org.bouncycastle.asn1.pkcs.PBES2Parameters;
 import org.bouncycastle.asn1.pkcs.PBKDF2Params;
@@ -331,8 +330,13 @@ public final class EncryptedPrivateKeyReader
 	 * @return the iteration count the file names
 	 * @throws InvalidAlgorithmParameterException
 	 *             if the scheme is none of these, or its parameters cannot be read
+	 *             <p>
+	 *             PBES2 parameters are read as PBKDF2's: the JDK reads a PBES2 file only with
+	 *             PBKDF2 and refuses any other key derivation while it reads the file, before this
+	 *             method sees it, and parameters that are no PBKDF2 parameters are refused here as
+	 *             unreadable
 	 */
-	static BigInteger iterationCountOf(final byte[] encryptedPrivateKeyBytes)
+	private static BigInteger iterationCountOf(final byte[] encryptedPrivateKeyBytes)
 		throws InvalidAlgorithmParameterException
 	{
 		final AlgorithmIdentifier scheme;
@@ -351,16 +355,8 @@ public final class EncryptedPrivateKeyReader
 			}
 			if (PKCSObjectIdentifiers.id_PBES2.equals(schemeId))
 			{
-				final KeyDerivationFunc keyDerivation = PBES2Parameters
-					.getInstance(scheme.getParameters()).getKeyDerivationFunc();
-				if (PKCSObjectIdentifiers.id_PBKDF2.equals(keyDerivation.getAlgorithm()))
-				{
-					return PBKDF2Params.getInstance(keyDerivation.getParameters())
-						.getIterationCount();
-				}
-				throw new InvalidAlgorithmParameterException(
-					"The key file derives its key with " + keyDerivation.getAlgorithm()
-						+ ", whose iteration count this reader does not read");
+				return PBKDF2Params.getInstance(PBES2Parameters.getInstance(scheme.getParameters())
+					.getKeyDerivationFunc().getParameters()).getIterationCount();
 			}
 		}
 		catch (IllegalArgumentException | IllegalStateException unreadable)
