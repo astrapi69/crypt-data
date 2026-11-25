@@ -1,6 +1,20 @@
 ## Change log
 ----------------------
 
+Version 13.3.2
+-------------
+
+A patch release of 13.3.1 with one change: the reader of password protected key files in DER form checks the
+iteration count a file names against one bound before it derives a key. Nothing else changes from 13.3.1.
+
+FIXED:
+
+- `EncryptedPrivateKeyReader.readPasswordProtectedPrivateKey` checks the iteration count a key file in DER form
+  names against one bound, `EncryptedPrivateKeyReader.MAXIMUM_ITERATION_COUNT` (10 000 000), before it derives a
+  key, for the PKCS#12 schemes, the PBES1 schemes and PBES2 with PBKDF2: a count of 0, a negative count or one above
+  it is refused with an `InvalidAlgorithmParameterException` that names the count and the range, and so is a scheme
+  whose count the reader cannot read. Key files written with the usual counts keep opening
+
 Version 13.3.1
 -------------
 
