@@ -172,19 +172,37 @@ class EncryptedPrivateKeyIterationCountTest
 	}
 
 	/**
+	 * The schemes whose files the JDK takes with NULL parameters while it reads them (measured on
+	 * JDK 25.0.5 with Bouncy Castle appended): the PKCS#12 schemes, the PBES1 schemes and PBES2
+	 */
+	static Stream<ASN1ObjectIdentifier> schemesTheJdkTakesWithNullParameters()
+	{
+		return Stream.of(PKCSObjectIdentifiers.pbeWithSHAAnd3_KeyTripleDES_CBC,
+			PKCSObjectIdentifiers.pbeWithSHAAnd2_KeyTripleDES_CBC,
+			PKCSObjectIdentifiers.pbeWithSHAAnd128BitRC4,
+			PKCSObjectIdentifiers.pbeWithSHAAnd40BitRC4,
+			PKCSObjectIdentifiers.pbeWithSHAAnd128BitRC2_CBC,
+			PKCSObjectIdentifiers.pbeWithSHAAnd40BitRC2_CBC,
+			PKCSObjectIdentifiers.pbeWithMD2AndDES_CBC, PKCSObjectIdentifiers.pbeWithMD2AndRC2_CBC,
+			PKCSObjectIdentifiers.pbeWithMD5AndDES_CBC, PKCSObjectIdentifiers.pbeWithMD5AndRC2_CBC,
+			PKCSObjectIdentifiers.pbeWithSHA1AndDES_CBC,
+			PKCSObjectIdentifiers.pbeWithSHA1AndRC2_CBC, PKCSObjectIdentifiers.id_PBES2);
+	}
+
+	/**
 	 * Parameters that are not what the scheme expects: the JDK takes them while it reads the file,
 	 * and the reader refuses them before any key is derived
 	 */
-	@Test
-	@DisplayName("a PKCS#12 key file whose parameters are no PKCS#12 parameters is refused")
-	void aKeyFileWithUnreadableParameters_isRefused()
+	@ParameterizedTest(name = "{0} with NULL parameters is refused before the key is derived")
+	@MethodSource("schemesTheJdkTakesWithNullParameters")
+	void aKeyFileWithUnreadableParameters_isRefused(final ASN1ObjectIdentifier scheme)
 	{
-		byte[] keyFile = encode(PKCSObjectIdentifiers.pbeWithSHAAnd3_KeyTripleDES_CBC,
-			DERNull.INSTANCE);
+		byte[] keyFile = encode(scheme, DERNull.INSTANCE);
 
-		InvalidAlgorithmParameterException refused = assertThrows(
-			InvalidAlgorithmParameterException.class,
-			() -> EncryptedPrivateKeyReader.readPasswordProtectedPrivateKey(keyFile, password));
+		InvalidAlgorithmParameterException refused = assertTimeoutPreemptively(REFUSED_AT_ONCE,
+			() -> assertThrows(InvalidAlgorithmParameterException.class,
+				() -> EncryptedPrivateKeyReader.readPasswordProtectedPrivateKey(keyFile,
+					password)));
 
 		assertTrue(
 			refused.getMessage().startsWith(
