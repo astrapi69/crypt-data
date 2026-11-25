@@ -13,7 +13,7 @@ FIXED:
   names against one bound, `EncryptedPrivateKeyReader.MAXIMUM_ITERATION_COUNT` (10 000 000), before it derives a
   key, for the PKCS#12 schemes, the PBES1 schemes and PBES2 with PBKDF2: a count of 0, a negative count or one above
   it is refused with an `InvalidAlgorithmParameterException` that names the count and the range, and so is a scheme
-  whose count the reader cannot read. Key files written with the usual counts keep opening
+  whose count the reader cannot read. Key files written with the usual counts keep opening (GHSA-x22h-chwm-8xp6)
 
 Version 13.3.1
 -------------
