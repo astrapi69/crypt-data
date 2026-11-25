@@ -39,11 +39,9 @@ import java.util.HexFormat;
 import java.util.stream.Stream;
 
 import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.DERNull;
 import org.bouncycastle.asn1.DEROctetString;
-import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.nist.NISTObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.EncryptedPrivateKeyInfo;
 import org.bouncycastle.asn1.pkcs.EncryptionScheme;
@@ -174,36 +172,8 @@ class EncryptedPrivateKeyIterationCountTest
 	}
 
 	/**
-	 * The reader's own refusal of a PBES2 key derivation it does not know. Through
-	 * readPasswordProtectedPrivateKey such a file is refused earlier, by the JDK while it reads the
-	 * file (EncryptedPrivateKeyInfo's constructor parses the PBES2 parameters and knows only
-	 * PBKDF2), so the refusal is held here directly
-	 */
-	@Test
-	@DisplayName("a PBES2 key file whose key derivation is not PBKDF2 is refused")
-	void aPbes2KeyFileWithAnotherKeyDerivation_isRefused()
-	{
-		ASN1ObjectIdentifier scrypt = new ASN1ObjectIdentifier("1.3.6.1.4.1.11591.4.11");
-		byte[] keyFile = encode(PKCSObjectIdentifiers.id_PBES2,
-			new PBES2Parameters(
-				new KeyDerivationFunc(scrypt,
-					new DERSequence(new ASN1Encodable[] { new DEROctetString(random(16)),
-							new ASN1Integer(16384), new ASN1Integer(8), new ASN1Integer(1) })),
-				new EncryptionScheme(NISTObjectIdentifiers.id_aes256_CBC,
-					new DEROctetString(random(16)))));
-
-		InvalidAlgorithmParameterException refused = assertThrows(
-			InvalidAlgorithmParameterException.class,
-			() -> EncryptedPrivateKeyReader.iterationCountOf(keyFile));
-
-		assertEquals("The key file derives its key with 1.3.6.1.4.1.11591.4.11, whose iteration"
-			+ " count this reader does not read", refused.getMessage());
-	}
-
-	/**
-	 * The reader's own refusal of parameters it cannot read. Through
-	 * readPasswordProtectedPrivateKey such a file is refused earlier, by the JDK while it reads the
-	 * file, so the refusal is held here directly
+	 * Parameters that are not what the scheme expects: the JDK takes them while it reads the file,
+	 * and the reader refuses them before any key is derived
 	 */
 	@Test
 	@DisplayName("a PKCS#12 key file whose parameters are no PKCS#12 parameters is refused")
@@ -214,7 +184,7 @@ class EncryptedPrivateKeyIterationCountTest
 
 		InvalidAlgorithmParameterException refused = assertThrows(
 			InvalidAlgorithmParameterException.class,
-			() -> EncryptedPrivateKeyReader.iterationCountOf(keyFile));
+			() -> EncryptedPrivateKeyReader.readPasswordProtectedPrivateKey(keyFile, password));
 
 		assertTrue(
 			refused.getMessage().startsWith(

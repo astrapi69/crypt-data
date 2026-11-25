@@ -332,7 +332,7 @@ public final class EncryptedPrivateKeyReader
 	 * @throws InvalidAlgorithmParameterException
 	 *             if the scheme is none of these, or its parameters cannot be read
 	 */
-	static BigInteger iterationCountOf(final byte[] encryptedPrivateKeyBytes)
+	private static BigInteger iterationCountOf(final byte[] encryptedPrivateKeyBytes)
 		throws InvalidAlgorithmParameterException
 	{
 		final AlgorithmIdentifier scheme;
@@ -358,9 +358,6 @@ public final class EncryptedPrivateKeyReader
 					return PBKDF2Params.getInstance(keyDerivation.getParameters())
 						.getIterationCount();
 				}
-				throw new InvalidAlgorithmParameterException(
-					"The key file derives its key with " + keyDerivation.getAlgorithm()
-						+ ", whose iteration count this reader does not read");
 			}
 		}
 		catch (IllegalArgumentException | IllegalStateException unreadable)
